@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -414,128 +416,129 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* This is a NP-Hard Problem */
-#include &lt;cstdio&gt;
-#include &lt;cstring&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* This is a NP-Hard Problem */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int n, m;
-int be[100005], head[100005], nxt[400005], edg[400005], cnt;
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">be</span><span class="p">[</span><span class="mi">100005</span><span class="p">],</span> <span class="n">head</span><span class="p">[</span><span class="mi">100005</span><span class="p">],</span> <span class="n">nxt</span><span class="p">[</span><span class="mi">400005</span><span class="p">],</span> <span class="n">edg</span><span class="p">[</span><span class="mi">400005</span><span class="p">],</span> <span class="n">cnt</span><span class="p">;</span>
 
-inline void addEdge(int u, int v){
-    ++cnt;
-    nxt[cnt] = head[u];
-    edg[cnt] = v;
-    head[u] = cnt;
-}
+<span class="kr">inline</span> <span class="kt">void</span> <span class="nf">addEdge</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">){</span>
+    <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+    <span class="n">nxt</span><span class="p">[</span><span class="n">cnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">u</span><span class="p">];</span>
+    <span class="n">edg</span><span class="p">[</span><span class="n">cnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+    <span class="n">head</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnt</span><span class="p">;</span>
+<span class="p">}</span>
 
-bool check(int st){
-    int q[100005] = {0};
-    int front = 0, rear = 0;
-    be[st] = 1;
-    q[rear++] = st;
-    while (front != rear){
-        int now = q[front++];
-        for (int i = head[now]; i; i = nxt[i]){
-            if (be[edg[i]] == 0){
-                int v = edg[i];
-                be[v] = (be[now] == 1 ? -1 : 1);
-                q[rear++] = v;
-            }
-            else if (be[edg[i]] != -be[now])
-                return false;
-        }
-    }
-    return true;
-}
+<span class="kt">bool</span> <span class="nf">check</span><span class="p">(</span><span class="kt">int</span> <span class="n">st</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">q</span><span class="p">[</span><span class="mi">100005</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">front</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rear</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">be</span><span class="p">[</span><span class="n">st</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">st</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">front</span> <span class="o">!=</span> <span class="n">rear</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">now</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">front</span><span class="o">++</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">now</span><span class="p">];</span> <span class="n">i</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">[</span><span class="n">i</span><span class="p">]){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">be</span><span class="p">[</span><span class="n">edg</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+                <span class="kt">int</span> <span class="n">v</span> <span class="o">=</span> <span class="n">edg</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">be</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">be</span><span class="p">[</span><span class="n">now</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">be</span><span class="p">[</span><span class="n">edg</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">!=</span> <span class="o">-</span><span class="n">be</span><span class="p">[</span><span class="n">now</span><span class="p">])</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    int t;
-    scanf(&quot;%d&quot;, &amp;t);
-    while (t--){
-        scanf(&quot;%d%d&quot;, &amp;n, &amp;m);
-        memset(be, 0, sizeof(be));
-        memset(head, 0, sizeof(head));
-        memset(nxt, 0, sizeof(nxt));
-        memset(edg, 0, sizeof(edg));
-        cnt = 0;
-        for (int i = 1; i &lt;= m; ++i){
-            int u, v;
-            scanf(&quot;%d%d&quot;, &amp;u, &amp;v);
-            addEdge(u, v);
-            addEdge(v, u);
-        }
-        bool flag = true;
-        for (int i = 1; i &lt;= n; ++i){
-            if (head[i] != 0 &amp;&amp; be[i] == 0){
-                if (!check(i)){
-                    flag = false;
-                    printf(&quot;-1\n&quot;);
-                    break;
-                }
-            }
-        }
-        if (flag)
-            printf(&quot;1\n&quot;);
-    }
-    return 0;
-}
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">t</span><span class="o">--</span><span class="p">){</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">be</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">be</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">head</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">nxt</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">nxt</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">edg</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">edg</span><span class="p">));</span>
+        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+            <span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">;</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">u</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">);</span>
+            <span class="n">addEdge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+            <span class="n">addEdge</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">head</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">be</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">check</span><span class="p">(</span><span class="n">i</span><span class="p">)){</span>
+                    <span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;-1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;cstdio&gt;
-#include &lt;cstring&gt;
-using namespace std;
-int ne[400010],to[400010],last[400010],num,k[400010],tail,head,ans;
-int t,m,n,u,v;
-void add(int u,int v)
-{
-    ne[++num]=last[u];
-    to[num]=v;
-    last[u]=num;
-}
-int dfs(int x)
-{
-    for (int i=last[x];i!=0;i=ne[i])
-    {
-        if (!k[to[i]])
-        {
-            k[to[i]]=-k[x];
-            if (!dfs(to[i])) return 0;
-        }
-        else
-            if (k[to[i]]+k[x]!=0)
-                return 0;
-    }
-    return 1;
-}
-int main() {
-    scanf(&quot;%d&quot;,&amp;t);
-    for (int i=0;i&lt;t;++i) {
-        scanf(&quot;%d%d&quot;, &amp;n, &amp;m);
-        num=0;
-        memset(last, 0, sizeof(last));
-        memset(k, 0, sizeof(k));
-        for (int j = 0; j &lt; m; ++j) {
-            scanf(&quot;%d%d&quot;, &amp;u, &amp;v);
-            add(u,v);
-            add(v,u);
-        }
-        ans=1;
-        for (int j=1;j&lt;=n;++j)
-            if (k[j]==0){
-                k[j]=1;
-                if (!dfs(j))
-                {
-                    ans=-1;
-                    break;
-                }
-            }
-        printf(&quot;%d\n&quot;,ans);
-    }
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">ne</span><span class="p">[</span><span class="mi">400010</span><span class="p">],</span><span class="n">to</span><span class="p">[</span><span class="mi">400010</span><span class="p">],</span><span class="n">last</span><span class="p">[</span><span class="mi">400010</span><span class="p">],</span><span class="n">num</span><span class="p">,</span><span class="n">k</span><span class="p">[</span><span class="mi">400010</span><span class="p">],</span><span class="n">tail</span><span class="p">,</span><span class="n">head</span><span class="p">,</span><span class="n">ans</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">t</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span><span class="kt">int</span> <span class="n">v</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ne</span><span class="p">[</span><span class="o">++</span><span class="n">num</span><span class="p">]</span><span class="o">=</span><span class="n">last</span><span class="p">[</span><span class="n">u</span><span class="p">];</span>
+    <span class="n">to</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">=</span><span class="n">v</span><span class="p">;</span>
+    <span class="n">last</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">=</span><span class="n">num</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">last</span><span class="p">[</span><span class="n">x</span><span class="p">];</span><span class="n">i</span><span class="o">!=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">=</span><span class="n">ne</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">k</span><span class="p">[</span><span class="n">to</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+        <span class="p">{</span>
+            <span class="n">k</span><span class="p">[</span><span class="n">to</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">=-</span><span class="n">k</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dfs</span><span class="p">(</span><span class="n">to</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="n">to</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">+</span><span class="n">k</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">t</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+        <span class="n">num</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">last</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">last</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">k</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">u</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">);</span>
+            <span class="n">add</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">);</span>
+            <span class="n">add</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">u</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">ans</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+                <span class="n">k</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dfs</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="n">ans</span><span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

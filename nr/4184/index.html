@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -376,119 +378,119 @@ NO
 </details>
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 1e6 + 100;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">1e6</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
 
-struct edgeNode {
-    int data;
-    edgeNode *next;
+<span class="k">struct</span> <span class="n">edgeNode</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
 
-    edgeNode(int d = 0, edgeNode *n = 0) : data(d), next(n) {}
-    ~edgeNode() {
-        if (next) {
-            delete next;
-        }
-    }
-};
+    <span class="n">edgeNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">edgeNode</span> <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">next</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="o">~</span><span class="n">edgeNode</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">next</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">delete</span> <span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-struct verNode {
-    int data;
-    int size;
-    edgeNode *head;
+<span class="k">struct</span> <span class="n">verNode</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
 
-    verNode(int d = 0, int s = 0, edgeNode *h = 0)
-        : data(d), size(s), head(h) {}
-    ~verNode() {
-        if (head) {
-            delete head;
-        }
-    }
-};
+    <span class="n">verNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">edgeNode</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">size</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">head</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="o">~</span><span class="n">verNode</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">head</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">delete</span> <span class="n">head</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int T, N, K;
-int father[maxN] = {0}, fa;
-verNode *nodes[maxN];
-bool isVisited[maxN] = {0};
+<span class="kt">int</span> <span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">father</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">fa</span><span class="p">;</span>
+<span class="n">verNode</span> <span class="o">*</span><span class="n">nodes</span><span class="p">[</span><span class="n">maxN</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="n">isVisited</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-int DFS(int);
+<span class="kt">int</span> <span class="nf">DFS</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    cin &gt;&gt; T;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">T</span><span class="p">;</span>
 
-    for (int j = 0; j &lt; T; j++) {
-        int ans = 0;
-        bool flag = 0;
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-        cin &gt;&gt; N &gt;&gt; K;
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span> <span class="o">&gt;&gt;</span> <span class="n">K</span><span class="p">;</span>
 
-        for (int i = 1; i &lt;= N; i++) {
-            father[i] = 0;
-            isVisited[i] = 0;
-            nodes[i] = new verNode(i);
-        }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">father</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">isVisited</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">verNode</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        for (int i = 1; i &lt; N; i++) {
-            int temp1, temp2;
-            cin &gt;&gt; temp1 &gt;&gt; temp2;
-            father[temp2] = temp1;
-            nodes[temp1]-&gt;head = new edgeNode(temp2, nodes[temp1]-&gt;head);
-        }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">temp1</span><span class="p">,</span> <span class="n">temp2</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp1</span> <span class="o">&gt;&gt;</span> <span class="n">temp2</span><span class="p">;</span>
+            <span class="n">father</span><span class="p">[</span><span class="n">temp2</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp1</span><span class="p">;</span>
+            <span class="n">nodes</span><span class="p">[</span><span class="n">temp1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">edgeNode</span><span class="p">(</span><span class="n">temp2</span><span class="p">,</span> <span class="n">nodes</span><span class="p">[</span><span class="n">temp1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        for (int i = 1; i &lt;= N; i++) {
-            if (!father[i]) {
-                fa = i;
-                break;
-            }
-        }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">father</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">fa</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        DFS(fa);
+        <span class="n">DFS</span><span class="p">(</span><span class="n">fa</span><span class="p">);</span>
 
-        if (N % K == 0) {
-            for (int i = 1; i &lt;= N; i++) {
-                if (nodes[i]-&gt;size % K == 0) {
-                    ans++;
-                }
-            }
-            if (ans == N / K) {
-                flag = 1;
-            }
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">N</span> <span class="o">%</span> <span class="n">K</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">%</span> <span class="n">K</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">ans</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ans</span> <span class="o">==</span> <span class="n">N</span> <span class="o">/</span> <span class="n">K</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        if (flag) {
-            cout &lt;&lt; &quot;YES\n&quot;;
-        } else {
-            cout &lt;&lt; &quot;NO\n&quot;;
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;YES</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;NO</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        for (int i = 1; i &lt;= N; i++) {
-            delete nodes[i];
-        }
-    }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">delete</span> <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return 0;
-}
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-int DFS(int i) {
-    if (isVisited[i]) {
-        return 0;
-    } else {
-        isVisited[i] = 1;
-        edgeNode *p = nodes[i]-&gt;head;
-        while (p) {
-            nodes[i]-&gt;size += DFS(p-&gt;data);
-            p = p-&gt;next;
-        }
-        return ++(nodes[i]-&gt;size);
-    }
-}
-</code></pre>
+<span class="kt">int</span> <span class="nf">DFS</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">isVisited</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">isVisited</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">edgeNode</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span> <span class="o">+=</span> <span class="n">DFS</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">++</span><span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

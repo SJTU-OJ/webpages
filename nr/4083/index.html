@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -627,121 +629,121 @@ END
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstring&quot;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-//交换
-template &lt;class T&gt;
-constexpr void mySwap(T&amp;a, T &amp;b) {
-    T temp = a;
-    a = b;
-    b = temp;
-}
+<span class="c1">//交换</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">mySwap</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">T</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
 
-//冒泡排序
-//(bool为真表示需要交换)
-template &lt;class T&gt;
-constexpr void bubbleSort(T *destination, T *source, int num, bool(*f)(T a, T b)) {
-    //复制
-    if (destination != source)
-        for (int i = 0; i &lt; num; i++)
-            destination[i] = source[i];
+<span class="c1">//冒泡排序</span>
+<span class="c1">//(bool为真表示需要交换)</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">constexpr</span> <span class="kt">void</span> <span class="n">bubbleSort</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span><span class="n">destination</span><span class="p">,</span> <span class="n">T</span> <span class="o">*</span><span class="n">source</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="kt">bool</span><span class="p">(</span><span class="o">*</span><span class="n">f</span><span class="p">)(</span><span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c1">//复制</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">destination</span> <span class="o">!=</span> <span class="n">source</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">destination</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 
-    for (int i = num - 2; i &gt;= 0; i--)
-        for (int j = 0; j &lt;= i; j++)
-            if (f(destination[j], destination[j + 1]))
-                mySwap(destination[j], destination[j + 1]);
-}
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">destination</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">destination</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+                <span class="n">mySwap</span><span class="p">(</span><span class="n">destination</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">destination</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
 
-class student {
-public:
-    char name[100];
-    int xuehao=0, chengji = 0;
-};
+<span class="k">class</span> <span class="nc">student</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">xuehao</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">chengji</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-int main() {
-    student stu[10000];
-    int num = 0;
-    while (true) {
-        int n=0;
-        cin &gt;&gt; n;
-        if (n == 7) {
-            cout &lt;&lt; &quot;END&quot;;
-            break;
-        }
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">student</span> <span class="n">stu</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;END&quot;</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        switch (n) {
-        case 1: {
-            int temp;
-            bool flag = false;
-            cin &gt;&gt; temp;
-            for (int i = 0; i &lt; num; i++) {
-                if (stu[i].xuehao == temp) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (flag) {
-                cout &lt;&lt; &quot;FAILED&quot; &lt;&lt; endl;
-                cin.clear();
-                cin.ignore(100, '\n');
-                break;
-            }
-            stu[num].xuehao = temp;
-            cin &gt;&gt; stu[num].name;
-            cin &gt;&gt; stu[num].chengji;
-            num++;
-            cout &lt;&lt; &quot;SUCCESS&quot; &lt;&lt; endl;
-            break;
-        }
-        case 2: {
-            for (int i = 0; i &lt; num; i++)
-                cout &lt;&lt; stu[i].xuehao &lt;&lt; &quot; &quot; &lt;&lt; stu[i].name &lt;&lt; &quot; &quot; &lt;&lt; stu[i].chengji &lt;&lt; endl;
-            break;
-        }
-        case 3: {
-            int temp;
-            cin &gt;&gt; temp;
-            for (int i = 0; i &lt; num; i++) {
-                if (stu[i].xuehao == temp) {
-                    cout &lt;&lt; stu[i].xuehao &lt;&lt; &quot; &quot; &lt;&lt; stu[i].name &lt;&lt; &quot; &quot; &lt;&lt; stu[i].chengji &lt;&lt; endl;
-                    break;
-                }
-            }
-            break;
-        }
-        case 4: {
-            char temp[100];
-            cin &gt;&gt; temp;
-            for (int i = 0; i &lt; num; i++) {
-                if (strcmp(temp,stu[i].name)==0) {
-                    cout &lt;&lt; stu[i].xuehao &lt;&lt; &quot; &quot; &lt;&lt; stu[i].name &lt;&lt; &quot; &quot; &lt;&lt; stu[i].chengji &lt;&lt; endl;
-                    break;
-                }
-            }
-            break;
-        }
-        case 5: {
-            student temp[10000];
-            bubbleSort&lt;student&gt;(temp, stu, num, [](student stu1, student stu2) {return stu1.xuehao &gt; stu2.xuehao ? true : false; });
-            for (int i = 0; i &lt; num; i++)
-                cout &lt;&lt; temp[i].xuehao &lt;&lt; &quot; &quot; &lt;&lt; temp[i].name &lt;&lt; &quot; &quot; &lt;&lt; temp[i].chengji &lt;&lt; endl;
-            break;
-        }
-        case 6: {
-            student temp[10000];
-            bubbleSort&lt;student&gt;(temp, stu, num, [](student stu1, student stu2) {return stu1.chengji &lt; stu2.chengji ? true : false; });
-            for (int i = 0; i &lt; num; i++)
-                cout &lt;&lt; temp[i].xuehao &lt;&lt; &quot; &quot; &lt;&lt; temp[i].name &lt;&lt; &quot; &quot; &lt;&lt; temp[i].chengji &lt;&lt; endl;
-            break;
-        }
-        }
-    }
-    return 0;
-}
-</code></pre>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">xuehao</span> <span class="o">==</span> <span class="n">temp</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;FAILED&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+                <span class="n">cin</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+                <span class="n">cin</span><span class="p">.</span><span class="n">ignore</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">stu</span><span class="p">[</span><span class="n">num</span><span class="p">].</span><span class="n">xuehao</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">num</span><span class="p">].</span><span class="n">name</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">num</span><span class="p">].</span><span class="n">chengji</span><span class="p">;</span>
+            <span class="n">num</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;SUCCESS&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">xuehao</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">chengji</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">case</span> <span class="mi">3</span><span class="o">:</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">xuehao</span> <span class="o">==</span> <span class="n">temp</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">xuehao</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">chengji</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">case</span> <span class="mi">4</span><span class="o">:</span> <span class="p">{</span>
+            <span class="kt">char</span> <span class="n">temp</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span><span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">xuehao</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">chengji</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">case</span> <span class="mi">5</span><span class="o">:</span> <span class="p">{</span>
+            <span class="n">student</span> <span class="n">temp</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
+            <span class="n">bubbleSort</span><span class="o">&lt;</span><span class="n">student</span><span class="o">&gt;</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">stu</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="p">[](</span><span class="n">student</span> <span class="n">stu1</span><span class="p">,</span> <span class="n">student</span> <span class="n">stu2</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">stu1</span><span class="p">.</span><span class="n">xuehao</span> <span class="o">&gt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">xuehao</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span> <span class="p">});</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">xuehao</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">chengji</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">case</span> <span class="mi">6</span><span class="o">:</span> <span class="p">{</span>
+            <span class="n">student</span> <span class="n">temp</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
+            <span class="n">bubbleSort</span><span class="o">&lt;</span><span class="n">student</span><span class="o">&gt;</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">stu</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="p">[](</span><span class="n">student</span> <span class="n">stu1</span><span class="p">,</span> <span class="n">student</span> <span class="n">stu2</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">stu1</span><span class="p">.</span><span class="n">chengji</span> <span class="o">&lt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">chengji</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span> <span class="p">});</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">xuehao</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">chengji</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -405,672 +407,663 @@
 </details>
 
 <h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;typename T&gt;
-struct uzel {
-    uzel&lt;T&gt;* next;
-    uzel&lt;T&gt;* last;
-    T value;
-    uzel(T&amp; nos) {
-        last  = nullptr;
-        next  = nullptr;
-        value = nos;
-    }
-    uzel() {
-        last = nullptr;
-        next = nullptr;
-    }
-};
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">struct</span> <span class="n">uzel</span> <span class="p">{</span>
+    <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">next</span><span class="p">;</span>
+    <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">last</span><span class="p">;</span>
+    <span class="n">T</span> <span class="n">value</span><span class="p">;</span>
+    <span class="n">uzel</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span> <span class="n">nos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">last</span>  <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="n">next</span>  <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">nos</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">uzel</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="n">next</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-template &lt;typename T&gt;
-class linlist {
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">linlist</span> <span class="p">{</span>
 
-    template &lt;typename Ty&gt;
-    friend linlist&lt;Ty&gt; operator+(linlist&lt;Ty&gt;&amp; lin1, linlist&lt;Ty&gt;&amp; lin2);
-    template &lt;typename Ty&gt;
-    friend ostream&amp; operator&lt;&lt;(ostream&amp; os, const linlist&lt;Ty&gt;&amp; l);
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Ty</span><span class="o">&gt;</span>
+    <span class="k">friend</span> <span class="n">linlist</span><span class="o">&lt;</span><span class="n">Ty</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">linlist</span><span class="o">&lt;</span><span class="n">Ty</span><span class="o">&gt;&amp;</span> <span class="n">lin1</span><span class="p">,</span> <span class="n">linlist</span><span class="o">&lt;</span><span class="n">Ty</span><span class="o">&gt;&amp;</span> <span class="n">lin2</span><span class="p">);</span>
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Ty</span><span class="o">&gt;</span>
+    <span class="k">friend</span> <span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">linlist</span><span class="o">&lt;</span><span class="n">Ty</span><span class="o">&gt;&amp;</span> <span class="n">l</span><span class="p">);</span>
 
-private:
-    uzel&lt;T&gt;* start;
-    uzel&lt;T&gt;* end;
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">start</span><span class="p">;</span>
+    <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">end</span><span class="p">;</span>
 
-public:
-    linlist&lt;T&gt;* operator+=(T var) {
-        uzel&lt;T&gt;* temp   = new uzel&lt;T&gt;(var);
-        end-&gt;last-&gt;next = temp;
-        end-&gt;last       = temp;
-        temp-&gt;next      = end;
-        return this;
-    }
-    linlist() {
-        start       = new uzel&lt;T&gt;;
-        end         = new uzel&lt;T&gt;;
-        start-&gt;next = end;
-        end-&gt;last   = start;
-    }
-    linlist(linlist&lt;T&gt;&amp; l) {
-        start       = new uzel&lt;T&gt;;
-        end         = new uzel&lt;T&gt;;
-        start-&gt;next = end;
-        end-&gt;last   = start;
-        for (uzel&lt;T&gt;* ptr = l.start-&gt;next; ptr != l.end; ptr = ptr-&gt;next) {
-            *this += ptr-&gt;value;
-        }
-    }
-};
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">linlist</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="n">T</span> <span class="n">var</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">temp</span>   <span class="o">=</span> <span class="k">new</span> <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">var</span><span class="p">);</span>
+        <span class="n">end</span><span class="o">-&gt;</span><span class="n">last</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">end</span><span class="o">-&gt;</span><span class="n">last</span>       <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">temp</span><span class="o">-&gt;</span><span class="n">next</span>      <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">linlist</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">start</span>       <span class="o">=</span> <span class="k">new</span> <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">end</span>         <span class="o">=</span> <span class="k">new</span> <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">start</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
+        <span class="n">end</span><span class="o">-&gt;</span><span class="n">last</span>   <span class="o">=</span> <span class="n">start</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">linlist</span><span class="p">(</span><span class="n">linlist</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">start</span>       <span class="o">=</span> <span class="k">new</span> <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">end</span>         <span class="o">=</span> <span class="k">new</span> <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">start</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
+        <span class="n">end</span><span class="o">-&gt;</span><span class="n">last</span>   <span class="o">=</span> <span class="n">start</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">l</span><span class="p">.</span><span class="n">start</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span> <span class="n">ptr</span> <span class="o">!=</span> <span class="n">l</span><span class="p">.</span><span class="n">end</span><span class="p">;</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">*</span><span class="k">this</span> <span class="o">+=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-template &lt;typename T&gt;
-ostream&amp; operator&lt;&lt;(ostream&amp; os, const linlist&lt;T&gt;&amp; l) {
-    uzel&lt;T&gt;* ptr = l.start-&gt;next;
-    while (ptr != l.end) {
-        if (ptr != l.start-&gt;next)
-            os &lt;&lt; ' ';
-        os &lt;&lt; ptr-&gt;value;
-        ptr = ptr-&gt;next;
-    }
-    return os;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">linlist</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">l</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">l</span><span class="p">.</span><span class="n">start</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">!=</span> <span class="n">l</span><span class="p">.</span><span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ptr</span> <span class="o">!=</span> <span class="n">l</span><span class="p">.</span><span class="n">start</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
+        <span class="n">ptr</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;typename T&gt;
-linlist&lt;T&gt; operator+(linlist&lt;T&gt;&amp; lin1, linlist&lt;T&gt;&amp; lin2) {
-    linlist&lt;T&gt; ans(lin1);
-    for (uzel&lt;T&gt;* ptr = lin2.start-&gt;next; ptr != lin2.end; ptr = ptr-&gt;next)
-        ans += ptr-&gt;value;
-    return ans;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="n">linlist</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">linlist</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">lin1</span><span class="p">,</span> <span class="n">linlist</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">lin2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">linlist</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="n">lin1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">uzel</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">lin2</span><span class="p">.</span><span class="n">start</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span> <span class="n">ptr</span> <span class="o">!=</span> <span class="n">lin2</span><span class="p">.</span><span class="n">end</span><span class="p">;</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">+=</span> <span class="n">ptr</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;typename T&gt;
-void process() {
-    int n, m;
-    cin &gt;&gt; n &gt;&gt; m;
-    T proc;
-    linlist&lt;T&gt; lin1, lin2;
-    for (int i = 0; i &lt; n; i++) {
-        cin &gt;&gt; proc;
-        lin1 += proc;
-    }
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">process</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">T</span> <span class="n">proc</span><span class="p">;</span>
+    <span class="n">linlist</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">lin1</span><span class="p">,</span> <span class="n">lin2</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">proc</span><span class="p">;</span>
+        <span class="n">lin1</span> <span class="o">+=</span> <span class="n">proc</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    for (int i = 0; i &lt; m; i++) {
-        cin &gt;&gt; proc;
-        lin2 += proc;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">proc</span><span class="p">;</span>
+        <span class="n">lin2</span> <span class="o">+=</span> <span class="n">proc</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; (lin1 + lin2);
-}
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">lin1</span> <span class="o">+</span> <span class="n">lin2</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main() {
-    char type[7];
-    cin &gt;&gt; type;
-    switch (type[0]) {
-    case 'd':
-        process&lt;double&gt;();
-        break;
-    case 'c':
-        process&lt;char&gt;();
-        break;
-    case 'i':
-        process&lt;int&gt;();
-    }
-    return 0;
-}
-</code></pre>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">type</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">type</span><span class="p">;</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">type</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="sc">&#39;d&#39;</span><span class="o">:</span>
+        <span class="n">process</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;c&#39;</span><span class="o">:</span>
+        <span class="n">process</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">();</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="sc">&#39;i&#39;</span><span class="o">:</span>
+        <span class="n">process</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstring&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;class T&gt;
-class myLink {
-public:
-    T data;
-    myLink *next = nullptr;
-};
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">myLink</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">T</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">myLink</span> <span class="o">*</span><span class="n">next</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+<span class="p">};</span>
 
-template &lt;class T&gt;
-class mySheet {
-public:
-    myLink&lt;T&gt; *head;
-    myLink&lt;T&gt; *rear;
-    mySheet() {
-        head = new myLink&lt;T&gt;;
-        rear = head;
-    }
-    mySheet(T data) {
-        head = new myLink&lt;T&gt;;
-        head-&gt;next = new myLink&lt;T&gt;;
-        head-&gt;next-&gt;data = data;
-        rear = head-&gt;next;
-    }
-    ~mySheet() {
-        for (auto p = head; p;) {
-            auto temp = p-&gt;next;
-            if (p == rear) {
-                delete p;
-                break;
-            }
-            delete p;
-            p = temp;
-        }
-    }
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">mySheet</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
+    <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">rear</span><span class="p">;</span>
+    <span class="n">mySheet</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">rear</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">mySheet</span><span class="p">(</span><span class="n">T</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">rear</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="n">mySheet</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span> <span class="n">p</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="n">rear</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //复制构造函数
-    mySheet(const mySheet&lt;T&gt; &amp;b) {
-        head = new myLink&lt;T&gt;;
-        for (auto p1 = head, p2 = b.head; p2-&gt;next != nullptr;) {
-            p1-&gt;next = new myLink&lt;T&gt;;
-            p1-&gt;next-&gt;data = p2-&gt;next-&gt;data;
-            p1 = p1-&gt;next;
-            p2 = p2-&gt;next;
-            rear = p1;
-        }
-    }
+    <span class="c1">//复制构造函数</span>
+    <span class="n">mySheet</span><span class="p">(</span><span class="k">const</span> <span class="n">mySheet</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">head</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">head</span><span class="p">;</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="n">p1</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+            <span class="n">p1</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="n">rear</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //重载等号
-    mySheet&lt;T&gt;&amp; operator=(const mySheet&lt;T&gt; &amp;b) {
-        head = new myLink&lt;T&gt;;
-        for (auto p1 = head, p2 = b.head; p2-&gt;next != nullptr;) {
-            p1-&gt;next = new myLink&lt;T&gt;;
-            p1-&gt;next-&gt;data = p2-&gt;next-&gt;data;
-            p1 = p1-&gt;next;
-            p2 = p2-&gt;next;
-            rear = p1;
-        }
-        return *this;
-    }
+    <span class="c1">//重载等号</span>
+    <span class="n">mySheet</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">mySheet</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">head</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">head</span><span class="p">;</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="n">p1</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+            <span class="n">p1</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="n">rear</span> <span class="o">=</span> <span class="n">p1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void append(T b) {
-        rear-&gt;next = new myLink&lt;T&gt;;
-        rear = rear-&gt;next;
-        rear-&gt;data = b;
-    }
+    <span class="kt">void</span> <span class="n">append</span><span class="p">(</span><span class="n">T</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="n">myLink</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="n">rear</span> <span class="o">=</span> <span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">rear</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //重载加号
-    mySheet&lt;T&gt; operator+(const mySheet&lt;T&gt; &amp;b) const {
-        mySheet&lt;T&gt; temp = *this;
-        mySheet&lt;T&gt; tempAdd = b;
-        temp.rear-&gt;next = tempAdd.head-&gt;next;
-        return temp;
-    }
+    <span class="c1">//重载加号</span>
+    <span class="n">mySheet</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">mySheet</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">mySheet</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="n">mySheet</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">tempAdd</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="n">tempAdd</span><span class="p">.</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //打印
-    void print() {
-        for (auto p = head;; ) {
-            if (p-&gt;next == nullptr) break;
-            if (p != head) cout &lt;&lt; &quot; &quot;;
-            cout &lt;&lt; p-&gt;next-&gt;data;
-            p = p-&gt;next;
-        }
-    }
-};
+    <span class="c1">//打印</span>
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">head</span><span class="p">;;</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="n">head</span><span class="p">)</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int main() {
-    char type[10];
-    int num1, num2;
-    cin &gt;&gt; type;
-    cin &gt;&gt; num1 &gt;&gt; num2;
-    if (strcmp(type, &quot;int&quot;) == 0) {
-        mySheet&lt;int&gt; a, b;
-        for (int i = 0; i &lt; num1; i++) {
-            int temp;
-            cin &gt;&gt; temp;
-            a.append(temp);
-        }
-        for (int i = 0; i &lt; num2; i++) {
-            int temp;
-            cin &gt;&gt; temp;
-            b.append(temp);
-        }
-        mySheet&lt;int&gt; c;
-        c = a + b;
-        c.print();
-    }
-    if (strcmp(type, &quot;char&quot;) == 0) {
-        mySheet&lt;char&gt; a, b;
-        for (int i = 0; i &lt; num1; i++) {
-            char temp;
-            cin&gt;&gt;temp;
-            a.append(temp);
-        }
-        for (int i = 0; i &lt; num2; i++) {
-            char temp;
-            cin &gt;&gt; temp;
-            b.append(temp);
-        }
-        mySheet&lt;char&gt; c;
-        c = a + b;
-        c.print();
-    }
-    if (strcmp(type, &quot;double&quot;) == 0) {
-        mySheet&lt;double&gt; a, b;
-        for (int i = 0; i &lt; num1; i++) {
-            double temp;
-            cin &gt;&gt; temp;
-            a.append(temp);
-        }
-        for (int i = 0; i &lt; num2; i++) {
-            double temp;
-            cin &gt;&gt; temp;
-            b.append(temp);
-        }
-        mySheet&lt;double&gt; c;
-        c = a + b;
-        c.print();
-    }
-    return 0;
-}
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">type</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">num1</span><span class="p">,</span> <span class="n">num2</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">type</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num1</span> <span class="o">&gt;&gt;</span> <span class="n">num2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span> <span class="s">&quot;int&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mySheet</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">a</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">b</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">mySheet</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">c</span><span class="p">;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span> <span class="s">&quot;char&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mySheet</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">char</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">temp</span><span class="p">;</span>
+            <span class="n">a</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">char</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">b</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">mySheet</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">c</span><span class="p">;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span> <span class="s">&quot;double&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">mySheet</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">a</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">b</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">mySheet</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">c</span><span class="p">;</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">print</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;cstring&gt;
-#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;class T&gt;
-class seqList {
-   private:
-    T *data;
-    int Length;
-    int maxSize;
-    void doubleSpace();
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">seqList</span> <span class="p">{</span>
+   <span class="k">private</span><span class="o">:</span>
+    <span class="n">T</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">Length</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxSize</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">doubleSpace</span><span class="p">();</span>
 
-   public:
-    seqList(int initSize = 10);
-    seqList(const seqList&lt;T&gt; &amp;);
-    ~seqList();
-    int length() const;
-    void add(const T &amp;x);
-    void traverse() const;
-    seqList&lt;T&gt; operator+(seqList&lt;T&gt; &amp;);
-    seqList&lt;T&gt; &amp;operator=(const seqList&lt;T&gt; &amp;);
-    T &amp;operator[](int);
-};
+   <span class="k">public</span><span class="o">:</span>
+    <span class="n">seqList</span><span class="p">(</span><span class="kt">int</span> <span class="n">initSize</span> <span class="o">=</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="n">seqList</span><span class="p">(</span><span class="k">const</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">seqList</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="nf">length</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">add</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">traverse</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">T</span> <span class="o">&amp;</span><span class="k">operator</span><span class="p">[](</span><span class="kt">int</span><span class="p">);</span>
+<span class="p">};</span>
 
-template &lt;class T&gt;
-void seqList&lt;T&gt;::doubleSpace() {
-    T *tmp = data;
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">doubleSpace</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">T</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
 
-    maxSize *= 2;
+    <span class="n">maxSize</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
 
-    data = new T[maxSize];
-    for (int i = 0; i &lt; Length; ++i) {
-        data[i] = tmp[i];
-    }
+    <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">Length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    delete[] tmp;
-}
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-seqList&lt;T&gt;::seqList(int initSize) {
-    data = new T[initSize];
-    Length = 0;
-    maxSize = initSize;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">seqList</span><span class="p">(</span><span class="kt">int</span> <span class="n">initSize</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">initSize</span><span class="p">];</span>
+    <span class="n">Length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">maxSize</span> <span class="o">=</span> <span class="n">initSize</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-seqList&lt;T&gt;::~seqList() {
-    delete[] data;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::~</span><span class="n">seqList</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-int seqList&lt;T&gt;::length() const {
-    return Length;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">length</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">Length</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-void seqList&lt;T&gt;::add(const T &amp;x) {
-    if (Length == maxSize) {
-        doubleSpace();
-    }
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">add</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Length</span> <span class="o">==</span> <span class="n">maxSize</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">doubleSpace</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    data[Length] = x;
-    Length++;
-}
+    <span class="n">data</span><span class="p">[</span><span class="n">Length</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">Length</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-void seqList&lt;T&gt;::traverse() const {
-    for (int i = 0; i &lt; Length - 1; i++) {
-        cout &lt;&lt; data[i] &lt;&lt; ' ';
-    }
-    cout &lt;&lt; data[Length - 1];
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">traverse</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">Length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">Length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-seqList&lt;T&gt; seqList&lt;T&gt;::operator+(seqList&lt;T&gt; &amp;right) {
-    seqList&lt;T&gt; tmp(this-&gt;length() + right.length());
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">tmp</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">length</span><span class="p">()</span> <span class="o">+</span> <span class="n">right</span><span class="p">.</span><span class="n">length</span><span class="p">());</span>
 
-    for (int i = 0; i &lt; this-&gt;length(); i++) {
-        tmp.add(data[i]);
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tmp</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
 
-    for (int i = 0; i &lt; right.length(); i++) {
-        tmp.add(right[i]);
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tmp</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">right</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
 
-    return tmp;
-}
+    <span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-T &amp;seqList&lt;T&gt;::operator[](int x) {
-    return data[x];
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="o">&amp;</span><span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="k">operator</span><span class="p">[](</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-seqList&lt;T&gt;::seqList(const seqList&lt;T&gt; &amp;right) {
-    Length = right.Length;
-    maxSize = right.maxSize;
-    data = new T[maxSize];
-    for (int i = 0; i &lt; maxSize; i++) {
-        data[i] = right.data[i];
-    }
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">seqList</span><span class="p">(</span><span class="k">const</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Length</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+    <span class="n">maxSize</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">maxSize</span><span class="p">;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">maxSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-seqList&lt;T&gt; &amp;seqList&lt;T&gt;::operator=(const seqList&lt;T&gt; &amp;right) {
-    if (&amp;right != this) {
-        delete[] data;
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">right</span> <span class="o">!=</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
 
-        Length = right.Length;
-        maxSize = right.maxSize;
-        data = new T[maxSize];
-        for (int i = 0; i &lt; Length; i++) {
-            data[i] = right.data[i];
-        }
-    }
+        <span class="n">Length</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+        <span class="n">maxSize</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">maxSize</span><span class="p">;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return *this;
-}
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main() {
-    char type[50];
-    int l1, l2;
-    cin &gt;&gt; type &gt;&gt; l1 &gt;&gt; l2;
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">type</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">type</span> <span class="o">&gt;&gt;</span> <span class="n">l1</span> <span class="o">&gt;&gt;</span> <span class="n">l2</span><span class="p">;</span>
 
-    if (strcmp(type, &quot;int&quot;) == 0) {
-        seqList&lt;int&gt; vec1, vec2, vec3;
-        int tmp;
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span> <span class="s">&quot;int&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vec3</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">tmp</span><span class="p">;</span>
 
-        for (int i = 0; i &lt; l1; ++i) {
-            cin &gt;&gt; tmp;
-            vec1.add(tmp);
-        }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">l1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="n">vec1</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        for (int i = 0; i &lt; l2; ++i) {
-            cin &gt;&gt; tmp;
-            vec2.add(tmp);
-        }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">l2</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="n">vec2</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        vec3 = vec1 + vec2;
-        vec3.traverse();
-    }
+        <span class="n">vec3</span> <span class="o">=</span> <span class="n">vec1</span> <span class="o">+</span> <span class="n">vec2</span><span class="p">;</span>
+        <span class="n">vec3</span><span class="p">.</span><span class="n">traverse</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    if (strcmp(type, &quot;double&quot;) == 0) {
-        seqList&lt;double&gt; vec1, vec2, vec3;
-        double tmp;
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span> <span class="s">&quot;double&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vec3</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">tmp</span><span class="p">;</span>
 
-        for (int i = 0; i &lt; l1; ++i) {
-            cin &gt;&gt; tmp;
-            vec1.add(tmp);
-        }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">l1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="n">vec1</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        for (int i = 0; i &lt; l2; ++i) {
-            cin &gt;&gt; tmp;
-            vec2.add(tmp);
-        }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">l2</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="n">vec2</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        vec3 = vec1 + vec2;
-        vec3.traverse();
-    }
+        <span class="n">vec3</span> <span class="o">=</span> <span class="n">vec1</span> <span class="o">+</span> <span class="n">vec2</span><span class="p">;</span>
+        <span class="n">vec3</span><span class="p">.</span><span class="n">traverse</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    if (strcmp(type, &quot;char&quot;) == 0) {
-        seqList&lt;char&gt; vec1, vec2, vec3;
-        char tmp;
+    <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span> <span class="s">&quot;char&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">vec3</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">tmp</span><span class="p">;</span>
 
-        for (int i = 0; i &lt; l1; ++i) {
-            cin &gt;&gt; tmp;
-            vec1.add(tmp);
-        }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">l1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="n">vec1</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        for (int i = 0; i &lt; l2; ++i) {
-            cin &gt;&gt; tmp;
-            vec2.add(tmp);
-        }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">l2</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="n">vec2</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        vec3 = vec1 + vec2;
-        vec3.traverse();
-    }
+        <span class="n">vec3</span> <span class="o">=</span> <span class="n">vec1</span> <span class="o">+</span> <span class="n">vec2</span><span class="p">;</span>
+        <span class="n">vec3</span><span class="p">.</span><span class="n">traverse</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>//NO.14的&lt;&gt;
-//operato+不返回引用&amp;
-#include &lt;iostream&gt;
-#include &lt;cstring&gt;
+<div class="codehilite"><pre><span></span><code><span class="c1">//NO.14的&lt;&gt;</span>
+<span class="c1">//operato+不返回引用&amp;</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;class elemType&gt; class mylist;
-template &lt;class elemType&gt; mylist&lt;elemType&gt; operator+(const mylist&lt;elemType&gt; &amp;l1,const mylist&lt;elemType&gt; &amp;l2);
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">mylist</span><span class="p">;</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span> <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">l1</span><span class="p">,</span><span class="k">const</span> <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">l2</span><span class="p">);</span>
 
-template&lt;class elemType&gt;
-class mylist
-{
-    friend mylist&lt;elemType&gt; operator+&lt;&gt;(const mylist &amp;l1,const mylist &amp;l2);
-public:
-    elemType *data;
-    int size;
-    mylist(int initSize=1)
-    {
-        size=initSize;
-        data = new elemType[size];
-    }
-    mylist(const mylist&lt;elemType&gt; &amp;x);//拷贝构造函数
-    mylist &amp;operator=(const mylist &amp;x);//赋值重载
-    ~mylist(){delete []data;size=0;}
-};
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">mylist</span>
+<span class="p">{</span>
+    <span class="k">friend</span> <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">+&lt;&gt;</span><span class="p">(</span><span class="k">const</span> <span class="n">mylist</span> <span class="o">&amp;</span><span class="n">l1</span><span class="p">,</span><span class="k">const</span> <span class="n">mylist</span> <span class="o">&amp;</span><span class="n">l2</span><span class="p">);</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">elemType</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="n">mylist</span><span class="p">(</span><span class="kt">int</span> <span class="n">initSize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">size</span><span class="o">=</span><span class="n">initSize</span><span class="p">;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">elemType</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">mylist</span><span class="p">(</span><span class="k">const</span> <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span><span class="c1">//拷贝构造函数</span>
+    <span class="n">mylist</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">mylist</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span><span class="c1">//赋值重载</span>
+    <span class="o">~</span><span class="n">mylist</span><span class="p">(){</span><span class="k">delete</span> <span class="p">[]</span><span class="n">data</span><span class="p">;</span><span class="n">size</span><span class="o">=</span><span class="mi">0</span><span class="p">;}</span>
+<span class="p">};</span>
 
-template&lt;class elemType&gt;//赋值重载
-mylist&lt;elemType&gt; &amp;mylist&lt;elemType&gt;::operator=(const mylist&lt;elemType&gt; &amp;x)
-{
-    if (this == &amp;x) return *this;
-    size=x.size;
-    delete []data;
-    data= new elemType[size];
-    for(int i=0;i&lt;size;i++)data[i]=x.data[i];
-    return *this;
-}
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span><span class="c1">//赋值重载</span>
+<span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="p">[]</span><span class="n">data</span><span class="p">;</span>
+    <span class="n">data</span><span class="o">=</span> <span class="k">new</span> <span class="n">elemType</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
 
-template&lt;class elemType&gt;//拷贝构造函数
-mylist&lt;elemType&gt;::mylist(const mylist&lt;elemType&gt; &amp;x)
-{
-    size=x.size;
-    elemType *data = new elemType[size];
-    for(int i=0;i&lt;size;i++)data[i]=x.data[i];
-}
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span><span class="c1">//拷贝构造函数</span>
+<span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">mylist</span><span class="p">(</span><span class="k">const</span> <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+    <span class="n">elemType</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">elemType</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
 
-template&lt;class elemType&gt;
-mylist&lt;elemType&gt; operator+(const mylist&lt;elemType&gt; &amp;l1,const mylist&lt;elemType&gt; &amp;l2)
-{
-    int i,j;
-    mylist&lt;elemType&gt; l3(l1.size+l2.size);
-    l3.size=l1.size+l2.size;
-    for (i=0;i&lt;l1.size;i++)l3.data[i]=l1.data[i];
-    for (j=0;j&lt;l2.size;j++)l3.data[i+j]=l2.data[j];
-    return l3;
-}
-
-
-int main()
-{
-    char type[10];
-    int len1,len2;
-    cin &gt;&gt; type;
-    cin &gt;&gt; len1 &gt;&gt; len2;
-
-    if (!strcmp(type,&quot;int&quot;))
-    {
-        mylist&lt;int&gt; list1(len1),list2(len2),list3(len1+len2);
-        for (int i=0;i&lt;len1;i++)cin&gt;&gt;list1.data[i];list1.size=len1;
-        for (int i=0;i&lt;len2;i++)cin&gt;&gt;list2.data[i];list2.size=len2;
-        list3 = list1+list2;
-        for (int i=0;i&lt;list3.size;i++)
-            cout &lt;&lt; list3.data[i]&lt;&lt;' ';
-    }
-    else if (!strcmp(type,&quot;double&quot;))
-    {
-        mylist&lt;double&gt; list1(len1),list2(len2),list3(len1+len2);
-        for (int i=0;i&lt;len1;i++)cin&gt;&gt;list1.data[i];list1.size=len1;
-        for (int i=0;i&lt;len2;i++)cin&gt;&gt;list2.data[i];list2.size=len2;
-        list3 = list1+list2;
-        for (int i=0;i&lt;list3.size;i++)
-            cout &lt;&lt; list3.data[i]&lt;&lt;' ';
-    }
-    else if (!strcmp(type,&quot;char&quot;))
-    {
-        mylist&lt;char&gt; list1(len1),list2(len2),list3(len1+len2);
-        for (int i=0;i&lt;len1;i++)cin&gt;&gt;list1.data[i];list1.size=len1;
-        for (int i=0;i&lt;len2;i++)cin&gt;&gt;list2.data[i];list2.size=len2;
-        list3 = list1+list2;
-        for (int i=0;i&lt;list3.size;i++)
-            cout &lt;&lt; list3.data[i]&lt;&lt;' ';
-    }
-
-    return 0;
-}
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">l1</span><span class="p">,</span><span class="k">const</span> <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">l2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+    <span class="n">mylist</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="n">l3</span><span class="p">(</span><span class="n">l1</span><span class="p">.</span><span class="n">size</span><span class="o">+</span><span class="n">l2</span><span class="p">.</span><span class="n">size</span><span class="p">);</span>
+    <span class="n">l3</span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="n">l1</span><span class="p">.</span><span class="n">size</span><span class="o">+</span><span class="n">l2</span><span class="p">.</span><span class="n">size</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">l1</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">l3</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">l1</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">l2</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="n">l3</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">l2</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">l3</span><span class="p">;</span>
+<span class="p">}</span>
 
 
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">type</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">len1</span><span class="p">,</span><span class="n">len2</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">type</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">len1</span> <span class="o">&gt;&gt;</span> <span class="n">len2</span><span class="p">;</span>
 
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="s">&quot;int&quot;</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">mylist</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">list1</span><span class="p">(</span><span class="n">len1</span><span class="p">),</span><span class="n">list2</span><span class="p">(</span><span class="n">len2</span><span class="p">),</span><span class="n">list3</span><span class="p">(</span><span class="n">len1</span><span class="o">+</span><span class="n">len2</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">len1</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">list1</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="n">list1</span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="n">len1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">len2</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">list2</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="n">list2</span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="n">len2</span><span class="p">;</span>
+        <span class="n">list3</span> <span class="o">=</span> <span class="n">list1</span><span class="o">+</span><span class="n">list2</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">list3</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">list3</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="s">&quot;double&quot;</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">mylist</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">list1</span><span class="p">(</span><span class="n">len1</span><span class="p">),</span><span class="n">list2</span><span class="p">(</span><span class="n">len2</span><span class="p">),</span><span class="n">list3</span><span class="p">(</span><span class="n">len1</span><span class="o">+</span><span class="n">len2</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">len1</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">list1</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="n">list1</span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="n">len1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">len2</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">list2</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="n">list2</span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="n">len2</span><span class="p">;</span>
+        <span class="n">list3</span> <span class="o">=</span> <span class="n">list1</span><span class="o">+</span><span class="n">list2</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">list3</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">list3</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">,</span><span class="s">&quot;char&quot;</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">mylist</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">list1</span><span class="p">(</span><span class="n">len1</span><span class="p">),</span><span class="n">list2</span><span class="p">(</span><span class="n">len2</span><span class="p">),</span><span class="n">list3</span><span class="p">(</span><span class="n">len1</span><span class="o">+</span><span class="n">len2</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">len1</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">list1</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="n">list1</span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="n">len1</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">len2</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">list2</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="n">list2</span><span class="p">.</span><span class="n">size</span><span class="o">=</span><span class="n">len2</span><span class="p">;</span>
+        <span class="n">list3</span> <span class="o">=</span> <span class="n">list1</span><span class="o">+</span><span class="n">list2</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">list3</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">list3</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span>
 
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-
-
-
-
-
-
-
-</code></pre>
 
 <h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-using namespace std;
-const int MAXNUM = 10010;
-template &lt;class elemType&gt;
-class seqList
-{
-    friend seqList&lt;elemType&gt; operator+(const seqList&lt;elemType&gt; &amp;list_1, const seqList&lt;elemType&gt; list_2)
-    {
-        seqList&lt;elemType&gt; list_3;
-        for (int i = 0; i &lt; list_1.length(); ++i)
-            list_3.insert(list_3.length(), list_1.visit(i));
-        for (int i = 0; i &lt; list_2.length(); ++i)
-            list_3.insert(list_3.length(), list_2.visit(i));
-        return list_3;
-    }
-public:
-    seqList();
-    int length() const;
-    void insert(int i, const elemType &amp;x);
-    void get_input(int n);
-    elemType visit(int i) const;
-    void traverse() const;
-    ~seqList();
-private:
-    elemType data[MAXNUM];
-    int currentLength;
-};
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXNUM</span> <span class="o">=</span> <span class="mi">10010</span><span class="p">;</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">seqList</span>
+<span class="p">{</span>
+    <span class="k">friend</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">list_1</span><span class="p">,</span> <span class="k">const</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="n">list_2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="n">list_3</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">list_1</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">list_3</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">list_3</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="n">list_1</span><span class="p">.</span><span class="n">visit</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">list_2</span><span class="p">.</span><span class="n">length</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">list_3</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">list_3</span><span class="p">.</span><span class="n">length</span><span class="p">(),</span> <span class="n">list_2</span><span class="p">.</span><span class="n">visit</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">list_3</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">seqList</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="nf">length</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="n">elemType</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">get_input</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+    <span class="n">elemType</span> <span class="nf">visit</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">traverse</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="o">~</span><span class="n">seqList</span><span class="p">();</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">elemType</span> <span class="n">data</span><span class="p">[</span><span class="n">MAXNUM</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">currentLength</span><span class="p">;</span>
+<span class="p">};</span>
 
-template &lt;class elemType&gt;
-seqList&lt;elemType&gt;::seqList()
-{
-    currentLength = 0;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">seqList</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">currentLength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-int seqList&lt;elemType&gt;::length() const
-{
-    return currentLength;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">length</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">currentLength</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-void seqList&lt;elemType&gt;::insert(int i, const elemType &amp;x)
-{
-    for (int j = currentLength; j &gt; i; --j)
-        data[j] = data[j - 1];
-    data[i] = x;
-    ++currentLength;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">insert</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="n">elemType</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">currentLength</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;</span> <span class="n">i</span><span class="p">;</span> <span class="o">--</span><span class="n">j</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="o">++</span><span class="n">currentLength</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-void seqList&lt;elemType&gt;::get_input(int n)
-{
-    elemType x;
-    for (int i = 0; i &lt; n; ++i)
-    {
-        cin &gt;&gt; x;
-        insert(currentLength, x);
-    }
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">get_input</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">elemType</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">insert</span><span class="p">(</span><span class="n">currentLength</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-elemType seqList&lt;elemType&gt;::visit(int i) const
-{
-    return data[i];
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">elemType</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">visit</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-void seqList&lt;elemType&gt;::traverse() const
-{
-    for (int i = 0; i &lt; currentLength; ++i)
-        cout &lt;&lt; data[i] &lt;&lt; ' ';
-    cout &lt;&lt; endl;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">traverse</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">currentLength</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-seqList&lt;elemType&gt;::~seqList(){}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">seqList</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::~</span><span class="n">seqList</span><span class="p">(){}</span>
 
-int main()
-{
-    string type;
-    int n1, n2;
-    cin &gt;&gt; type &gt;&gt; n1 &gt;&gt; n2;
-    if (!strcmp(type.c_str(), &quot;int&quot;))
-    {
-        seqList&lt;int&gt; list_1, list_2;
-        list_1.get_input(n1);
-        list_2.get_input(n2);
-        seqList&lt;int&gt; list_3 = list_1 + list_2;
-        list_3.traverse();
-    }
-    else if (!strcmp(type.c_str(), &quot;char&quot;))
-    {
-        seqList&lt;char&gt; list_1, list_2;
-        list_1.get_input(n1);
-        list_2.get_input(n2);
-        seqList&lt;char&gt; list_3 = list_1 + list_2;
-        list_3.traverse();
-    }
-    else if (!strcmp(type.c_str(), &quot;double&quot;))
-    {
-        seqList&lt;double&gt; list_1, list_2;
-        list_1.get_input(n1);
-        list_2.get_input(n2);
-        seqList&lt;double&gt; list_3 = list_1 + list_2;
-        list_3.traverse();
-    }
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">string</span> <span class="n">type</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">type</span> <span class="o">&gt;&gt;</span> <span class="n">n1</span> <span class="o">&gt;&gt;</span> <span class="n">n2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="s">&quot;int&quot;</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">list_1</span><span class="p">,</span> <span class="n">list_2</span><span class="p">;</span>
+        <span class="n">list_1</span><span class="p">.</span><span class="n">get_input</span><span class="p">(</span><span class="n">n1</span><span class="p">);</span>
+        <span class="n">list_2</span><span class="p">.</span><span class="n">get_input</span><span class="p">(</span><span class="n">n2</span><span class="p">);</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">list_3</span> <span class="o">=</span> <span class="n">list_1</span> <span class="o">+</span> <span class="n">list_2</span><span class="p">;</span>
+        <span class="n">list_3</span><span class="p">.</span><span class="n">traverse</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="s">&quot;char&quot;</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">list_1</span><span class="p">,</span> <span class="n">list_2</span><span class="p">;</span>
+        <span class="n">list_1</span><span class="p">.</span><span class="n">get_input</span><span class="p">(</span><span class="n">n1</span><span class="p">);</span>
+        <span class="n">list_2</span><span class="p">.</span><span class="n">get_input</span><span class="p">(</span><span class="n">n2</span><span class="p">);</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">list_3</span> <span class="o">=</span> <span class="n">list_1</span> <span class="o">+</span> <span class="n">list_2</span><span class="p">;</span>
+        <span class="n">list_3</span><span class="p">.</span><span class="n">traverse</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">type</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span> <span class="s">&quot;double&quot;</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">list_1</span><span class="p">,</span> <span class="n">list_2</span><span class="p">;</span>
+        <span class="n">list_1</span><span class="p">.</span><span class="n">get_input</span><span class="p">(</span><span class="n">n1</span><span class="p">);</span>
+        <span class="n">list_2</span><span class="p">.</span><span class="n">get_input</span><span class="p">(</span><span class="n">n2</span><span class="p">);</span>
+        <span class="n">seqList</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">list_3</span> <span class="o">=</span> <span class="n">list_1</span> <span class="o">+</span> <span class="n">list_2</span><span class="p">;</span>
+        <span class="n">list_3</span><span class="p">.</span><span class="n">traverse</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

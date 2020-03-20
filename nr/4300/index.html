@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -371,113 +373,114 @@
 </details>
 
 <h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int *MergeSort(int *list, int listSize)
-{
-    if (listSize == 1)
-        return list;
-    if (listSize == 2)
-    {
-        if (list[0] &gt; list[1])
-        {
-            int temp = list[0];
-            list[0] = list[1];
-            list[1] = temp;
-            return list;
-        }
-        return list;
-    }
-    int *tmplist = new int[listSize];
-    int *llst = MergeSort(list, listSize / 2);
-    int *rlst = MergeSort(list + listSize / 2, listSize - listSize / 2);
-    int lct = 0, rct = 0;
-    while (lct + rct != listSize)
-    {
-        if ((llst[lct] &lt;= rlst[rct] &amp;&amp; lct &lt; listSize / 2) || rct &gt;= listSize - listSize / 2)
-        {
-            tmplist[lct + rct] = llst[lct];
-            lct++;
-        }
-        else
-        {
-            tmplist[lct + rct] = rlst[rct];
-            rct++;
-        }
-    }
-    for (int i = 0; i &lt; listSize; i++)
-    {
-        list[i] = tmplist[i];
-    }
-    return list;
-}
-int main()
-{
-    int n;
-    cin &gt;&gt; n;
-    int *cnlist = new int[n];
-    for (int i = 0; i &lt; n; i++)
-        cin &gt;&gt; cnlist[i];
-    MergeSort(cnlist, n);
-    cout &lt;&lt; cnlist[n / 2];
-    return 0;
-}
-</code></pre>
+<span class="kt">int</span> <span class="o">*</span><span class="nf">MergeSort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">list</span><span class="p">,</span> <span class="kt">int</span> <span class="n">listSize</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">listSize</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">list</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">listSize</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+            <span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">list</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">list</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">tmplist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">listSize</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">llst</span> <span class="o">=</span> <span class="n">MergeSort</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">rlst</span> <span class="o">=</span> <span class="n">MergeSort</span><span class="p">(</span><span class="n">list</span> <span class="o">+</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">listSize</span> <span class="o">-</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">lct</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rct</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">lct</span> <span class="o">+</span> <span class="n">rct</span> <span class="o">!=</span> <span class="n">listSize</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">llst</span><span class="p">[</span><span class="n">lct</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">rlst</span><span class="p">[</span><span class="n">rct</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">lct</span> <span class="o">&lt;</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">||</span> <span class="n">rct</span> <span class="o">&gt;=</span> <span class="n">listSize</span> <span class="o">-</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">tmplist</span><span class="p">[</span><span class="n">lct</span> <span class="o">+</span> <span class="n">rct</span><span class="p">]</span> <span class="o">=</span> <span class="n">llst</span><span class="p">[</span><span class="n">lct</span><span class="p">];</span>
+            <span class="n">lct</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">tmplist</span><span class="p">[</span><span class="n">lct</span> <span class="o">+</span> <span class="n">rct</span><span class="p">]</span> <span class="o">=</span> <span class="n">rlst</span><span class="p">[</span><span class="n">rct</span><span class="p">];</span>
+            <span class="n">rct</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">listSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmplist</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">list</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">cnlist</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">cnlist</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">MergeSort</span><span class="p">(</span><span class="n">cnlist</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">cnlist</span><span class="p">[</span><span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int divide(int a[],int low,int high)
-{
-    int k = a[low];
-    do
-    {
-        while(low&lt;high&amp;&amp;a[high]&gt;=k)
-            high--;
-        if(low&lt;high)
-            a[low++] = a[high];
-        while(low&lt;high&amp;&amp;a[low]&lt;=k)
-            low++;
-        if (low&lt;high)
-            a[high--] = a[low];
-    } while (low != high);
-    a[low] = k;
-    return low;
-}
+<span class="kt">int</span> <span class="nf">divide</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span><span class="kt">int</span> <span class="n">low</span><span class="p">,</span><span class="kt">int</span> <span class="n">high</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">low</span><span class="p">];</span>
+    <span class="k">do</span>
+    <span class="p">{</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">low</span><span class="o">&lt;</span><span class="n">high</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">high</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">high</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">low</span><span class="o">&lt;</span><span class="n">high</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">low</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">high</span><span class="p">];</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">low</span><span class="o">&lt;</span><span class="n">high</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">low</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">k</span><span class="p">)</span>
+            <span class="n">low</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">low</span><span class="o">&lt;</span><span class="n">high</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">high</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">low</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">low</span> <span class="o">!=</span> <span class="n">high</span><span class="p">);</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">low</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">low</span><span class="p">;</span>
+<span class="p">}</span>
 
-void quickSort(int a[],int low,int high)
-{
-    int mid;
-    if (low&gt;=high)//只有1个或0个元素
-        return;
-    mid = divide(a, low, high);
-    quickSort(a, low, mid-1);
-    quickSort(a, mid + 1, high);
-}
+<span class="kt">void</span> <span class="nf">quickSort</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span><span class="kt">int</span> <span class="n">low</span><span class="p">,</span><span class="kt">int</span> <span class="n">high</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">mid</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">low</span><span class="o">&gt;=</span><span class="n">high</span><span class="p">)</span><span class="c1">//只有1个或0个元素</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="n">mid</span> <span class="o">=</span> <span class="n">divide</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
+    <span class="n">quickSort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">low</span><span class="p">,</span> <span class="n">mid</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">quickSort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="p">);</span>
+<span class="p">}</span>
 
-void quickSort(int a[],int size)
-{
-    quickSort(a, 0, size - 1);
-}
+<span class="kt">void</span> <span class="nf">quickSort</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">quickSort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main()
-{
-    int N ,*array;
-    cin &gt;&gt; N;
-    array = new int[N];
-    for (int i =0;i&lt;N;i++)
-    {
-        cin &gt;&gt; array[i];
-    }
-    quickSort(array, N);
-    cout &lt;&lt; array[N / 2];
-    return 0;
-}
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">N</span> <span class="p">,</span><span class="o">*</span><span class="n">array</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span><span class="p">;</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">quickSort</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">array</span><span class="p">[</span><span class="n">N</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

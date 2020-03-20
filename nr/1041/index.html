@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -404,273 +406,274 @@ findmin -100
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 二哥打飞机 */
-#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-#include &lt;set&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 二哥打飞机 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class cmp{
-public:
-    bool operator()(pair&lt;int, int&gt; p1, pair&lt;int, int&gt; p2){
-        return (p1.second &lt; p2.second || (p1.second == p2.second &amp;&amp; p1.first &lt; p2.first));
-    }
-};
+<span class="k">class</span> <span class="nc">cmp</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">bool</span> <span class="k">operator</span><span class="p">()(</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">p1</span><span class="p">,</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">p2</span><span class="p">){</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;</span> <span class="n">p2</span><span class="p">.</span><span class="n">second</span> <span class="o">||</span> <span class="p">(</span><span class="n">p1</span><span class="p">.</span><span class="n">second</span> <span class="o">==</span> <span class="n">p2</span><span class="p">.</span><span class="n">second</span> <span class="o">&amp;&amp;</span> <span class="n">p1</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">p2</span><span class="p">.</span><span class="n">first</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-class Plane{
-public:
-    bool operator &lt;(const Plane &amp;p){
-        return (h &lt; p.h || (h == p.h &amp;&amp; ind &lt; p.ind));
-    }
+<span class="k">class</span> <span class="nc">Plane</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">bool</span> <span class="k">operator</span> <span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">Plane</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">){</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">h</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">h</span> <span class="o">||</span> <span class="p">(</span><span class="n">h</span> <span class="o">==</span> <span class="n">p</span><span class="p">.</span><span class="n">h</span> <span class="o">&amp;&amp;</span> <span class="n">ind</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">ind</span><span class="p">));</span>
+    <span class="p">}</span>
 
-    int h = 0, ind = 0;
-};
+    <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-int n;
-Plane a[100005];
-int pos[100005];
+<span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+<span class="n">Plane</span> <span class="n">a</span><span class="p">[</span><span class="mi">100005</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">pos</span><span class="p">[</span><span class="mi">100005</span><span class="p">];</span>
 
-void siftup(int x){
-    while (x &gt; 1){
-        if (a[x] &lt; a[x / 2]){
-            a[0] = a[x / 2];
-            a[x / 2] = a[x];
-            a[x] = a[0];
-            pos[a[x].ind] = x;
-            pos[a[x / 2].ind] = x / 2;
-            x /= 2;
-        }
-        else
-            break;
-    }
-}
+<span class="kt">void</span> <span class="nf">siftup</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]){</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="n">pos</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+            <span class="n">pos</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="n">x</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-void makeheap(){
-    for (int i = n / 2 + 1; i &lt;= n; ++i)
-        siftup(i);
-}
+<span class="kt">void</span> <span class="nf">makeheap</span><span class="p">(){</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">siftup</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
 
-int dfs(int x, int i){
-    if (a[i].h &gt; x)
-        return i;
-    int r1 = 0, r2 = 0;
-    if (i * 2 &lt;= n){
-        r1 = dfs(x, i * 2);
-    }
-    if (i * 2 + 1 &lt;= n){
-        r2 = dfs(x, i * 2 + 1);
-    }
-    if (r1 == 0)
-        return r2;
-    else if (r2 == 0)
-        return r1;
-    else
-        return (a[r1] &lt; a[r2] ? r1 : r2);
-}
+<span class="kt">int</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">r1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">){</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">){</span>
+        <span class="n">r2</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">r1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r2</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">r2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">r1</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">r1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">r2</span><span class="p">]</span> <span class="o">?</span> <span class="nl">r1</span> <span class="p">:</span> <span class="n">r2</span><span class="p">);</span>
+<span class="p">}</span>
 
-void findmin(int x){
-    int r = dfs(x, 1);
-    cout &lt;&lt; a[r].ind &lt;&lt; endl;
-}
+<span class="kt">void</span> <span class="nf">findmin</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">dfs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">ind</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    set&lt;pair&lt;int, int&gt;, cmp&gt; s;
-    cin &gt;&gt; n;
-if (n &lt;= 70000){
-    for (int i = 1; i &lt;= n; ++i){
-        int h;
-        cin &gt;&gt; h;
-        s.insert(make_pair(i, h));
-    }
-    char ss[10];
-    while (cin &gt;&gt; ss){
-        if (ss[0] == 'd'){
-            int x, d;
-            cin &gt;&gt; x &gt;&gt; d;
-            auto it = find_if(s.begin(), s.end(), [x](pair&lt;int, int&gt; p){return p.first == x;});
-            auto t = *it;
-            t.second -= d;
-            s.erase(it);
-            s.insert(t);
-        }
-        else if (ss[0] == 'f'){
-            int x;
-            cin &gt;&gt; x;
-            auto it = find_if(s.begin(), s.end(), [x](pair&lt;int, int&gt; p){return p.second &gt; x;});
-            cout &lt;&lt; it-&gt;first &lt;&lt; '\n';
-        }
-    }
-}
-else{
-    for (int i = 1; i &lt;= n; ++i){
-        cin &gt;&gt; a[i].h;
-        a[i].ind = i;
-        pos[i] = i;
-    }
-    makeheap();
-    char s[10];
-    while (cin &gt;&gt; s){
-        if (s[0] == 'd'){
-            int x, d;
-            cin &gt;&gt; x &gt;&gt; d;
-            a[pos[x]].h -= d;
-            siftup(pos[x]);
-        }
-        else if (s[0] == 'f'){
-            int x;
-            cin &gt;&gt; x;
-            findmin(x);
-        }
-    }
-}
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">set</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">cmp</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">70000</span><span class="p">){</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">h</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">h</span><span class="p">;</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">h</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="kt">char</span> <span class="n">ss</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ss</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;d&#39;</span><span class="p">){</span>
+            <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">d</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="n">x</span><span class="p">](</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">){</span><span class="k">return</span> <span class="n">p</span><span class="p">.</span><span class="n">first</span> <span class="o">==</span> <span class="n">x</span><span class="p">;});</span>
+            <span class="k">auto</span> <span class="n">t</span> <span class="o">=</span> <span class="o">*</span><span class="n">it</span><span class="p">;</span>
+            <span class="n">t</span><span class="p">.</span><span class="n">second</span> <span class="o">-=</span> <span class="n">d</span><span class="p">;</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span><span class="p">){</span>
+            <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">find_if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">s</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[</span><span class="n">x</span><span class="p">](</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">){</span><span class="k">return</span> <span class="n">p</span><span class="p">.</span><span class="n">second</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">;});</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">makeheap</span><span class="p">();</span>
+    <span class="kt">char</span> <span class="n">s</span><span class="p">[</span><span class="mi">10</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;d&#39;</span><span class="p">){</span>
+            <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">d</span><span class="p">;</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">]].</span><span class="n">h</span> <span class="o">-=</span> <span class="n">d</span><span class="p">;</span>
+            <span class="n">siftup</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;f&#39;</span><span class="p">){</span>
+            <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+            <span class="n">findmin</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &lt;map&gt;
-#include &lt;set&gt;
-#include &lt;vector&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int n;
-    cin &gt;&gt; n;
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
 
-    map&lt;int, set&lt;int&gt;&gt; mdata;
-    vector&lt;int&gt; vdata(n + 1);
+    <span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">mdata</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">vdata</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
 
-    for (int i = 1; i &lt;= n; ++i) {
-        int temp;
-        cin &gt;&gt; temp;
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
 
-        if (mdata.find(temp) == mdata.end()) {
-            set&lt;int&gt; stmp;
-            stmp.insert(i);
-            mdata.insert(make_pair(temp, stmp));
-        }
-        else {
-            mdata[temp].insert(i);
-        }
-        vdata[i] = temp;
-    }
+        <span class="k">if</span> <span class="p">(</span><span class="n">mdata</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">==</span> <span class="n">mdata</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+            <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">stmp</span><span class="p">;</span>
+            <span class="n">stmp</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="n">mdata</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">stmp</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="n">temp</span><span class="p">].</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">vdata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    string op;
-    while (cin &gt;&gt; op) {
-        if (op == &quot;findmin&quot;) {
-            int val;
-            cin &gt;&gt; val;
+    <span class="n">string</span> <span class="n">op</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">op</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="s">&quot;findmin&quot;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">val</span><span class="p">;</span>
 
-            auto p = mdata.upper_bound(val);
-            cout &lt;&lt; *(p-&gt;second.begin()) &lt;&lt; &quot;\n&quot;;
-        }
-        else if (op == &quot;decrease&quot;) {
-            int i, j;
-            cin &gt;&gt; i &gt;&gt; j;
-            mdata[vdata[i]].erase(i);
-            vdata[i] -= j;
-            mdata[vdata[i]].insert(i);
-        }
-    }
+            <span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">mdata</span><span class="p">.</span><span class="n">upper_bound</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">begin</span><span class="p">())</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="s">&quot;decrease&quot;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="n">j</span><span class="p">;</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="n">vdata</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">erase</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="n">vdata</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="n">j</span><span class="p">;</span>
+            <span class="n">mdata</span><span class="p">[</span><span class="n">vdata</span><span class="p">[</span><span class="n">i</span><span class="p">]].</span><span class="n">insert</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-using namespace std;
-struct node{
-    int n,h;
-};
-char cmd[200];
-node heap[200000];
-int ptr[200000],num,x,d;
-inline int ls(int x){ return x&lt;&lt;1;}
-inline int rs(int x){ return x&lt;&lt;1|1;}
-void minheapify(int x){
-    int s=x;
-    while (true){
-        if (ls(x)&lt;=num&amp;&amp;(heap[ls(x)].h&lt;heap[s].h||(heap[ls(x)].h==heap[s].h&amp;&amp;heap[ls(x)].n&lt;heap[s].n))) s=ls(x);
-        if (rs(x)&lt;=num&amp;&amp;(heap[rs(x)].h&lt;heap[s].h||(heap[rs(x)].h==heap[s].h&amp;&amp;heap[rs(x)].n&lt;heap[s].n))) s=rs(x);
-        if (s!=x)
-        {
-            swap(ptr[heap[s].n],ptr[heap[x].n]);
-            swap(heap[s],heap[x]);
-            x=s;
-        }
-        else break;
-    }
-}
-void modify(int x,int d){
-    heap[ptr[x]].h-=d;
-    minheapify(ptr[x]);
-    int cur=ptr[x];
-    while (cur&gt;1){
-        if (heap[cur].h&lt;heap[cur/2].h||(heap[cur].h==heap[cur/2].h&amp;&amp;heap[cur].n&lt;heap[cur/2].n)){
-            swap(ptr[heap[cur].n],ptr[heap[cur/2].n]);
-            swap(heap[cur],heap[cur/2]);
-            cur/=2;
-        }
-        else break;
-    }
-}
-int findmin(int x,int cur){
-    int ans=0x3f3f3f3f,index=0x3f3f3f3f,tmp;
-    if (heap[cur].h&lt;=x){
-        if (ls(cur)&lt;=num){
-            tmp=findmin(x,ls(cur));
-            if (tmp&lt;=num&amp;&amp;(heap[ptr[tmp]].h&lt;ans||(heap[ptr[tmp]].h==ans&amp;&amp;tmp&lt;index))) {
-                ans = heap[ptr[tmp]].h;
-                index = tmp;
-            }
-        }
-        if (rs(cur)&lt;=num){
-            tmp=findmin(x,rs(cur));
-            if (tmp&lt;=num&amp;&amp;(heap[ptr[tmp]].h&lt;ans||(heap[ptr[tmp]].h==ans&amp;&amp;tmp&lt;index))) {
-                ans = heap[ptr[tmp]].h;
-                index = tmp;
-            }
-        }
-        return index;
-    }
-    else return heap[cur].n;
-}
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cin&gt;&gt;num;
-    for (int i=1;i&lt;=num;++i) {
-        cin&gt;&gt;heap[i].h;
-        heap[i].n=i;
-        ptr[i]=i;
-    }
-    for (int i=num;i&gt;=1;--i)
-        minheapify(i);
-    while (cin&gt;&gt;cmd){
-        if (strcmp(cmd,&quot;findmin&quot;)==0){
-            cin&gt;&gt;x;
-            cout&lt;&lt;findmin(x,1)&lt;&lt;endl;
-        }
-        if (strcmp(cmd,&quot;decrease&quot;)==0){
-            cin&gt;&gt;x&gt;&gt;d;
-            modify(x,d);
-        }
-    }
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">node</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">h</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kt">char</span> <span class="n">cmd</span><span class="p">[</span><span class="mi">200</span><span class="p">];</span>
+<span class="n">node</span> <span class="n">heap</span><span class="p">[</span><span class="mi">200000</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">ptr</span><span class="p">[</span><span class="mi">200000</span><span class="p">],</span><span class="n">num</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">d</span><span class="p">;</span>
+<span class="kr">inline</span> <span class="kt">int</span> <span class="nf">ls</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span> <span class="k">return</span> <span class="n">x</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">;}</span>
+<span class="kr">inline</span> <span class="kt">int</span> <span class="nf">rs</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span> <span class="k">return</span> <span class="n">x</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="o">|</span><span class="mi">1</span><span class="p">;}</span>
+<span class="kt">void</span> <span class="nf">minheapify</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">s</span><span class="o">=</span><span class="n">x</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ls</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">num</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">ls</span><span class="p">(</span><span class="n">x</span><span class="p">)].</span><span class="n">h</span><span class="o">&lt;</span><span class="n">heap</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">h</span><span class="o">||</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">ls</span><span class="p">(</span><span class="n">x</span><span class="p">)].</span><span class="n">h</span><span class="o">==</span><span class="n">heap</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">h</span><span class="o">&amp;&amp;</span><span class="n">heap</span><span class="p">[</span><span class="n">ls</span><span class="p">(</span><span class="n">x</span><span class="p">)].</span><span class="n">n</span><span class="o">&lt;</span><span class="n">heap</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">n</span><span class="p">)))</span> <span class="n">s</span><span class="o">=</span><span class="n">ls</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">num</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">rs</span><span class="p">(</span><span class="n">x</span><span class="p">)].</span><span class="n">h</span><span class="o">&lt;</span><span class="n">heap</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">h</span><span class="o">||</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">rs</span><span class="p">(</span><span class="n">x</span><span class="p">)].</span><span class="n">h</span><span class="o">==</span><span class="n">heap</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">h</span><span class="o">&amp;&amp;</span><span class="n">heap</span><span class="p">[</span><span class="n">rs</span><span class="p">(</span><span class="n">x</span><span class="p">)].</span><span class="n">n</span><span class="o">&lt;</span><span class="n">heap</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">n</span><span class="p">)))</span> <span class="n">s</span><span class="o">=</span><span class="n">rs</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="o">!=</span><span class="n">x</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">ptr</span><span class="p">[</span><span class="n">heap</span><span class="p">[</span><span class="n">s</span><span class="p">].</span><span class="n">n</span><span class="p">],</span><span class="n">ptr</span><span class="p">[</span><span class="n">heap</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">n</span><span class="p">]);</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">s</span><span class="p">],</span><span class="n">heap</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">s</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">modify</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">d</span><span class="p">){</span>
+    <span class="n">heap</span><span class="p">[</span><span class="n">ptr</span><span class="p">[</span><span class="n">x</span><span class="p">]].</span><span class="n">h</span><span class="o">-=</span><span class="n">d</span><span class="p">;</span>
+    <span class="n">minheapify</span><span class="p">(</span><span class="n">ptr</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+    <span class="kt">int</span> <span class="n">cur</span><span class="o">=</span><span class="n">ptr</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cur</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="p">].</span><span class="n">h</span><span class="o">&lt;</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="o">/</span><span class="mi">2</span><span class="p">].</span><span class="n">h</span><span class="o">||</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="p">].</span><span class="n">h</span><span class="o">==</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="o">/</span><span class="mi">2</span><span class="p">].</span><span class="n">h</span><span class="o">&amp;&amp;</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="p">].</span><span class="n">n</span><span class="o">&lt;</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="o">/</span><span class="mi">2</span><span class="p">].</span><span class="n">n</span><span class="p">)){</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">ptr</span><span class="p">[</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="p">].</span><span class="n">n</span><span class="p">],</span><span class="n">ptr</span><span class="p">[</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="o">/</span><span class="mi">2</span><span class="p">].</span><span class="n">n</span><span class="p">]);</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="p">],</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="o">/</span><span class="mi">2</span><span class="p">]);</span>
+            <span class="n">cur</span><span class="o">/=</span><span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">findmin</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">cur</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">ans</span><span class="o">=</span><span class="mh">0x3f3f3f3f</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="mh">0x3f3f3f3f</span><span class="p">,</span><span class="n">tmp</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="p">].</span><span class="n">h</span><span class="o">&lt;=</span><span class="n">x</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ls</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">num</span><span class="p">){</span>
+            <span class="n">tmp</span><span class="o">=</span><span class="n">findmin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">ls</span><span class="p">(</span><span class="n">cur</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="o">&lt;=</span><span class="n">num</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">ptr</span><span class="p">[</span><span class="n">tmp</span><span class="p">]].</span><span class="n">h</span><span class="o">&lt;</span><span class="n">ans</span><span class="o">||</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">ptr</span><span class="p">[</span><span class="n">tmp</span><span class="p">]].</span><span class="n">h</span><span class="o">==</span><span class="n">ans</span><span class="o">&amp;&amp;</span><span class="n">tmp</span><span class="o">&lt;</span><span class="n">index</span><span class="p">)))</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">ptr</span><span class="p">[</span><span class="n">tmp</span><span class="p">]].</span><span class="n">h</span><span class="p">;</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rs</span><span class="p">(</span><span class="n">cur</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">num</span><span class="p">){</span>
+            <span class="n">tmp</span><span class="o">=</span><span class="n">findmin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">rs</span><span class="p">(</span><span class="n">cur</span><span class="p">));</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="o">&lt;=</span><span class="n">num</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">ptr</span><span class="p">[</span><span class="n">tmp</span><span class="p">]].</span><span class="n">h</span><span class="o">&lt;</span><span class="n">ans</span><span class="o">||</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">ptr</span><span class="p">[</span><span class="n">tmp</span><span class="p">]].</span><span class="n">h</span><span class="o">==</span><span class="n">ans</span><span class="o">&amp;&amp;</span><span class="n">tmp</span><span class="o">&lt;</span><span class="n">index</span><span class="p">)))</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">ptr</span><span class="p">[</span><span class="n">tmp</span><span class="p">]].</span><span class="n">h</span><span class="p">;</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">index</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">return</span> <span class="n">heap</span><span class="p">[</span><span class="n">cur</span><span class="p">].</span><span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">num</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">num</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">h</span><span class="p">;</span>
+        <span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">n</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+        <span class="n">ptr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">num</span><span class="p">;</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">;</span><span class="o">--</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">minheapify</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">cmd</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="s">&quot;findmin&quot;</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+            <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">findmin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="s">&quot;decrease&quot;</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+            <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">x</span><span class="o">&gt;&gt;</span><span class="n">d</span><span class="p">;</span>
+            <span class="n">modify</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">d</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

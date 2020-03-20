@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -395,98 +397,98 @@ Bingo!
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;cstring&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int n, m;
-bool visited[25] = { 0 };
-int choose[65][25] = { 0 };
-int val_num[65] = { 0 };
-bool fucked = false;
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">visited</span><span class="p">[</span><span class="mi">25</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="kt">int</span> <span class="n">choose</span><span class="p">[</span><span class="mi">65</span><span class="p">][</span><span class="mi">25</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="kt">int</span> <span class="n">val_num</span><span class="p">[</span><span class="mi">65</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="kt">bool</span> <span class="n">fucked</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
 
-void fuck(int pos) {
-    if (pos == n + 1) {
-        bool flag = true;
-        for (int i = 0; i &lt; m; ++i) {
-            int cnt = 0;
-            for (int j = 0; j &lt; val_num[i]; ++j) {
-                if (choose[i][j] &lt; 0 &amp;&amp; !visited[-choose[i][j]]) {
-                    ++cnt;
-                }
-                else if (choose[i][j] &gt; 0 &amp;&amp; visited[choose[i][j]]) {
-                    ++cnt;
-                }
-            }
-            if (cnt == 0) {
-                flag = false;
-                break;
-            }
-        }
-        if (flag) {
-            fucked = true;
-        }
-        return;
-    }
-    visited[pos] = true;
-    fuck(pos + 1);
-    visited[pos] = false;
-    fuck(pos + 1);
-}
+<span class="kt">void</span> <span class="nf">fuck</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">==</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">val_num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">choose</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="o">-</span><span class="n">choose</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]])</span> <span class="p">{</span>
+                    <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">choose</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">visited</span><span class="p">[</span><span class="n">choose</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]])</span> <span class="p">{</span>
+                    <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fucked</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">visited</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="n">fuck</span><span class="p">(</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">visited</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">fuck</span><span class="p">(</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int t;
-    cin &gt;&gt; t;
-    cin.get();
+    <span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
 
-    for (; t &gt; 0; --t) {
-        fucked = false;
-        memset(visited, 0, sizeof(visited));
-        memset(choose, 0, sizeof(choose));
-        memset(val_num, 0, sizeof(val_num));
-        cin &gt;&gt; n &gt;&gt; m;
-        /*
-        cin.get();
-        char buff[1000] = { 0 };
-        cin.getline(buff, 1000);
-        int length = strlen(buff);
-        int cnt = 0;
-        int cur_num = 0;
-        for (int i = 0; i &lt; length; ++i) {
-            if (buff[i] &gt;= '0' &amp;&amp; buff[i] &lt;= '9') {
-                cur_num = cur_num * 10 + buff[i] - '0';
-                if ()
-            }
-        }*/
-        cin.get();
-        for (int i = 0; i &lt; m; ++i) {
-            for (int cnt = 0;; ++cnt) {
-                cin &gt;&gt; choose[i][cnt];
-                if (cin.get() == '\n') {
-                    val_num[i] = cnt + 1;
-                    break;
-                }
-            }
-        }
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">fucked</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">visited</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">visited</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">choose</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">choose</span><span class="p">));</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">val_num</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">val_num</span><span class="p">));</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+        <span class="cm">/*</span>
+<span class="cm">        cin.get();</span>
+<span class="cm">        char buff[1000] = { 0 };</span>
+<span class="cm">        cin.getline(buff, 1000);</span>
+<span class="cm">        int length = strlen(buff);</span>
+<span class="cm">        int cnt = 0;</span>
+<span class="cm">        int cur_num = 0;</span>
+<span class="cm">        for (int i = 0; i &lt; length; ++i) {</span>
+<span class="cm">            if (buff[i] &gt;= &#39;0&#39; &amp;&amp; buff[i] &lt;= &#39;9&#39;) {</span>
+<span class="cm">                cur_num = cur_num * 10 + buff[i] - &#39;0&#39;;</span>
+<span class="cm">                if ()</span>
+<span class="cm">            }</span>
+<span class="cm">        }*/</span>
+        <span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;;</span> <span class="o">++</span><span class="n">cnt</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">choose</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">cnt</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;\n&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">val_num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnt</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        fuck(1);
+        <span class="n">fuck</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 
-        if (fucked) {
-            cout &lt;&lt; &quot;Bingo!\n&quot;;
-        }
-        else {
-            cout &lt;&lt; &quot;Sigh...\n&quot;;
-        }
-    }
+        <span class="k">if</span> <span class="p">(</span><span class="n">fucked</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Bingo!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Sigh...</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -385,59 +387,59 @@ Cow #1 lives at position x=10 and has height h=3, and so on.
 </details>
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-void qsort(int *s,int *t,int *p,int *q){
-    if (t-s&lt;=1) return;
-    int i=0,j=int(t-s)-1,x=s[0],y=p[0];
-    while (i&lt;j){
-        while (i&lt;j&amp;&amp;s[j]&gt;=x) j--;
-        if (i&lt;j) {s[i]=s[j]; p[i++]=p[j];}
-        while (i&lt;j&amp;&amp;s[i]&lt;=x) i++;
-        if (i&lt;j) {s[j]=s[i]; p[j--]=p[i];}
-    }
-    s[j]=x;
-    p[j]=y;
-    qsort(s,s+j,p,p+j);
-    qsort(s+j+1,t,p+j+1,q);
-}
-int ans,p,x[100000],n,d,head,tail,h[100000],a[100000],lmax[100000],rmax[100000],bx[100000];
-int main() {
-    scanf(&quot;%d%d&quot;,&amp;n,&amp;d);
-    for (int i=0;i&lt;n;++i) scanf(&quot;%d%d&quot;,&amp;x[i],&amp;h[i]);
-    qsort(x,x+n,h,h+n);
-    head=0;
-    tail=0;
-    for (;x[p]&lt;=d&amp;&amp;p&lt;n;++p){
-        while (head&gt;0&amp;&amp;h[a[head-1]]&lt;=h[p]) head--;
-        a[head++]=p;
-        lmax[p]=h[a[tail]];
-    }
-    for (;p&lt;n;++p){
-        while (tail&lt;head&amp;&amp;x[a[tail]]+d&lt;x[p]) tail++;
-        while (head&gt;tail&amp;&amp;h[a[head-1]]&lt;=h[p]) head--;
-        a[head++]=p;
-        lmax[p]=h[a[tail]];
-    }
-    head=0;
-    tail=0;
-    for (p=n-1;x[p]&gt;=x[n-1]-d;--p){
-        while (head&gt;0&amp;&amp;h[a[head-1]]&lt;=h[p]) head--;
-        a[head++]=p;
-        rmax[p]=h[a[tail]];
-    }
-    for (;p&gt;=0;--p){
-        while (tail&lt;head&amp;&amp;x[a[tail]]-d&gt;x[p]) tail++;
-        while (head&gt;tail&amp;&amp;h[a[head-1]]&lt;=h[p]) head--;
-        a[head++]=p;
-        rmax[p]=h[a[tail]];
-    }
-    for (int i=0;i&lt;n;++i)
-        if (2 * h[i] &lt;= lmax[i] &amp;&amp; 2 * h[i] &lt;= rmax[i]) ans++;
-    printf(&quot;%d&quot;,ans);
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="kt">void</span> <span class="nf">qsort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">t</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">q</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">s</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="o">=</span><span class="kt">int</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">s</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="o">&amp;&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">x</span><span class="p">)</span> <span class="n">j</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">];</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">];}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="o">&amp;&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">x</span><span class="p">)</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="o">--</span><span class="p">]</span><span class="o">=</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">];}</span>
+    <span class="p">}</span>
+    <span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">y</span><span class="p">;</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">s</span><span class="o">+</span><span class="n">j</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="n">j</span><span class="p">);</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">s</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">p</span><span class="o">+</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">q</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">ans</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="mi">100000</span><span class="p">],</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">head</span><span class="p">,</span><span class="n">tail</span><span class="p">,</span><span class="n">h</span><span class="p">[</span><span class="mi">100000</span><span class="p">],</span><span class="n">a</span><span class="p">[</span><span class="mi">100000</span><span class="p">],</span><span class="n">lmax</span><span class="p">[</span><span class="mi">100000</span><span class="p">],</span><span class="n">rmax</span><span class="p">[</span><span class="mi">100000</span><span class="p">],</span><span class="n">bx</span><span class="p">[</span><span class="mi">100000</span><span class="p">];</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="o">&amp;</span><span class="n">d</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="o">&amp;</span><span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="o">+</span><span class="n">n</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">h</span><span class="o">+</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">head</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="n">tail</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span><span class="n">x</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">d</span><span class="o">&amp;&amp;</span><span class="n">p</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">p</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">h</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;=</span><span class="n">h</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="n">head</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">p</span><span class="p">;</span>
+        <span class="n">lmax</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">=</span><span class="n">h</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(;</span><span class="n">p</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">p</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">tail</span><span class="o">&lt;</span><span class="n">head</span><span class="o">&amp;&amp;</span><span class="n">x</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]]</span><span class="o">+</span><span class="n">d</span><span class="o">&lt;</span><span class="n">x</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="n">tail</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="o">&gt;</span><span class="n">tail</span><span class="o">&amp;&amp;</span><span class="n">h</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;=</span><span class="n">h</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="n">head</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">p</span><span class="p">;</span>
+        <span class="n">lmax</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">=</span><span class="n">h</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]];</span>
+    <span class="p">}</span>
+    <span class="n">head</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="n">tail</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="n">x</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">d</span><span class="p">;</span><span class="o">--</span><span class="n">p</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">h</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;=</span><span class="n">h</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="n">head</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">p</span><span class="p">;</span>
+        <span class="n">rmax</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">=</span><span class="n">h</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(;</span><span class="n">p</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="o">--</span><span class="n">p</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">tail</span><span class="o">&lt;</span><span class="n">head</span><span class="o">&amp;&amp;</span><span class="n">x</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]]</span><span class="o">-</span><span class="n">d</span><span class="o">&gt;</span><span class="n">x</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="n">tail</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="o">&gt;</span><span class="n">tail</span><span class="o">&amp;&amp;</span><span class="n">h</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;=</span><span class="n">h</span><span class="p">[</span><span class="n">p</span><span class="p">])</span> <span class="n">head</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">p</span><span class="p">;</span>
+        <span class="n">rmax</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">=</span><span class="n">h</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">lmax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">rmax</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">ans</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

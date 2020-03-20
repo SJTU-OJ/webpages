@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -410,243 +412,242 @@
 </details>
 
 <h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>//1002 rewrite cf FineArtz
-#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="c1">//1002 rewrite cf FineArtz</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int main()
-{
-    int m, n;
-    cin &gt;&gt; m &gt;&gt; n;
-    //DynMat    Name:Summat
-    //Lines:m+1 rows:n+1
-    int **Summat = new int *[m + 1];
-    for (int i = 0; i &lt; m + 1; i++)
-        *(Summat + i) = new int[n + 1]();
-    int *Summat_cfg = new int(m + 1);
-    //End of Dynmat.
-    int getnum;
-    for (int i = 1; i &lt;= m; i++)
-        for (int j = 1; j &lt;= n; j++)
-        {
-            cin &gt;&gt; getnum;
-            Summat[i][j] = getnum + Summat[i - 1][j] + Summat[i][j - 1] - Summat[i - 1][j - 1];
-        }
-    int l, h;
-    cin &gt;&gt; l &gt;&gt; h;
-    int max = 0;
-    int total = 0;
-    for (int i = 0; i &lt; m + 1 - l; i++)
-        for (int j = 0; j &lt; n + 1 - h; j++)
-        {
-            total = (Summat[i + l][j + h] + Summat[i][j] - Summat[i + l][j] - Summat[i][j + h]);
-            max = total &gt; max ? total : max;
-        }
-    cout &lt;&lt; max;
-    //Release DynMat
-    //Name:Summat
-    for (int i = 0; i &lt; *Summat_cfg; i++)
-        delete[] * (Summat + i);
-    delete[] Summat;
-    delete Summat_cfg;
-    //End of Release.
-    return 0;
-}
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">m</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="c1">//DynMat    Name:Summat</span>
+    <span class="c1">//Lines:m+1 rows:n+1</span>
+    <span class="kt">int</span> <span class="o">**</span><span class="n">Summat</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="o">*</span><span class="p">[</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="o">*</span><span class="p">(</span><span class="n">Summat</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]();</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">Summat_cfg</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="c1">//End of Dynmat.</span>
+    <span class="kt">int</span> <span class="n">getnum</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">getnum</span><span class="p">;</span>
+            <span class="n">Summat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">getnum</span> <span class="o">+</span> <span class="n">Summat</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">Summat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">Summat</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="n">h</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">l</span> <span class="o">&gt;&gt;</span> <span class="n">h</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">l</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">h</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">total</span> <span class="o">=</span> <span class="p">(</span><span class="n">Summat</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">l</span><span class="p">][</span><span class="n">j</span> <span class="o">+</span> <span class="n">h</span><span class="p">]</span> <span class="o">+</span> <span class="n">Summat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">Summat</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">l</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">Summat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">+</span> <span class="n">h</span><span class="p">]);</span>
+            <span class="n">max</span> <span class="o">=</span> <span class="n">total</span> <span class="o">&gt;</span> <span class="n">max</span> <span class="o">?</span> <span class="nl">total</span> <span class="p">:</span> <span class="n">max</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">max</span><span class="p">;</span>
+    <span class="c1">//Release DynMat</span>
+    <span class="c1">//Name:Summat</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="o">*</span><span class="n">Summat_cfg</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="o">*</span> <span class="p">(</span><span class="n">Summat</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">Summat</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="n">Summat_cfg</span><span class="p">;</span>
+    <span class="c1">//End of Release.</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 二哥种花生 */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 二哥种花生 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int sum[1005][1005] = {0};
+<span class="kt">int</span> <span class="n">sum</span><span class="p">[</span><span class="mi">1005</span><span class="p">][</span><span class="mi">1005</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-int main(){
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
 
-    int m, n, t;
-    cin &gt;&gt; m &gt;&gt; n;
-    for (int i = 1; i &lt;= m; ++i)
-        for (int j = 1; j &lt;= n; ++j){
-            cin &gt;&gt; t;
-            sum[i][j] = t + sum[i - 1][j] + sum[i][j - 1] - sum[i - 1][j - 1];
-        }
-    int a, b, ans = 0;
-    cin &gt;&gt; a &gt;&gt; b;
-    for (int i = a; i &lt;= m; ++i)
-        for (int j = b; j &lt;= n; ++j)
-            ans = max(ans, sum[i][j] - sum[i - a][j] - sum[i][j - b] + sum[i - a][j - b]);
-    cout &lt;&lt; ans &lt;&lt; endl;
-    return 0;
-}
+    <span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">m</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">;</span>
+            <span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">sum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">sum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">a</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">sum</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="n">b</span><span class="p">]</span> <span class="o">+</span> <span class="n">sum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">a</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="n">b</span><span class="p">]);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int hs[1009][1009] = { 0 };
+<span class="kt">int</span> <span class="n">hs</span><span class="p">[</span><span class="mi">1009</span><span class="p">][</span><span class="mi">1009</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int L, W;
-    cin &gt;&gt; L &gt;&gt; W;
+    <span class="kt">int</span> <span class="n">L</span><span class="p">,</span> <span class="n">W</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">L</span> <span class="o">&gt;&gt;</span> <span class="n">W</span><span class="p">;</span>
 
-    for (int i = 1; i &lt;= L; ++i) {
-        for (int j = 1; j &lt;= W; ++j) {
-            int temp;
-            cin &gt;&gt; temp;
-            hs[i][j] = hs[i][j - 1] + hs[i - 1][j] - hs[i - 1][j - 1] + temp;
-        }
-    }
-    int cur_ans = 0;
-    int a, b;
-    cin &gt;&gt; a &gt;&gt; b;
-    for (int i = 0; i + a &lt;= L; ++i) {
-        for (int j = 0; j + b &lt;= W; ++j) {
-            if (hs[i + a][j + b] - hs[i][j + b] - hs[i + a][j] + hs[i][j] &gt; cur_ans)
-                cur_ans = hs[i + a][j + b] - hs[i][j + b] - hs[i + a][j] + hs[i][j];
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">L</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">W</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">hs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">cur_ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">+</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="n">L</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="n">W</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">hs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">a</span><span class="p">][</span><span class="n">j</span> <span class="o">+</span> <span class="n">b</span><span class="p">]</span> <span class="o">-</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">+</span> <span class="n">b</span><span class="p">]</span> <span class="o">-</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">a</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">cur_ans</span><span class="p">)</span>
+                <span class="n">cur_ans</span> <span class="o">=</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">a</span><span class="p">][</span><span class="n">j</span> <span class="o">+</span> <span class="n">b</span><span class="p">]</span> <span class="o">-</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">+</span> <span class="n">b</span><span class="p">]</span> <span class="o">-</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">a</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; cur_ans;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">cur_ans</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="callmeinks-solution">Callmeink's solution <a class="github-button" href="https://github.com/CallMeInk/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include&lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int main()
-{
-    int n,m,x,y,ans,sum;
-    int a[1005][1005],f[1005][1005] ;
-    cin &gt;&gt; n &gt;&gt; m;
-    for (int i=1;i&lt;=n;i++)
-        for (int j=1;j&lt;=m;j++)
-            cin &gt;&gt; a[i][j];
-    cin &gt;&gt; x &gt;&gt; y;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">ans</span><span class="p">,</span><span class="n">sum</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">1005</span><span class="p">][</span><span class="mi">1005</span><span class="p">],</span><span class="n">f</span><span class="p">[</span><span class="mi">1005</span><span class="p">][</span><span class="mi">1005</span><span class="p">]</span> <span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">m</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
 
-    for (int i=1;i&lt;=n;i++)
-        f[0][i] = 0;
-    for (int i=1;i&lt;=n;i++)
-        for (int j=1;j&lt;=m;j++)
-            f[i][j] = f[i-1][j] + a[i][j];
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">m</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
 
-    ans = 0;
-    for (int i=1;i&lt;=n-x+1;i++)
-    {
-        sum = 0;
-        for (int k=1;k&lt;=y;k++)
-            sum += f[i+x-1][k] - f[i-1][k];
-        if (sum &gt; ans) ans = sum;
-        for (int j=2;j&lt;=m-y+1;j++)
-        {
-             sum += f[i+x-1][j+y-1]-f[i-1][j+y-1]-(f[i+x-1][j-1]-f[i-1][j-1]);
-             //cout &lt;&lt; i &lt;&lt; ' ' &lt;&lt; j &lt;&lt; ' ' &lt;&lt; sum &lt;&lt; endl;
-             if (sum &gt; ans) ans = sum;
-        }
-        //cout &lt;&lt; &quot;ans=&quot; &lt;&lt; ans &lt;&lt; endl;
-    }
-    cout &lt;&lt; ans &lt;&lt; endl;
-}
+    <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="o">-</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">k</span><span class="o">&lt;=</span><span class="n">y</span><span class="p">;</span><span class="n">k</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="n">ans</span><span class="p">)</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">m</span><span class="o">-</span><span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+             <span class="n">sum</span> <span class="o">+=</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="n">y</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="n">y</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+             <span class="c1">//cout &lt;&lt; i &lt;&lt; &#39; &#39; &lt;&lt; j &lt;&lt; &#39; &#39; &lt;&lt; sum &lt;&lt; endl;</span>
+             <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="n">ans</span><span class="p">)</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//cout &lt;&lt; &quot;ans=&quot; &lt;&lt; ans &lt;&lt; endl;</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-
-</code></pre>
 
 <h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-int main(void)
-{
-    int L, W;
-    cin &gt;&gt; L &gt;&gt; W;
-    //int corn[1001][1001] = {};
-    int **corn = NULL, **pre = NULL;
-    corn = new int *[L + 1];
-    pre = new int *[L + 1];
-    pre[0] = new int [W + 1]{0};
-    for (int i = 1; i &lt;= L; ++i)
-    {
-        corn[i] = new int[W + 1];
-        pre[i] = new int[W + 1];
-        pre[i][0] = 0;
-    }
-    for (int i = 1; i &lt;= L; ++i)
-        for (int j = 1; j &lt;= W; ++j)
-        {
-            cin &gt;&gt; corn[i][j];
-            pre[i][j] = corn[i][j] + pre[i - 1][j] + pre[i][j - 1] - pre[i - 1][j - 1];
-        }
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">L</span><span class="p">,</span> <span class="n">W</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">L</span> <span class="o">&gt;&gt;</span> <span class="n">W</span><span class="p">;</span>
+    <span class="c1">//int corn[1001][1001] = {};</span>
+    <span class="kt">int</span> <span class="o">**</span><span class="n">corn</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="o">**</span><span class="n">pre</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+    <span class="n">corn</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="o">*</span><span class="p">[</span><span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="n">pre</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="o">*</span><span class="p">[</span><span class="n">L</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="n">pre</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="p">[</span><span class="n">W</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">L</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">corn</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">W</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">pre</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">W</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="n">pre</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">L</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">W</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">corn</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="n">pre</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">corn</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">pre</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">pre</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pre</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
 
-    int length, width;
-    cin &gt;&gt; length &gt;&gt; width;
-    int max = 0;
-    int sum = 0;
-    for (int i = length; i &lt;= L; ++i)
-        for (int j = width; j &lt;= W; ++j)
-        {
-            sum = pre[i][j] - pre[i - length][j] - pre[i][j - width] + pre[i - length][j - width];
-            if (sum &gt; max)
-                max = sum;
-        }
-    /*for (int i = 1; i &lt;= L - length + 1; ++i)
-        for (int j = 1; j &lt;= W - width + 1; ++j)
-        {
-            int sum = 0;
-            for (int k = i; k &lt;= i + length - 1; ++k)
-                for (int l = j; l &lt;= j + width - 1; ++l)
-                    sum += corn[k][l];
-            if (sum &gt; max)
-                max = sum;
-        }*/
-    /*int temp_head = 0, temp = 0;
-    for (int i = 1; i &lt;= L - length + 1; ++i)
-        for (int j = 1; j &lt;= W - width + 1; ++j)
-        {
-            int sum = 0;
-            if (i == 1 &amp;&amp; j == 1)
-            {
-                for (int k = 1; k &lt;= length; ++k)
-                    for (int l = 1; l &lt;= width; ++l)
-                        temp += corn[k][l];
-                max = temp_head = temp;
-            }
-            else if (j == 1)
-            {
-                for (int l = 1; l &lt;= width; ++l)
-                {
-                    temp_head = temp_head - corn[i - 1][l] + corn[i + length - 1][l];
-                }
-                temp = temp_head;
-                if (temp &gt; max)
-                    max = temp;
-            }
-            else
-            {
-                for (int k = i; k &lt;= i + length - 1; ++k)
-                    temp = temp - corn[k][j - 1] + corn[k][j + width - 1];
-                if (temp &gt; max)
-                    max = temp;
-            }
-        }*/
-    cout &lt;&lt; max;
+    <span class="kt">int</span> <span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">length</span> <span class="o">&gt;&gt;</span> <span class="n">width</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">L</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">width</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">W</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">sum</span> <span class="o">=</span> <span class="n">pre</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">pre</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">length</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">pre</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="n">width</span><span class="p">]</span> <span class="o">+</span> <span class="n">pre</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">length</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="n">width</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">&gt;</span> <span class="n">max</span><span class="p">)</span>
+                <span class="n">max</span> <span class="o">=</span> <span class="n">sum</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="cm">/*for (int i = 1; i &lt;= L - length + 1; ++i)</span>
+<span class="cm">        for (int j = 1; j &lt;= W - width + 1; ++j)</span>
+<span class="cm">        {</span>
+<span class="cm">            int sum = 0;</span>
+<span class="cm">            for (int k = i; k &lt;= i + length - 1; ++k)</span>
+<span class="cm">                for (int l = j; l &lt;= j + width - 1; ++l)</span>
+<span class="cm">                    sum += corn[k][l];</span>
+<span class="cm">            if (sum &gt; max)</span>
+<span class="cm">                max = sum;</span>
+<span class="cm">        }*/</span>
+    <span class="cm">/*int temp_head = 0, temp = 0;</span>
+<span class="cm">    for (int i = 1; i &lt;= L - length + 1; ++i)</span>
+<span class="cm">        for (int j = 1; j &lt;= W - width + 1; ++j)</span>
+<span class="cm">        {</span>
+<span class="cm">            int sum = 0;</span>
+<span class="cm">            if (i == 1 &amp;&amp; j == 1)</span>
+<span class="cm">            {</span>
+<span class="cm">                for (int k = 1; k &lt;= length; ++k)</span>
+<span class="cm">                    for (int l = 1; l &lt;= width; ++l)</span>
+<span class="cm">                        temp += corn[k][l];</span>
+<span class="cm">                max = temp_head = temp;</span>
+<span class="cm">            }</span>
+<span class="cm">            else if (j == 1)</span>
+<span class="cm">            {</span>
+<span class="cm">                for (int l = 1; l &lt;= width; ++l)</span>
+<span class="cm">                {</span>
+<span class="cm">                    temp_head = temp_head - corn[i - 1][l] + corn[i + length - 1][l];</span>
+<span class="cm">                }</span>
+<span class="cm">                temp = temp_head;</span>
+<span class="cm">                if (temp &gt; max)</span>
+<span class="cm">                    max = temp;</span>
+<span class="cm">            }</span>
+<span class="cm">            else</span>
+<span class="cm">            {</span>
+<span class="cm">                for (int k = i; k &lt;= i + length - 1; ++k)</span>
+<span class="cm">                    temp = temp - corn[k][j - 1] + corn[k][j + width - 1];</span>
+<span class="cm">                if (temp &gt; max)</span>
+<span class="cm">                    max = temp;</span>
+<span class="cm">            }</span>
+<span class="cm">        }*/</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">max</span><span class="p">;</span>
 
-    for (int i = 1; i &lt;= L; ++i)
-        delete [] corn[i];
-    delete [] corn;
-    return 0;
-}
-
-
-</code></pre>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">L</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">delete</span> <span class="p">[]</span> <span class="n">corn</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">delete</span> <span class="p">[]</span> <span class="n">corn</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

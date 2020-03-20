@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -392,119 +394,118 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* Count On Tree*/
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;queue&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* Count On Tree*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class Node{
-public:
-    int father = 0;
-    vector&lt;int&gt; edge;
-    long long w = 0, sumw = 0;
-    int depth = 0;
-    int inT = 0, outT = 0;
-};
-Node a[50005];
-vector&lt;int&gt; dep[50105];
+<span class="k">class</span> <span class="nc">Node</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">father</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">edge</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sumw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">inT</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">outT</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="mi">50005</span><span class="p">];</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">dep</span><span class="p">[</span><span class="mi">50105</span><span class="p">];</span>
 
-void makeTree(){
-    queue&lt;int&gt; q;
-    q.push(1);
-    int now, next;
-    while (!q.empty()){
-        now = q.front();
-        q.pop();
-        for (int i : a[now].edge){
-            if (i != a[now].father){
-                a[i].father = now;
-                if (a[i].edge.size() != 1)
-                    q.push(i);
-            }
-        }
-    }
-}
-/*void print(int root){
-    if (root == 0) return;
-    cout &lt;&lt; root &lt;&lt; ' ' &lt;&lt; a[root].sumw &lt;&lt; endl;
-    print(a[root].lchild);
-    print(a[root].rchild);
-}*/
-long long calcw(int root){
-    a[root].sumw = a[root].w;
-    for (auto i : a[root].edge){
-        if (i != a[root].father){
-            if (a[i].edge.size() != 1)
-                a[root].sumw += calcw(i);
-            else{
-                a[i].sumw = a[i].w;
-                a[root].sumw += a[i].w;
-            }
-        }
-    }
-    return a[root].sumw;
-}
-void calcDepth(int root, int d){
-    if (root == 0) return;
-    a[root].depth = d;
-    dep[d].push_back(root);
-    for (auto i : a[root].edge){
-        if (i != a[root].father){
-            calcDepth(i, d + 1);
-        }
-    }
-}
+<span class="kt">void</span> <span class="nf">makeTree</span><span class="p">(){</span>
+    <span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
+    <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">now</span><span class="p">,</span> <span class="n">next</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">()){</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">edge</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">father</span><span class="p">){</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">father</span> <span class="o">=</span> <span class="n">now</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">edge</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="cm">/*void print(int root){</span>
+<span class="cm">    if (root == 0) return;</span>
+<span class="cm">    cout &lt;&lt; root &lt;&lt; &#39; &#39; &lt;&lt; a[root].sumw &lt;&lt; endl;</span>
+<span class="cm">    print(a[root].lchild);</span>
+<span class="cm">    print(a[root].rchild);</span>
+<span class="cm">}*/</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="nf">calcw</span><span class="p">(</span><span class="kt">int</span> <span class="n">root</span><span class="p">){</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">sumw</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">edge</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">father</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">edge</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">sumw</span> <span class="o">+=</span> <span class="n">calcw</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="k">else</span><span class="p">{</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sumw</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">sumw</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">sumw</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">calcDepth</span><span class="p">(</span><span class="kt">int</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">d</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">depth</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+    <span class="n">dep</span><span class="p">[</span><span class="n">d</span><span class="p">].</span><span class="n">push_back</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">edge</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">father</span><span class="p">){</span>
+            <span class="n">calcDepth</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-int timeStamp = 1;
-void makeStamp(int root){
-    a[root].inT = timeStamp;
-    for (auto i : a[root].edge){
-        if (i != a[root].father){
-            ++timeStamp;
-            makeStamp(i);
-        }
-    }
-    a[root].outT = timeStamp;
-}
+<span class="kt">int</span> <span class="n">timeStamp</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">makeStamp</span><span class="p">(</span><span class="kt">int</span> <span class="n">root</span><span class="p">){</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">inT</span> <span class="o">=</span> <span class="n">timeStamp</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">edge</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">father</span><span class="p">){</span>
+            <span class="o">++</span><span class="n">timeStamp</span><span class="p">;</span>
+            <span class="n">makeStamp</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">outT</span> <span class="o">=</span> <span class="n">timeStamp</span><span class="p">;</span>
+<span class="p">}</span>
 
-long long query(int root, int h){
-    long long ret = 0;
-    for (auto i : dep[a[root].depth + h]){
-        if (a[i].inT &gt;= a[root].inT &amp;&amp; a[i].outT &lt;= a[root].outT)
-            ret += a[i].sumw;
-    }
-    return ret;
-}
-int main(){
-    ios::sync_with_stdio(false);
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">long</span> <span class="kt">long</span> <span class="nf">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">root</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">){</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">dep</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">depth</span> <span class="o">+</span> <span class="n">h</span><span class="p">]){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">inT</span> <span class="o">&gt;=</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">inT</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">outT</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">outT</span><span class="p">)</span>
+            <span class="n">ret</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sumw</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">ios_base</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int n, q, u, v;
-    cin &gt;&gt; n &gt;&gt; q;
-    for (int i = 1; i &lt;= n; ++i)
-        cin &gt;&gt; a[i].w;
-    for (int i = 1; i &lt; n; ++i){
-        cin &gt;&gt; u &gt;&gt; v;
-        a[u].edge.push_back(v);
-        a[v].edge.push_back(u);
-    }
-    makeTree();
-    calcw(1);
-    //print(1);
-    calcDepth(1, 1);
-    makeStamp(1);
-    int x, k;
-    for (int i = 1; i &lt;= q; ++i){
-        cin &gt;&gt; x &gt;&gt; k;
-        cout &lt;&lt; query(x, k) &lt;&lt; '\n';
-    }
-    return 0;
-}
-
-</code></pre>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">q</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">u</span> <span class="o">&gt;&gt;</span> <span class="n">v</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">edge</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">edge</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">u</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">makeTree</span><span class="p">();</span>
+    <span class="n">calcw</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="c1">//print(1);</span>
+    <span class="n">calcDepth</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">makeStamp</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">k</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">query</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

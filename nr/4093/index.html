@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -388,168 +390,169 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* Candy */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* Candy */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class Node{
-public:
-    int pack = 0, candy = 0;
+<span class="k">class</span> <span class="nc">Node</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">pack</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">candy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    Node() = default;
-    Node(int p, int c) : pack(p), candy(c) {}
+    <span class="n">Node</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">Node</span><span class="p">(</span><span class="kt">int</span> <span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c</span><span class="p">)</span> <span class="o">:</span> <span class="n">pack</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">candy</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="p">{}</span>
 
-    bool operator &lt;(const Node &amp;n){
-        return candy &lt; n.candy;
-    }
-};
+    <span class="kt">bool</span> <span class="k">operator</span> <span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">){</span>
+        <span class="k">return</span> <span class="n">candy</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">.</span><span class="n">candy</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-class Heap{
-public:
-    Node a[200005];
-    int heapsize = 0;
+<span class="k">class</span> <span class="nc">Heap</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="mi">200005</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">heapsize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    void swap(int x, int y){
-        Node t = a[x];
-        a[x] = a[y];
-        a[y] = t;
-    }
+    <span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
+        <span class="n">Node</span> <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void siftup(int x){
-        while (x &gt; 1){
-            if (a[x / 2] &lt; a[x]){
-                swap(x, x / 2);
-                x /= 2;
-            }
-            else
-                break;
-        }
-    }
+    <span class="kt">void</span> <span class="nf">siftup</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]){</span>
+                <span class="n">swap</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="n">x</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void siftdown(){
-        int i = 2;
-        while (i &lt;= heapsize){
-            if (i + 1 &lt;= heapsize &amp;&amp; a[i] &lt; a[i + 1])
-                ++i;
-            if (a[i / 2] &lt; a[i]){
-                swap(i, i / 2);
-                i *= 2;
-            }
-            else
-                break;
-        }
-    }
+    <span class="kt">void</span> <span class="nf">siftdown</span><span class="p">(){</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">heapsize</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">heapsize</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]){</span>
+                <span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="n">i</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void insert(const Node &amp;n){
-        a[++heapsize] = n;
-        siftup(heapsize);
-    }
+    <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="o">++</span><span class="n">heapsize</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+        <span class="n">siftup</span><span class="p">(</span><span class="n">heapsize</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    void remove(){
-        swap(1, heapsize);
-        --heapsize;
-        siftdown();
-    }
+    <span class="kt">void</span> <span class="nf">remove</span><span class="p">(){</span>
+        <span class="n">swap</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">heapsize</span><span class="p">);</span>
+        <span class="o">--</span><span class="n">heapsize</span><span class="p">;</span>
+        <span class="n">siftdown</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    Node getMax(){
-        return a[1];
-    }
-};
+    <span class="n">Node</span> <span class="nf">getMax</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-Heap heap;
-int n, m;
+<span class="n">Heap</span> <span class="n">heap</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
 
-int main(){
-    cin &gt;&gt; n &gt;&gt; m;
-    for (int i = 1; i &lt;= m; ++i){
-        int x, y;
-        cin &gt;&gt; x &gt;&gt; y;
-        heap.insert(Node(x, y));
-    }
-    long long ans = 0;
-    while (n != 0 &amp;&amp; heap.heapsize != 0){
-        Node t = heap.getMax();
-        if (n &lt; t.pack){
-            ans += n * (long long)t.candy;
-            break;
-        }
-        else{
-            ans += (long long)t.pack * t.candy;
-            n -= t.pack;
-            heap.remove();
-        }
-    }
-    cout &lt;&lt; ans &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">heap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="p">.</span><span class="n">heapsize</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="n">Node</span> <span class="n">t</span> <span class="o">=</span> <span class="n">heap</span><span class="p">.</span><span class="n">getMax</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">.</span><span class="n">pack</span><span class="p">){</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">n</span> <span class="o">*</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span><span class="p">)</span><span class="n">t</span><span class="p">.</span><span class="n">candy</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span><span class="p">)</span><span class="n">t</span><span class="p">.</span><span class="n">pack</span> <span class="o">*</span> <span class="n">t</span><span class="p">.</span><span class="n">candy</span><span class="p">;</span>
+            <span class="n">n</span> <span class="o">-=</span> <span class="n">t</span><span class="p">.</span><span class="n">pack</span><span class="p">;</span>
+            <span class="n">heap</span><span class="p">.</span><span class="n">remove</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int MAX = 200001;
-int n, m;
-struct candy {
-    int ai = 0;
-    int bi = 0;
-}c[MAX];
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAX</span> <span class="o">=</span> <span class="mi">200001</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">candy</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ai</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">bi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span><span class="n">c</span><span class="p">[</span><span class="n">MAX</span><span class="p">];</span>
 
-long long nums[MAX] = { 0 };
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">nums</span><span class="p">[</span><span class="n">MAX</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cin &gt;&gt; n &gt;&gt; m;
-    for (int i = 0; i &lt; m; ++i) {
-        cin &gt;&gt; c[i].ai;
-        cin &gt;&gt; c[i].bi;
-        nums[c[i].bi] += c[i].ai;
-    }
-    long long ans = 0;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ai</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">bi</span><span class="p">;</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">bi</span><span class="p">]</span> <span class="o">+=</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ai</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    for (long long i = MAX - 1; i &gt;= 0; --i) {
-        if (n &gt; nums[i]) {
-            ans += nums[i] * i;
-            n -= nums[i];
-        }
-        else {
-            ans += n * i;
-            break;
-        }
-    }
-    cout &lt;&lt; ans;
-    return 0;
-}
-</code></pre>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span> <span class="n">i</span> <span class="o">=</span> <span class="n">MAX</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+            <span class="n">n</span> <span class="o">-=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;cstdio&gt;
-using namespace std;
-int m,a,b;
-long long n,ans,num[200001];
-int main() {
-    scanf(&quot;%lld%d&quot;,&amp;n,&amp;m);
-    for (int i=0;i&lt;m;++i){
-        scanf(&quot;%d%d&quot;,&amp;a,&amp;b);
-        num[b]+=a;
-    }
-    for (int i=200000;i&gt;=1;--i)
-    {
-        if (n&gt;=num[i]) {
-            ans += num[i] * i;
-            n -= num[i];
-        }
-        else{
-            ans+=n*i;
-            break;
-        }
-    }
-    printf(&quot;%lld&quot;,ans);
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">m</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">n</span><span class="p">,</span><span class="n">ans</span><span class="p">,</span><span class="n">num</span><span class="p">[</span><span class="mi">200001</span><span class="p">];</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%lld%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
+        <span class="n">num</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">+=</span><span class="n">a</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">200000</span><span class="p">;</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">;</span><span class="o">--</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">&gt;=</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+            <span class="n">n</span> <span class="o">-=</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="n">ans</span><span class="o">+=</span><span class="n">n</span><span class="o">*</span><span class="n">i</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%lld&quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

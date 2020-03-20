@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -375,299 +377,299 @@
 </details>
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;cstring&gt;
-#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 5e6 + 10;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">5e6</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
 
-int inputLen = 0, outputLen = 0;
-char input[maxN] = {0}, output[2 * maxN] = {0};
+<span class="kt">int</span> <span class="n">inputLen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">outputLen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">input</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">output</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-template &lt;class T&gt;
-class seqStack {
-   private:
-    T* data;
-    int nowSize;
-    int maxSize;
-    // void doublespace();
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">seqStack</span> <span class="p">{</span>
+   <span class="k">private</span><span class="o">:</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">nowSize</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxSize</span><span class="p">;</span>
+    <span class="c1">// void doublespace();</span>
 
-   public:
-    seqStack(int initSize = maxN);
-    seqStack(const seqStack&lt;T&gt;&amp;);
-    ~seqStack();
-    int size() const;
-    void push(T);
-    T top();
-    T pop();
-    bool isEmpty();
-    T find(T) const;
-    seqStack&lt;T&gt;&amp; operator=(const seqStack&lt;T&gt;&amp;);
-    T&amp; operator[](int);
-};
+   <span class="k">public</span><span class="o">:</span>
+    <span class="n">seqStack</span><span class="p">(</span><span class="kt">int</span> <span class="n">initSize</span> <span class="o">=</span> <span class="n">maxN</span><span class="p">);</span>
+    <span class="n">seqStack</span><span class="p">(</span><span class="k">const</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">seqStack</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="nf">size</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="n">T</span><span class="p">);</span>
+    <span class="n">T</span> <span class="nf">top</span><span class="p">();</span>
+    <span class="n">T</span> <span class="nf">pop</span><span class="p">();</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">();</span>
+    <span class="n">T</span> <span class="nf">find</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span><span class="p">);</span>
+    <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">[](</span><span class="kt">int</span><span class="p">);</span>
+<span class="p">};</span>
 
-template &lt;class T&gt;
-seqStack&lt;T&gt;::seqStack(int initSize) {
-    data = new T[initSize];
-    nowSize = 0;
-    maxSize = initSize;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">seqStack</span><span class="p">(</span><span class="kt">int</span> <span class="n">initSize</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">initSize</span><span class="p">];</span>
+    <span class="n">nowSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">maxSize</span> <span class="o">=</span> <span class="n">initSize</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-seqStack&lt;T&gt;::seqStack(const seqStack&lt;T&gt;&amp; right) {
-    nowSize = right.nowSize;
-    maxSize = right.maxSize;
-    data = new T[maxSize];
-    for (int i = 0; i &lt; nowSize; i++) {
-        data[i] = right.data[i];
-    }
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">seqStack</span><span class="p">(</span><span class="k">const</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">nowSize</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">nowSize</span><span class="p">;</span>
+    <span class="n">maxSize</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">maxSize</span><span class="p">;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nowSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-seqStack&lt;T&gt;::~seqStack() {
-    delete[] data;
-    data = NULL;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::~</span><span class="n">seqStack</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
 
-/*template &lt;class T&gt;
-void seqStack&lt;T&gt;::doublespace() {
-    maxSize *= 2;
-    T* tmp;
-    tmp = new T[maxSize];
+<span class="cm">/*template &lt;class T&gt;</span>
+<span class="cm">void seqStack&lt;T&gt;::doublespace() {</span>
+<span class="cm">    maxSize *= 2;</span>
+<span class="cm">    T* tmp;</span>
+<span class="cm">    tmp = new T[maxSize];</span>
 
-    for (int i = 0; i &lt; nowSize; i++) {
-        tmp[i] = data[i];
-    }
+<span class="cm">    for (int i = 0; i &lt; nowSize; i++) {</span>
+<span class="cm">        tmp[i] = data[i];</span>
+<span class="cm">    }</span>
 
-    delete[] data;
-    data = tmp;
+<span class="cm">    delete[] data;</span>
+<span class="cm">    data = tmp;</span>
 
-    tmp = NULL;
-}*/
+<span class="cm">    tmp = NULL;</span>
+<span class="cm">}*/</span>
 
-template &lt;class T&gt;
-int seqStack&lt;T&gt;::size() const {
-    return nowSize;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">size</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">nowSize</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-void seqStack&lt;T&gt;::push(T x) {
-    /*if (nowSize == maxSize) {
-        doublespace();
-    }*/
-    data[nowSize++] = x;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">push</span><span class="p">(</span><span class="n">T</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/*if (nowSize == maxSize) {</span>
+<span class="cm">        doublespace();</span>
+<span class="cm">    }*/</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">nowSize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-T seqStack&lt;T&gt;::top() {
-    if (nowSize &gt; 0) {
-        return data[nowSize - 1];
-    } else {
-        return 0;
-    }
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">top</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nowSize</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">nowSize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-T seqStack&lt;T&gt;::pop() {
-    if (nowSize &gt; 0) {
-        return data[--nowSize];
-    } else {
-        return 0;
-    }
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">pop</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nowSize</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="o">--</span><span class="n">nowSize</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-bool seqStack&lt;T&gt;::isEmpty() {
-    return (nowSize == 0);
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">nowSize</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-T seqStack&lt;T&gt;::find(T x) const {
-    for (int i = 0; i &lt; nowSize; i++) {
-        if (data[i] == x) {
-            return x;
-        }
-    }
-    return -1;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">find</span><span class="p">(</span><span class="n">T</span> <span class="n">x</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nowSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-seqStack&lt;T&gt;&amp; seqStack&lt;T&gt;::operator=(const seqStack&lt;T&gt;&amp; right) {
-    if (this != &amp;right) {
-        delete[] data;
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">!=</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
 
-        nowSize = right.nowSize;
-        maxSize = right.maxSize;
-        data = new T[maxSize];
-        for (int i = 0; i &lt; nowSize; i++) {
-            data[i] = right.data[i];
-        }
-    }
+        <span class="n">nowSize</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">nowSize</span><span class="p">;</span>
+        <span class="n">maxSize</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">maxSize</span><span class="p">;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nowSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return *this;
-}
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-T&amp; seqStack&lt;T&gt;::operator[](int x) {
-    return data[nowSize - x - 1];
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span><span class="o">&amp;</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="k">operator</span><span class="p">[](</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">nowSize</span> <span class="o">-</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int ans, temp = 0, temp1, temp2, temp3;
-    seqStack&lt;char&gt; mark;
-    seqStack&lt;int&gt; num;
-    bool flag = 0;
-    char ch;
+    <span class="kt">int</span> <span class="n">ans</span><span class="p">,</span> <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">temp1</span><span class="p">,</span> <span class="n">temp2</span><span class="p">,</span> <span class="n">temp3</span><span class="p">;</span>
+    <span class="n">seqStack</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">mark</span><span class="p">;</span>
+    <span class="n">seqStack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">num</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
 
-    ch = cin.get();
-    while (ch != -1) {
-        if (ch != ' ' &amp;&amp; ch != '\n') {
-            input[inputLen++] = ch;
-        }
-        ch = cin.get();
-    }
-    input[inputLen] = 0;
+    <span class="n">ch</span> <span class="o">=</span> <span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ch</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">!=</span> <span class="sc">&#39; &#39;</span> <span class="o">&amp;&amp;</span> <span class="n">ch</span> <span class="o">!=</span> <span class="sc">&#39;\n&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">input</span><span class="p">[</span><span class="n">inputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">input</span><span class="p">[</span><span class="n">inputLen</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    for (int i = inputLen - 1; i &gt;= 0; i--) {
-        switch (input[i]) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                if (!flag) {
-                    output[outputLen++] = ' ';
-                }
-                flag = 1;
-                output[outputLen++] = input[i];
-                break;
-            case ')':
-                flag = 0;
-                mark.push(input[i]);
-                break;
-            case '+':
-            case '-':
-                flag = 0;
-                if (mark.isEmpty() || mark.top() == ')' || mark.top() == '+' ||
-                    mark.top() == '-') {
-                    mark.push(input[i]);
-                } else if (!mark.isEmpty()) {
-                    output[outputLen++] = ' ';
-                    output[outputLen++] = mark.pop();
-                    i++;
-                }
-                break;
-            case '*':
-            case '/':
-                flag = 0;
-                if (mark.isEmpty() || mark.top() == ')' || mark.top() == '+' ||
-                    mark.top() == '-' || mark.top() == '*' ||
-                    mark.top() == '/') {
-                    mark.push(input[i]);
-                } else if (!mark.isEmpty()) {
-                    output[outputLen++] = ' ';
-                    output[outputLen++] = mark.pop();
-                    i++;
-                }
-                break;
-            case '(':
-                flag = 0;
-                while (!mark.isEmpty() &amp;&amp; mark.top() != ')') {
-                    output[outputLen++] = ' ';
-                    output[outputLen++] = mark.pop();
-                }
-                if (!mark.isEmpty() &amp;&amp; mark.top() == ')') {
-                    mark.pop();
-                }
-                break;
-        }
-    }
-    while (!mark.isEmpty()) {
-        output[outputLen++] = ' ';
-        output[outputLen++] = mark.pop();
-    }
-    output[outputLen] = 0;
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">inputLen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="sc">&#39;0&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;1&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;2&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;3&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;4&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;5&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;6&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;7&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;8&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;9&#39;</span><span class="o">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;)&#39;</span><span class="o">:</span>
+                <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="n">mark</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;+&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;-&#39;</span><span class="o">:</span>
+                <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">mark</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="o">||</span> <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;)&#39;</span> <span class="o">||</span> <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;+&#39;</span> <span class="o">||</span>
+                    <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;-&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">mark</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">mark</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+                    <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">mark</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;*&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;/&#39;</span><span class="o">:</span>
+                <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">mark</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="o">||</span> <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;)&#39;</span> <span class="o">||</span> <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;+&#39;</span> <span class="o">||</span>
+                    <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;-&#39;</span> <span class="o">||</span> <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;*&#39;</span> <span class="o">||</span>
+                    <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;/&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">mark</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">mark</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+                    <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">mark</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;(&#39;</span><span class="o">:</span>
+                <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">mark</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">!=</span> <span class="sc">&#39;)&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+                    <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">mark</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">mark</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">mark</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">==</span> <span class="sc">&#39;)&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">mark</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">mark</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+        <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">mark</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">output</span><span class="p">[</span><span class="n">outputLen</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    flag = 0;
-    for (int i = outputLen - 1; i &gt;= 0; i--) {
-        if (!flag &amp;&amp; output[i] == ' ') {
-            continue;
-        } else {
-            flag = 1;
-            cout &lt;&lt; output[i];
-        }
-    }
-    cout &lt;&lt; '\n';
+    <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">outputLen</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">flag</span> <span class="o">&amp;&amp;</span> <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39; &#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 
-    for (int i = 0; i &lt; outputLen; i++) {
-        switch (output[i]) {
-            case '0':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9': {
-                int j = i;
-                temp = 0;
-                while (output[j] != ' ' &amp;&amp; j &lt; outputLen) {
-                    j++;
-                }
-                for (int k = j - 1; k &gt;= i; k--) {
-                    temp *= 10;
-                    temp += output[k] - '0';
-                }
-                i = j;
-                num.push(temp);
-                break;
-            }
-            case ' ':
-                break;
-            case '+':
-                if (!num.isEmpty()) temp1 = num.pop();
-                if (!num.isEmpty()) temp2 = num.pop();
-                temp1 += temp2;
-                num.push(temp1);
-                break;
-            case '-':
-                if (!num.isEmpty()) temp1 = num.pop();
-                if (!num.isEmpty()) temp2 = num.pop();
-                temp1 -= temp2;
-                num.push(temp1);
-                break;
-            case '*':
-                if (!num.isEmpty()) temp1 = num.pop();
-                if (!num.isEmpty()) temp2 = num.pop();
-                temp1 *= temp2;
-                num.push(temp1);
-                break;
-            case '/':
-                if (!num.isEmpty()) temp1 = num.pop();
-                if (!num.isEmpty()) temp2 = num.pop();
-                temp1 /= temp2;
-                num.push(temp1);
-                break;
-        }
-    }
-    if (!num.isEmpty()) ans = num.pop();
-    cout &lt;&lt; ans;
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">outputLen</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="sc">&#39;0&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;1&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;2&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;3&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;4&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;5&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;6&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;7&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;8&#39;</span><span class="o">:</span>
+            <span class="k">case</span> <span class="sc">&#39;9&#39;</span><span class="o">:</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39; &#39;</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">outputLen</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="n">i</span><span class="p">;</span> <span class="n">k</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">temp</span> <span class="o">*=</span> <span class="mi">10</span><span class="p">;</span>
+                    <span class="n">temp</span> <span class="o">+=</span> <span class="n">output</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+                <span class="n">num</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">case</span> <span class="sc">&#39; &#39;</span><span class="o">:</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;+&#39;</span><span class="o">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">temp1</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">temp2</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">temp1</span> <span class="o">+=</span> <span class="n">temp2</span><span class="p">;</span>
+                <span class="n">num</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp1</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;-&#39;</span><span class="o">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">temp1</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">temp2</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">temp1</span> <span class="o">-=</span> <span class="n">temp2</span><span class="p">;</span>
+                <span class="n">num</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp1</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;*&#39;</span><span class="o">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">temp1</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">temp2</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">temp1</span> <span class="o">*=</span> <span class="n">temp2</span><span class="p">;</span>
+                <span class="n">num</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp1</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;/&#39;</span><span class="o">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">temp1</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">temp2</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">temp1</span> <span class="o">/=</span> <span class="n">temp2</span><span class="p">;</span>
+                <span class="n">num</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp1</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

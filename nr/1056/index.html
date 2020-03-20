@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -425,608 +427,609 @@ Q 1
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 二哥吃糖 */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 二哥吃糖 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class Node{
-public:
-    int size = 1, ind = 0;
-};
+<span class="k">class</span> <span class="nc">Node</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-bool b[500005];
-Node a[500005];
-int p[500005], pos[500005];
-int n, m, Size = 0;
+<span class="kt">bool</span> <span class="n">b</span><span class="p">[</span><span class="mi">500005</span><span class="p">];</span>
+<span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="mi">500005</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">p</span><span class="p">[</span><span class="mi">500005</span><span class="p">],</span> <span class="n">pos</span><span class="p">[</span><span class="mi">500005</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">Size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-int getParent(int x){
-    if (p[x] != x)
-        p[x] = getParent(p[x]);
-    return p[x];
-}
+<span class="kt">int</span> <span class="nf">getParent</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">x</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">getParent</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+<span class="p">}</span>
 
-void siftdown(int i){
-    int x = i, mx = a[i].size;
-    if (i * 2 &lt;= Size){
-        if (a[i * 2].size &gt; mx){
-            x = i * 2;
-            mx = a[i * 2].size;
-        }
-    }
-    if (i * 2 + 1 &lt;= Size){
-        if (a[i * 2 + 1].size &gt; mx){
-            x = i * 2 + 1;
-            mx = a[i * 2 + 1].size;
-        }
-    }
-    if (x != i){
-        a[0] = a[x];
-        a[x] = a[i];
-        a[i] = a[0];
-        pos[a[i].ind] = i;
-        pos[a[x].ind] = x;
-        siftdown(x);
-    }
-}
+<span class="kt">void</span> <span class="nf">siftdown</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">Size</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">){</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="n">mx</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">size</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">Size</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">){</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">mx</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">size</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="n">i</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">siftdown</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-void siftup(int i){
-    while (i &gt;= 2){
-        if (a[i].size &lt;= a[i / 2].size)
-            break;
-        a[0] = a[i];
-        a[i] = a[i / 2];
-        a[i / 2] = a[0];
-        pos[a[i].ind] = i;
-        pos[a[i / 2].ind] = i / 2;
-        i /= 2;
-    }
-}
+<span class="kt">void</span> <span class="nf">siftup</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">){</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">].</span><span class="n">size</span><span class="p">)</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">i</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-void del(int i){
-    a[i] = a[Size--];
-    siftdown(i);
-}
+<span class="kt">void</span> <span class="nf">del</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">){</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">Size</span><span class="o">--</span><span class="p">];</span>
+    <span class="n">siftdown</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
 
-int findk(int k){
-    int tmp = Size;
-    for (int i = 1; i &lt;= k - 1; ++i){
-        a[0] = a[1];
-        a[1] = a[Size];
-        a[Size] = a[0];
-        pos[a[1].ind] = 1;
-        pos[a[Size].ind] = Size;
-        --Size;
-        siftdown(1);
-    }
-    int ret = a[1].size;
-    while (Size &lt; tmp){
-        ++Size;
-        siftup(Size);
-    }
-    return ret;
-}
+<span class="kt">int</span> <span class="nf">findk</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">Size</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">Size</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">Size</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">Size</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">Size</span><span class="p">;</span>
+        <span class="o">--</span><span class="n">Size</span><span class="p">;</span>
+        <span class="n">siftdown</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">size</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">Size</span> <span class="o">&lt;</span> <span class="n">tmp</span><span class="p">){</span>
+        <span class="o">++</span><span class="n">Size</span><span class="p">;</span>
+        <span class="n">siftup</span><span class="p">(</span><span class="n">Size</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; n &gt;&gt; m;
-    for (int i = 1; i &lt;= n; ++i){
-        a[i].ind = i;
-        p[i] = i;
-        pos[i] = i;
-        b[i] = true;
-    }
-    Size = n;
-    while (m--){
-        char ch;
-        int x, y;
-        cin &gt;&gt; ch;
-        switch(ch){
-        case 'C':{
-            cin &gt;&gt; x &gt;&gt; y;
-            int px = getParent(x), py = getParent(y);
-            if (!b[px] || !b[py] || px == py) break;
-            p[px] = py;
-            a[pos[py]].size += a[pos[px]].size;
-            del(pos[px]);
-            siftup(pos[py]);
-            break;
-        }
-        case 'D':{
-            cin &gt;&gt; x;
-            int px = getParent(x);
-            if (!b[px]) break;
-            del(pos[px]);
-            b[px] = false;
-            break;
-        }
-        case 'Q':{
-            cin &gt;&gt; x;
-            if (Size &lt; x)
-                cout &lt;&lt; &quot;0\n&quot;;
-            else
-                cout &lt;&lt; findk(x) &lt;&lt; '\n';
-            break;
-        }
-        default:
-            break;
-        }
-    }
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">Size</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="o">--</span><span class="p">){</span>
+        <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ch</span><span class="p">;</span>
+        <span class="k">switch</span><span class="p">(</span><span class="n">ch</span><span class="p">){</span>
+        <span class="k">case</span> <span class="sc">&#39;C&#39;</span><span class="o">:</span><span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">px</span> <span class="o">=</span> <span class="n">getParent</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">py</span> <span class="o">=</span> <span class="n">getParent</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">b</span><span class="p">[</span><span class="n">px</span><span class="p">]</span> <span class="o">||</span> <span class="o">!</span><span class="n">b</span><span class="p">[</span><span class="n">py</span><span class="p">]</span> <span class="o">||</span> <span class="n">px</span> <span class="o">==</span> <span class="n">py</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+            <span class="n">p</span><span class="p">[</span><span class="n">px</span><span class="p">]</span> <span class="o">=</span> <span class="n">py</span><span class="p">;</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">py</span><span class="p">]].</span><span class="n">size</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">px</span><span class="p">]].</span><span class="n">size</span><span class="p">;</span>
+            <span class="n">del</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">px</span><span class="p">]);</span>
+            <span class="n">siftup</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">py</span><span class="p">]);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">case</span> <span class="sc">&#39;D&#39;</span><span class="o">:</span><span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">px</span> <span class="o">=</span> <span class="n">getParent</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">b</span><span class="p">[</span><span class="n">px</span><span class="p">])</span> <span class="k">break</span><span class="p">;</span>
+            <span class="n">del</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">px</span><span class="p">]);</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">px</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">case</span> <span class="sc">&#39;Q&#39;</span><span class="o">:</span><span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">Size</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;0</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">findk</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;cstring&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int mmax(int a, int b) {
-    return a &gt; b ? a : b;
-}
+<span class="kt">int</span> <span class="nf">mmax</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">?</span> <span class="nl">a</span> <span class="p">:</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
 
-int mmin(int a, int b) {
-    return a &lt; b ? a : b;
-}
+<span class="kt">int</span> <span class="nf">mmin</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="o">?</span> <span class="nl">a</span> <span class="p">:</span> <span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
 
-//记录元素在优先队列里面的位置
-int queue_pos[500009] = { 0 };
+<span class="c1">//记录元素在优先队列里面的位置</span>
+<span class="kt">int</span> <span class="n">queue_pos</span><span class="p">[</span><span class="mi">500009</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
 
-class type {
-public:
-    int pos = 0;
-    int val = 0;
-};
+<span class="k">class</span> <span class="nc">type</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-class mqueue {
-public:
-    type queue_data[500009];
-    int _size = 0;
+<span class="k">class</span> <span class="nc">mqueue</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">type</span> <span class="n">queue_data</span><span class="p">[</span><span class="mi">500009</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    void push_up(int pos) {
-        for (; pos &gt; 1 &amp;&amp; queue_data[pos].val &gt; queue_data[pos &gt;&gt; 1].val; pos &gt;&gt;= 1) {
-            swap(queue_pos[queue_data[pos].pos], queue_pos[queue_data[pos &gt;&gt; 1].pos]);
-            swap(queue_data[pos], queue_data[pos &gt;&gt; 1]);
-        }
-    }
+    <span class="kt">void</span> <span class="nf">push_up</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">val</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">pos</span><span class="p">],</span> <span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">pos</span><span class="p">]);</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void push_down(int pos) {
-        for (; pos * 2 &lt;= _size;) {
-            if (pos * 2 == _size) {
-                if (queue_data[pos].val &lt; queue_data[pos &lt;&lt; 1].val) {
-                    swap(queue_pos[queue_data[pos].pos], queue_pos[queue_data[pos * 2].pos]);
-                    swap(queue_data[pos], queue_data[pos &lt;&lt; 1]);
-                }
-                break;
-            }
-            else {
-                if (queue_data[pos].val &lt; mmax(queue_data[pos * 2].val, queue_data[pos * 2 + 1].val)) {
-                    if (queue_data[pos * 2].val &lt; queue_data[pos * 2 + 1].val) {
-                        swap(queue_pos[queue_data[pos].pos], queue_pos[queue_data[pos * 2 + 1].pos]);
-                        swap(queue_data[pos], queue_data[pos * 2 + 1]);
-                        pos = pos * 2 + 1;
-                    }
-                    else {
-                        swap(queue_pos[queue_data[pos].pos], queue_pos[queue_data[pos * 2].pos]);
-                        swap(queue_data[pos], queue_data[pos * 2]);
-                        pos &lt;&lt;= 1;
-                    }
-                }
-                else
-                    break;
-            }
-        }
-    }
+    <span class="kt">void</span> <span class="nf">push_down</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">_size</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">_size</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">swap</span><span class="p">(</span><span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">pos</span><span class="p">],</span> <span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">pos</span><span class="p">]);</span>
+                    <span class="n">swap</span><span class="p">(</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">]);</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">mmax</span><span class="p">(</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">val</span><span class="p">,</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">val</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">swap</span><span class="p">(</span><span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">pos</span><span class="p">],</span> <span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">pos</span><span class="p">]);</span>
+                        <span class="n">swap</span><span class="p">(</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+                        <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">swap</span><span class="p">(</span><span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">pos</span><span class="p">],</span> <span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">pos</span><span class="p">]);</span>
+                        <span class="n">swap</span><span class="p">(</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">],</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]);</span>
+                        <span class="n">pos</span> <span class="o">&lt;&lt;=</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void push(const type&amp; val) {
-        queue_data[++_size] = val;
-        queue_pos[val.pos] = _size;
-        push_up(_size);
-    }
+    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">type</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">queue_data</span><span class="p">[</span><span class="o">++</span><span class="n">_size</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+        <span class="n">queue_pos</span><span class="p">[</span><span class="n">val</span><span class="p">.</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">_size</span><span class="p">;</span>
+        <span class="n">push_up</span><span class="p">(</span><span class="n">_size</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    type pop() {
-        auto temp = queue_data[1];
-        queue_data[1] = queue_data[_size];
-        queue_pos[queue_data[1].pos] = 1;
-        --_size;
-        push_down(1);
-        queue_pos[temp.pos] = 0;
-        return temp;
-    }
+    <span class="n">type</span> <span class="nf">pop</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queue_data</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="n">queue_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">_size</span><span class="p">];</span>
+        <span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="o">--</span><span class="n">_size</span><span class="p">;</span>
+        <span class="n">push_down</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">queue_pos</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    int size() {
-        return _size;
-    }
+    <span class="kt">int</span> <span class="nf">size</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">_size</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void erase(int pos) {
-        queue_pos[queue_data[pos].pos] = 0;
-        queue_pos[queue_data[_size].pos] = pos;
-        queue_data[pos] = queue_data[_size];
-        --_size;
-        push_up(pos);
-        push_down(pos);
-    }
-};
+    <span class="kt">void</span> <span class="nf">erase</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">queue_pos</span><span class="p">[</span><span class="n">queue_data</span><span class="p">[</span><span class="n">_size</span><span class="p">].</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+        <span class="n">queue_data</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">_size</span><span class="p">];</span>
+        <span class="o">--</span><span class="n">_size</span><span class="p">;</span>
+        <span class="n">push_up</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+        <span class="n">push_down</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-//并查集
-class disjointSet {
-public:
-    //数组
-    int* parent;
-    int length = 0;
+<span class="c1">//并查集</span>
+<span class="k">class</span> <span class="nc">disjointSet</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//数组</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    //构造函数
-    disjointSet() = default;
-    disjointSet(int size) :length(size) {
-        parent = new int[size];
-        memset(parent, -1, length * sizeof(int));
-    }
+    <span class="c1">//构造函数</span>
+    <span class="n">disjointSet</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">disjointSet</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span> <span class="o">:</span><span class="n">length</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+    <span class="p">}</span>
 
-    //析构函数
-    ~disjointSet() {
-        length = 0;
-        delete[] parent;
-    }
+    <span class="c1">//析构函数</span>
+    <span class="o">~</span><span class="n">disjointSet</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //寻找
-    int find(int x) {
-        if (parent[x] &lt; 0)
-            return x;
-        return parent[x] = find(parent[x]);
-    }
-    //合并
-    void set_union(int root1, int root2) {
-        if (root1 == root2)
-            return;
-        if (parent[root1] &gt; parent[root2]) {
-            parent[root2] += parent[root1];
-            parent[root1] = root2;
-        }
-        else {
-            parent[root1] += parent[root2];
-            parent[root2] = root1;
-        }
-    }
+    <span class="c1">//寻找</span>
+    <span class="kt">int</span> <span class="n">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="c1">//合并</span>
+    <span class="kt">void</span> <span class="n">set_union</span><span class="p">(</span><span class="kt">int</span> <span class="n">root1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root1</span> <span class="o">==</span> <span class="n">root2</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">];</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">=</span> <span class="n">root2</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">];</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">]</span> <span class="o">=</span> <span class="n">root1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    int size(int pos) {
-        return -parent[find(pos)];
-    }
-};
+    <span class="kt">int</span> <span class="n">size</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">parent</span><span class="p">[</span><span class="n">find</span><span class="p">(</span><span class="n">pos</span><span class="p">)];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-bool cleared[500009] = { 0 };
-mqueue queue_data;
+<span class="kt">bool</span> <span class="n">cleared</span><span class="p">[</span><span class="mi">500009</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="n">mqueue</span> <span class="n">queue_data</span><span class="p">;</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int n, m;
-    cin &gt;&gt; n &gt;&gt; m;
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
 
-    disjointSet set_data(n + 1);
-    for (int i = 1; i &lt;= n; ++i) {
-        type temp;
-        temp.pos = i;
-        temp.val = 1;
-        queue_data.push(temp);
-    }
+    <span class="n">disjointSet</span> <span class="n">set_data</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">queue_data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    for (; m &gt; 0;) {
-        char op;
-        cin &gt;&gt; op;
-        if (op == 'C') {
-            --m;
-            int x, y;
-            cin &gt;&gt; x &gt;&gt; y;
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;)</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">op</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">op</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">&#39;C&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">--</span><span class="n">m</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
 
-            if (set_data.find(x) == set_data.find(y) || cleared[set_data.find(x)] || cleared[set_data.find(y)]) {
-                continue;
-            }
-            queue_data.erase(queue_pos[set_data.find(x)]);
-            queue_data.erase(queue_pos[set_data.find(y)]);
-            set_data.set_union(set_data.find(x), set_data.find(y));
-            type temp;
-            temp.pos = set_data.find(x);
-            temp.val = set_data.size(x);
-            queue_data.push(temp);
-        }
-        else if (op == 'D') {
-            --m;
-            int x;
-            cin &gt;&gt; x;
-            if (cleared[set_data.find(x)]) {
-                continue;
-            }
-            queue_data.erase(queue_pos[set_data.find(x)]);
-            cleared[set_data.find(x)] = true;
-        }
-        else if (op == 'Q') {
-            --m;
-            int p;
-            cin &gt;&gt; p;
-            type temp[12];
-            for (int i = 0; i &lt; p - 1; ++i) {
-                temp[i] = queue_data.pop();
-            }
-            type ans = queue_data.pop();
-            cout &lt;&lt; ans.val &lt;&lt; &quot;\n&quot;;
-            queue_data.push(ans);
-            for (int i = 0; i &lt; p - 1; ++i) {
-                queue_data.push(temp[i]);
-            }
-        }
-    }
+            <span class="k">if</span> <span class="p">(</span><span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">||</span> <span class="n">cleared</span><span class="p">[</span><span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">||</span> <span class="n">cleared</span><span class="p">[</span><span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">y</span><span class="p">)])</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">queue_data</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">queue_pos</span><span class="p">[</span><span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)]);</span>
+            <span class="n">queue_data</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">queue_pos</span><span class="p">[</span><span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">y</span><span class="p">)]);</span>
+            <span class="n">set_data</span><span class="p">.</span><span class="n">set_union</span><span class="p">(</span><span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">y</span><span class="p">));</span>
+            <span class="n">type</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">set_data</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+            <span class="n">queue_data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">&#39;D&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">--</span><span class="n">m</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cleared</span><span class="p">[</span><span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span> <span class="p">{</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">queue_data</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">queue_pos</span><span class="p">[</span><span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)]);</span>
+            <span class="n">cleared</span><span class="p">[</span><span class="n">set_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">&#39;Q&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">--</span><span class="n">m</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">p</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">p</span><span class="p">;</span>
+            <span class="n">type</span> <span class="n">temp</span><span class="p">[</span><span class="mi">12</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">queue_data</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="n">type</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">queue_data</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">.</span><span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="n">queue_data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">ans</span><span class="p">);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">queue_data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 5e5 + 100;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">5e5</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
 
-int box[maxN], sugar[maxN], moveTo[maxN] = {0}, boxNow, N, M;
+<span class="kt">int</span> <span class="n">box</span><span class="p">[</span><span class="n">maxN</span><span class="p">],</span> <span class="n">sugar</span><span class="p">[</span><span class="n">maxN</span><span class="p">],</span> <span class="n">moveTo</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">boxNow</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">;</span>
 
-template &lt;class T&gt;
-class AvlTree {
-   private:
-    struct AvlNode {
-        T data;
-        AvlNode *left;
-        AvlNode *right;
-        int height;
-        AvlNode(const T &amp;otherdata, AvlNode *l, AvlNode *r)
-            : data(otherdata), left(l), right(r), height(1) {}
-    };
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">AvlTree</span> <span class="p">{</span>
+   <span class="k">private</span><span class="o">:</span>
+    <span class="k">struct</span> <span class="n">AvlNode</span> <span class="p">{</span>
+        <span class="n">T</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">AvlNode</span> <span class="o">*</span><span class="n">left</span><span class="p">;</span>
+        <span class="n">AvlNode</span> <span class="o">*</span><span class="n">right</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">height</span><span class="p">;</span>
+        <span class="n">AvlNode</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">otherdata</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*</span><span class="n">l</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*</span><span class="n">r</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">otherdata</span><span class="p">),</span> <span class="n">left</span><span class="p">(</span><span class="n">l</span><span class="p">),</span> <span class="n">right</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">height</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="p">};</span>
 
-   public:
-    AvlTree(AvlNode *t = 0) : root(t) {}
-    ~AvlTree() { makeEmpty(root); }
-    bool find(const T &amp;x) const { return find(x, root); }
-    void insert(const T &amp;x) { insert(x, root); }
-    void remove(const T &amp;x) { remove(x, root); }
-    T &amp;findkth(int i) { return findkth(i, root); }
+   <span class="k">public</span><span class="o">:</span>
+    <span class="n">AvlTree</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*</span><span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">root</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="o">~</span><span class="n">AvlTree</span><span class="p">()</span> <span class="p">{</span> <span class="n">makeEmpty</span><span class="p">(</span><span class="n">root</span><span class="p">);</span> <span class="p">}</span>
+    <span class="kt">bool</span> <span class="n">find</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">insert</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">remove</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span> <span class="p">}</span>
+    <span class="n">T</span> <span class="o">&amp;</span><span class="n">findkth</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">findkth</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span> <span class="p">}</span>
 
-   private:
-    AvlNode *root;
-    void insert(const T &amp;x, AvlNode *&amp;t);
-    void remove(const T &amp;x, AvlNode *&amp;t);
-    bool find(const T &amp;x, AvlNode *t) const;
-    void makeEmpty(AvlNode *&amp;t);
-    T &amp;findkth(int i, AvlNode *&amp;t);
-    int height(AvlNode *t) { return t == 0 ? 0 : t-&gt;height; }
-    void LL(AvlNode *&amp;t);
-    void RR(AvlNode *&amp;t);
-    void LR(AvlNode *&amp;t);
-    void RL(AvlNode *&amp;t);
-};
+   <span class="k">private</span><span class="o">:</span>
+    <span class="n">AvlNode</span> <span class="o">*</span><span class="n">root</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">remove</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="kt">bool</span> <span class="nf">find</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">makeEmpty</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="n">T</span> <span class="o">&amp;</span><span class="n">findkth</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="nf">height</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">t</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">height</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">LL</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">RR</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">LR</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">RL</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">);</span>
+<span class="p">};</span>
 
-template &lt;class T&gt;
-void AvlTree&lt;T&gt;::insert(const T &amp;x, AvlNode *&amp;t) {
-    if (t == 0) {
-        t = new AvlNode(x, 0, 0);
-    } else if (x &gt; t-&gt;data) {
-        insert(x, t-&gt;left);
-        if (height(t-&gt;left) - height(t-&gt;right) == 2) {
-            if (x &gt; t-&gt;left-&gt;data) {
-                LL(t);
-            } else {
-                LR(t);
-            }
-        }
-        t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
-    } else {
-        insert(x, t-&gt;right);
-        if (height(t-&gt;right) - height(t-&gt;left) == 2) {
-            if (x &lt;= t-&gt;right-&gt;data) {
-                RR(t);
-            } else {
-                RL(t);
-            }
-        }
-        t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
-    }
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">AvlTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">insert</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="n">AvlNode</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">-</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">LL</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">LR</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">t</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">insert</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">-</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">RR</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">RL</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">t</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-void AvlTree&lt;T&gt;::remove(const T &amp;x, AvlNode *&amp;t) {
-    if (t == 0) {
-        return;
-    }
-    if (x &gt; t-&gt;data) {
-        remove(x, t-&gt;left);
-        if (height(t-&gt;right) - height(t-&gt;left) == 2) {
-            AvlNode *r = t-&gt;right;
-            if (height(r-&gt;left) &gt; height(r-&gt;right)) {
-                RL(t);
-            } else {
-                RR(t);
-            }
-        }
-        t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
-    } else if (x &lt; t-&gt;data) {
-        remove(x, t-&gt;right);
-        if (height(t-&gt;left) - height(t-&gt;right) == 2) {
-            AvlNode *r = t-&gt;left;
-            if (height(r-&gt;right) &gt; height(r-&gt;left)) {
-                LR(t);
-            } else {
-                LL(t);
-            }
-        }
-        t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
-    } else if (t-&gt;left != 0 &amp;&amp; t-&gt;right != 0) {
-        if (height(t-&gt;left) &lt;= height(t-&gt;right)) {
-            AvlNode *tmp = t-&gt;right;
-            while (tmp-&gt;left != 0) {
-                tmp = tmp-&gt;left;
-            }
-            t-&gt;data = tmp-&gt;data;
-            remove(t-&gt;data, t-&gt;right);
-            t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
-        } else {
-            AvlNode *tmp = t-&gt;left;
-            while (tmp-&gt;right != 0) {
-                tmp = tmp-&gt;right;
-            }
-            t-&gt;data = tmp-&gt;data;
-            remove(t-&gt;data, t-&gt;left);
-            t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
-        }
-    } else {
-        AvlNode *old = t;
-        t = (t-&gt;left != 0) ? t-&gt;left : t-&gt;right;
-        delete old;
-    }
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">AvlTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">remove</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">-</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">AvlNode</span> <span class="o">*</span><span class="n">r</span> <span class="o">=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">height</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">height</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">RL</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">RR</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">t</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">remove</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">-</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">AvlNode</span> <span class="o">*</span><span class="n">r</span> <span class="o">=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">height</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">height</span><span class="p">(</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">LR</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">LL</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">t</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">AvlNode</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+            <span class="n">remove</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+            <span class="n">t</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">AvlNode</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+            <span class="n">remove</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+            <span class="n">t</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">AvlNode</span> <span class="o">*</span><span class="n">old</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="n">t</span><span class="o">-&gt;</span><span class="nl">left</span> <span class="p">:</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="n">old</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-bool AvlTree&lt;T&gt;::find(const T &amp;x, AvlNode *t) const {
-    if (t == 0) {
-        return false;
-    }
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">AvlTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">find</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    if (x &gt; t-&gt;data) {
-        return find(x, t-&gt;left);
-    }
-    if (x &lt; t-&gt;data) {
-        return find(x, t-&gt;right);
-    }
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    return true;
-}
+    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-void AvlTree&lt;T&gt;::makeEmpty(AvlNode *&amp;t) {
-    if (t == 0) return;
-    AvlNode *tmp = t;
-    makeEmpty(t-&gt;left);
-    makeEmpty(t-&gt;right);
-    delete tmp;
-    t = 0;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">AvlTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">makeEmpty</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="n">AvlNode</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">makeEmpty</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="n">makeEmpty</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="k">delete</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-T &amp;AvlTree&lt;T&gt;::findkth(int i, AvlNode *&amp;t) {
-    int rs = height(t-&gt;left);
-    if (rs == i - 1) {
-        return t-&gt;data;
-    }
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="n">T</span> <span class="o">&amp;</span><span class="n">AvlTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">findkth</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">rs</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rs</span> <span class="o">==</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    if (rs &gt;= i) {
-        return findkth(i, t-&gt;left);
-    } else {
-        return findkth(i - rs - 1, t-&gt;right);
-    }
-}
+    <span class="k">if</span> <span class="p">(</span><span class="n">rs</span> <span class="o">&gt;=</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">findkth</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">findkth</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">rs</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-void AvlTree&lt;T&gt;::LL(AvlNode *&amp;t) {
-    AvlNode *t1 = t-&gt;left;
-    t-&gt;left = t1-&gt;right;
-    t1-&gt;right = t;
-    t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
-    t1-&gt;height = height(t1-&gt;left) + height(t) + 1;
-    t = t1;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">AvlTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">LL</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">AvlNode</span> <span class="o">*</span><span class="n">t1</span> <span class="o">=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">t1</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">t1</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">t</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">t1</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t1</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-void AvlTree&lt;T&gt;::RR(AvlNode *&amp;t) {
-    AvlNode *t1 = t-&gt;right;
-    t-&gt;right = t1-&gt;left;
-    t1-&gt;left = t;
-    t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
-    t1-&gt;height = height(t1-&gt;right) + height(t) + 1;
-    t = t1;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">AvlTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">RR</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">AvlNode</span> <span class="o">*</span><span class="n">t1</span> <span class="o">=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">t1</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="n">t1</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="n">t</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">t1</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">(</span><span class="n">t1</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="o">+</span> <span class="n">height</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">t1</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-void AvlTree&lt;T&gt;::LR(AvlNode *&amp;t) {
-    RR(t-&gt;left);
-    LL(t);
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">AvlTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">LR</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">RR</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="n">LL</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="p">}</span>
 
-template &lt;class T&gt;
-void AvlTree&lt;T&gt;::RL(AvlNode *&amp;t) {
-    LL(t-&gt;right);
-    RR(t);
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">AvlTree</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">RL</span><span class="p">(</span><span class="n">AvlNode</span> <span class="o">*&amp;</span><span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">LL</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="n">RR</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int x, y;
-    char order;
-    AvlTree&lt;int&gt; bst;
+    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">order</span><span class="p">;</span>
+    <span class="n">AvlTree</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">bst</span><span class="p">;</span>
 
-    cin &gt;&gt; N &gt;&gt; M;
-    for (int i = 1; i &lt;= N; i++) {
-        box[i] = 1;
-        bst.insert(1);
-        sugar[i] = i;
-    }
-    boxNow = N;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span> <span class="o">&gt;&gt;</span> <span class="n">M</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">box</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">bst</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">sugar</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">boxNow</span> <span class="o">=</span> <span class="n">N</span><span class="p">;</span>
 
-    for (int times = 0; times &lt; M; times++) {
-        cin &gt;&gt; order;
-        switch (order) {
-            case 'C':
-                cin &gt;&gt; x &gt;&gt; y;
-                while (moveTo[sugar[x]] != 0) {
-                    sugar[x] = moveTo[sugar[x]];
-                }
-                while (moveTo[sugar[y]] != 0) {
-                    sugar[y] = moveTo[sugar[y]];
-                }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">times</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">times</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">;</span> <span class="n">times</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">order</span><span class="p">;</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="sc">&#39;C&#39;</span><span class="o">:</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">moveTo</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">moveTo</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]];</span>
+                <span class="p">}</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">moveTo</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">y</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">sugar</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">moveTo</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">y</span><span class="p">]];</span>
+                <span class="p">}</span>
 
-                if (sugar[x] != sugar[y] &amp;&amp; box[sugar[x]] != 0 &amp;&amp;
-                    box[sugar[y]] != 0) {
-                    bst.remove(box[sugar[x]]);
-                    bst.remove(box[sugar[y]]);
+                <span class="k">if</span> <span class="p">(</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">!=</span> <span class="n">sugar</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span>
+                    <span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">y</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">bst</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]]);</span>
+                    <span class="n">bst</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">y</span><span class="p">]]);</span>
 
-                    box[sugar[x]] += box[sugar[y]];
-                    box[sugar[y]] = 0;
+                    <span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">y</span><span class="p">]];</span>
+                    <span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">y</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-                    bst.insert(box[sugar[x]]);
+                    <span class="n">bst</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]]);</span>
 
-                    moveTo[sugar[y]] = sugar[x];
-                    boxNow--;
-                }
-                break;
-            case 'D':
-                cin &gt;&gt; x;
-                while (moveTo[sugar[x]] != 0) {
-                    sugar[x] = moveTo[sugar[x]];
-                }
-                if (box[sugar[x]] != 0) {
-                    bst.remove(box[sugar[x]]);
-                    box[sugar[x]] = 0;
-                    boxNow--;
-                }
-                break;
-            case 'Q':
-                cin &gt;&gt; x;
-                if (boxNow &lt; x) {
-                    cout &lt;&lt; 0 &lt;&lt; '\n';
-                } else {
-                    cout &lt;&lt; bst.findkth(x) &lt;&lt; '\n';
-                }
-                break;
-        }
-    }
+                    <span class="n">moveTo</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">y</span><span class="p">]]</span> <span class="o">=</span> <span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+                    <span class="n">boxNow</span><span class="o">--</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;D&#39;</span><span class="o">:</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">moveTo</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">moveTo</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]];</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">bst</span><span class="p">.</span><span class="n">remove</span><span class="p">(</span><span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]]);</span>
+                    <span class="n">box</span><span class="p">[</span><span class="n">sugar</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="n">boxNow</span><span class="o">--</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;Q&#39;</span><span class="o">:</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">boxNow</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">bst</span><span class="p">.</span><span class="n">findkth</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -438,99 +440,99 @@ david 90 89 71
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstring&quot;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-constexpr auto maxNum = 100;
+<span class="k">constexpr</span> <span class="k">auto</span> <span class="n">maxNum</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
 
-//交换
-template &lt;class T&gt;
-void mySwap(T&amp;a, T &amp;b) {
-    T temp = a;
-    a = b;
-    b = temp;
-}
+<span class="c1">//交换</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">mySwap</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">T</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
 
-//冒泡排序
-//(bool为真表示a&gt;b,true代表升序)
-template &lt;class T&gt;
-void bubbleSort(T *destination, T *source, int num, bool(*f)(T a, T b),bool mode) {
-    //复制
-    if (destination != source)
-        for (int i = 0; i &lt; num; i++)
-            destination[i] = source[i];
+<span class="c1">//冒泡排序</span>
+<span class="c1">//(bool为真表示a&gt;b,true代表升序)</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">bubbleSort</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span><span class="n">destination</span><span class="p">,</span> <span class="n">T</span> <span class="o">*</span><span class="n">source</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="kt">bool</span><span class="p">(</span><span class="o">*</span><span class="n">f</span><span class="p">)(</span><span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span><span class="p">),</span><span class="kt">bool</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//复制</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">destination</span> <span class="o">!=</span> <span class="n">source</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">destination</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 
-    for (int i = num - 2; i &gt;= 0; i--)
-        for (int j = 0; j &lt;= i; j++)
-            if ((f(destination[j], destination[j + 1])&amp;&amp;mode)|| (!f(destination[j], destination[j + 1]) &amp;&amp; !mode))
-                mySwap(destination[j], destination[j + 1]);
-}
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">f</span><span class="p">(</span><span class="n">destination</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">destination</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span><span class="o">&amp;&amp;</span><span class="n">mode</span><span class="p">)</span><span class="o">||</span> <span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">(</span><span class="n">destination</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">destination</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">mode</span><span class="p">))</span>
+                <span class="n">mySwap</span><span class="p">(</span><span class="n">destination</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">destination</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+<span class="p">}</span>
 
-class student {
-public:
-    int chinese, math, english;
-    char name[maxNum];
+<span class="k">class</span> <span class="nc">student</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">chinese</span><span class="p">,</span> <span class="n">math</span><span class="p">,</span> <span class="n">english</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">maxNum</span><span class="p">];</span>
 
-    student() =default;
+    <span class="n">student</span><span class="p">()</span> <span class="o">=</span><span class="k">default</span><span class="p">;</span>
 
-    /*student(const student &amp;stu) {
-        strcpy(name, stu.name);
-        chinese = stu.chinese;
-        math = stu.math;
-        english = stu.english;
-    }*/
+    <span class="cm">/*student(const student &amp;stu) {</span>
+<span class="cm">        strcpy(name, stu.name);</span>
+<span class="cm">        chinese = stu.chinese;</span>
+<span class="cm">        math = stu.math;</span>
+<span class="cm">        english = stu.english;</span>
+<span class="cm">    }*/</span>
 
-};
+<span class="p">};</span>
 
-int main() {
-    int n, k;
-    char name[maxNum];
-    cin &gt;&gt; n;
-    student *stu = new student[n];
-    for (int i = 0; i &lt; n; i++) {
-        cin &gt;&gt; stu[i].name;
-        cin &gt;&gt; stu[i].chinese;
-        cin &gt;&gt; stu[i].math;
-        cin &gt;&gt; stu[i].english;
-    }
-    cin &gt;&gt; k;
-    k--;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="n">maxNum</span><span class="p">];</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">student</span> <span class="o">*</span><span class="n">stu</span> <span class="o">=</span> <span class="k">new</span> <span class="n">student</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">chinese</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">math</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">english</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">k</span><span class="p">;</span>
+    <span class="n">k</span><span class="o">--</span><span class="p">;</span>
 
-    //开始排序
-    bubbleSort&lt;student&gt;(stu, stu, n, [](student stu1,student stu2) {
-        int sum1 = stu1.chinese+stu1.math+stu1.english, sum2 = stu2.chinese+stu2.math+stu2.english;
-        if (sum1 &gt; sum2)
-            return true;
-        else if (sum1 &lt; sum2)
-            return false;
-        else if (stu1.chinese &gt; stu2.chinese)
-            return true;
-        else if (stu1.chinese &lt; stu2.chinese)
-            return false;
-        else if (stu1.math &gt; stu2.math)
-            return true;
-        else if (stu1.math &lt; stu2.math)
-            return false;
-        else if (stu1.english &gt; stu2.english)
-            return true;
-        else if (stu1.english &lt; stu2.english)
-            return false;
-        else if (strcmp(stu1.name,stu2.name)&lt;0)
-            return true;
-        else if (strcmp(stu1.name, stu2.name)&gt;0)
-            return false;
+    <span class="c1">//开始排序</span>
+    <span class="n">bubbleSort</span><span class="o">&lt;</span><span class="n">student</span><span class="o">&gt;</span><span class="p">(</span><span class="n">stu</span><span class="p">,</span> <span class="n">stu</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="p">[](</span><span class="n">student</span> <span class="n">stu1</span><span class="p">,</span><span class="n">student</span> <span class="n">stu2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">sum1</span> <span class="o">=</span> <span class="n">stu1</span><span class="p">.</span><span class="n">chinese</span><span class="o">+</span><span class="n">stu1</span><span class="p">.</span><span class="n">math</span><span class="o">+</span><span class="n">stu1</span><span class="p">.</span><span class="n">english</span><span class="p">,</span> <span class="n">sum2</span> <span class="o">=</span> <span class="n">stu2</span><span class="p">.</span><span class="n">chinese</span><span class="o">+</span><span class="n">stu2</span><span class="p">.</span><span class="n">math</span><span class="o">+</span><span class="n">stu2</span><span class="p">.</span><span class="n">english</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sum1</span> <span class="o">&gt;</span> <span class="n">sum2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">sum1</span> <span class="o">&lt;</span> <span class="n">sum2</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">chinese</span> <span class="o">&gt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">chinese</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">chinese</span> <span class="o">&lt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">chinese</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">math</span> <span class="o">&gt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">math</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">math</span> <span class="o">&lt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">math</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">english</span> <span class="o">&gt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">english</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">english</span> <span class="o">&lt;</span> <span class="n">stu2</span><span class="p">.</span><span class="n">english</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="n">stu2</span><span class="p">.</span><span class="n">name</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">stu1</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">stu2</span><span class="p">.</span><span class="n">name</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 
-        return true;
-    },false);
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">},</span><span class="nb">false</span><span class="p">);</span>
 
-    //输出
-    cout &lt;&lt; stu[k].name &lt;&lt; &quot; &quot; &lt;&lt; stu[k].chinese + stu[k].math + stu[k].english;
+    <span class="c1">//输出</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">stu</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">chinese</span> <span class="o">+</span> <span class="n">stu</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">math</span> <span class="o">+</span> <span class="n">stu</span><span class="p">[</span><span class="n">k</span><span class="p">].</span><span class="n">english</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

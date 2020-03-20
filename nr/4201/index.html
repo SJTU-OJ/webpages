@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -555,136 +557,136 @@ A03274 45 hypu
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;algorithm&quot;
-#include &quot;cstring&quot;
-#include &quot;cstdio&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;algorithm&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-constexpr double jd = 0.00001;
+<span class="k">constexpr</span> <span class="kt">double</span> <span class="n">jd</span> <span class="o">=</span> <span class="mf">0.00001</span><span class="p">;</span>
 
-//交换
-template &lt;class T&gt;
-void mySwap(T&amp;a, T &amp;b) {
-    T temp = a;
-    a = b;
-    b = temp;
-}
+<span class="c1">//交换</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">mySwap</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">T</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+<span class="p">}</span>
 
-struct School
-{
-    char name[7]; //学院名字
-    double score; //加权总分
-    int count;    //学生人数
+<span class="k">struct</span> <span class="n">School</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span> <span class="c1">//学院名字</span>
+    <span class="kt">double</span> <span class="n">score</span><span class="p">;</span> <span class="c1">//加权总分</span>
+    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>    <span class="c1">//学生人数</span>
 
-    int scoreA = 0, scoreB = 0, scoreC = 0;
-};
+    <span class="kt">int</span> <span class="n">scoreA</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">scoreB</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">scoreC</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-class Solution
-{
-public:
-    Solution(int cnt) { numOfSchool = 0; schools = new School[cnt]; }
-    //根据学生信息，修改所在学院的相应信息
-    void modify(char* id, double score, char* schoolName);
-    void displayResult();  //输出
-    ~Solution() { delete[] schools; }
+<span class="k">class</span> <span class="nc">Solution</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">Solution</span><span class="p">(</span><span class="kt">int</span> <span class="n">cnt</span><span class="p">)</span> <span class="p">{</span> <span class="n">numOfSchool</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">schools</span> <span class="o">=</span> <span class="k">new</span> <span class="n">School</span><span class="p">[</span><span class="n">cnt</span><span class="p">];</span> <span class="p">}</span>
+    <span class="c1">//根据学生信息，修改所在学院的相应信息</span>
+    <span class="kt">void</span> <span class="n">modify</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">id</span><span class="p">,</span> <span class="kt">double</span> <span class="n">score</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">schoolName</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">displayResult</span><span class="p">();</span>  <span class="c1">//输出</span>
+    <span class="o">~</span><span class="n">Solution</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">schools</span><span class="p">;</span> <span class="p">}</span>
 
-    // 可以根据设计自行添加所需成员
+    <span class="c1">// 可以根据设计自行添加所需成员</span>
 
-private:
-    School *schools;    // 存放学院信息的指针
-    unsigned int numOfSchool;  // 学院数量
+<span class="k">private</span><span class="o">:</span>
+    <span class="n">School</span> <span class="o">*</span><span class="n">schools</span><span class="p">;</span>    <span class="c1">// 存放学院信息的指针</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">numOfSchool</span><span class="p">;</span>  <span class="c1">// 学院数量</span>
 
-// 可以根据设计自行添加所需成员
+<span class="c1">// 可以根据设计自行添加所需成员</span>
 
-};
-void Solution::displayResult() {
-    //算分
-    for (int i = 0; i &lt; numOfSchool; i++) {
-        schools[i].score = double(schools[i].scoreA) + double(schools[i].scoreB) / 1.5 + double(schools[i].scoreC) * 1.5;
-    }
+<span class="p">};</span>
+<span class="kt">void</span> <span class="n">Solution</span><span class="o">::</span><span class="n">displayResult</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//算分</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numOfSchool</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">schools</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span> <span class="o">=</span> <span class="kt">double</span><span class="p">(</span><span class="n">schools</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">scoreA</span><span class="p">)</span> <span class="o">+</span> <span class="kt">double</span><span class="p">(</span><span class="n">schools</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">scoreB</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1.5</span> <span class="o">+</span> <span class="kt">double</span><span class="p">(</span><span class="n">schools</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">scoreC</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //开始排序
-    sort(schools, schools + numOfSchool, [](School a, School b) {
-        return int(a.score) &gt; int(b.score) ||
-            int(a.score) == int(b.score) &amp;&amp; (a.count &lt; b.count) ||
-            (int(a.score) == int(b.score) &amp;&amp; (a.count == b.count) &amp;&amp; strcmp(a.name, b.name) &lt; 0);
-    });
-    /*auto num = numOfSchool;
-    auto destination = schools;
-    for (int i = num - 2; i &gt;= 0; i--)
-        for (int j = 0; j &lt;= i; j++)
-        {
-            bool flag = false;
-            if (int(destination[j].score) &lt; int(destination[j+1].score)) flag = true;
-            else if (int(destination[j].score) == int(destination[j+1].score) &amp;&amp; destination[j].count &gt; destination[j + 1].count) flag = true;
-            else if (int(destination[j].score) == int(destination[j+1].score) &amp;&amp; destination[j].count == destination[j + 1].count&amp;&amp;strcmp(destination[j].name, destination[j + 1].name) &gt; 0) flag = true;
-            if(flag)
-               mySwap(destination[j], destination[j + 1]);
-        }*/
-    cout &lt;&lt; numOfSchool;
-    for (int i = 0; i &lt; numOfSchool; i++) {
-        cout &lt;&lt; endl;
-        //判断是否并列
-        int n = 0;
-        for (n = 1; n &lt;= numOfSchool; n++)
-            if (int(schools[n - 1].score) == int(schools[i].score))
-                break;
-        cout &lt;&lt; n &lt;&lt; &quot; &quot; &lt;&lt; schools[i].name &lt;&lt; &quot; &quot; &lt;&lt; int(schools[i].score) &lt;&lt; &quot; &quot; &lt;&lt; schools[i].count;
-    }
-}
+    <span class="c1">//开始排序</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">schools</span><span class="p">,</span> <span class="n">schools</span> <span class="o">+</span> <span class="n">numOfSchool</span><span class="p">,</span> <span class="p">[](</span><span class="n">School</span> <span class="n">a</span><span class="p">,</span> <span class="n">School</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">int</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">score</span><span class="p">)</span> <span class="o">&gt;</span> <span class="kt">int</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">score</span><span class="p">)</span> <span class="o">||</span>
+            <span class="kt">int</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">score</span><span class="p">)</span> <span class="o">==</span> <span class="kt">int</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">score</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">count</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">count</span><span class="p">)</span> <span class="o">||</span>
+            <span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">score</span><span class="p">)</span> <span class="o">==</span> <span class="kt">int</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">score</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">count</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">count</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">name</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="cm">/*auto num = numOfSchool;</span>
+<span class="cm">    auto destination = schools;</span>
+<span class="cm">    for (int i = num - 2; i &gt;= 0; i--)</span>
+<span class="cm">        for (int j = 0; j &lt;= i; j++)</span>
+<span class="cm">        {</span>
+<span class="cm">            bool flag = false;</span>
+<span class="cm">            if (int(destination[j].score) &lt; int(destination[j+1].score)) flag = true;</span>
+<span class="cm">            else if (int(destination[j].score) == int(destination[j+1].score) &amp;&amp; destination[j].count &gt; destination[j + 1].count) flag = true;</span>
+<span class="cm">            else if (int(destination[j].score) == int(destination[j+1].score) &amp;&amp; destination[j].count == destination[j + 1].count&amp;&amp;strcmp(destination[j].name, destination[j + 1].name) &gt; 0) flag = true;</span>
+<span class="cm">            if(flag)</span>
+<span class="cm">               mySwap(destination[j], destination[j + 1]);</span>
+<span class="cm">        }*/</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">numOfSchool</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numOfSchool</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="c1">//判断是否并列</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="n">numOfSchool</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="n">schools</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="n">score</span><span class="p">)</span> <span class="o">==</span> <span class="kt">int</span><span class="p">(</span><span class="n">schools</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span><span class="p">))</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">n</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">schools</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="kt">int</span><span class="p">(</span><span class="n">schools</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">schools</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">count</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-void Solution::modify(char* id, double score, char* schoolName) {
-    //化小写
-    for (int i = 0; i &lt; strlen(schoolName); i++) {
-        if (schoolName[i] &gt;= 'A'&amp;&amp;schoolName[i] &lt;= 'Z') {
-            schoolName[i] -= 'A' - 'a';
-        }
-    }
-    //归并学院
-    bool flag = false;
-    int thisSchool = 0;
-    for (int i = 0; i &lt; numOfSchool; i++) {
-        if (strcmp(schoolName, schools[i].name) == 0) {
-            flag = true;
-            thisSchool = i;
-            break;
-        }
-    }
-    if (!flag) {
-        thisSchool = numOfSchool++;
-        schools[thisSchool].count = 0;
-        schools[thisSchool].score = 0.0;
-        strcpy(schools[thisSchool].name, schoolName);
-    }
+<span class="kt">void</span> <span class="n">Solution</span><span class="o">::</span><span class="n">modify</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">id</span><span class="p">,</span> <span class="kt">double</span> <span class="n">score</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">schoolName</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//化小写</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">schoolName</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">schoolName</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">&#39;A&#39;</span><span class="o">&amp;&amp;</span><span class="n">schoolName</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">&#39;Z&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">schoolName</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="sc">&#39;A&#39;</span> <span class="o">-</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">//归并学院</span>
+    <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">thisSchool</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numOfSchool</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">schoolName</span><span class="p">,</span> <span class="n">schools</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">thisSchool</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">thisSchool</span> <span class="o">=</span> <span class="n">numOfSchool</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">schools</span><span class="p">[</span><span class="n">thisSchool</span><span class="p">].</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">schools</span><span class="p">[</span><span class="n">thisSchool</span><span class="p">].</span><span class="n">score</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="n">strcpy</span><span class="p">(</span><span class="n">schools</span><span class="p">[</span><span class="n">thisSchool</span><span class="p">].</span><span class="n">name</span><span class="p">,</span> <span class="n">schoolName</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    //开始算分
-    schools[thisSchool].count++;
-    if (id[0] == 'A') schools[thisSchool].scoreA += score;
-    else if (id[0] == 'B') schools[thisSchool].scoreB += score;
-    else if (id[0] == 'T') schools[thisSchool].scoreC += score;
-}
-//main函数不要做任何修改
-int main()
-{
-    int numOfPerson;
-    cin &gt;&gt; numOfPerson;   //输入考试人数
+    <span class="c1">//开始算分</span>
+    <span class="n">schools</span><span class="p">[</span><span class="n">thisSchool</span><span class="p">].</span><span class="n">count</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;A&#39;</span><span class="p">)</span> <span class="n">schools</span><span class="p">[</span><span class="n">thisSchool</span><span class="p">].</span><span class="n">scoreA</span> <span class="o">+=</span> <span class="n">score</span><span class="p">;</span>
+    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;B&#39;</span><span class="p">)</span> <span class="n">schools</span><span class="p">[</span><span class="n">thisSchool</span><span class="p">].</span><span class="n">scoreB</span> <span class="o">+=</span> <span class="n">score</span><span class="p">;</span>
+    <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">id</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;T&#39;</span><span class="p">)</span> <span class="n">schools</span><span class="p">[</span><span class="n">thisSchool</span><span class="p">].</span><span class="n">scoreC</span> <span class="o">+=</span> <span class="n">score</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//main函数不要做任何修改</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">numOfPerson</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">numOfPerson</span><span class="p">;</span>   <span class="c1">//输入考试人数</span>
 
-    char id[7]; //准考证号
-    int score;  //分数
-    char schoolName[7]; //学院名字
+    <span class="kt">char</span> <span class="n">id</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span> <span class="c1">//准考证号</span>
+    <span class="kt">int</span> <span class="n">score</span><span class="p">;</span>  <span class="c1">//分数</span>
+    <span class="kt">char</span> <span class="n">schoolName</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span> <span class="c1">//学院名字</span>
 
-    Solution solution(numOfPerson);
+    <span class="n">Solution</span> <span class="nf">solution</span><span class="p">(</span><span class="n">numOfPerson</span><span class="p">);</span>
 
-    for (int i = 0; i &lt; numOfPerson; i++) {
-        cin &gt;&gt; id &gt;&gt; score &gt;&gt; schoolName;    // 读取考试信息
-        solution.modify(id, score, schoolName);  //根据学生信息，修改所在学院的相应信息
-    }
-    solution.displayResult();    //输出结果
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numOfPerson</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">id</span> <span class="o">&gt;&gt;</span> <span class="n">score</span> <span class="o">&gt;&gt;</span> <span class="n">schoolName</span><span class="p">;</span>    <span class="c1">// 读取考试信息</span>
+        <span class="n">solution</span><span class="p">.</span><span class="n">modify</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">schoolName</span><span class="p">);</span>  <span class="c1">//根据学生信息，修改所在学院的相应信息</span>
+    <span class="p">}</span>
+    <span class="n">solution</span><span class="p">.</span><span class="n">displayResult</span><span class="p">();</span>    <span class="c1">//输出结果</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

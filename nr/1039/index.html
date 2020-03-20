@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -391,528 +393,529 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 顺序存储二叉树 */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 顺序存储二叉树 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class Node{
-public:
-    int l = 0, r = 0, pos = 0, ind = 0;
-};
+<span class="k">class</span> <span class="nc">Node</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-Node a[100005];
-int n, root = 0, b[100005], c[100005];
+<span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="mi">100005</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">root</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="p">[</span><span class="mi">100005</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="mi">100005</span><span class="p">];</span>
 
-void encode(int root){
-    int q[200005], front = 0, rear = 0, cnt = 0, r = 0;
-    q[rear++]= root;
-    r = rear;
-    a[root].pos = ++cnt;
-    while (front != r){
-        int now = q[front++];
-        ++cnt;
-        if (now != -1){
-            if (a[now].l != -1){
-                q[rear++] = b[a[now].l];
-                a[b[a[now].l]].pos = cnt;
-                r = rear;
-            }
-            else
-                q[rear++] = -1;
-        }
-        else{
-            q[rear++] = -1;
-        }
-        ++cnt;
-        if (now != -1){
-            if (a[now].r != -1){
-                q[rear++] = b[a[now].r];
-                a[b[a[now].r]].pos = cnt;
-                r = rear;
-            }
-            else
-                q[rear++] = -1;
-        }
-        else{
-            q[rear++] = -1;
-        }
-    }
-    for (int i = 1; i &lt;= n; ++i){
-        c[a[i].ind] = a[i].pos;
-    }
-    for (int i = 1; i &lt;= n; ++i)
-        cout &lt;&lt; c[i] &lt;&lt; ' ';
-    cout &lt;&lt; endl;
-}
+<span class="kt">void</span> <span class="nf">encode</span><span class="p">(</span><span class="kt">int</span> <span class="n">root</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">q</span><span class="p">[</span><span class="mi">200005</span><span class="p">],</span> <span class="n">front</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rear</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span><span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">rear</span><span class="p">;</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">pos</span> <span class="o">=</span> <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">front</span> <span class="o">!=</span> <span class="n">r</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">now</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">front</span><span class="o">++</span><span class="p">];</span>
+        <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">now</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">l</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+                <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">l</span><span class="p">];</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">l</span><span class="p">]].</span><span class="n">pos</span> <span class="o">=</span> <span class="n">cnt</span><span class="p">;</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">rear</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">now</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">r</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+                <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">r</span><span class="p">];</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">r</span><span class="p">]].</span><span class="n">pos</span> <span class="o">=</span> <span class="n">cnt</span><span class="p">;</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">rear</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">c</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pos</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
 
-void sufTrans(int x){
-    if (a[x].l != -1)
-        sufTrans(b[a[x].l]);
-    if (a[x].r != -1)
-        sufTrans(b[a[x].r]);
-    cout &lt;&lt; a[x].ind &lt;&lt; ' ';
-}
+<span class="kt">void</span> <span class="nf">sufTrans</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">sufTrans</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">sufTrans</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span><span class="p">]);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">ind</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    cin &gt;&gt; n;
-    for (int i = 1; i &lt;= n; ++i){
-        cin &gt;&gt; a[i].ind &gt;&gt; a[i].l &gt;&gt; a[i].r;
-        if (a[i].ind == 1)
-            root = i;
-    }
-    for (int i = 1; i &lt;= n; ++i){
-        b[a[i].ind] = i;
-    }
-    encode(root);
-    sufTrans(root);
-    cout &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">l</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">r</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">b</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">encode</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="n">sufTrans</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;cmath&quot;
-#include &quot;cstring&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cmath&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
 
-int fuck_data[30009] = { 0 };
-template &lt;class T&gt;
-class mQueue {
-    class node {
-    public:
-        T data;
-        node* next = nullptr;
-    };
-    node* head = nullptr,
-        * rear = nullptr;
-    size_t _size = 0;
+<span class="kt">int</span> <span class="n">fuck_data</span><span class="p">[</span><span class="mi">30009</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">mQueue</span> <span class="p">{</span>
+    <span class="k">class</span> <span class="nc">node</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">T</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">next</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">node</span><span class="o">*</span> <span class="n">head</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span>
+        <span class="o">*</span> <span class="n">rear</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">_size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-public:
-    //构造函数
-    mQueue() {
-        head = new node;
-        rear = head;
-    }
-    //判断是否为空
-    bool empty() {
-        return head-&gt;next == nullptr;
-    }
-    //增加
-    void push(const T&amp; val) {
-        rear-&gt;next = new node;
-        rear = rear-&gt;next;
-        rear-&gt;data = val;
-        ++_size;
-    }
-    //删除
-    void pop() {
-        //安全措施
-        if (head-&gt;next == nullptr)
-            return;
-        auto temp = head-&gt;next;
-        delete head;
-        head = temp;
-        --_size;
-    }
-    //大小
-    size_t size() {
-        return _size;
-    }
-    //最前
-    T&amp; front() {
-        //安全措施
-        return head-&gt;next-&gt;data;
-    }
-    //最后
-    T&amp; back() {
-        //安全措施
-        return rear-&gt;data;
-    }
-};
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//构造函数</span>
+    <span class="n">mQueue</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">rear</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//判断是否为空</span>
+    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//增加</span>
+    <span class="kt">void</span> <span class="n">push</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">rear</span> <span class="o">=</span> <span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">rear</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+        <span class="o">++</span><span class="n">_size</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//删除</span>
+    <span class="kt">void</span> <span class="n">pop</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//安全措施</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="k">delete</span> <span class="n">head</span><span class="p">;</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="o">--</span><span class="n">_size</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//大小</span>
+    <span class="kt">size_t</span> <span class="n">size</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">_size</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//最前</span>
+    <span class="n">T</span><span class="o">&amp;</span> <span class="n">front</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//安全措施</span>
+        <span class="k">return</span> <span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//最后</span>
+    <span class="n">T</span><span class="o">&amp;</span> <span class="n">back</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">//安全措施</span>
+        <span class="k">return</span> <span class="n">rear</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-template &lt;class T&gt;
-class mVector {
-    T** vector_data = nullptr;
-    unsigned int size = 0;
-    unsigned int capacity = 0;
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">mVector</span> <span class="p">{</span>
+    <span class="n">T</span><span class="o">**</span> <span class="n">vector_data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">capacity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-public:
-    //构造函数
-    mVector() = default;
-    mVector(unsigned int _size) :size(_size) {
-        capacity = _size * 2;
-        vector_data = new T * [capacity] {nullptr};
-    }
-    mVector(unsigned int _size, const T&amp; val) :size(_size) {
-        capacity = _size * 2;
-        vector_data = new T * [capacity] {nullptr};
-        for (unsigned int i = 0; i &lt; _size; ++i)
-            vector_data[i] = new T(val);
-    }
-    mVector(const mVector&lt;T&gt; &amp; _vector) :size(_vector.size), capacity(_vector.capacity) {
-        vector_data = new T * [capacity] {nullptr};
-        for (int i = 0; i &lt; size; ++i)
-            vector_data[i] = new T(*_vector.vector_data[i]);
-    }
-    //析构函数
-    ~mVector() {
-        for (unsigned int i = 0; i &lt; size; ++i)
-            delete vector_data[i];
-        delete[] vector_data;
-    }
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//构造函数</span>
+    <span class="n">mVector</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">mVector</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">_size</span><span class="p">)</span> <span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">_size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">capacity</span> <span class="o">=</span> <span class="n">_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">vector_data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span> <span class="o">*</span> <span class="p">[</span><span class="n">capacity</span><span class="p">]</span> <span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
+    <span class="p">}</span>
+    <span class="n">mVector</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">_size</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span> <span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">_size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">capacity</span> <span class="o">=</span> <span class="n">_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">vector_data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span> <span class="o">*</span> <span class="p">[</span><span class="n">capacity</span><span class="p">]</span> <span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">mVector</span><span class="p">(</span><span class="k">const</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">_vector</span><span class="p">)</span> <span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">_vector</span><span class="p">.</span><span class="n">size</span><span class="p">),</span> <span class="n">capacity</span><span class="p">(</span><span class="n">_vector</span><span class="p">.</span><span class="n">capacity</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector_data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span> <span class="o">*</span> <span class="p">[</span><span class="n">capacity</span><span class="p">]</span> <span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="o">*</span><span class="n">_vector</span><span class="p">.</span><span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="c1">//析构函数</span>
+    <span class="o">~</span><span class="n">mVector</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">delete</span> <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">vector_data</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //迭代器
-    class iterator {
-        T** pos = nullptr;
-        friend iterator mVector&lt;T&gt;::begin();
-        friend iterator mVector&lt;T&gt;::end();
-        friend void mVector&lt;T&gt;::erase(const iterator&amp; val);
-    public:
-        iterator() = default;
-        iterator(const iterator&amp; other) {
-            pos = other.pos;
-        }
-        iterator&amp; operator++() {
-            ++pos;
-            return *this;
-        }
-        iterator operator++(int) {
-            iterator temp(*this);
-            ++pos;
-            return temp;
-        }
-        iterator&amp; operator--() {
-            --pos;
-            return *this;
-        }
-        iterator operator--(int) {
-            iterator temp(*this);
-            --pos;
-            return temp;
-        }
-        bool operator==(const iterator&amp; other) const {
-            return pos == other.pos;
-        }
-        bool operator!=(const iterator&amp; other) const {
-            return pos != other.pos;
-        }
-        iterator&amp; operator=(const iterator&amp; other) {
-            pos = other.pos;
-            return *this;
-        }
-        T&amp; operator*() const {
-            return **pos;
-        }
-    };
+    <span class="c1">//迭代器</span>
+    <span class="k">class</span> <span class="nc">iterator</span> <span class="p">{</span>
+        <span class="n">T</span><span class="o">**</span> <span class="n">pos</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="n">iterator</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">begin</span><span class="p">();</span>
+        <span class="k">friend</span> <span class="n">iterator</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">end</span><span class="p">();</span>
+        <span class="k">friend</span> <span class="kt">void</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">erase</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">);</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">iterator</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+        <span class="n">iterator</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">++</span><span class="p">()</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">pos</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">iterator</span> <span class="k">operator</span><span class="o">++</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">iterator</span> <span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+            <span class="o">++</span><span class="n">pos</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">--</span><span class="p">()</span> <span class="p">{</span>
+            <span class="o">--</span><span class="n">pos</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">iterator</span> <span class="k">operator</span><span class="o">--</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">iterator</span> <span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+            <span class="o">--</span><span class="n">pos</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">pos</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">pos</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">**</span><span class="n">pos</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
 
-    //增加元素
-    void push_back(const T &amp; val) {
-        if (size &lt; capacity)
-            vector_data[size++] = new T(val);
-        else {
-            T** temp_data = new T * [(capacity + 1) * 2]{ nullptr };
-            for (unsigned int i = 0; i &lt; size; ++i)
-                temp_data[i] = vector_data[i];
-            temp_data[size++] = new T(val);
-            capacity = (capacity + 1) * 2;
-            delete[] vector_data;
-            vector_data = temp_data;
-        }
-    }
+    <span class="c1">//增加元素</span>
+    <span class="kt">void</span> <span class="nf">push_back</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">capacity</span><span class="p">)</span>
+            <span class="n">vector_data</span><span class="p">[</span><span class="n">size</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">T</span><span class="o">**</span> <span class="n">temp_data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span> <span class="o">*</span> <span class="p">[(</span><span class="n">capacity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]{</span> <span class="k">nullptr</span> <span class="p">};</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">temp_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">temp_data</span><span class="p">[</span><span class="n">size</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+            <span class="n">capacity</span> <span class="o">=</span> <span class="p">(</span><span class="n">capacity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">vector_data</span><span class="p">;</span>
+            <span class="n">vector_data</span> <span class="o">=</span> <span class="n">temp_data</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //删除末尾
-    void pop_back() {
-        delete vector_data[size];
-        vector_data[size--] = nullptr;
-    }
+    <span class="c1">//删除末尾</span>
+    <span class="kt">void</span> <span class="nf">pop_back</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">delete</span> <span class="n">vector_data</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+        <span class="n">vector_data</span><span class="p">[</span><span class="n">size</span><span class="o">--</span><span class="p">]</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //清空
-    void clear() {
-        for (unsigned int i = 0; i &lt; size; ++i) {
-            delete vector_data[i];
-            vector_data[i] = nullptr;
-        }
-        size = 0;
-    }
+    <span class="c1">//清空</span>
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">delete</span> <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //删除
-    void erase(const iterator &amp; val) {
-        delete* val.pos;
-        for (auto p = val.pos; p != vector_data + size - 1; ++p)
-            * p = *(p + 1);
-        --size;
-        vector_data[size] = nullptr;
-    }
+    <span class="c1">//删除</span>
+    <span class="kt">void</span> <span class="nf">erase</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span> <span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">delete</span><span class="o">*</span> <span class="n">val</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">val</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span> <span class="n">p</span> <span class="o">!=</span> <span class="n">vector_data</span> <span class="o">+</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">p</span><span class="p">)</span>
+            <span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="o">--</span><span class="n">size</span><span class="p">;</span>
+        <span class="n">vector_data</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //重载运算符
-    T &amp; operator[](const unsigned int&amp; pos) {
-        return *vector_data[pos];
-    }
+    <span class="c1">//重载运算符</span>
+    <span class="n">T</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="p">[](</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">*</span><span class="n">vector_data</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    iterator begin() {
-        iterator temp;
-        temp.pos = vector_data;
-        return temp;
-    }
+    <span class="n">iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">iterator</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">vector_data</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    iterator end() {
-        iterator temp;
-        temp.pos = vector_data + size;
-        return temp;
-    }
+    <span class="n">iterator</span> <span class="n">end</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">iterator</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">vector_data</span> <span class="o">+</span> <span class="n">size</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-};
+<span class="p">};</span>
 
-//二叉树类
-template &lt;class T&gt;
-class myBinaryTree {
-public:
-    class node {
-    public:
-        T data;
-        node* lchild = nullptr, * rchild = nullptr, * parent = nullptr;
-    };
-    node* root = nullptr;
-    node** nodeList = nullptr;
-    long long sizeOfTree = 0;
+<span class="c1">//二叉树类</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">myBinaryTree</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">class</span> <span class="nc">node</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">T</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">lchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">*</span> <span class="n">rchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">node</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">**</span> <span class="n">nodeList</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">sizeOfTree</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    //创建树
-    void createTree(int num) {
-        nodeList = new node * [num + 1]{ nullptr };
-        sizeOfTree = num;
-    }
+    <span class="c1">//创建树</span>
+    <span class="kt">void</span> <span class="nf">createTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nodeList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span> <span class="o">*</span> <span class="p">[</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]{</span> <span class="k">nullptr</span> <span class="p">};</span>
+        <span class="n">sizeOfTree</span> <span class="o">=</span> <span class="n">num</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void creadNode(int nodeNum, int lchild, int rchild, int data) {
-        if (nodeList[nodeNum] == nullptr)
-            nodeList[nodeNum] = new node;
+    <span class="kt">void</span> <span class="nf">creadNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">nodeNum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">lchild</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rchild</span><span class="p">,</span> <span class="kt">int</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
 
-        nodeList[nodeNum]-&gt;data = data;
+        <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
 
-        if (lchild != -1) {
-            if (nodeList[lchild] == nullptr)
-                nodeList[lchild] = new node;
-            nodeList[lchild]-&gt;parent = nodeList[nodeNum];
-            nodeList[nodeNum]-&gt;lchild = nodeList[lchild];
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">lchild</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">];</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">];</span>
+        <span class="p">}</span>
 
-        if (rchild != -1) {
-            if (nodeList[rchild] == nullptr)
-                nodeList[rchild] = new node;
-            nodeList[rchild]-&gt;parent = nodeList[nodeNum];
-            nodeList[nodeNum]-&gt;rchild = nodeList[rchild];
-        }
-    }
+        <span class="k">if</span> <span class="p">(</span><span class="n">rchild</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">];</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void checkRoot() {
-        root = nodeList[1];
-        fuck_data[1] = 1;
-        get_fuck(1);
-    }
+    <span class="kt">void</span> <span class="nf">checkRoot</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="n">fuck_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">get_fuck</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    //清空
-    void clear() {
-        clear(root);
-    }
+    <span class="c1">//清空</span>
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    void clear(node * p) {
-        if (p == nullptr)
-            return;
-        clear(p-&gt;lchild);
-        clear(p-&gt;rchild);
-        delete p;
-        p = nullptr;
-    }
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
+        <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //构造
-    myBinaryTree() {}
+    <span class="c1">//构造</span>
+    <span class="n">myBinaryTree</span><span class="p">()</span> <span class="p">{}</span>
 
-    //析构
-    ~myBinaryTree() {
-        clear(root);
-    }
+    <span class="c1">//析构</span>
+    <span class="o">~</span><span class="n">myBinaryTree</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    //判断是否非空
-    bool empty() {
-        return root == nullptr;
-    }
+    <span class="c1">//判断是否非空</span>
+    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //判断是否为完全二叉树
-    bool isCBT() {
-        if (empty())
-            return false;
-        //层次遍历
-        mQueue&lt;node*&gt; treeQueue;
-        bool flag = false;
-        //先入队
-        treeQueue.push(root);
+    <span class="c1">//判断是否为完全二叉树</span>
+    <span class="kt">bool</span> <span class="n">isCBT</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">empty</span><span class="p">())</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="c1">//层次遍历</span>
+        <span class="n">mQueue</span><span class="o">&lt;</span><span class="n">node</span><span class="o">*&gt;</span> <span class="n">treeQueue</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="c1">//先入队</span>
+        <span class="n">treeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
 
-        //反复
-        while (!treeQueue.empty()) {
-            //先出队一个
-            node* temp = treeQueue.front();
-            treeQueue.pop();
+        <span class="c1">//反复</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">treeQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="c1">//先出队一个</span>
+            <span class="n">node</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">treeQueue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+            <span class="n">treeQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
 
-            //右孩子有左孩子没有
-            if (temp-&gt;lchild == nullptr &amp;&amp; temp-&gt;rchild != nullptr)
-                return false;
+            <span class="c1">//右孩子有左孩子没有</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
 
-            if (!flag) {
-                //左孩子有右孩子没有
-                if (temp-&gt;lchild != nullptr &amp;&amp; temp-&gt;rchild == nullptr) {
-                    flag = true;
-                    //左孩子入队
-                    treeQueue.push(temp-&gt;lchild);
-                }
-                //左右孩子都没有
-                else if (temp-&gt;lchild == nullptr &amp;&amp; temp-&gt;rchild == nullptr) {
-                    flag = true;
-                }
-                //左右都有孩子
-                else {
-                    treeQueue.push(temp-&gt;lchild);
-                    treeQueue.push(temp-&gt;rchild);
-                }
-            }
-            else {
-                //判断是否为叶子
-                if (temp-&gt;lchild != nullptr || temp-&gt;rchild != nullptr)
-                    return false;
-            }
-        }
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">flag</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//左孩子有右孩子没有</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="c1">//左孩子入队</span>
+                    <span class="n">treeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="c1">//左右孩子都没有</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="c1">//左右都有孩子</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">treeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+                    <span class="n">treeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="c1">//判断是否为叶子</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">temp</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        return true;
-    }
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //返回大小
-    long long size() {
-        return sizeOfTree;
-    }
+    <span class="c1">//返回大小</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">size</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">sizeOfTree</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void get_fuck(int pos) {
-        if (nodeList[pos]-&gt;lchild) {
-            fuck_data[nodeList[pos]-&gt;lchild-&gt;data] = fuck_data[pos] * 2;
-            get_fuck(nodeList[pos]-&gt;lchild-&gt;data);
-        }
-        if (nodeList[pos]-&gt;rchild) {
-            fuck_data[nodeList[pos]-&gt;rchild-&gt;data] = fuck_data[pos] * 2 + 1;
-            get_fuck(nodeList[pos]-&gt;rchild-&gt;data);
-        }
-    }
+    <span class="kt">void</span> <span class="n">get_fuck</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fuck_data</span><span class="p">[</span><span class="n">nodeList</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">fuck_data</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="n">get_fuck</span><span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fuck_data</span><span class="p">[</span><span class="n">nodeList</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">fuck_data</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">get_fuck</span><span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //层次遍历
-    mVector&lt;T&gt; levelTraversal() {
-        if (sizeOfTree == 0)
-            return *new mVector&lt;T&gt;;
+    <span class="c1">//层次遍历</span>
+    <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">levelTraversal</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sizeOfTree</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">new</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
 
-        mVector&lt;T&gt; result;
-        mQueue&lt;node*&gt; treeQueue;
+        <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+        <span class="n">mQueue</span><span class="o">&lt;</span><span class="n">node</span><span class="o">*&gt;</span> <span class="n">treeQueue</span><span class="p">;</span>
 
-        //根结点入队
-        treeQueue.push(root);
+        <span class="c1">//根结点入队</span>
+        <span class="n">treeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
 
-        //层次遍历
-        while (!treeQueue.empty()) {
-            //出队
-            node* temp = treeQueue.front();
-            treeQueue.pop();
+        <span class="c1">//层次遍历</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">treeQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+            <span class="c1">//出队</span>
+            <span class="n">node</span><span class="o">*</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">treeQueue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+            <span class="n">treeQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
 
-            //入队
-            if (temp-&gt;lchild != nullptr)
-                treeQueue.push(temp-&gt;lchild);
-            if (temp-&gt;rchild != nullptr)
-                treeQueue.push(temp-&gt;rchild);
+            <span class="c1">//入队</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">treeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">treeQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
 
-            //写入
-            result.push_back(temp-&gt;data);
-        }
+            <span class="c1">//写入</span>
+            <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        //返回
-        return result;
-    }
+        <span class="c1">//返回</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //后序遍历
-    mVector&lt;T&gt; lostorderTraversal() {
-        mVector&lt;T&gt; result;
-        lostorderTraversal(root, result);
-        return result;
-    }
+    <span class="c1">//后序遍历</span>
+    <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">lostorderTraversal</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+        <span class="n">lostorderTraversal</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void lostorderTraversal(node * treeRoot, mVector&lt;T&gt; &amp; result) {
-        if (treeRoot-&gt;lchild != nullptr)
-            lostorderTraversal(treeRoot-&gt;lchild, result);
-        if (treeRoot-&gt;rchild != nullptr)
-            lostorderTraversal(treeRoot-&gt;rchild, result);
-        //显示当前
-        result.push_back(treeRoot-&gt;data);
-    }
-};
+    <span class="kt">void</span> <span class="n">lostorderTraversal</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="n">treeRoot</span><span class="p">,</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">result</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">treeRoot</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">lostorderTraversal</span><span class="p">(</span><span class="n">treeRoot</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">treeRoot</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">lostorderTraversal</span><span class="p">(</span><span class="n">treeRoot</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+        <span class="c1">//显示当前</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">treeRoot</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
 
 
-int main() {
-    int num;
-    myBinaryTree&lt;int&gt; bTree;
-    cin &gt;&gt; num;
-    bTree.createTree(num + 1);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+    <span class="n">myBinaryTree</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">bTree</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
+    <span class="n">bTree</span><span class="p">.</span><span class="n">createTree</span><span class="p">(</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
 
-    for (int i = 1; i &lt;= num; i++) {
-        int code, lchild, rchild;
-        scanf(&quot;%d %d %d&quot;, &amp;code, &amp;lchild, &amp;rchild);
-        bTree.creadNode(code, lchild, rchild, code);
-        fuck_data[code] = i;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">code</span><span class="p">,</span> <span class="n">lchild</span><span class="p">,</span> <span class="n">rchild</span><span class="p">;</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">code</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lchild</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rchild</span><span class="p">);</span>
+        <span class="n">bTree</span><span class="p">.</span><span class="n">creadNode</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">lchild</span><span class="p">,</span> <span class="n">rchild</span><span class="p">,</span> <span class="n">code</span><span class="p">);</span>
+        <span class="n">fuck_data</span><span class="p">[</span><span class="n">code</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    bTree.checkRoot();
-    cout &lt;&lt; fuck_data[1];
-    for (int i = 2; i &lt;= num; ++i)
-        cout &lt;&lt; &quot; &quot; &lt;&lt; fuck_data[i];
-    cout &lt;&lt; endl;
-    auto ans = bTree.lostorderTraversal();
-    for (auto p : ans)
-        cout &lt;&lt; p &lt;&lt; &quot; &quot;;
+    <span class="n">bTree</span><span class="p">.</span><span class="n">checkRoot</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">fuck_data</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">fuck_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">bTree</span><span class="p">.</span><span class="n">lostorderTraversal</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">ans</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">p</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-int n,root,postn,seq[30001],post[30001],ls[30001],rs[30001],x,y,z;
-void dfs(int x)
-{
-    if (ls[x]!=-1) {
-        seq[ls[x]]=2*seq[x];
-        dfs(ls[x]);
-    }
-    if (rs[x]!=-1){
-        seq[rs[x]]=2*seq[x]+1;
-        dfs(rs[x]);
-    }
-    post[++postn]=x;
-}
-int main() {
-    cin&gt;&gt;n;
-    for (int i=0;i&lt;n;++i){
-        cin&gt;&gt;x&gt;&gt;y&gt;&gt;z;
-        if (i==0) root=x;
-        ls[x]=y;
-        rs[x]=z;
-    }
-    seq[root]=1;
-    dfs(root);
-    for (int i=1;i&lt;=n;++i)
-        cout&lt;&lt;seq[i]&lt;&lt;&quot; &quot;;
-    cout&lt;&lt;endl;
-    for (int i=1;i&lt;=n;++i)
-        cout&lt;&lt;post[i]&lt;&lt;&quot; &quot;;
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">root</span><span class="p">,</span><span class="n">postn</span><span class="p">,</span><span class="n">seq</span><span class="p">[</span><span class="mi">30001</span><span class="p">],</span><span class="n">post</span><span class="p">[</span><span class="mi">30001</span><span class="p">],</span><span class="n">ls</span><span class="p">[</span><span class="mi">30001</span><span class="p">],</span><span class="n">rs</span><span class="p">[</span><span class="mi">30001</span><span class="p">],</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ls</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">seq</span><span class="p">[</span><span class="n">ls</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">seq</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">ls</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rs</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">!=-</span><span class="mi">1</span><span class="p">){</span>
+        <span class="n">seq</span><span class="p">[</span><span class="n">rs</span><span class="p">[</span><span class="n">x</span><span class="p">]]</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">seq</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">rs</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">post</span><span class="p">[</span><span class="o">++</span><span class="n">postn</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">x</span><span class="o">&gt;&gt;</span><span class="n">y</span><span class="o">&gt;&gt;</span><span class="n">z</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="n">root</span><span class="o">=</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">ls</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">=</span><span class="n">y</span><span class="p">;</span>
+        <span class="n">rs</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">=</span><span class="n">z</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">seq</span><span class="p">[</span><span class="n">root</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="p">;</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">post</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

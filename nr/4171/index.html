@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -398,404 +400,405 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;vector&quot;
-#include &quot;algorithm&quot;
-#include &quot;cstdio&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;vector&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;algorithm&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;class T&gt;
-class myPriorityQueue {
-    vector&lt;T&gt; queueData;
-    unsigned int sizeOfQueue = 0;
-    bool(*cmp)(T a, T b) = [](T a, T b) {return a &lt; b; };
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">myPriorityQueue</span> <span class="p">{</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">queueData</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">sizeOfQueue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">bool</span><span class="p">(</span><span class="o">*</span><span class="n">cmp</span><span class="p">)(</span><span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="p">[](</span><span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">;</span> <span class="p">};</span>
 
-    //向下过滤
-    void percolateDown(unsigned int pos) {
-        while (pos * 2 &lt;= sizeOfQueue) {
-            if (pos * 2 + 1 &gt; sizeOfQueue) {
-                //交换
-                if (cmp(queueData[pos * 2], queueData[pos])) {
-                    auto temp = queueData[pos * 2];
-                    queueData[pos * 2] = queueData[pos];
-                    queueData[pos] = temp;
-                }
-                break;
-            }
-            else {
-                bool minNum = cmp(queueData[pos * 2 + 1], queueData[pos * 2]);
-                if (cmp(queueData[pos * 2 + minNum], queueData[pos])) {
-                    auto temp = queueData[pos * 2 + minNum];
-                    queueData[pos * 2 + minNum] = queueData[pos];
-                    queueData[pos] = temp;
-                    pos = pos * 2 + minNum;
-                }
-                else break;
-            }
-        }
-    }
+    <span class="c1">//向下过滤</span>
+    <span class="kt">void</span> <span class="nf">percolateDown</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">sizeOfQueue</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">sizeOfQueue</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//交换</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">],</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">];</span>
+                    <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
+                    <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="kt">bool</span> <span class="n">minNum</span> <span class="o">=</span> <span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">minNum</span><span class="p">],</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">]))</span> <span class="p">{</span>
+                    <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">minNum</span><span class="p">];</span>
+                    <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">minNum</span><span class="p">]</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
+                    <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+                    <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">minNum</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-public:
-    //构建
-    myPriorityQueue() {
-        queueData.clear();
-        queueData.push_back(*new T);
-        sizeOfQueue = 0;
-    }
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//构建</span>
+    <span class="n">myPriorityQueue</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">queueData</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="k">new</span> <span class="n">T</span><span class="p">);</span>
+        <span class="n">sizeOfQueue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //compare函数返回父结点a与孩子结点b的关系正确与否
-    myPriorityQueue(bool(*compare)(T a, T b)) :cmp(compare) {
-        queueData.clear();
-        queueData.push_back(*new T);
-        sizeOfQueue = 0;
-    }
+    <span class="c1">//compare函数返回父结点a与孩子结点b的关系正确与否</span>
+    <span class="n">myPriorityQueue</span><span class="p">(</span><span class="kt">bool</span><span class="p">(</span><span class="o">*</span><span class="n">compare</span><span class="p">)(</span><span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span><span class="p">))</span> <span class="o">:</span><span class="n">cmp</span><span class="p">(</span><span class="n">compare</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">queueData</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="k">new</span> <span class="n">T</span><span class="p">);</span>
+        <span class="n">sizeOfQueue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //根据数组建立堆
-    void buildHeap(T* eleData, unsigned int eleNum) {
-        queueData.clear();
-        sizeOfQueue = eleNum;
-        queueData.push_back(*new T);
-        for (unsigned int i = 1; i &lt;= eleNum; i++)
-            queueData.push_back(eleData[i - 1]);
-        //向下过滤
-        for (unsigned int pos = eleNum / 2; pos &gt; 0; pos--)
-            percolateDown(pos);
-    }
+    <span class="c1">//根据数组建立堆</span>
+    <span class="kt">void</span> <span class="n">buildHeap</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">eleData</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">eleNum</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">queueData</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+        <span class="n">sizeOfQueue</span> <span class="o">=</span> <span class="n">eleNum</span><span class="p">;</span>
+        <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="k">new</span> <span class="n">T</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">eleNum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">eleData</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="c1">//向下过滤</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">eleNum</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pos</span><span class="o">--</span><span class="p">)</span>
+            <span class="n">percolateDown</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    //判断是否空
-    bool empty() {
-        return sizeOfQueue == 0;
-    }
+    <span class="c1">//判断是否空</span>
+    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">sizeOfQueue</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //返回队列大小
-    auto size() {
-        return sizeOfQueue;
-    }
+    <span class="c1">//返回队列大小</span>
+    <span class="k">auto</span> <span class="n">size</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">sizeOfQueue</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //入队
-    void push(const T &amp; input) {
-        sizeOfQueue++;
-        queueData.push_back(input);
+    <span class="c1">//入队</span>
+    <span class="kt">void</span> <span class="n">push</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sizeOfQueue</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>
 
-        //向上过滤
-        for (auto i = sizeOfQueue; i &gt; 1; i = i / 2) {
-            //判断是否比父结点更小
-            if (cmp(queueData[i], queueData[i / 2])) {
-                //交换
-                auto temp = queueData[i];
-                queueData[i] = queueData[i / 2];
-                queueData[i / 2] = temp;
-            }
-            else break;
-        }
-    }
+        <span class="c1">//向上过滤</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">sizeOfQueue</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//判断是否比父结点更小</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">queueData</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]))</span> <span class="p">{</span>
+                <span class="c1">//交换</span>
+                <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">queueData</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+                <span class="n">queueData</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //队列最前
-    T top() {
-        return queueData[1];
-    }
+    <span class="c1">//队列最前</span>
+    <span class="n">T</span> <span class="n">top</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">queueData</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    //出队
-    T pop() {
-        auto temp = queueData[1];
-        queueData[1] = queueData[sizeOfQueue--];
-        queueData.pop_back();
-        percolateDown(1);
-        return temp;
-    }
-};
+    <span class="c1">//出队</span>
+    <span class="n">T</span> <span class="n">pop</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="n">queueData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">sizeOfQueue</span><span class="o">--</span><span class="p">];</span>
+        <span class="n">queueData</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+        <span class="n">percolateDown</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-//用于保存数据的格式
-class data_type {
-public:
-    int val = 0;
-    int posa = 0, posb = 0;
-    data_type() = default;
-    data_type(int val,int posa,int posb):val(val),posa(posa),posb(posb){}
-    bool operator&lt;(const data_type&amp; other) const {
-        return val &lt; other.val;
-    }
-};
+<span class="c1">//用于保存数据的格式</span>
+<span class="k">class</span> <span class="nc">data_type</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">posa</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">posb</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">data_type</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">data_type</span><span class="p">(</span><span class="kt">int</span> <span class="n">val</span><span class="p">,</span><span class="kt">int</span> <span class="n">posa</span><span class="p">,</span><span class="kt">int</span> <span class="n">posb</span><span class="p">)</span><span class="o">:</span><span class="n">val</span><span class="p">(</span><span class="n">val</span><span class="p">),</span><span class="n">posa</span><span class="p">(</span><span class="n">posa</span><span class="p">),</span><span class="n">posb</span><span class="p">(</span><span class="n">posb</span><span class="p">){}</span>
+    <span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">data_type</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="n">other</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int a[1000009] = { 0 }, b[1000009] = { 0 };
-//构造堆
-myPriorityQueue&lt;data_type&gt; queue_data;
-//保存临时数据
-data_type data_temp[1000009];
-//保存答案
-int ans_data[1000009];
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">1000009</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">},</span> <span class="n">b</span><span class="p">[</span><span class="mi">1000009</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="c1">//构造堆</span>
+<span class="n">myPriorityQueue</span><span class="o">&lt;</span><span class="n">data_type</span><span class="o">&gt;</span> <span class="n">queue_data</span><span class="p">;</span>
+<span class="c1">//保存临时数据</span>
+<span class="n">data_type</span> <span class="n">data_temp</span><span class="p">[</span><span class="mi">1000009</span><span class="p">];</span>
+<span class="c1">//保存答案</span>
+<span class="kt">int</span> <span class="n">ans_data</span><span class="p">[</span><span class="mi">1000009</span><span class="p">];</span>
 
-int main() {
-    int num;
-    scanf(&quot;%d&quot;, &amp;num);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">num</span><span class="p">);</span>
 
-    for (int i = 0; i &lt; num; ++i)
-        scanf(&quot;%d&quot;, &amp;a[i]);
-    for (int i = 0; i &lt; num; ++i)
-        scanf(&quot;%d&quot;, &amp;b[i]);
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 
-    sort(a, a + num);
-    sort(b, b + num);
+    <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">num</span><span class="p">);</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span> <span class="o">+</span> <span class="n">num</span><span class="p">);</span>
 
-    //初始化堆
-    for (int i = 0; i &lt; num; ++i) {
-        data_type temp(a[0] + b[i], 0, i);
-        data_temp[i] = temp;
-    }
+    <span class="c1">//初始化堆</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data_type</span> <span class="n">temp</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+        <span class="n">data_temp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    queue_data.buildHeap(data_temp,num);
+    <span class="n">queue_data</span><span class="p">.</span><span class="n">buildHeap</span><span class="p">(</span><span class="n">data_temp</span><span class="p">,</span><span class="n">num</span><span class="p">);</span>
 
-    //进行排序和写入
-    for (int i = 0; i &lt; num; ++i) {
-        auto temp = queue_data.pop();
-        //写入答案
-        ans_data[i] = temp.val;
-        //准备下一次
-        if (i &lt; num - 1) {
-            ++temp.posa;
-            temp.val = a[temp.posa] + b[temp.posb];
-            queue_data.push(temp);
-        }
-    }
+    <span class="c1">//进行排序和写入</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queue_data</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="c1">//写入答案</span>
+        <span class="n">ans_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
+        <span class="c1">//准备下一次</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">temp</span><span class="p">.</span><span class="n">posa</span><span class="p">;</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">posa</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">posb</span><span class="p">];</span>
+            <span class="n">queue_data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //输出答案
-    printf(&quot;%d&quot;, ans_data[0]);
-    for (int i = 1; i &lt; num; ++i)
-        printf(&quot; %d&quot;, ans_data[i]);
+    <span class="c1">//输出答案</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="n">ans_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %d&quot;</span><span class="p">,</span> <span class="n">ans_data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 1e6 + 100;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">1e6</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
 
-int n;
-int A[maxN], B[maxN];
-// bool X[maxN][maxN] = {0};
+<span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">maxN</span><span class="p">],</span> <span class="n">B</span><span class="p">[</span><span class="n">maxN</span><span class="p">];</span>
+<span class="c1">// bool X[maxN][maxN] = {0};</span>
 
-struct Node {
-    int x;
-    int y;
+<span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">y</span><span class="p">;</span>
 
-    Node(int a = 0, int b = 0) : x(a), y(b) {}
+    <span class="n">Node</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">{}</span>
 
-    Node &amp;operator=(const Node &amp;right) {
-        if (&amp;right != this) {
-            x = right.x;
-            y = right.y;
-        }
+    <span class="n">Node</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">right</span> <span class="o">!=</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        return *this;
-    }
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    bool operator&lt;(const Node &amp;right) const {
-        return ((A[x] + B[y]) &lt; (A[right.x] + B[right.y]));
-    }
-};
+    <span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">((</span><span class="n">A</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="n">B</span><span class="p">[</span><span class="n">y</span><span class="p">])</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">right</span><span class="p">.</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="n">B</span><span class="p">[</span><span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">]));</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-class priorityQueue {
-   private:
-    int currentSize;
-    Node *data;
-    int maxSize;
+<span class="k">class</span> <span class="nc">priorityQueue</span> <span class="p">{</span>
+   <span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">currentSize</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxSize</span><span class="p">;</span>
 
-    void doubleSpace();
-    void percolateDown(int);
+    <span class="kt">void</span> <span class="nf">doubleSpace</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">percolateDown</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
 
-   public:
-    priorityQueue(int capacity = 10);
-    ~priorityQueue();
-    void enQueue(const Node &amp;x);
-    Node deQueue();
-};
+   <span class="k">public</span><span class="o">:</span>
+    <span class="n">priorityQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">capacity</span> <span class="o">=</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">priorityQueue</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">Node</span> <span class="nf">deQueue</span><span class="p">();</span>
+<span class="p">};</span>
 
-priorityQueue::priorityQueue(int capacity) : currentSize(0), maxSize(capacity) {
-    data = new Node[capacity];
-}
+<span class="n">priorityQueue</span><span class="o">::</span><span class="n">priorityQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">capacity</span><span class="p">)</span> <span class="o">:</span> <span class="n">currentSize</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">maxSize</span><span class="p">(</span><span class="n">capacity</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">[</span><span class="n">capacity</span><span class="p">];</span>
+<span class="p">}</span>
 
-priorityQueue::~priorityQueue() { delete[] data; }
+<span class="n">priorityQueue</span><span class="o">::~</span><span class="n">priorityQueue</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span> <span class="p">}</span>
 
-void priorityQueue::enQueue(const Node &amp;x) {
-    if (currentSize == maxSize - 2) {
-        doubleSpace();
-    }
-    /*if (X[x.x][x.y] == 1) {
-        return;
-    }*/
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">::</span><span class="n">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Node</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">currentSize</span> <span class="o">==</span> <span class="n">maxSize</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">doubleSpace</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="cm">/*if (X[x.x][x.y] == 1) {</span>
+<span class="cm">        return;</span>
+<span class="cm">    }*/</span>
 
-    // X[x.x][x.y] = 1;
+    <span class="c1">// X[x.x][x.y] = 1;</span>
 
-    int hole = ++currentSize;
-    for (; hole &gt; 1 &amp;&amp; x &lt; data[hole / 2]; hole /= 2) {
-        data[hole] = data[hole / 2];
-    }
+    <span class="kt">int</span> <span class="n">hole</span> <span class="o">=</span> <span class="o">++</span><span class="n">currentSize</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">hole</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span> <span class="n">hole</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    data[hole] = x;
-}
+    <span class="n">data</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-Node priorityQueue::deQueue() {
-    Node minItem;
+<span class="n">Node</span> <span class="n">priorityQueue</span><span class="o">::</span><span class="n">deQueue</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Node</span> <span class="n">minItem</span><span class="p">;</span>
 
-    minItem = data[1];
-    data[1] = data[currentSize--];
-    percolateDown(1);
-    if (minItem.x + 1 &lt; n) {
-        enQueue(Node((minItem.x + 1), (minItem.y)));
-    }
+    <span class="n">minItem</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">currentSize</span><span class="o">--</span><span class="p">];</span>
+    <span class="n">percolateDown</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">minItem</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">enQueue</span><span class="p">(</span><span class="n">Node</span><span class="p">((</span><span class="n">minItem</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">minItem</span><span class="p">.</span><span class="n">y</span><span class="p">)));</span>
+    <span class="p">}</span>
 
-    return minItem;
-}
+    <span class="k">return</span> <span class="n">minItem</span><span class="p">;</span>
+<span class="p">}</span>
 
-void priorityQueue::percolateDown(int hole) {
-    int child;
-    Node tmp = data[hole];
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">::</span><span class="n">percolateDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">hole</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">child</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">hole</span><span class="p">];</span>
 
-    for (; hole * 2 &lt;= currentSize; hole = child) {
-        child = hole * 2;
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">currentSize</span><span class="p">;</span> <span class="n">hole</span> <span class="o">=</span> <span class="n">child</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
 
-        if (child != currentSize &amp;&amp; data[child + 1] &lt; data[child]) {
-            child++;
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">child</span> <span class="o">!=</span> <span class="n">currentSize</span> <span class="o">&amp;&amp;</span> <span class="n">data</span><span class="p">[</span><span class="n">child</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">child</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">child</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        if (data[child] &lt; tmp) {
-            data[hole] = data[child];
-        } else {
-            break;
-        }
-    }
-    data[hole] = tmp;
-}
+        <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tmp</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">child</span><span class="p">];</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-void priorityQueue::doubleSpace() {
-    Node *tmp = data;
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">::</span><span class="n">doubleSpace</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
 
-    maxSize *= 2;
+    <span class="n">maxSize</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
 
-    data = new Node[maxSize];
-    for (int i = 0; i &lt; currentSize; i++) {
-        data[i] = tmp[i];
-    }
+    <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">currentSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    delete[] tmp;
-}
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-void qSort(int *nums, int l, int h) {
-    if (l &gt;= h) {
-        return;
-    }
-    int first = l, last = h;
-    int key = nums[first];
+<span class="kt">void</span> <span class="n">qSort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">first</span> <span class="o">=</span> <span class="n">l</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">key</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">];</span>
 
-    while (first &lt; last) {
-        while (first &lt; last &amp;&amp; nums[last] &gt;= key) {
-            --last;
-        }
-        nums[first] = nums[last];
-        while (first &lt; last &amp;&amp; nums[first] &lt;= key) {
-            ++first;
-        }
-        nums[last] = nums[first];
-    }
-    nums[first] = key;
-    qSort(nums, l, first - 1);
-    qSort(nums, first + 1, h);
-}
+    <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">last</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">last</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">last</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">--</span><span class="n">last</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">last</span><span class="p">];</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">last</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">first</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">last</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+    <span class="n">qSort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">first</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">qSort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+<span class="p">}</span>
 
-priorityQueue gold(maxN * 2);
+<span class="n">priorityQueue</span> <span class="n">gold</span><span class="p">(</span><span class="n">maxN</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    cin &gt;&gt; n;
-    for (int i = 0; i &lt; n; i++) {
-        cin &gt;&gt; A[i];
-    }
-    for (int i = 0; i &lt; n; i++) {
-        cin &gt;&gt; B[i];
-    }
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    qSort(A, 0, (n - 1));
-    qSort(B, 0, (n - 1));
-    for (int i = 0; i &lt; n; i++) {
-        gold.enQueue(Node(0, i));
-    }
+    <span class="n">qSort</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="n">qSort</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">gold</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">Node</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">));</span>
+    <span class="p">}</span>
 
-    for (int i = 0; i &lt; n; i++) {
-        Node temp = gold.deQueue();
-        int ans = A[temp.x] + B[temp.y];
-        cout &lt;&lt; ans &lt;&lt; ' ';
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Node</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">gold</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">x</span><span class="p">]</span> <span class="o">+</span> <span class="n">B</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">y</span><span class="p">];</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    return 0;
-}
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-using namespace std;
-int n,heap[2000000],p[2000000],len,a[1000000],b[1000000],q[1000000];
-void minheapify(int x){
-    int smallest=x,l,r;
-    while (true) {
-        l=x&lt;&lt;1;
-        r=l+1;
-        if (l &lt;= len &amp;&amp; heap[l] &lt; heap[x]) smallest = l;
-        if (r &lt;= len &amp;&amp; heap[r] &lt; heap[smallest]) smallest = r;
-        if (smallest != x) {
-            swap(heap[smallest],heap[x]);
-            swap(p[smallest],p[x]);
-            x = smallest;
-        }
-        else break;
-    }
-}
-int pop(){
-    int ret=heap[1];
-    q[p[1]]++;
-    heap[1]=a[p[1]]+b[q[p[1]]];
-    minheapify(1);
-    return ret;
-}
-void qsort(int l,int r){
-    if (l+1&gt;=r) return;
-    int i=l,j=r-1,key=b[l];
-    while (i&lt;j){
-        while (i&lt;j&amp;&amp;b[j]&gt;=key) j--;
-        if (i&lt;j) b[i++]=b[j];
-        while (i&lt;j&amp;&amp;b[i]&lt;=key) i++;
-        if (i&lt;j) b[j--]=b[i];
-    }
-    b[i]=key;
-    qsort(l,i);
-    qsort(i+1,r);
-}
-int main() {
-    scanf(&quot;%d&quot;,&amp;n);
-    for (int i=0;i&lt;n;++i) scanf(&quot;%d&quot;,&amp;a[i]);
-    for (int i=0;i&lt;n;++i) scanf(&quot;%d&quot;,&amp;b[i]);
-    qsort(0,n);
-    len=n;
-    for (int i=1;i&lt;=n;++i)
-    {
-        heap[i]=a[i-1]+b[0];
-        p[i]=i-1;
-        q[i]=0;
-    }
-    for (int i=n&gt;&gt;1;i&gt;=1;--i) minheapify(i);
-    for (int i=0;i&lt;n;++i)
-        printf(&quot;%d &quot;,pop());
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">heap</span><span class="p">[</span><span class="mi">2000000</span><span class="p">],</span><span class="n">p</span><span class="p">[</span><span class="mi">2000000</span><span class="p">],</span><span class="n">len</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="mi">1000000</span><span class="p">],</span><span class="n">b</span><span class="p">[</span><span class="mi">1000000</span><span class="p">],</span><span class="n">q</span><span class="p">[</span><span class="mi">1000000</span><span class="p">];</span>
+<span class="kt">void</span> <span class="nf">minheapify</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">smallest</span><span class="o">=</span><span class="n">x</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">l</span><span class="o">=</span><span class="n">x</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">r</span><span class="o">=</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="n">smallest</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="n">heap</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">smallest</span><span class="p">])</span> <span class="n">smallest</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">smallest</span> <span class="o">!=</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">smallest</span><span class="p">],</span><span class="n">heap</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+            <span class="n">swap</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">smallest</span><span class="p">],</span><span class="n">p</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">smallest</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">pop</span><span class="p">(){</span>
+    <span class="kt">int</span> <span class="n">ret</span><span class="o">=</span><span class="n">heap</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">q</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">heap</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="n">q</span><span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]]];</span>
+    <span class="n">minheapify</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">qsort</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span><span class="kt">int</span> <span class="n">r</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="o">&gt;=</span><span class="n">r</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">l</span><span class="p">,</span><span class="n">j</span><span class="o">=</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="n">b</span><span class="p">[</span><span class="n">l</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="o">&amp;&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">key</span><span class="p">)</span> <span class="n">j</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">)</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="o">&amp;&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">key</span><span class="p">)</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">)</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="o">--</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">key</span><span class="p">;</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">r</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">len</span><span class="o">=</span><span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">n</span><span class="o">&gt;&gt;</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">;</span><span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="n">minheapify</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span><span class="n">pop</span><span class="p">());</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

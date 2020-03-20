@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -364,95 +366,94 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 高精度加法 */
-#include &lt;iostream&gt;
-#include &lt;string&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 高精度加法 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class BigInt{
-    friend BigInt operator +(const BigInt&amp;, const BigInt&amp;);
-    friend ostream&amp; operator &lt;&lt;(ostream &amp;, const BigInt&amp;);
-public:
-//constructor
-    BigInt(string);
+<span class="k">class</span> <span class="nc">BigInt</span><span class="p">{</span>
+    <span class="k">friend</span> <span class="n">BigInt</span> <span class="k">operator</span> <span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">BigInt</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">BigInt</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">BigInt</span><span class="o">&amp;</span><span class="p">);</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="c1">//constructor</span>
+    <span class="n">BigInt</span><span class="p">(</span><span class="n">string</span><span class="p">);</span>
 
-    int getl() const { return len; }
-private:
-    short data[100005];
-    int len;
-};
+    <span class="kt">int</span> <span class="nf">getl</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">len</span><span class="p">;</span> <span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">short</span> <span class="n">data</span><span class="p">[</span><span class="mi">100005</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">};</span>
 
-BigInt::BigInt(string s){
-    len = s.size();
-    for (int i = 1; i &lt;= len; ++i)
-        data[i] = s[len - i] - '0';
-}
+<span class="n">BigInt</span><span class="o">::</span><span class="n">BigInt</span><span class="p">(</span><span class="n">string</span> <span class="n">s</span><span class="p">){</span>
+    <span class="n">len</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+<span class="p">}</span>
 
-BigInt operator +(const BigInt &amp;a, const BigInt &amp;b){
-    BigInt ans(&quot;&quot;);
-    int l = (a.getl() &gt; b.getl() ? a.getl() : b.getl());
-    ans.len = l;
-    for (int i = 1; i &lt;= l; ++i)
-        ans.data[i] = a.data[i] + b.data[i];
-    int i = 1;
-    while (i &lt;= l + 1){
-        if (ans.data[i] &gt;= 10){
-            ans.data[i++] -= 10;
-            ++ans.data[i];
-        }
-        else ++i;
-    }
-    ans.len = i;
-    while (ans.data[ans.len] == 0) --ans.len;
-    return ans;
-}
-ostream&amp; operator &lt;&lt;(ostream &amp;os, const BigInt &amp;a){
-    for (int i = a.len; i &gt;= 1; --i)
-        os &lt;&lt; a.data[i];
-    return os;
-}
+<span class="n">BigInt</span> <span class="k">operator</span> <span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">BigInt</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">BigInt</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">){</span>
+    <span class="n">BigInt</span> <span class="n">ans</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">getl</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">getl</span><span class="p">()</span> <span class="o">?</span> <span class="n">a</span><span class="p">.</span><span class="n">getl</span><span class="p">()</span> <span class="o">:</span> <span class="n">b</span><span class="p">.</span><span class="n">getl</span><span class="p">());</span>
+    <span class="n">ans</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">l</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">ans</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ans</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">){</span>
+            <span class="n">ans</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">ans</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">ans</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ans</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">ans</span><span class="p">.</span><span class="n">len</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">--</span><span class="n">ans</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">BigInt</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">){</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    string s1, s2;
-    cin &gt;&gt; s1 &gt;&gt; s2;
-    BigInt a(s1), b(s2);
-    cout &lt;&lt; a + b &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">string</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s1</span> <span class="o">&gt;&gt;</span> <span class="n">s2</span><span class="p">;</span>
+    <span class="n">BigInt</span> <span class="nf">a</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="n">s2</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-using namespace std;
-const int MAXSIZE = 100005;
-void Add(char* num_1, char* num_2, char* num_3)
-{
-    char* head;
-    int temp = 0, size_1 = strlen(num_1), size_2 = strlen(num_2), size_3 = 2 + (size_1 &gt; size_2 ? size_1 : size_2);
-    head = new char[size_3];
-    head[size_3] = '\0';
-    --size_1; --size_2; --size_3;
-    for(;temp != 0 || size_1 &gt;= 0 || size_2 &gt;= 0; --size_1, --size_2, --size_3)
-    {
-        int add_1 = size_1 &gt;= 0 ? (num_1[size_1] - '0') : 0;
-        int add_2 = size_2 &gt;= 0 ? (num_2[size_2] - '0') : 0;
-        head[size_3] = (add_1 + add_2 + temp) % 10 + '0';
-        temp = (add_1 + add_2 + temp) / 10;
-    }
-    head = head + size_3 + 1;
-    strcpy(num_3, head);
-}
-int main(void)
-{
-    char num_1[MAXSIZE], num_2[MAXSIZE], num_3[MAXSIZE];
-    cin &gt;&gt; num_1 &gt;&gt; num_2;
-    Add(num_1, num_2, num_3);
-    cout &lt;&lt; num_3;
-}
-
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXSIZE</span> <span class="o">=</span> <span class="mi">100005</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">Add</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">num_1</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">num_2</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">num_3</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">head</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size_1</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">num_1</span><span class="p">),</span> <span class="n">size_2</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">num_2</span><span class="p">),</span> <span class="n">size_3</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">size_1</span> <span class="o">&gt;</span> <span class="n">size_2</span> <span class="o">?</span> <span class="nl">size_1</span> <span class="p">:</span> <span class="n">size_2</span><span class="p">);</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">size_3</span><span class="p">];</span>
+    <span class="n">head</span><span class="p">[</span><span class="n">size_3</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+    <span class="o">--</span><span class="n">size_1</span><span class="p">;</span> <span class="o">--</span><span class="n">size_2</span><span class="p">;</span> <span class="o">--</span><span class="n">size_3</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(;</span><span class="n">temp</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">size_1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">size_2</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">size_1</span><span class="p">,</span> <span class="o">--</span><span class="n">size_2</span><span class="p">,</span> <span class="o">--</span><span class="n">size_3</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">add_1</span> <span class="o">=</span> <span class="n">size_1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">(</span><span class="n">num_1</span><span class="p">[</span><span class="n">size_1</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">add_2</span> <span class="o">=</span> <span class="n">size_2</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">(</span><span class="n">num_2</span><span class="p">[</span><span class="n">size_2</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">head</span><span class="p">[</span><span class="n">size_3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">add_1</span> <span class="o">+</span> <span class="n">add_2</span> <span class="o">+</span> <span class="n">temp</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="n">add_1</span> <span class="o">+</span> <span class="n">add_2</span> <span class="o">+</span> <span class="n">temp</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">head</span> <span class="o">+</span> <span class="n">size_3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">strcpy</span><span class="p">(</span><span class="n">num_3</span><span class="p">,</span> <span class="n">head</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">num_1</span><span class="p">[</span><span class="n">MAXSIZE</span><span class="p">],</span> <span class="n">num_2</span><span class="p">[</span><span class="n">MAXSIZE</span><span class="p">],</span> <span class="n">num_3</span><span class="p">[</span><span class="n">MAXSIZE</span><span class="p">];</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num_1</span> <span class="o">&gt;&gt;</span> <span class="n">num_2</span><span class="p">;</span>
+    <span class="n">Add</span><span class="p">(</span><span class="n">num_1</span><span class="p">,</span> <span class="n">num_2</span><span class="p">,</span> <span class="n">num_3</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">num_3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

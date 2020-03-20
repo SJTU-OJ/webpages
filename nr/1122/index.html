@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -386,122 +388,121 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 二哥开房间 */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 二哥开房间 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int MAXN = 50000;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXN</span> <span class="o">=</span> <span class="mi">50000</span><span class="p">;</span>
 
-struct Node{
-    int l = 0, r = 0;
-    int lsum = 0, rsum = 0, sum = 0;
-    int lazy = 0; //0: None, 1: occupied, 2: recycled
-};
+<span class="k">struct</span> <span class="n">Node</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">lsum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rsum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">lazy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//0: None, 1: occupied, 2: recycled</span>
+<span class="p">};</span>
 
-Node a[MAXN * 4 + 5];
-int n, m;
+<span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
 
-void pushUp(int x){
-    a[x].lsum = a[x &lt;&lt; 1].lsum;
-    a[x].rsum = a[x &lt;&lt; 1 | 1].rsum;
-    int mid = (a[x].l + a[x].r) &gt;&gt; 1;
-    if (a[x &lt;&lt; 1].lsum == mid - a[x].l + 1)
-        a[x].lsum += a[x &lt;&lt; 1 | 1].lsum;
-    if (a[x &lt;&lt; 1 | 1].rsum == a[x].r - mid)
-        a[x].rsum += a[x &lt;&lt; 1].rsum;
-    a[x].sum = max(a[x &lt;&lt; 1].rsum + a[x &lt;&lt; 1 | 1].lsum, max(a[x &lt;&lt; 1].sum, a[x &lt;&lt; 1 | 1].sum));
-}
+<span class="kt">void</span> <span class="nf">pushUp</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">lsum</span><span class="p">;</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">rsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">lsum</span> <span class="o">==</span> <span class="n">mid</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lsum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">lsum</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span> <span class="o">-</span> <span class="n">mid</span><span class="p">)</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">rsum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span><span class="p">;</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sum</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">lsum</span><span class="p">,</span> <span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">sum</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">sum</span><span class="p">));</span>
+<span class="p">}</span>
 
-void pushDown(int x){
-    if (a[x].lazy == 0)
-        return;
-    int mid = (a[x].l + a[x].r) &gt;&gt; 1;
-    a[x &lt;&lt; 1].lazy = a[x &lt;&lt; 1 | 1].lazy = a[x].lazy;
-    if (a[x].lazy == 1){
-        a[x &lt;&lt; 1].lsum = a[x &lt;&lt; 1].rsum = a[x &lt;&lt; 1].sum = 0;
-        a[x &lt;&lt; 1 | 1].lsum = a[x &lt;&lt; 1 | 1].rsum = a[x &lt;&lt; 1 | 1].sum = 0;
-    }
-    else{
-        a[x &lt;&lt; 1].lsum = a[x &lt;&lt; 1].rsum = a[x &lt;&lt; 1].sum = mid - a[x].l + 1;
-        a[x &lt;&lt; 1 | 1].lsum = a[x &lt;&lt; 1 | 1].rsum = a[x &lt;&lt; 1 | 1].sum = a[x].r - mid;
-    }
-    a[x].lazy = 0;
-}
+<span class="kt">void</span> <span class="nf">pushDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lazy</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">lazy</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">lazy</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lazy</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lazy</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">lsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">lsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">lsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">sum</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">lsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">sum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span> <span class="o">-</span> <span class="n">mid</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lazy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-void buildTree(int x, int l, int r){
-    a[x].l = l;
-    a[x].r = r;
-    if (l == r){
-        a[x].lsum = a[x].rsum = a[x].sum = 1;
-        return;
-    }
-    int mid = (l + r) &gt;&gt; 1;
-    buildTree(x &lt;&lt; 1, l, mid);
-    buildTree(x &lt;&lt; 1 | 1, mid + 1, r);
-    pushUp(x);
-}
+<span class="kt">void</span> <span class="nf">buildTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">){</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">==</span> <span class="n">r</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">rsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">buildTree</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">mid</span><span class="p">);</span>
+    <span class="n">buildTree</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+    <span class="n">pushUp</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
 
-void update(int x, int l, int r, int lazy){
-    if (a[x].l &gt;= l &amp;&amp; a[x].r &lt;= r){
-        a[x].lazy = lazy;
-        if (lazy == 1)
-            a[x].lsum = a[x].rsum = a[x].sum = 0;
-        else
-            a[x].lsum = a[x].rsum = a[x].sum = a[x].r - a[x].l + 1;
-        return;
-    }
-    pushDown(x);
-    int mid = (a[x].l + a[x].r) &gt;&gt; 1;
-    if (l &lt;= mid)
-        update(x &lt;&lt; 1, l, r, lazy);
-    if (r &gt; mid)
-        update(x &lt;&lt; 1 | 1, l, r, lazy);
-    pushUp(x);
-}
+<span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span> <span class="n">lazy</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">l</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lazy</span> <span class="o">=</span> <span class="n">lazy</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">lazy</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">rsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">lsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">rsum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sum</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">pushDown</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="p">)</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lazy</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">)</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">lazy</span><span class="p">);</span>
+    <span class="n">pushUp</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
 
-int query(int x, int len){
-    if (a[x].l == a[x].r)
-        return a[x].l;
-    pushDown(x);
-    int mid = (a[x].l + a[x].r) &gt;&gt; 1;
-    if (a[x &lt;&lt; 1].sum &gt;= len)
-        return query(x &lt;&lt; 1, len);
-    else if (a[x &lt;&lt; 1].rsum + a[x &lt;&lt; 1 | 1].lsum &gt;= len)
-        return mid - a[x &lt;&lt; 1].rsum + 1;
-    else
-        return query(x &lt;&lt; 1 | 1, len);
-}
+<span class="kt">int</span> <span class="nf">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span><span class="p">;</span>
+    <span class="n">pushDown</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">sum</span> <span class="o">&gt;=</span> <span class="n">len</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">query</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">].</span><span class="n">lsum</span> <span class="o">&gt;=</span> <span class="n">len</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mid</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">].</span><span class="n">rsum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="n">query</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; n &gt;&gt; m;
-    buildTree(1, 1, n);
-    while (m--){
-        int op, x, y;
-        cin &gt;&gt; op;
-        switch (op){
-        case 1:
-            cin &gt;&gt; x;
-            if (x &gt; a[1].sum)
-                cout &lt;&lt; 0 &lt;&lt; '\n';
-            else{
-                y = query(1, x);
-                cout &lt;&lt; y &lt;&lt; '\n';
-                update(1, y, y + x - 1, 1);
-            }
-            break;
-        case 2:
-            cin &gt;&gt; x &gt;&gt; y;
-            update(1, x, x + y - 1, 2);
-            break;
-        }
-    }
-    return 0;
-}
-
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">buildTree</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="o">--</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">op</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">op</span><span class="p">;</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">op</span><span class="p">){</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">sum</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+            <span class="k">else</span><span class="p">{</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">y</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+                <span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
+            <span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

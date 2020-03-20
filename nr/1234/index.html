@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -408,555 +410,557 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;cstring&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;class T, class T_val = decltype(*declval&lt;T&gt;()),
-    class Compare = bool (*)(T_val, T_val)&gt;
-    void quick_sort(T start, T end,
-        Compare cmp = [](T_val a, T_val b) {return a &lt; b; }) {
-    if (start == end)
-        return;
-    auto i = start, j = end;
-    --j;
-    if (i == j)
-        return;
-    //交换
-    auto key = *start;
-    for (bool status = true; i != j;) {
-        if (status) {
-            if (cmp(*j, key)) {
-                *i = *j;
-                ++i;
-                status = false;
-            }
-            else
-                --j;
-        }
-        else {
-            if (cmp(key, *i)) {
-                *j = *i;
-                --j;
-                status = true;
-            }
-            else
-                ++i;
-        }
-    }
-    *i = key;
-    //递归
-    quick_sort(start, ++i, cmp);
-    quick_sort(i, end, cmp);
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T_val</span> <span class="o">=</span> <span class="k">decltype</span><span class="p">(</span><span class="o">*</span><span class="n">declval</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()),</span>
+    <span class="k">class</span> <span class="nc">Compare</span> <span class="o">=</span> <span class="kt">bool</span> <span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="n">T_val</span><span class="p">,</span> <span class="n">T_val</span><span class="p">)</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">quick_sort</span><span class="p">(</span><span class="n">T</span> <span class="n">start</span><span class="p">,</span> <span class="n">T</span> <span class="n">end</span><span class="p">,</span>
+        <span class="n">Compare</span> <span class="n">cmp</span> <span class="o">=</span> <span class="p">[](</span><span class="n">T_val</span> <span class="n">a</span><span class="p">,</span> <span class="n">T_val</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">;</span> <span class="p">})</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="o">==</span> <span class="n">end</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">start</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
+    <span class="o">--</span><span class="n">j</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="c1">//交换</span>
+    <span class="k">auto</span> <span class="n">key</span> <span class="o">=</span> <span class="o">*</span><span class="n">start</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">bool</span> <span class="n">status</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">;)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">status</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="o">*</span><span class="n">j</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span> <span class="p">{</span>
+                <span class="o">*</span><span class="n">i</span> <span class="o">=</span> <span class="o">*</span><span class="n">j</span><span class="p">;</span>
+                <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="o">--</span><span class="n">j</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+                <span class="o">*</span><span class="n">j</span> <span class="o">=</span> <span class="o">*</span><span class="n">i</span><span class="p">;</span>
+                <span class="o">--</span><span class="n">j</span><span class="p">;</span>
+                <span class="n">status</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="o">*</span><span class="n">i</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+    <span class="c1">//递归</span>
+    <span class="n">quick_sort</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="o">++</span><span class="n">i</span><span class="p">,</span> <span class="n">cmp</span><span class="p">);</span>
+    <span class="n">quick_sort</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">cmp</span><span class="p">);</span>
+<span class="p">}</span>
 
-class edge {
-public:
-    int from = 0, to = 0;
-    int length = 0;
-};
+<span class="k">class</span> <span class="nc">edge</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">from</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">to</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-edge edges[100009];
+<span class="n">edge</span> <span class="n">edges</span><span class="p">[</span><span class="mi">100009</span><span class="p">];</span>
 
-//并查集
-class disjointSet {
-public:
-    //数组
-    int* parent;
-    int length = 0;
+<span class="c1">//并查集</span>
+<span class="k">class</span> <span class="nc">disjointSet</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//数组</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    //构造函数
-    disjointSet() = default;
-    disjointSet(int size) :length(size) {
-        parent = new int[size];
-        memset(parent, -1, length * sizeof(int));
-    }
+    <span class="c1">//构造函数</span>
+    <span class="n">disjointSet</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">disjointSet</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span> <span class="o">:</span><span class="n">length</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+    <span class="p">}</span>
 
-    //析构函数
-    ~disjointSet() {
-        length = 0;
-        delete[] parent;
-    }
+    <span class="c1">//析构函数</span>
+    <span class="o">~</span><span class="n">disjointSet</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">delete</span><span class="p">[]</span> <span class="n">parent</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //寻找
-    int find_root(int x) {
-        int temp = x;
-        for (; parent[temp] &gt;= 0; temp = parent[temp]);
-        //压缩路径
-        for (int i = x; i != temp;) {
-            int tempi = parent[i];
-            parent[i] = temp;
-            i = tempi;
-        }
-        return temp;
-    }
-    //合并
-    void set_union(int root1, int root2) {
-        if (root1 == root2)
-            return;
-        if (parent[root1] &gt; parent[root2]) {
-            parent[root2] += parent[root1];
-            parent[root1] = root2;
-        }
-        else {
-            parent[root1] += parent[root2];
-            parent[root2] = root1;
-        }
-    }
-};
+    <span class="c1">//寻找</span>
+    <span class="kt">int</span> <span class="n">find_root</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">parent</span><span class="p">[</span><span class="n">temp</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="n">temp</span><span class="p">]);</span>
+        <span class="c1">//压缩路径</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">temp</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">tempi</span> <span class="o">=</span> <span class="n">parent</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">tempi</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//合并</span>
+    <span class="kt">void</span> <span class="n">set_union</span><span class="p">(</span><span class="kt">int</span> <span class="n">root1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root1</span> <span class="o">==</span> <span class="n">root2</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">];</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">=</span> <span class="n">root2</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">];</span>
+            <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">]</span> <span class="o">=</span> <span class="n">root1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int n, m;
-    cin &gt;&gt; n &gt;&gt; m;
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
 
-    disjointSet set_data(n + 1);
+    <span class="n">disjointSet</span> <span class="n">set_data</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
 
-    for (int i = 0; i &lt; m; ++i) {
-        cin &gt;&gt; edges[i].from &gt;&gt; edges[i].to &gt;&gt; edges[i].length;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">from</span> <span class="o">&gt;&gt;</span> <span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">to</span> <span class="o">&gt;&gt;</span> <span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">length</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    quick_sort(edges, edges + m, [](edge a, edge b) {return a.length &lt; b.length; });
+    <span class="n">quick_sort</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">edges</span> <span class="o">+</span> <span class="n">m</span><span class="p">,</span> <span class="p">[](</span><span class="n">edge</span> <span class="n">a</span><span class="p">,</span> <span class="n">edge</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">length</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">length</span><span class="p">;</span> <span class="p">});</span>
 
-    int cnt = 0;
-    long long ans = 0;
-    int root_pos = edges[0].from;
-    for (int i = 0; i &lt; m; ++i) {
-        if (set_data.find_root(edges[i].from) != set_data.find_root(edges[i].to)) {
-            set_data.set_union(set_data.find_root(edges[i].from), set_data.find_root(edges[i].to));
-            ++cnt;
-            ans += edges[i].length;
-        }
-        if (cnt == n - 1) {
-            break;
-        }
-    }
+    <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">root_pos</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">from</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">set_data</span><span class="p">.</span><span class="n">find_root</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">from</span><span class="p">)</span> <span class="o">!=</span> <span class="n">set_data</span><span class="p">.</span><span class="n">find_root</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">to</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">set_data</span><span class="p">.</span><span class="n">set_union</span><span class="p">(</span><span class="n">set_data</span><span class="p">.</span><span class="n">find_root</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">from</span><span class="p">),</span> <span class="n">set_data</span><span class="p">.</span><span class="n">find_root</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">to</span><span class="p">));</span>
+            <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">edges</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">length</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; ans;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 1e4 + 100;
-const int maxM = 1e5 + 100;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">1e4</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxM</span> <span class="o">=</span> <span class="mf">1e5</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
 
-struct edge {
-    int beg;
-    int end;
-    int weight;
-};
+<span class="k">struct</span> <span class="n">edge</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">beg</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">end</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">weight</span><span class="p">;</span>
+<span class="p">};</span>
 
-class DisjointSet {
-   private:
-    int size;
-    int *parent;
+<span class="k">class</span> <span class="nc">DisjointSet</span> <span class="p">{</span>
+   <span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">parent</span><span class="p">;</span>
 
-   public:
-    DisjointSet(int s);
-    ~DisjointSet() { delete[] parent; }
-    void Union(int root1, int root2);
-    int Find(int x);
-};
+   <span class="k">public</span><span class="o">:</span>
+    <span class="n">DisjointSet</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">DisjointSet</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">parent</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Union</span><span class="p">(</span><span class="kt">int</span> <span class="n">root1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root2</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="nf">Find</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">);</span>
+<span class="p">};</span>
 
-DisjointSet::DisjointSet(int n) : size(n) {
-    parent = new int[size];
-    for (int i = 0; i &lt; size; i++) {
-        parent[i] = -1;
-    }
-}
+<span class="n">DisjointSet</span><span class="o">::</span><span class="n">DisjointSet</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="o">:</span> <span class="n">size</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-int DisjointSet::Find(int x) {
-    if (parent[x] &lt; 0) {
-        return x;
-    }
-    return parent[x] = Find(parent[x]);
-}
+<span class="kt">int</span> <span class="n">DisjointSet</span><span class="o">::</span><span class="n">Find</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+<span class="p">}</span>
 
-void DisjointSet::Union(int root1, int root2) {
-    root1 = Find(root1);
-    root2 = Find(root2);
-    if (root1 == root2) {
-        return;
-    } else if (parent[root1] &lt; parent[root2]) {
-        parent[root1] += parent[root2];
-        parent[root2] = root1;
-    } else {
-        parent[root2] += parent[root1];
-        parent[root1] = root2;
-    }
-}
+<span class="kt">void</span> <span class="n">DisjointSet</span><span class="o">::</span><span class="n">Union</span><span class="p">(</span><span class="kt">int</span> <span class="n">root1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">root1</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">root1</span><span class="p">);</span>
+    <span class="n">root2</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">root2</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root1</span> <span class="o">==</span> <span class="n">root2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">];</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">]</span> <span class="o">=</span> <span class="n">root1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">];</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">=</span> <span class="n">root2</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-edge e[maxM];
-int ans = 0, n, m;
+<span class="n">edge</span> <span class="n">e</span><span class="p">[</span><span class="n">maxM</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
 
-void qSort(edge *, int, int);
+<span class="kt">void</span> <span class="nf">qSort</span><span class="p">(</span><span class="n">edge</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    cin &gt;&gt; n &gt;&gt; m;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
 
-    DisjointSet ds(n + 10);
+    <span class="n">DisjointSet</span> <span class="n">ds</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">10</span><span class="p">);</span>
 
-    for (int i = 1; i &lt;= m; i++) {
-        int temp1, temp2, temp3;
-        cin &gt;&gt; temp1 &gt;&gt; temp2 &gt;&gt; temp3;
-        e[i].beg = temp1;
-        e[i].end = temp2;
-        e[i].weight = temp3;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp1</span><span class="p">,</span> <span class="n">temp2</span><span class="p">,</span> <span class="n">temp3</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp1</span> <span class="o">&gt;&gt;</span> <span class="n">temp2</span> <span class="o">&gt;&gt;</span> <span class="n">temp3</span><span class="p">;</span>
+        <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">beg</span> <span class="o">=</span> <span class="n">temp1</span><span class="p">;</span>
+        <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end</span> <span class="o">=</span> <span class="n">temp2</span><span class="p">;</span>
+        <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span> <span class="o">=</span> <span class="n">temp3</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    qSort(e, 1, m);
+    <span class="n">qSort</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span>
 
-    for (int i = 1; i &lt;= m; i++) {
-        int from = e[i].beg, to = e[i].end;
-        if (ds.Find(from) != ds.Find(to)) {
-            ds.Union(from, to);
-            ans += e[i].weight;
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">from</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">beg</span><span class="p">,</span> <span class="n">to</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">end</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ds</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="n">from</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ds</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="n">to</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">ds</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">from</span><span class="p">,</span> <span class="n">to</span><span class="p">);</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">weight</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; ans;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">;</span>
 
-    return 0;
-}
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-void qSort(edge *nums, int l, int h) {
-    if (l &gt;= h) {
-        return;
-    }
-    int first = l, last = h, wmid = e[(first + last) / 2].weight;
-    while (first &lt;= last) {
-        while (e[first].weight &lt; wmid) {
-            first++;
-        }
-        while (e[last].weight &gt; wmid) {
-            last--;
-        }
-        if (first &lt;= last) {
-            edge temp = e[last];
-            e[last] = e[first];
-            e[first] = temp;
-            first++;
-            last--;
-        }
-    }
-    qSort(nums, l, last);
-    qSort(nums, first, h);
-}
-</code></pre>
+<span class="kt">void</span> <span class="nf">qSort</span><span class="p">(</span><span class="n">edge</span> <span class="o">*</span><span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">first</span> <span class="o">=</span> <span class="n">l</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="n">h</span><span class="p">,</span> <span class="n">wmid</span> <span class="o">=</span> <span class="n">e</span><span class="p">[(</span><span class="n">first</span> <span class="o">+</span> <span class="n">last</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">].</span><span class="n">weight</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;=</span> <span class="n">last</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="n">first</span><span class="p">].</span><span class="n">weight</span> <span class="o">&lt;</span> <span class="n">wmid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">first</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="n">last</span><span class="p">].</span><span class="n">weight</span> <span class="o">&gt;</span> <span class="n">wmid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">last</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;=</span> <span class="n">last</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">edge</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="n">last</span><span class="p">];</span>
+            <span class="n">e</span><span class="p">[</span><span class="n">last</span><span class="p">]</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="n">first</span><span class="p">];</span>
+            <span class="n">e</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">first</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">last</span><span class="o">--</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">qSort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">last</span><span class="p">);</span>
+    <span class="n">qSort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;class typeofver, class typeofedge&gt;
-class adjListGraph
-{
-public:
-    adjListGraph(int vSize);
-    void insert(typeofver x, typeofver y, typeofedge w);
-    int kruskal() const;
-    ~adjListGraph();
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">typeofver</span><span class="p">,</span> <span class="k">class</span> <span class="nc">typeofedge</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">adjListGraph</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">adjListGraph</span><span class="p">(</span><span class="kt">int</span> <span class="n">vSize</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="n">typeofver</span> <span class="n">x</span><span class="p">,</span> <span class="n">typeofver</span> <span class="n">y</span><span class="p">,</span> <span class="n">typeofedge</span> <span class="n">w</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="nf">kruskal</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="o">~</span><span class="n">adjListGraph</span><span class="p">();</span>
 
-private:
-    struct kruskalEdge
-    {
-        int beg, end;
-        typeofedge w;
-        bool operator&lt;(const kruskalEdge &amp;rp) const { return w &lt; rp.w; }
-    };
-    struct edgeNode
-    {
-        int end;
-        typeofedge weight;
-        edgeNode *next;
+<span class="k">private</span><span class="o">:</span>
+    <span class="k">struct</span> <span class="n">kruskalEdge</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">beg</span><span class="p">,</span> <span class="n">end</span><span class="p">;</span>
+        <span class="n">typeofedge</span> <span class="n">w</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">kruskalEdge</span> <span class="o">&amp;</span><span class="n">rp</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">w</span> <span class="o">&lt;</span> <span class="n">rp</span><span class="p">.</span><span class="n">w</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="k">struct</span> <span class="n">edgeNode</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">end</span><span class="p">;</span>
+        <span class="n">typeofedge</span> <span class="n">weight</span><span class="p">;</span>
+        <span class="n">edgeNode</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
 
-        edgeNode(int e, typeofedge w, edgeNode *n = NULL)
-        {
-            end = e;
-            weight = w;
-            next = n;
-        }
-    };
-    struct verNode
-    {
-        typeofver ver;
-        edgeNode *head;
+        <span class="n">edgeNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">e</span><span class="p">,</span> <span class="n">typeofedge</span> <span class="n">w</span><span class="p">,</span> <span class="n">edgeNode</span> <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">e</span><span class="p">;</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+            <span class="n">next</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="k">struct</span> <span class="n">verNode</span>
+    <span class="p">{</span>
+        <span class="n">typeofver</span> <span class="n">ver</span><span class="p">;</span>
+        <span class="n">edgeNode</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
 
-        verNode(edgeNode *h = NULL) { head = h; }
-    };
+        <span class="n">verNode</span><span class="p">(</span><span class="n">edgeNode</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span> <span class="n">head</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">};</span>
 
-    int Vers, Edges;
-    verNode *verList;
-    int find(typeofver v) const
-    {
-        for (int i = 0; i &lt; this-&gt;Vers; i++)
-            if (verList[i].ver == v)
-                return i;
-    }
-};
+    <span class="kt">int</span> <span class="n">Vers</span><span class="p">,</span> <span class="n">Edges</span><span class="p">;</span>
+    <span class="n">verNode</span> <span class="o">*</span><span class="n">verList</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="nf">find</span><span class="p">(</span><span class="n">typeofver</span> <span class="n">v</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">Vers</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">verList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ver</span> <span class="o">==</span> <span class="n">v</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-template &lt;class Type&gt;
-class priorityQueue
-{
-public:
-    priorityQueue(int capacity = 10);
-    priorityQueue(const Type data[],int size);
-    ~priorityQueue();
-    bool isEmpty()const;
-    void enQueue(const Type &amp;x);
-    Type deQueue();
-    Type getHead() const;
-private:
-    int currentSize;
-    Type *array;//array[0]不放东西
-    int maxSize;
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">priorityQueue</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">priorityQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">capacity</span> <span class="o">=</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="n">priorityQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Type</span> <span class="n">data</span><span class="p">[],</span><span class="kt">int</span> <span class="n">size</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">priorityQueue</span><span class="p">();</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Type</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">Type</span> <span class="nf">deQueue</span><span class="p">();</span>
+    <span class="n">Type</span> <span class="nf">getHead</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">currentSize</span><span class="p">;</span>
+    <span class="n">Type</span> <span class="o">*</span><span class="n">array</span><span class="p">;</span><span class="c1">//array[0]不放东西</span>
+    <span class="kt">int</span> <span class="n">maxSize</span><span class="p">;</span>
 
-    void doubleSpace();
-    void buildHeap();//对一串数字进行有序化建堆
-    void percolateDown(int hole);
-};
+    <span class="kt">void</span> <span class="nf">doubleSpace</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">buildHeap</span><span class="p">();</span><span class="c1">//对一串数字进行有序化建堆</span>
+    <span class="kt">void</span> <span class="nf">percolateDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">hole</span><span class="p">);</span>
+<span class="p">};</span>
 
-template &lt;class Type&gt;
-priorityQueue&lt;Type&gt;::priorityQueue(int capacity)
-{
-    array = new Type[capacity];
-    maxSize = capacity;
-    currentSize = 0;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">priorityQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">capacity</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Type</span><span class="p">[</span><span class="n">capacity</span><span class="p">];</span>
+    <span class="n">maxSize</span> <span class="o">=</span> <span class="n">capacity</span><span class="p">;</span>
+    <span class="n">currentSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type&gt;
-priorityQueue&lt;Type&gt;::~priorityQueue()
-{
-    delete[] array;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::~</span><span class="n">priorityQueue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">array</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type&gt;
-bool priorityQueue&lt;Type&gt;::isEmpty() const
-{
-    return currentSize == 0;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">currentSize</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type&gt;
-Type priorityQueue&lt;Type&gt;::getHead() const
-{
-    return array[1];
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="n">Type</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">getHead</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
 
-template &lt;class Type &gt;
-void priorityQueue&lt;Type&gt;::enQueue(const Type &amp;x)
-{
-    if (currentSize == maxSize-1)//因为array[0]不放东西
-        doubleSpace();
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Type</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">currentSize</span> <span class="o">==</span> <span class="n">maxSize</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="c1">//因为array[0]不放东西</span>
+        <span class="n">doubleSpace</span><span class="p">();</span>
 
-    //向上过滤
-    int hole = ++currentSize;
-    for (; hole &gt; 1 &amp;&amp; x &lt; array[hole / 2]; hole /= 2)
-        array[hole] = array[hole / 2];
-    array[hole] = x;
-}
+    <span class="c1">//向上过滤</span>
+    <span class="kt">int</span> <span class="n">hole</span> <span class="o">=</span> <span class="o">++</span><span class="n">currentSize</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">hole</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">array</span><span class="p">[</span><span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span> <span class="n">hole</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+    <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type &gt;
-Type priorityQueue&lt;Type &gt;::deQueue()
-{
-    Type miniItem;
-    miniItem = array[1];
-    array[1] = array[currentSize--];//把最大(maybe)的数放在第一个，再向下过滤
-    percolateDown(1);
-    return miniItem;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="n">Type</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span> <span class="o">&gt;::</span><span class="n">deQueue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Type</span> <span class="n">miniItem</span><span class="p">;</span>
+    <span class="n">miniItem</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">currentSize</span><span class="o">--</span><span class="p">];</span><span class="c1">//把最大(maybe)的数放在第一个，再向下过滤</span>
+    <span class="n">percolateDown</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">miniItem</span><span class="p">;</span>
+<span class="p">}</span>
 
-template&lt;class Type &gt;
-void priorityQueue&lt;Type &gt;:: percolateDown(int hole)//向下过滤
-{
-    int child;
-    Type tmp = array[hole];
-    for (; hole * 2 &lt;= currentSize; hole = child){
-        child = hole * 2;
-        if (child!=currentSize &amp;&amp; array[child+1]&lt;array[child])//找小的儿子，如果child==currentSize，则没有右儿子
-            child++;
-        if(array[child]&lt;tmp)
-            array[hole] = array[child];
-        else
-            break;
-    }
-    array[hole] = tmp;
-}
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span> <span class="o">&gt;::</span> <span class="n">percolateDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">hole</span><span class="p">)</span><span class="c1">//向下过滤</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">child</span><span class="p">;</span>
+    <span class="n">Type</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">currentSize</span><span class="p">;</span> <span class="n">hole</span> <span class="o">=</span> <span class="n">child</span><span class="p">){</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">child</span><span class="o">!=</span><span class="n">currentSize</span> <span class="o">&amp;&amp;</span> <span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="p">])</span><span class="c1">//找小的儿子，如果child==currentSize，则没有右儿子</span>
+            <span class="n">child</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">&lt;</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="p">];</span>
+        <span class="k">else</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type &gt;
-void priorityQueue&lt;Type &gt;::buildHeap()
-{
-    for (int i = currentSize / 2; i &gt; 0;i--)
-        percolateDown(i);
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span> <span class="o">&gt;::</span><span class="n">buildHeap</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">currentSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="n">percolateDown</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
 
-template &lt;class Type&gt;
-priorityQueue&lt;Type&gt;::priorityQueue(const Type *items, int size) : maxSize(size + 10), currentSize(size)
-{
-    array = new Type[maxSize];
-    for (int i = 0; i &lt; size;i++)
-        array[i + 1] = items[i];
-    buildHeap();
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">priorityQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Type</span> <span class="o">*</span><span class="n">items</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">)</span> <span class="o">:</span> <span class="n">maxSize</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="mi">10</span><span class="p">),</span> <span class="n">currentSize</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Type</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">buildHeap</span><span class="p">();</span>
+<span class="p">}</span>
 
-template &lt;class Type &gt;
-void priorityQueue&lt;Type &gt;::doubleSpace()
-{
-    Type *tmp = array;
-    maxSize *= 2;
-    array = new Type[maxSize];
-    for (int i = 0; i &lt;= currentSize; i++) //当currentSize == maxSize-1时，调用doubleSpace()
-        array[i] = tmp[i];
-    delete[] tmp;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span> <span class="o">&gt;::</span><span class="n">doubleSpace</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Type</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="p">;</span>
+    <span class="n">maxSize</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Type</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">currentSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">//当currentSize == maxSize-1时，调用doubleSpace()</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-class DisjointSet{
-private:
-    int size;
-    int *parent;
-public:
-    DisjointSet(int s);
-    ~DisjointSet() { delete[] parent; }
-    void Union(int root1, int root2);
-    int Find(int x);
-};
+<span class="k">class</span> <span class="nc">DisjointSet</span><span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">parent</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">DisjointSet</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">DisjointSet</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">parent</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Union</span><span class="p">(</span><span class="kt">int</span> <span class="n">root1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root2</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="nf">Find</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">);</span>
+<span class="p">};</span>
 
-DisjointSet::DisjointSet(int s)
-{
-    size = s;
-    parent = new int[size];
-    for (int i = 0; i &lt; size;i++)
-        parent[i] = -1;
-}
+<span class="n">DisjointSet</span><span class="o">::</span><span class="n">DisjointSet</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">s</span><span class="p">;</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
 
-int DisjointSet::Find(int x)
-{
-    if (parent[x]&lt;0)
-        return x;
-    return parent[x] = Find(parent[x]);
-}
+<span class="kt">int</span> <span class="n">DisjointSet</span><span class="o">::</span><span class="n">Find</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">Find</span><span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+<span class="p">}</span>
 
-void DisjointSet::Union(int root1,int root2)
-{
-    if (root1==root2)
-        return;
-    if (parent[root1]&gt;parent[root2])
-    {
-        parent[root2] += parent[root1];
-        parent[root1] = root2;
-    }
-    else
-    {
-        parent[root1] += parent[root2];
-        parent[root2] = root1;
-    }
-}
+<span class="kt">void</span> <span class="n">DisjointSet</span><span class="o">::</span><span class="n">Union</span><span class="p">(</span><span class="kt">int</span> <span class="n">root1</span><span class="p">,</span><span class="kt">int</span> <span class="n">root2</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">root1</span><span class="o">==</span><span class="n">root2</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">])</span>
+    <span class="p">{</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">];</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">=</span> <span class="n">root2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">root1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">];</span>
+        <span class="n">parent</span><span class="p">[</span><span class="n">root2</span><span class="p">]</span> <span class="o">=</span> <span class="n">root1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template &lt;class typeofver, class typeofedge&gt;
-adjListGraph&lt;typeofver, typeofedge&gt;::adjListGraph(int vSize)
-{
-    this-&gt;Vers = vSize;
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">typeofver</span><span class="p">,</span> <span class="k">class</span> <span class="nc">typeofedge</span><span class="o">&gt;</span>
+<span class="n">adjListGraph</span><span class="o">&lt;</span><span class="n">typeofver</span><span class="p">,</span> <span class="n">typeofedge</span><span class="o">&gt;::</span><span class="n">adjListGraph</span><span class="p">(</span><span class="kt">int</span> <span class="n">vSize</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">Vers</span> <span class="o">=</span> <span class="n">vSize</span><span class="p">;</span>
 
-    verList = new verNode[vSize];
-    for (int i = 0; i &lt; vSize;i++)
-    {
-        verList[i].ver = i+1;
-    }
-}
+    <span class="n">verList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">verNode</span><span class="p">[</span><span class="n">vSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vSize</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">verList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ver</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-template&lt;class typeofver,class typeofedge&gt;
-adjListGraph&lt;typeofver,typeofedge&gt;::~adjListGraph()
-{
-    int i;
-    edgeNode *p;
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">typeofver</span><span class="p">,</span><span class="k">class</span> <span class="nc">typeofedge</span><span class="o">&gt;</span>
+<span class="n">adjListGraph</span><span class="o">&lt;</span><span class="n">typeofver</span><span class="p">,</span><span class="n">typeofedge</span><span class="o">&gt;::~</span><span class="n">adjListGraph</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
 
-    for (i = 0; i &lt; this-&gt;Vers;i++)
-        while((p=verList[i].head)!=NULL)
-        {
-            verList[i].head = p-&gt;next;
-            delete p;
-        }
-    delete[] verList;
-}
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">Vers</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">while</span><span class="p">((</span><span class="n">p</span><span class="o">=</span><span class="n">verList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">head</span><span class="p">)</span><span class="o">!=</span><span class="nb">NULL</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">verList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">head</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">verList</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class typeofver,class typeofedge&gt;
-void adjListGraph&lt;typeofver ,typeofedge&gt;::insert(typeofver x,typeofver y,typeofedge w)
-{
-    int u = find(x), v = find(y);
-    verList[u].head = new edgeNode(v, w, verList[u].head);
-    ++this-&gt;Edges;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">typeofver</span><span class="p">,</span><span class="k">class</span> <span class="nc">typeofedge</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">adjListGraph</span><span class="o">&lt;</span><span class="n">typeofver</span> <span class="p">,</span><span class="n">typeofedge</span><span class="o">&gt;::</span><span class="n">insert</span><span class="p">(</span><span class="n">typeofver</span> <span class="n">x</span><span class="p">,</span><span class="n">typeofver</span> <span class="n">y</span><span class="p">,</span><span class="n">typeofedge</span> <span class="n">w</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">v</span> <span class="o">=</span> <span class="n">find</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+    <span class="n">verList</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">edgeNode</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">verList</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">head</span><span class="p">);</span>
+    <span class="o">++</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">Edges</span><span class="p">;</span>
+<span class="p">}</span>
 
-template&lt;class typeofver,class typeofedge&gt;
-int adjListGraph&lt;typeofver,typeofedge&gt;::kruskal()const
-{
-    int count = 0;
-    int edgesAccepted = 0, u, v;
-    edgeNode *p;
-    kruskalEdge e;
-    DisjointSet ds(this-&gt;Vers);
-    priorityQueue&lt;kruskalEdge&gt; pq;
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">typeofver</span><span class="p">,</span><span class="k">class</span> <span class="nc">typeofedge</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">adjListGraph</span><span class="o">&lt;</span><span class="n">typeofver</span><span class="p">,</span><span class="n">typeofedge</span><span class="o">&gt;::</span><span class="n">kruskal</span><span class="p">()</span><span class="k">const</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">edgesAccepted</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
+    <span class="n">kruskalEdge</span> <span class="n">e</span><span class="p">;</span>
+    <span class="n">DisjointSet</span> <span class="nf">ds</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">Vers</span><span class="p">);</span>
+    <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">kruskalEdge</span><span class="o">&gt;</span> <span class="n">pq</span><span class="p">;</span>
 
-    //生成优先级队列
-    for (int i = 0; i &lt; this-&gt;Vers;i++)
-    {
-        for (p = verList[i].head; p != NULL; p = p-&gt;next)
-            if (i&lt;p-&gt;end)
-            {   
-                e.beg = i;
-                e.end = p-&gt;end;
-                e.w = p-&gt;weight;
-                pq.enQueue(e);
-            }
-    }
+    <span class="c1">//生成优先级队列</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">Vers</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="n">verList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">head</span><span class="p">;</span> <span class="n">p</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">)</span>
+            <span class="p">{</span>   
+                <span class="n">e</span><span class="p">.</span><span class="n">beg</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="n">e</span><span class="p">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">;</span>
+                <span class="n">e</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">weight</span><span class="p">;</span>
+                <span class="n">pq</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">e</span><span class="p">);</span>
+            <span class="p">}</span>
+    <span class="p">}</span>
 
-    //开始归并
-    while(edgesAccepted&lt;(this-&gt;Vers)-1)
-    {
-        e = pq.deQueue();
-        u = ds.Find(e.beg);
-        v = ds.Find(e.end);
-        if(u!=v){
-            edgesAccepted++;
-            count += e.w;
-            ds.Union(u, v);
-        }
-    }
-    return count;
-}
+    <span class="c1">//开始归并</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">edgesAccepted</span><span class="o">&lt;</span><span class="p">(</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">Vers</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">pq</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">ds</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">beg</span><span class="p">);</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">ds</span><span class="p">.</span><span class="n">Find</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">end</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">u</span><span class="o">!=</span><span class="n">v</span><span class="p">){</span>
+            <span class="n">edgesAccepted</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="n">e</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+            <span class="n">ds</span><span class="p">.</span><span class="n">Union</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">count</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main()
-{
-    int numofver, numofedge,weight,node1,node2,tmp;
-    cin &gt;&gt; numofver &gt;&gt; numofedge;
-    adjListGraph&lt;int, int&gt; gf(numofver);
-    for (int i = 0; i &lt; numofedge;i++)
-    {
-        cin &gt;&gt; node1 &gt;&gt; node2 &gt;&gt; weight;
-        if (node1&gt;node2){
-            tmp = node2;
-            node2 = node1;
-            node1 = tmp;
-        }
-        gf.insert(node1, node2, weight);
-    }
-    cout &lt;&lt; gf.kruskal() &lt;&lt; endl;
-    return 0;
-}
-</code></pre>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">numofver</span><span class="p">,</span> <span class="n">numofedge</span><span class="p">,</span><span class="n">weight</span><span class="p">,</span><span class="n">node1</span><span class="p">,</span><span class="n">node2</span><span class="p">,</span><span class="n">tmp</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">numofver</span> <span class="o">&gt;&gt;</span> <span class="n">numofedge</span><span class="p">;</span>
+    <span class="n">adjListGraph</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">gf</span><span class="p">(</span><span class="n">numofver</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numofedge</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">node1</span> <span class="o">&gt;&gt;</span> <span class="n">node2</span> <span class="o">&gt;&gt;</span> <span class="n">weight</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">node1</span><span class="o">&gt;</span><span class="n">node2</span><span class="p">){</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">node2</span><span class="p">;</span>
+            <span class="n">node2</span> <span class="o">=</span> <span class="n">node1</span><span class="p">;</span>
+            <span class="n">node1</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">gf</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">node1</span><span class="p">,</span> <span class="n">node2</span><span class="p">,</span> <span class="n">weight</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">gf</span><span class="p">.</span><span class="n">kruskal</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

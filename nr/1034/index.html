@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -400,152 +402,153 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 二哥的金链 */
-#include &lt;iostream&gt;
-#include &lt;deque&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 二哥的金链 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;deque&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-void pop_back(deque&lt;int&gt; &amp;d){
-    while ((d.end() - d.begin()) &gt;= 1 &amp;&amp; d.back() &gt;= d.front())
-        d.pop_front();
-    if (!d.empty()) d.pop_back();
-}
+<span class="kt">void</span> <span class="nf">pop_back</span><span class="p">(</span><span class="n">deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">d</span><span class="p">){</span>
+    <span class="k">while</span> <span class="p">((</span><span class="n">d</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="n">d</span><span class="p">.</span><span class="n">begin</span><span class="p">())</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">d</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">d</span><span class="p">.</span><span class="n">front</span><span class="p">())</span>
+        <span class="n">d</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">d</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="n">d</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+<span class="p">}</span>
 
-int main(){
-    int n, k, a[400005];
-    cin &gt;&gt; n &gt;&gt; k;
-    for (int i = 1; i &lt;= n; ++i)
-        cin &gt;&gt; a[i];
-    for (int i = n + 1; i &lt;= n + k; ++i)
-        a[i] = a[i - n];
-    deque&lt;int&gt; f, ff;
-    for (int i = 1; i &lt;= k; ++i)
-    {
-        while (!f.empty() &amp;&amp; a[i] &gt; f.back()){
-            pop_back(f);
-        }
-        f.push_back(a[i]);
-        ff.push_back(a[i]);
-    }
-    int maxmin = f[0];
-    for (int i = k + 1; i &lt;= n + k; ++i){
-        while (!f.empty() &amp;&amp; a[i] &gt; f.back()){
-            pop_back(f);
-        }
-        f.push_back(a[i]);
-        if (f[0] == ff[0]) f.pop_front();
-        ff.pop_front();
-        ff.push_back(a[i]);
-        if (maxmin &gt; f[0]) maxmin = f[0];
-    }
-    cout &lt;&lt; maxmin &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">400005</span><span class="p">];</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">k</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">n</span><span class="p">];</span>
+    <span class="n">deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">f</span><span class="p">,</span> <span class="n">ff</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">back</span><span class="p">()){</span>
+            <span class="n">pop_back</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">f</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">ff</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">maxmin</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">+</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">f</span><span class="p">.</span><span class="n">back</span><span class="p">()){</span>
+            <span class="n">pop_back</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">f</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">ff</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="n">f</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+        <span class="n">ff</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+        <span class="n">ff</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">maxmin</span> <span class="o">&gt;</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="n">maxmin</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">maxmin</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int val[400009] = { 0 };
-//单调队列类
-class f_queue {
-public:
-    //存储单调队列数据的数组
-    int queue_data[400009] = { 0 };
-    //队头元素位置
-    int start = 0;
-    //队尾元素位置
-    int end = 0;
-    //插入函数
-    void push(int num) {
-        int i = end;
-        //从队尾开始扫描，将小于num的元素全部弹出，直到遇到大于等于num的元素
-        for (; i &gt; start; --i) {
-            if (queue_data[i - 1] &gt;= num)
-                break;
-        }
-        //将num放入单调队列中
-        queue_data[i] = num;
-        end = i + 1;
-    }
-    //弹出函数
-    void pop(int num) {
-        //判断需要弹出的num是否与队头元素相等，如果相等则将队头出队，如果不相等则不进行任何操作
-        if (num == queue_data[start])
-            ++start;
-    }
-    //返回队头元素
-    int front() {
-        return queue_data[start];
-    }
-};
+<span class="kt">int</span> <span class="n">val</span><span class="p">[</span><span class="mi">400009</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="c1">//单调队列类</span>
+<span class="k">class</span> <span class="nc">f_queue</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//存储单调队列数据的数组</span>
+    <span class="kt">int</span> <span class="n">queue_data</span><span class="p">[</span><span class="mi">400009</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+    <span class="c1">//队头元素位置</span>
+    <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">//队尾元素位置</span>
+    <span class="kt">int</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="c1">//插入函数</span>
+    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">end</span><span class="p">;</span>
+        <span class="c1">//从队尾开始扫描，将小于num的元素全部弹出，直到遇到大于等于num的元素</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="n">start</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">queue_data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">num</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//将num放入单调队列中</span>
+        <span class="n">queue_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="p">;</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//弹出函数</span>
+    <span class="kt">void</span> <span class="nf">pop</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//判断需要弹出的num是否与队头元素相等，如果相等则将队头出队，如果不相等则不进行任何操作</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">start</span><span class="p">])</span>
+            <span class="o">++</span><span class="n">start</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//返回队头元素</span>
+    <span class="kt">int</span> <span class="nf">front</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">queue_data</span><span class="p">[</span><span class="n">start</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-//单调队列
-f_queue qdata;
+<span class="c1">//单调队列</span>
+<span class="n">f_queue</span> <span class="n">qdata</span><span class="p">;</span>
 
-int main() {
-    int N, K;
-    cin &gt;&gt; N &gt;&gt; K;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">K</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span> <span class="o">&gt;&gt;</span> <span class="n">K</span><span class="p">;</span>
 
-    int init = 0;
-    for (int i = 0, cur_max = 0; i &lt; N; ++i) {
-        scanf(&quot;%d&quot;, &amp;val[i]);
-    }
+    <span class="kt">int</span> <span class="n">init</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cur_max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
 
-    //拼接，并且将前K个元素入单调队列
-    for (int i = 0; i &lt; K; ++i) {
-        val[N + i] = val[i];
-        qdata.push(val[i]);
-    }
+    <span class="c1">//拼接，并且将前K个元素入单调队列</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">K</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">val</span><span class="p">[</span><span class="n">N</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">qdata</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
 
-    int rp_max = qdata.front();
-    for (int i = 0; i &lt; N; ++i) {
-        //移动窗口，先将第i个元素出单调队列，再将第i+K个元素入队，并判断此时单调队列中的最大值是否比rp_max小
-        qdata.pop(val[i]);
-        qdata.push(val[i + K]);
-        if (qdata.front() &lt; rp_max)
-            rp_max = qdata.front();
-    }
-    //输出答案rp_max
-    cout &lt;&lt; rp_max;
+    <span class="kt">int</span> <span class="n">rp_max</span> <span class="o">=</span> <span class="n">qdata</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//移动窗口，先将第i个元素出单调队列，再将第i+K个元素入队，并判断此时单调队列中的最大值是否比rp_max小</span>
+        <span class="n">qdata</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">qdata</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">K</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">qdata</span><span class="p">.</span><span class="n">front</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">rp_max</span><span class="p">)</span>
+            <span class="n">rp_max</span> <span class="o">=</span> <span class="n">qdata</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="c1">//输出答案rp_max</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">rp_max</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-using namespace std;
-int a[300000],rp[300000],n,k,head,tail,minrp=0x3f3f3f3f;
-int main() {
-    scanf(&quot;%d%d&quot;,&amp;n,&amp;k);
-    for (int i=0;i&lt;n;++i)
-        scanf(&quot;%d&quot;,&amp;rp[i]);
-    for (int i=0;i&lt;k;++i){
-        while (head&gt;0&amp;&amp;rp[a[head-1]]&lt;=rp[i]) head--;
-        a[head++]=i;
-    }
-    if (rp[a[tail]]&lt;minrp) minrp=rp[a[tail]];
-    for (int i=k;i&lt;n;++i){
-        while (head&gt;tail&amp;&amp;a[tail]&lt;=i-k) tail++;
-        while (head&gt;tail&amp;&amp;rp[a[head-1]]&lt;=rp[i]) head--;
-        a[head++]=i;
-        if (rp[a[tail]]&lt;minrp) minrp=rp[a[tail]];
-    }
-    for (int i=0;i&lt;k-1;++i){
-        while (head&gt;tail&amp;&amp;(a[tail]&gt;i&amp;&amp;a[tail]&lt;=i-k+n)) tail++;
-        while (head&gt;tail&amp;&amp;rp[a[head-1]]&lt;=rp[i]) head--;
-        a[head++]=i;
-        if (rp[a[tail]]&lt;minrp) minrp=rp[a[tail]];
-    }
-    printf(&quot;%d&quot;,minrp);
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">300000</span><span class="p">],</span><span class="n">rp</span><span class="p">[</span><span class="mi">300000</span><span class="p">],</span><span class="n">n</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">head</span><span class="p">,</span><span class="n">tail</span><span class="p">,</span><span class="n">minrp</span><span class="o">=</span><span class="mh">0x3f3f3f3f</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="o">&amp;</span><span class="n">k</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">rp</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="n">rp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;=</span><span class="n">rp</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">head</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]]</span><span class="o">&lt;</span><span class="n">minrp</span><span class="p">)</span> <span class="n">minrp</span><span class="o">=</span><span class="n">rp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="o">&gt;</span><span class="n">tail</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">i</span><span class="o">-</span><span class="n">k</span><span class="p">)</span> <span class="n">tail</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="o">&gt;</span><span class="n">tail</span><span class="o">&amp;&amp;</span><span class="n">rp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;=</span><span class="n">rp</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">head</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]]</span><span class="o">&lt;</span><span class="n">minrp</span><span class="p">)</span> <span class="n">minrp</span><span class="o">=</span><span class="n">rp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="o">&gt;</span><span class="n">tail</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span><span class="o">&gt;</span><span class="n">i</span><span class="o">&amp;&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">i</span><span class="o">-</span><span class="n">k</span><span class="o">+</span><span class="n">n</span><span class="p">))</span> <span class="n">tail</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">head</span><span class="o">&gt;</span><span class="n">tail</span><span class="o">&amp;&amp;</span><span class="n">rp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">&lt;=</span><span class="n">rp</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">head</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">head</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]]</span><span class="o">&lt;</span><span class="n">minrp</span><span class="p">)</span> <span class="n">minrp</span><span class="o">=</span><span class="n">rp</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">tail</span><span class="p">]];</span>
+    <span class="p">}</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="n">minrp</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

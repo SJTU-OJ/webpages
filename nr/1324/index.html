@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -379,70 +381,70 @@
 </details>
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-struct team{
-    int p,m,t; //p:power  m:money  t:team number
-};
-team s[110000],tmp[110000],cold[110000],win[110000],lose[110000];
-int a,b,r,n,coldn,winn,losen,ans[110000];
-void merge(team *r, team *s, team *t, int l1, int l2){
-    int i=0,j=0,index=0;
-    while (i&lt;l1&amp;&amp;j&lt;l2){
-        if (s[i].m&lt;t[j].m) r[index++]=s[i++];
-        else if (s[i].m&gt;t[j].m) r[index++]=t[j++];
-        else if (s[i].t&lt;t[j].t) r[index++]=s[i++];
-        else r[index++]=t[j++];
-    }
-    if (i&lt;l1) while (i&lt;l1) r[index++]=s[i++];
-    if (j&lt;l2) while (j&lt;l2) r[index++]=t[j++];
-}
-int main() {
-    scanf(&quot;%d%d&quot;,&amp;n,&amp;r);
-    for (int i=0;i&lt;2*n;++i){
-        scanf(&quot;%d&quot;,&amp;s[i].p);
-        s[i].t=i;
-    }
-    for (int i=0;i&lt;r;++i){
-        coldn=winn=losen=0;
-        for (int j=0;j&lt;n;++j){
-            a=j&lt;&lt;1;
-            b=a|1;
-            if (s[a].p%s[b].p==0||(s[b].p&gt;s[a].p&amp;&amp;s[b].p%s[a].p!=0)){
-                if (s[b].t&gt;s[a].t){
-                    s[b].m+=1;
-                    win[winn++]=s[b];
-                    lose[losen++]=s[a];
-                }
-                else{
-                    s[b].m+=2;
-                    cold[coldn++]=s[b];
-                    lose[losen++]=s[a];
-                }
-            }
-            else{
-                if (s[b].t&lt;s[a].t){
-                    s[a].m+=1;
-                    win[winn++]=s[a];
-                    lose[losen++]=s[b];
-                }
-                else{
-                    s[a].m+=2;
-                    cold[coldn++]=s[a];
-                    lose[losen++]=s[b];
-                }
-            }
-        }
-        merge(tmp,win,cold,winn,coldn);
-        merge(s,tmp,lose,winn+coldn,losen);
-    }
-    for (int i=0;i&lt;2*n;++i)
-        ans[s[i].t]=s[i].m;
-    for (int i=0;i&lt;2*n;++i)
-        printf(&quot;%d &quot;,ans[i]);
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">team</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">p</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">t</span><span class="p">;</span> <span class="c1">//p:power  m:money  t:team number</span>
+<span class="p">};</span>
+<span class="n">team</span> <span class="n">s</span><span class="p">[</span><span class="mi">110000</span><span class="p">],</span><span class="n">tmp</span><span class="p">[</span><span class="mi">110000</span><span class="p">],</span><span class="n">cold</span><span class="p">[</span><span class="mi">110000</span><span class="p">],</span><span class="n">win</span><span class="p">[</span><span class="mi">110000</span><span class="p">],</span><span class="n">lose</span><span class="p">[</span><span class="mi">110000</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">coldn</span><span class="p">,</span><span class="n">winn</span><span class="p">,</span><span class="n">losen</span><span class="p">,</span><span class="n">ans</span><span class="p">[</span><span class="mi">110000</span><span class="p">];</span>
+<span class="kt">void</span> <span class="nf">merge</span><span class="p">(</span><span class="n">team</span> <span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="n">team</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="n">team</span> <span class="o">*</span><span class="n">t</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l2</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">l1</span><span class="o">&amp;&amp;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">l2</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m</span><span class="o">&lt;</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">m</span><span class="p">)</span> <span class="n">r</span><span class="p">[</span><span class="n">index</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m</span><span class="o">&gt;</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">m</span><span class="p">)</span> <span class="n">r</span><span class="p">[</span><span class="n">index</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">t</span><span class="o">&lt;</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">t</span><span class="p">)</span> <span class="n">r</span><span class="p">[</span><span class="n">index</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+        <span class="k">else</span> <span class="n">r</span><span class="p">[</span><span class="n">index</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">l1</span><span class="p">)</span> <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">l1</span><span class="p">)</span> <span class="n">r</span><span class="p">[</span><span class="n">index</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">j</span><span class="o">&lt;</span><span class="n">l2</span><span class="p">)</span> <span class="k">while</span> <span class="p">(</span><span class="n">j</span><span class="o">&lt;</span><span class="n">l2</span><span class="p">)</span> <span class="n">r</span><span class="p">[</span><span class="n">index</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="o">&amp;</span><span class="n">r</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span><span class="p">);</span>
+        <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">t</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">r</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">coldn</span><span class="o">=</span><span class="n">winn</span><span class="o">=</span><span class="n">losen</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">){</span>
+            <span class="n">a</span><span class="o">=</span><span class="n">j</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">;</span>
+            <span class="n">b</span><span class="o">=</span><span class="n">a</span><span class="o">|</span><span class="mi">1</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">p</span><span class="o">%</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">p</span><span class="o">==</span><span class="mi">0</span><span class="o">||</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">p</span><span class="o">&gt;</span><span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">p</span><span class="o">&amp;&amp;</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">p</span><span class="o">%</span><span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">p</span><span class="o">!=</span><span class="mi">0</span><span class="p">)){</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">t</span><span class="o">&gt;</span><span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">t</span><span class="p">){</span>
+                    <span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">m</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+                    <span class="n">win</span><span class="p">[</span><span class="n">winn</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+                    <span class="n">lose</span><span class="p">[</span><span class="n">losen</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+                <span class="p">}</span>
+                <span class="k">else</span><span class="p">{</span>
+                    <span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">m</span><span class="o">+=</span><span class="mi">2</span><span class="p">;</span>
+                    <span class="n">cold</span><span class="p">[</span><span class="n">coldn</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+                    <span class="n">lose</span><span class="p">[</span><span class="n">losen</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">t</span><span class="o">&lt;</span><span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">t</span><span class="p">){</span>
+                    <span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">m</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
+                    <span class="n">win</span><span class="p">[</span><span class="n">winn</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+                    <span class="n">lose</span><span class="p">[</span><span class="n">losen</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+                <span class="p">}</span>
+                <span class="k">else</span><span class="p">{</span>
+                    <span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">].</span><span class="n">m</span><span class="o">+=</span><span class="mi">2</span><span class="p">;</span>
+                    <span class="n">cold</span><span class="p">[</span><span class="n">coldn</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+                    <span class="n">lose</span><span class="p">[</span><span class="n">losen</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">merge</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span><span class="n">win</span><span class="p">,</span><span class="n">cold</span><span class="p">,</span><span class="n">winn</span><span class="p">,</span><span class="n">coldn</span><span class="p">);</span>
+        <span class="n">merge</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">tmp</span><span class="p">,</span><span class="n">lose</span><span class="p">,</span><span class="n">winn</span><span class="o">+</span><span class="n">coldn</span><span class="p">,</span><span class="n">losen</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">ans</span><span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">t</span><span class="p">]</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">m</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

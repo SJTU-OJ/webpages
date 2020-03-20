@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -440,510 +442,512 @@ int main()
 </details>
 
 <h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;iomanip&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class MyComplex
-{
-    friend ostream &amp;operator&lt;&lt;(ostream &amp;, const MyComplex &amp;);
-    friend istream &amp;operator&gt;&gt;(istream &amp;, MyComplex &amp;);
-    friend MyComplex operator+(const MyComplex &amp;, const MyComplex &amp;);
-    friend MyComplex operator-(const MyComplex &amp;, const MyComplex &amp;);
-    friend MyComplex operator!(const MyComplex &amp;);
-    friend MyComplex operator*(const MyComplex &amp;, const MyComplex &amp;);
-    friend MyComplex operator/(const MyComplex &amp;, const MyComplex &amp;);
-private:
-    double x, y;
+<span class="k">class</span> <span class="nc">MyComplex</span>
+<span class="p">{</span>
+    <span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">istream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span> <span class="o">&amp;</span><span class="p">,</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">!</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
 
-public:
-    MyComplex &amp;operator=(const MyComplex &amp;);
-    MyComplex &amp;operator+=(const MyComplex &amp;);
-    MyComplex &amp;operator-=(const MyComplex &amp;);
-    MyComplex &amp;operator*=(const MyComplex &amp;);
-    MyComplex &amp;operator/=(const MyComplex &amp;);
-};
-ostream &amp;operator&lt;&lt;(ostream &amp;ost, const MyComplex &amp;z)
-{
-    ost &lt;&lt;setiosflags(ios::fixed)&lt;&lt;setprecision(2)&lt;&lt; z.x &lt;&lt; ' ' &lt;&lt; z.y;
-    return ost;
-}
-istream &amp;operator&gt;&gt;(istream &amp;ist, MyComplex &amp;z)
-{
-    ist &gt;&gt; z.x &gt;&gt; z.y;
-    return ist;
-}
-MyComplex operator+(const MyComplex &amp;a, const MyComplex &amp;b)
-{
-    MyComplex Temp;
-    Temp.x = a.x + b.x;
-    Temp.y = a.y + b.y;
-    return Temp;
-}
-MyComplex operator-(const MyComplex &amp;a, const MyComplex &amp;b)
-{
-    MyComplex Temp;
-    Temp.x = a.x - b.x;
-    Temp.y = a.y - b.y;
-    return Temp;
-}
-MyComplex operator!(const MyComplex &amp;a)
-{
-    MyComplex Temp;
-    Temp.x = a.x;
-    Temp.y = -a.y;
-    return Temp;
-}
-MyComplex operator*(const MyComplex &amp;a, const MyComplex &amp;b)
-{
-    MyComplex Temp;
-    Temp.x = a.x * b.x - a.y * b.y;
-    Temp.y = a.x * b.y + a.y * b.x;
-    return Temp;
-}
-MyComplex operator/(const MyComplex &amp;a, const MyComplex &amp;b)
-{
-    MyComplex Temp;
-    Temp = a * (!b);
-    Temp.x /= (b * (!b)).x;
-    Temp.y /= (b * (!b)).x;
-    return Temp;
-}
-MyComplex &amp;MyComplex::operator=(const MyComplex &amp;a)
-{
-    x = a.x;
-    y = a.y;
-    return *this;
-}
-MyComplex &amp;MyComplex::operator+=(const MyComplex &amp;a)
-{
-    *this = *this + a;
-    return *this;
-}
-MyComplex &amp;MyComplex::operator-=(const MyComplex &amp;a)
-{
-    *this = *this - a;
-    return *this;
-}
-MyComplex &amp;MyComplex::operator*=(const MyComplex &amp;a)
-{
-    *this = *this * a;
-    return *this;
-}
-MyComplex &amp;MyComplex::operator/=(const MyComplex &amp;a)
-{
-    *this = *this / a;
-    return *this;
-}
-int main()
-{
-    MyComplex z1;
-    MyComplex z2;
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">-=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">*=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">/=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="n">ostream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">ost</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">z</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ost</span> <span class="o">&lt;&lt;</span><span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">fixed</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="n">setprecision</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">&lt;&lt;</span> <span class="n">z</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">z</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">ost</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">istream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span> <span class="o">&amp;</span><span class="n">ist</span><span class="p">,</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">z</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">ist</span> <span class="o">&gt;&gt;</span> <span class="n">z</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">z</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">ist</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">Temp</span><span class="p">;</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">Temp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">Temp</span><span class="p">;</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">Temp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="k">operator</span><span class="o">!</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">Temp</span><span class="p">;</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">Temp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">Temp</span><span class="p">;</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">Temp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="k">operator</span><span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">Temp</span><span class="p">;</span>
+    <span class="n">Temp</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="o">!</span><span class="n">b</span><span class="p">);</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">x</span> <span class="o">/=</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="p">(</span><span class="o">!</span><span class="n">b</span><span class="p">)).</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">Temp</span><span class="p">.</span><span class="n">y</span> <span class="o">/=</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="p">(</span><span class="o">!</span><span class="n">b</span><span class="p">)).</span><span class="n">x</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">Temp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">+</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">-=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">-</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">*=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">*</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">/=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">/</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">z1</span><span class="p">;</span>
+    <span class="n">MyComplex</span> <span class="n">z2</span><span class="p">;</span>
 
-    cin &gt;&gt; z1 &gt;&gt; z2;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">z1</span> <span class="o">&gt;&gt;</span> <span class="n">z2</span><span class="p">;</span>
 
-    cout &lt;&lt; z1 + z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 - z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 * z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 / z2 &lt;&lt; endl;
-    cout &lt;&lt; (z1 += z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 -= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 *= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 /= z2) &lt;&lt; endl;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">+</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">*</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">/</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">+=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">-=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">*=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">/=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 复数类 */
-#include &lt;iostream&gt;
-#include &lt;iomanip&gt;
-#include &lt;cmath&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 复数类 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class CMP{
-    //friend
-    friend inline CMP operator +(const CMP&amp;, const CMP&amp;);
-    friend inline CMP operator -(const CMP&amp;, const CMP&amp;);
-    friend inline CMP operator *(const CMP&amp;, const CMP&amp;);
-    friend inline CMP operator /(const CMP&amp;, const CMP&amp;);
-    friend istream&amp; operator &gt;&gt;(istream&amp;, CMP&amp;);
-    friend ostream&amp; operator &lt;&lt;(ostream&amp;, const CMP&amp;);
-public:
-    //constructor
-    CMP() : x(0.0), y(0.0) {}
-    CMP(const double &amp;xx, const double &amp;yy) : x(xx), y(yy) {}
-    CMP(const int &amp;xx, const int &amp;yy) : x(xx), y(yy) {}
-    CMP(const CMP &amp;cmp) : x(cmp.x), y(cmp.y) {}
+<span class="k">class</span> <span class="nc">CMP</span><span class="p">{</span>
+    <span class="c1">//friend</span>
+    <span class="k">friend</span> <span class="kr">inline</span> <span class="n">CMP</span> <span class="k">operator</span> <span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="kr">inline</span> <span class="n">CMP</span> <span class="k">operator</span> <span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="kr">inline</span> <span class="n">CMP</span> <span class="k">operator</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="kr">inline</span> <span class="n">CMP</span> <span class="k">operator</span> <span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span><span class="o">&amp;</span><span class="p">,</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//constructor</span>
+    <span class="n">CMP</span><span class="p">()</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">CMP</span><span class="p">(</span><span class="k">const</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">xx</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">yy</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">yy</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">CMP</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">xx</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">yy</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">yy</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">CMP</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">cmp</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">cmp</span><span class="p">.</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">cmp</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="p">{}</span>
 
-    //operator
-    CMP&amp; operator =(const CMP&amp;);
-    CMP&amp; operator +=(const CMP&amp;);
-    CMP&amp; operator -=(const CMP&amp;);
-    CMP&amp; operator *=(const CMP&amp;);
-    CMP&amp; operator /=(const CMP&amp;);
-    CMP operator ~() const;//conjugation
-    CMP operator -() const;//minus
+    <span class="c1">//operator</span>
+    <span class="n">CMP</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">CMP</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">+=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">CMP</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">-=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">CMP</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">*=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">CMP</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">/=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">CMP</span> <span class="k">operator</span> <span class="o">~</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span><span class="c1">//conjugation</span>
+    <span class="n">CMP</span> <span class="k">operator</span> <span class="o">-</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span><span class="c1">//minus</span>
 
-    double SquareModule() const { return (x * x + y * y); }
-    double Module() const { return sqrt(x * x + y * y); }
-private:
-    double x, y;
-};
+    <span class="kt">double</span> <span class="nf">SquareModule</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">);</span> <span class="p">}</span>
+    <span class="kt">double</span> <span class="nf">Module</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">);</span> <span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">};</span>
 
-CMP&amp; CMP::operator =(const CMP &amp;rhs){
-    x = rhs.x;
-    y = rhs.y;
-    return *this;
-}
-CMP CMP::operator ~() const{
-    return CMP(x, -y);
-}
-CMP CMP::operator -() const{
-    return CMP(-x, -y);
-}
-CMP inline operator +(const CMP &amp;lhs, const CMP &amp;rhs){
-    return CMP(lhs.x + rhs.x, lhs.y + rhs.y);
-}
-CMP inline operator -(const CMP &amp;lhs, const CMP &amp;rhs){
-    return CMP(lhs.x - rhs.x, lhs.y - rhs.y);
-}
-CMP inline operator *(const CMP &amp;lhs, const CMP &amp;rhs){
-    return CMP(lhs.x * rhs.x - lhs.y * rhs.y, lhs.x * rhs.y + lhs.y * rhs.x);
-}
-CMP inline operator /(const CMP &amp;lhs, const CMP &amp;rhs){
-    CMP ret = lhs * ~rhs;
-    return CMP(ret.x / rhs.SquareModule(), ret.y / rhs.SquareModule());
-}
-CMP&amp; CMP::operator +=(const CMP &amp;rhs){
-    x += rhs.x;
-    y += rhs.y;
-    return *this;
-}
-CMP&amp; CMP::operator -=(const CMP &amp;rhs){
-    x -= rhs.x;
-    y -= rhs.y;
-    return *this;
-}
-CMP&amp; CMP::operator *=(const CMP &amp;rhs){
-    double tx = x * rhs.x - y * rhs.y;
-    double ty = x * rhs.y + y * rhs.x;
-    x = tx;
-    y = ty;
-    return *this;
-}
-CMP&amp; CMP::operator /=(const CMP &amp;rhs){
-    CMP cmp = *this / rhs;
-    *this = cmp;
-    return *this;
-}
-istream&amp; operator &gt;&gt;(istream &amp;is, CMP&amp; cmp){
-    is &gt;&gt; cmp.x &gt;&gt; cmp.y;
-    return is;
-}
-ostream&amp; operator &lt;&lt;(ostream &amp;os, const CMP&amp; cmp){
-    os &lt;&lt; setiosflags(ios::fixed) &lt;&lt; setprecision(2) &lt;&lt; cmp.x &lt;&lt; ' ' &lt;&lt; cmp.y;
-    return os;
-}
+<span class="n">CMP</span><span class="o">&amp;</span> <span class="n">CMP</span><span class="o">::</span><span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">CMP</span> <span class="n">CMP</span><span class="o">::</span><span class="k">operator</span> <span class="o">~</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">CMP</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">CMP</span> <span class="n">CMP</span><span class="o">::</span><span class="k">operator</span> <span class="o">-</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">CMP</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">CMP</span> <span class="kr">inline</span> <span class="k">operator</span> <span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">CMP</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">CMP</span> <span class="kr">inline</span> <span class="k">operator</span> <span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">CMP</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">CMP</span> <span class="kr">inline</span> <span class="k">operator</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">CMP</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">CMP</span> <span class="kr">inline</span> <span class="k">operator</span> <span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="n">CMP</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">lhs</span> <span class="o">*</span> <span class="o">~</span><span class="n">rhs</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nf">CMP</span><span class="p">(</span><span class="n">ret</span><span class="p">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">rhs</span><span class="p">.</span><span class="n">SquareModule</span><span class="p">(),</span> <span class="n">ret</span><span class="p">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">rhs</span><span class="p">.</span><span class="n">SquareModule</span><span class="p">());</span>
+<span class="p">}</span>
+<span class="n">CMP</span><span class="o">&amp;</span> <span class="n">CMP</span><span class="o">::</span><span class="k">operator</span> <span class="o">+=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">+=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">CMP</span><span class="o">&amp;</span> <span class="n">CMP</span><span class="o">::</span><span class="k">operator</span> <span class="o">-=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="n">x</span> <span class="o">-=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">-=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">CMP</span><span class="o">&amp;</span> <span class="n">CMP</span><span class="o">::</span><span class="k">operator</span> <span class="o">*=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="kt">double</span> <span class="n">tx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">ty</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tx</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">ty</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">CMP</span><span class="o">&amp;</span> <span class="n">CMP</span><span class="o">::</span><span class="k">operator</span> <span class="o">/=</span><span class="p">(</span><span class="k">const</span> <span class="n">CMP</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="n">CMP</span> <span class="n">cmp</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">/</span> <span class="n">rhs</span><span class="p">;</span>
+    <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="n">cmp</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span> <span class="o">&amp;</span><span class="n">is</span><span class="p">,</span> <span class="n">CMP</span><span class="o">&amp;</span> <span class="n">cmp</span><span class="p">){</span>
+    <span class="n">is</span> <span class="o">&gt;&gt;</span> <span class="n">cmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">cmp</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">is</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">CMP</span><span class="o">&amp;</span> <span class="n">cmp</span><span class="p">){</span>
+    <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">fixed</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">cmp</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">cmp</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    CMP z1, z2;
-    cin &gt;&gt; z1 &gt;&gt; z2;
-    cout &lt;&lt; z1 + z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 - z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 * z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 / z2 &lt;&lt; endl;
-    cout &lt;&lt; (z1 += z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 -= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 *= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 /= z2) &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">CMP</span> <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">z1</span> <span class="o">&gt;&gt;</span> <span class="n">z2</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">+</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">*</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">/</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">+=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">-=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">*=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">/=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &quot;cstdio&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class MyComplex
-{
-private:
-    double x, y;
-public:
-    friend istream&amp; operator&gt;&gt;(istream&amp; input, MyComplex &amp;b) {
-        input &gt;&gt; b.x &gt;&gt; b.y;
-        return input;
-    }
-    friend ostream&amp; operator&lt;&lt;(ostream&amp; output, const MyComplex &amp;b) {
-        char op[1000];
-        sprintf(op, &quot;%.2f %.2f&quot;, b.x, b.y);
-        output &lt;&lt; op;
-        //output &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; b.x &lt;&lt; &quot; &quot; &lt;&lt; b.y;
-        return output;
-    }
+<span class="k">class</span> <span class="nc">MyComplex</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">friend</span> <span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span><span class="o">&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">input</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">input</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">friend</span> <span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">output</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">op</span><span class="p">[</span><span class="mi">1000</span><span class="p">];</span>
+        <span class="n">sprintf</span><span class="p">(</span><span class="n">op</span><span class="p">,</span> <span class="s">&quot;%.2f %.2f&quot;</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+        <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">op</span><span class="p">;</span>
+        <span class="c1">//output &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; b.x &lt;&lt; &quot; &quot; &lt;&lt; b.y;</span>
+        <span class="k">return</span> <span class="n">output</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    MyComplex operator+(const MyComplex &amp;b) const{
-        MyComplex temp;
-        temp.x = x + b.x;
-        temp.y = y + b.y;
-        return temp;
-    }
+    <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="k">const</span><span class="p">{</span>
+        <span class="n">MyComplex</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    MyComplex operator-(const MyComplex &amp;b) const {
-        MyComplex temp;
-        temp.x = x - b.x;
-        temp.y = y - b.y;
-        return temp;
-    }
+    <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">MyComplex</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    MyComplex operator*(const MyComplex &amp;b) const {
-        MyComplex temp;
-        temp.x = x * b.x - y * b.y;
-        temp.y = x * b.y + y * b.x;
-        return temp;
-    }
+    <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">MyComplex</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    MyComplex operator/(const MyComplex &amp;b) const {
-        MyComplex temp;
-        double data = b.x*b.x + b.y*b.y;
-        temp.x = (x*b.x + y * b.y) / data;
-        temp.y = (y*b.x - x * b.y) / data;
-        return temp;
-    }
+    <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">MyComplex</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">data</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="o">*</span><span class="n">b</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="o">*</span><span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">b</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">b</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span> <span class="o">*</span> <span class="n">b</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">data</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    MyComplex &amp;operator+=(const MyComplex &amp;b) {
-        *this = *this + b;
-        return *this;
-    }
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    MyComplex &amp;operator-=(const MyComplex &amp;b) {
-        *this = *this - b;
-        return *this;
-    }
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">-=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">-</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    MyComplex &amp;operator*=(const MyComplex &amp;b) {
-        *this = *this * b;
-        return *this;
-    }
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">*=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">*</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    MyComplex &amp;operator/=(const MyComplex &amp;b) {
-        *this = *this / b;
-        return *this;
-    }
-};
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">/=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">*</span><span class="k">this</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span> <span class="o">/</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int main()
-{
-    MyComplex z1;
-    MyComplex z2;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">z1</span><span class="p">;</span>
+    <span class="n">MyComplex</span> <span class="n">z2</span><span class="p">;</span>
 
-    cin &gt;&gt; z1 &gt;&gt; z2;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">z1</span> <span class="o">&gt;&gt;</span> <span class="n">z2</span><span class="p">;</span>
 
-    cout &lt;&lt; z1 + z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 - z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 * z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 / z2 &lt;&lt; endl;
-    cout &lt;&lt; (z1 += z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 -= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 *= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 /= z2);
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">+</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">*</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">/</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">+=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">-=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">*=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">/=</span> <span class="n">z2</span><span class="p">);</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iomanip&gt;
-#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class MyComplex {
-   private:
-    double x, y;
+<span class="k">class</span> <span class="nc">MyComplex</span> <span class="p">{</span>
+   <span class="k">private</span><span class="o">:</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
 
-   public:
-    MyComplex(int a = 0, int b = 0) : x(a), y(b) {}
-    MyComplex operator+(const MyComplex &amp;) const;
-    MyComplex operator-(const MyComplex &amp;) const;
-    MyComplex operator*(const MyComplex &amp;)const;
-    MyComplex operator/(const MyComplex &amp;) const;
-    MyComplex &amp;operator+=(const MyComplex &amp;);
-    MyComplex &amp;operator-=(const MyComplex &amp;);
-    MyComplex &amp;operator*=(const MyComplex &amp;);
-    MyComplex &amp;operator/=(const MyComplex &amp;);
-    friend istream &amp;operator&gt;&gt;(istream &amp;, MyComplex &amp;);
-    friend ostream &amp;operator&lt;&lt;(ostream &amp;, const MyComplex &amp;);
-};
+   <span class="k">public</span><span class="o">:</span>
+    <span class="n">MyComplex</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">)</span><span class="k">const</span><span class="p">;</span>
+    <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">-=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">*=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">/=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">istream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span> <span class="o">&amp;</span><span class="p">,</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="p">);</span>
+<span class="p">};</span>
 
-MyComplex MyComplex::operator+(const MyComplex &amp;right) const {
-    MyComplex tmp;
-    tmp.x = x + right.x;
-    tmp.y = y + right.y;
-    return tmp;
-}
+<span class="n">MyComplex</span> <span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-MyComplex MyComplex::operator-(const MyComplex &amp;right) const {
-    MyComplex tmp;
-    tmp.x = x - right.x;
-    tmp.y = y - right.y;
-    return tmp;
-}
+<span class="n">MyComplex</span> <span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-MyComplex MyComplex::operator*(const MyComplex &amp;right) const {
-    MyComplex tmp;
-    tmp.x = x * right.x - y * right.y;
-    tmp.y = x * right.y + y * right.x;
-    return tmp;
-}
+<span class="n">MyComplex</span> <span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-MyComplex MyComplex::operator/(const MyComplex &amp;right) const {
-    MyComplex tmp;
-    tmp.x =
-        (x * right.x + y * right.y) / (right.x * right.x + right.y * right.y);
-    tmp.y =
-        (y * right.x - x * right.y) / (right.x * right.x + right.y * right.y);
-    return tmp;
-}
+<span class="n">MyComplex</span> <span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span>
+        <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">right</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+    <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span>
+        <span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">right</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-MyComplex &amp;MyComplex::operator+=(const MyComplex &amp;right) {
-    (*this) = (*this) + right;
-    return *this;
-}
+<span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">+</span> <span class="n">right</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
 
-MyComplex &amp;MyComplex::operator-=(const MyComplex &amp;right) {
-    (*this) = (*this) - right;
-    return *this;
-}
+<span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">-=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">-</span> <span class="n">right</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
 
-MyComplex &amp;MyComplex::operator*=(const MyComplex &amp;right) {
-    (*this) = (*this) * right;
-    return *this;
-}
+<span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">*=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">*</span> <span class="n">right</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
 
-MyComplex &amp;MyComplex::operator/=(const MyComplex &amp;right) {
-    (*this) = (*this) / right;
-    return *this;
-}
+<span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">MyComplex</span><span class="o">::</span><span class="k">operator</span><span class="o">/=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">/</span> <span class="n">right</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
 
-istream &amp;operator&gt;&gt;(istream &amp;is, MyComplex &amp;right) {
-    is &gt;&gt; right.x &gt;&gt; right.y;
-    return is;
-}
+<span class="n">istream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span> <span class="o">&amp;</span><span class="n">is</span><span class="p">,</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">is</span> <span class="o">&gt;&gt;</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">is</span><span class="p">;</span>
+<span class="p">}</span>
 
-ostream &amp;operator&lt;&lt;(ostream &amp;os, const MyComplex &amp;right) {
-    os &lt;&lt; setiosflags(ios::fixed) &lt;&lt; setprecision(2) &lt;&lt; right.x &lt;&lt; ' '
-       &lt;&lt; right.y;
-    return os;
-}
+<span class="n">ostream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">fixed</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">right</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span>
+       <span class="o">&lt;&lt;</span> <span class="n">right</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main() {
-    MyComplex z1;
-    MyComplex z2;
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">z1</span><span class="p">;</span>
+    <span class="n">MyComplex</span> <span class="n">z2</span><span class="p">;</span>
 
-    cin &gt;&gt; z1 &gt;&gt; z2;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">z1</span> <span class="o">&gt;&gt;</span> <span class="n">z2</span><span class="p">;</span>
 
-    cout &lt;&lt; z1 + z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 - z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 * z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 / z2 &lt;&lt; endl;
-    cout &lt;&lt; (z1 += z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 -= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 *= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 /= z2) &lt;&lt; endl;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">+</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">*</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">/</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">+=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">-=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">*=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">/=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;iomanip&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class MyComplex
-{
-    friend istream&amp; operator&gt;&gt;(istream &amp;is, MyComplex &amp;c)
-    {
-        is &gt;&gt; c.x &gt;&gt; c.y;
-        return is;
-    }
-    friend ostream&amp; operator&lt;&lt;(ostream &amp;os, const MyComplex &amp;c)
-    {
-        os &lt;&lt; setiosflags(ios::fixed) &lt;&lt; setprecision(2) &lt;&lt; c.x &lt;&lt; &quot; &quot; &lt;&lt; c.y;
-    }
-    private:
-        double x, y;
-    public:
-        MyComplex(double a = 0.0, double b = 0.0): x(a), y(b){}
-        MyComplex operator+(const MyComplex &amp;c)
-        {
-            return MyComplex(x + c.x, y + c.y);
-        }
-        MyComplex operator-(const MyComplex &amp;c)
-        {
-            return MyComplex(x - c.x, y - c.y);
-        }
-        MyComplex operator*(const MyComplex &amp;c)
-        {
-            return MyComplex(x * c.x - y * c.y, x * c.y + y * c.x);
-        }
-        MyComplex operator/(const MyComplex &amp;c)
-        {
-            return MyComplex((x * c.x + y * c.y) / (c.x * c.x + c.y * c.y), (y * c.x - x * c.y) / (c.x * c.x + c.y * c.y));
-        }
-        MyComplex&amp; operator+=(const MyComplex &amp;c)
-        {
-            x += c.x;
-            y += c.y;
-            return *this;
-        }
-        MyComplex&amp; operator-=(const MyComplex &amp;c)
-        {
-            x -= c.x;
-            y -= c.y;
-            return *this;
-        }
-        MyComplex&amp; operator*=(const MyComplex &amp;c)
-        {
-            double tem_x = x * c.x - y * c.y, tem_y = x * c.y + y * c.x;
-            x = tem_x;
-            y = tem_y;
-            return *this;
-        }
-        MyComplex&amp; operator/=(const MyComplex &amp;c)
-        {
-            double tem_x = (x * c.x + y * c.y) / (c.x * c.x + c.y * c.y), tem_y = (y * c.x - x * c.y) / (c.x * c.x + c.y * c.y);
-            x = tem_x;
-            y = tem_y;
-            return *this;
-        }
-        ~MyComplex(){}
-};
+<span class="k">class</span> <span class="nc">MyComplex</span>
+<span class="p">{</span>
+    <span class="k">friend</span> <span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span> <span class="o">&amp;</span><span class="n">is</span><span class="p">,</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">is</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">is</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">friend</span> <span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">fixed</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">MyComplex</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span><span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">b</span><span class="p">){}</span>
+        <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">MyComplex</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">MyComplex</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">-</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">MyComplex</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">MyComplex</span> <span class="k">operator</span><span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">MyComplex</span><span class="p">((</span><span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="n">MyComplex</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">+=</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">MyComplex</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">-=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">x</span> <span class="o">-=</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">-=</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">MyComplex</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">*=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">tem_x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">tem_y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">tem_x</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">tem_y</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">MyComplex</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">/=</span><span class="p">(</span><span class="k">const</span> <span class="n">MyComplex</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">tem_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">),</span> <span class="n">tem_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">tem_x</span><span class="p">;</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">tem_y</span><span class="p">;</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="o">~</span><span class="n">MyComplex</span><span class="p">(){}</span>
+<span class="p">};</span>
 
-int main()
-{
-    MyComplex z1;
-    MyComplex z2;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">MyComplex</span> <span class="n">z1</span><span class="p">;</span>
+    <span class="n">MyComplex</span> <span class="n">z2</span><span class="p">;</span>
 
-    cin &gt;&gt; z1 &gt;&gt; z2;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">z1</span> <span class="o">&gt;&gt;</span> <span class="n">z2</span><span class="p">;</span>
 
-    cout &lt;&lt; z1 + z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 - z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 * z2 &lt;&lt; endl;
-    cout &lt;&lt; z1 / z2 &lt;&lt; endl;
-    cout &lt;&lt; (z1 += z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 -= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 *= z2) &lt;&lt; endl;
-    cout &lt;&lt; (z1 /= z2) &lt;&lt; endl;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">+</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">-</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">*</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">z1</span> <span class="o">/</span> <span class="n">z2</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">+=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">-=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">*=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">z1</span> <span class="o">/=</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 
-    return 0;
-}
-
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

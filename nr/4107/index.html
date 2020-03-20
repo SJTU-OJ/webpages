@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -418,65 +420,64 @@ Perception of the physical world does not necessarily result in a universal reac
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* Love and Auto Memories Doll II */
-#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-#include &lt;cstring&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* Love and Auto Memories Doll II */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int MAXS = 10000000;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXS</span> <span class="o">=</span> <span class="mi">10000000</span><span class="p">;</span>
 
-char a[MAXS + 5], b[MAXS + 5];
-int nxt[MAXS + 5] = {0};
-int lena = 0, lenb = 0;
+<span class="kt">char</span> <span class="n">a</span><span class="p">[</span><span class="n">MAXS</span> <span class="o">+</span> <span class="mi">5</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">MAXS</span> <span class="o">+</span> <span class="mi">5</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">nxt</span><span class="p">[</span><span class="n">MAXS</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">lena</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">lenb</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-inline void lowercase(char &amp;ch){
-    if (ch &gt;= 'A' &amp;&amp; ch &lt;= 'Z')
-        ch = ch - 'A' + 'a';
-}
+<span class="kr">inline</span> <span class="kt">void</span> <span class="nf">lowercase</span><span class="p">(</span><span class="kt">char</span> <span class="o">&amp;</span><span class="n">ch</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">&gt;=</span> <span class="sc">&#39;A&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">ch</span> <span class="o">&lt;=</span> <span class="sc">&#39;Z&#39;</span><span class="p">)</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">ch</span> <span class="o">-</span> <span class="sc">&#39;A&#39;</span> <span class="o">+</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    fgets(a, MAXS + 5, stdin);
-    fgets(b, MAXS + 5, stdin);
-    lena = strlen(a) - 1;
-    lenb = strlen(b);
-    for (int i = 0; i &lt; lena; ++i)
-        if (a[i] &gt;= 'A' &amp;&amp; a[i] &lt;= 'Z')
-            a[i] = a[i] - 'A' + 'a';
-    for (int i = 0; i &lt; lenb; ++i)
-        if (b[i] &gt;= 'A' &amp;&amp; b[i] &lt;= 'Z')
-            b[i] = b[i] - 'A' + 'a';
-    int pos = -1, ans = 0;
-    nxt[0] = -1;
-    int t = -1;
-    for (int i = 1; i &lt; lena; ++i){
-        while (t &gt; -1 &amp;&amp; a[i] != a[t + 1])
-            t = nxt[t];
-        if (a[i] == a[t + 1])
-            ++t;
-        nxt[i] = t;
-    }
-    t = -1;
-    for (int i = 0; i &lt; lenb; ++i){
-        while (t &gt; -1 &amp;&amp; a[t + 1] != b[i])
-            t = nxt[t];
-        if (a[t + 1] == b[i])
-            ++t;
-        if (t == lena - 1){
-            if (ans == 0)
-                pos = i - lena + 1;
-            ++ans;
-            t = nxt[t];
-        }
-    }
-    if (ans == 0)
-        cout &lt;&lt; &quot;-1&quot; &lt;&lt; '\n';
-    else
-        cout &lt;&lt; ans &lt;&lt; ' ' &lt;&lt; pos &lt;&lt; '\n';
-    return 0;
-}
-
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">fgets</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">MAXS</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span> <span class="n">stdin</span><span class="p">);</span>
+    <span class="n">fgets</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">MAXS</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span> <span class="n">stdin</span><span class="p">);</span>
+    <span class="n">lena</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">lenb</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">lena</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">&#39;A&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">&#39;Z&#39;</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;A&#39;</span> <span class="o">+</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">lenb</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">&#39;A&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">&#39;Z&#39;</span><span class="p">)</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;A&#39;</span> <span class="o">+</span> <span class="sc">&#39;a&#39;</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">nxt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">lena</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">t</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">[</span><span class="n">t</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="o">++</span><span class="n">t</span><span class="p">;</span>
+        <span class="n">nxt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">lenb</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">t</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">[</span><span class="n">t</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="o">++</span><span class="n">t</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="n">lena</span> <span class="o">-</span> <span class="mi">1</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ans</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">lena</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">ans</span><span class="p">;</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">[</span><span class="n">t</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ans</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;-1&quot;</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">pos</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

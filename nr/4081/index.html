@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -418,75 +420,74 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 侠盗罗宾 */
-#include &lt;iostream&gt;
-#include &lt;map&gt;
-#include &lt;algorithm&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 侠盗罗宾 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int n, k;
-map&lt;int, long long&gt; w;
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+<span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">long</span> <span class="kt">long</span><span class="o">&gt;</span> <span class="n">w</span><span class="p">;</span>
 
-int main(){
-    cin &gt;&gt; n &gt;&gt; k;
-    int maxx = 0, minn = 1000000005;
-    long long sum = 0;
-    for (long long i = 1; i &lt;= n; ++i){
-        int t;
-        cin &gt;&gt; t;
-        ++w[t];
-        maxx = max(maxx, t);
-        minn = min(minn, t);
-        sum += t;
-    }
-    long long p = 0, pp = 0, r = 0, rr = 0;
-    for (auto i = w.begin(); ; ++i){
-        if (pp + i-&gt;second &gt; n / 2) break;
-        pp += i-&gt;second;
-        p += i-&gt;first * i-&gt;second;
-    }
-    for (auto i = w.end(); ; --i){
-        if (i == w.end()) continue;
-        if (rr + i-&gt;second &gt; n / 2) break;
-        rr += i-&gt;second;
-        r += i-&gt;first * i-&gt;second;
-    }
-    if (r - p &lt;= 2 * k){
-        if (sum % n == 0)
-            cout &lt;&lt; 0 &lt;&lt; endl;
-        else
-            cout &lt;&lt; 1 &lt;&lt; endl;
-        return 0;
-    }
-    int kk = k, mp = minn, tp = w[minn];
-    for (auto i = w.begin(); ; ++i){
-        if (i == w.begin()) continue;
-        if ((i-&gt;first - mp) * tp &gt; kk){
-            mp += kk / tp;
-            break;
-        }
-        kk -= (i-&gt;first - mp) * tp;
-        mp = i-&gt;first;
-        tp += i-&gt;second;
-    }
-    int mr = maxx, tr = w[maxx];
-    kk = k;
-    for (auto i = w.end(); ; --i){
-        if (i == w.end()) continue;
-        if (i-&gt;first == maxx) continue;
-        if ((mr - i-&gt;first) * tr &gt; kk){
-            mr -= kk / tr;
-            break;
-        }
-        kk -= (mr - i-&gt;first) * tr;
-        mr = i-&gt;first;
-        tr += i-&gt;second;
-    }
-    cout &lt;&lt; mr - mp &lt;&lt; endl;
-    return 0;
-}
-
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">k</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">minn</span> <span class="o">=</span> <span class="mi">1000000005</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">;</span>
+        <span class="o">++</span><span class="n">w</span><span class="p">[</span><span class="n">t</span><span class="p">];</span>
+        <span class="n">maxx</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+        <span class="n">minn</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">minn</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pp</span> <span class="o">+</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+        <span class="n">pp</span> <span class="o">+=</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+        <span class="n">p</span> <span class="o">+=</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">*</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">w</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rr</span> <span class="o">+</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span> <span class="o">&gt;</span> <span class="n">n</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+        <span class="n">rr</span> <span class="o">+=</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+        <span class="n">r</span> <span class="o">+=</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">*</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">k</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sum</span> <span class="o">%</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">kk</span> <span class="o">=</span> <span class="n">k</span><span class="p">,</span> <span class="n">mp</span> <span class="o">=</span> <span class="n">minn</span><span class="p">,</span> <span class="n">tp</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">minn</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">w</span><span class="p">.</span><span class="n">begin</span><span class="p">())</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">-</span> <span class="n">mp</span><span class="p">)</span> <span class="o">*</span> <span class="n">tp</span> <span class="o">&gt;</span> <span class="n">kk</span><span class="p">){</span>
+            <span class="n">mp</span> <span class="o">+=</span> <span class="n">kk</span> <span class="o">/</span> <span class="n">tp</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">kk</span> <span class="o">-=</span> <span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">-</span> <span class="n">mp</span><span class="p">)</span> <span class="o">*</span> <span class="n">tp</span><span class="p">;</span>
+        <span class="n">mp</span> <span class="o">=</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">;</span>
+        <span class="n">tp</span> <span class="o">+=</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">mr</span> <span class="o">=</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">tr</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="n">maxx</span><span class="p">];</span>
+    <span class="n">kk</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">w</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span> <span class="o">==</span> <span class="n">maxx</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">mr</span> <span class="o">-</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">)</span> <span class="o">*</span> <span class="n">tr</span> <span class="o">&gt;</span> <span class="n">kk</span><span class="p">){</span>
+            <span class="n">mr</span> <span class="o">-=</span> <span class="n">kk</span> <span class="o">/</span> <span class="n">tr</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">kk</span> <span class="o">-=</span> <span class="p">(</span><span class="n">mr</span> <span class="o">-</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">)</span> <span class="o">*</span> <span class="n">tr</span><span class="p">;</span>
+        <span class="n">mr</span> <span class="o">=</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">;</span>
+        <span class="n">tr</span> <span class="o">+=</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">mr</span> <span class="o">-</span> <span class="n">mp</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -391,85 +393,85 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;queue&gt;
-#include &lt;map&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-vector&lt;vector&lt;int&gt;&gt; map_data;
-map&lt;int,vector&lt;pair&lt;int,int&gt;&gt;&gt; ele_data;
-int n, sx, sy, tx, ty;
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">map_data</span><span class="p">;</span>
+<span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;&gt;&gt;</span> <span class="n">ele_data</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">,</span> <span class="n">tx</span><span class="p">,</span> <span class="n">ty</span><span class="p">;</span>
 
-int dx[] = { 0,1,0,-1 },
-dy[] = { 1,0,-1,0 };
+<span class="kt">int</span> <span class="n">dx</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span> <span class="p">},</span>
+<span class="n">dy</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span> <span class="p">};</span>
 
-int bfs() {
-    queue &lt;pair&lt;pair&lt;int, int&gt;, int&gt;&gt; qdata;
-    vector&lt;vector&lt;bool&gt;&gt; visited(n, vector&lt;bool&gt;(n, false));
-    qdata.push(make_pair(make_pair(sx, sy), 0));
-    visited[sx][sy] = true;
+<span class="kt">int</span> <span class="nf">bfs</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">queue</span> <span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">qdata</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;&gt;</span> <span class="n">visited</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">false</span><span class="p">));</span>
+    <span class="n">qdata</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">sx</span><span class="p">,</span> <span class="n">sy</span><span class="p">),</span> <span class="mi">0</span><span class="p">));</span>
+    <span class="n">visited</span><span class="p">[</span><span class="n">sx</span><span class="p">][</span><span class="n">sy</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 
-    while (!qdata.empty()) {
-        auto temp = qdata.front();
-        qdata.pop();
-        if (temp.first.first == tx &amp;&amp; temp.first.second == ty) {
-            return temp.second;
-        }
-        int cx = temp.first.first, cy = temp.first.second;
-        for (int i = 0; i &lt; 4; ++i) {
-            int nx = temp.first.first + dx[i], ny = temp.first.second + dy[i];
-            if (nx &lt; n &amp;&amp; ny &lt; n &amp;&amp; nx &gt;= 0 &amp;&amp; ny &gt;= 0 &amp;&amp; !visited[nx][ny] &amp;&amp; map_data[nx][ny] &gt;= 0) {
-                qdata.push(make_pair(make_pair(nx, ny), temp.second + 1));
-                visited[nx][ny] = true;
-            }
-        }
-        if (map_data[cx][cy] &gt; 0) {
-            int nx, ny;
-            if (ele_data[map_data[cx][cy]][0].first == cx &amp;&amp; ele_data[map_data[cx][cy]][0].second == cy) {
-                nx = ele_data[map_data[cx][cy]][1].first;
-                ny = ele_data[map_data[cx][cy]][1].second;
-            }
-            else {
-                nx = ele_data[map_data[cx][cy]][0].first;
-                ny = ele_data[map_data[cx][cy]][0].second;
-            }
-            if (!visited[nx][ny]) {
-                qdata.push(make_pair(make_pair(nx, ny), temp.second + 1));
-                visited[nx][ny] = true;
-            }
-        }
-    }
-}
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">qdata</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">qdata</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">qdata</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">first</span> <span class="o">==</span> <span class="n">tx</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">second</span> <span class="o">==</span> <span class="n">ty</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">temp</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">cx</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">first</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">second</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">first</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">first</span><span class="p">.</span><span class="n">second</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nx</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">ny</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">nx</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ny</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">map_data</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">qdata</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">),</span> <span class="n">temp</span><span class="p">.</span><span class="n">second</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+                <span class="n">visited</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">map_data</span><span class="p">[</span><span class="n">cx</span><span class="p">][</span><span class="n">cy</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ele_data</span><span class="p">[</span><span class="n">map_data</span><span class="p">[</span><span class="n">cx</span><span class="p">][</span><span class="n">cy</span><span class="p">]][</span><span class="mi">0</span><span class="p">].</span><span class="n">first</span> <span class="o">==</span> <span class="n">cx</span> <span class="o">&amp;&amp;</span> <span class="n">ele_data</span><span class="p">[</span><span class="n">map_data</span><span class="p">[</span><span class="n">cx</span><span class="p">][</span><span class="n">cy</span><span class="p">]][</span><span class="mi">0</span><span class="p">].</span><span class="n">second</span> <span class="o">==</span> <span class="n">cy</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">nx</span> <span class="o">=</span> <span class="n">ele_data</span><span class="p">[</span><span class="n">map_data</span><span class="p">[</span><span class="n">cx</span><span class="p">][</span><span class="n">cy</span><span class="p">]][</span><span class="mi">1</span><span class="p">].</span><span class="n">first</span><span class="p">;</span>
+                <span class="n">ny</span> <span class="o">=</span> <span class="n">ele_data</span><span class="p">[</span><span class="n">map_data</span><span class="p">[</span><span class="n">cx</span><span class="p">][</span><span class="n">cy</span><span class="p">]][</span><span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">nx</span> <span class="o">=</span> <span class="n">ele_data</span><span class="p">[</span><span class="n">map_data</span><span class="p">[</span><span class="n">cx</span><span class="p">][</span><span class="n">cy</span><span class="p">]][</span><span class="mi">0</span><span class="p">].</span><span class="n">first</span><span class="p">;</span>
+                <span class="n">ny</span> <span class="o">=</span> <span class="n">ele_data</span><span class="p">[</span><span class="n">map_data</span><span class="p">[</span><span class="n">cx</span><span class="p">][</span><span class="n">cy</span><span class="p">]][</span><span class="mi">0</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">qdata</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">),</span> <span class="n">temp</span><span class="p">.</span><span class="n">second</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+                <span class="n">visited</span><span class="p">[</span><span class="n">nx</span><span class="p">][</span><span class="n">ny</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; n &gt;&gt; sx &gt;&gt; sy &gt;&gt; tx &gt;&gt; ty;
-    --sx, --sy, --tx, --ty;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">sx</span> <span class="o">&gt;&gt;</span> <span class="n">sy</span> <span class="o">&gt;&gt;</span> <span class="n">tx</span> <span class="o">&gt;&gt;</span> <span class="n">ty</span><span class="p">;</span>
+    <span class="o">--</span><span class="n">sx</span><span class="p">,</span> <span class="o">--</span><span class="n">sy</span><span class="p">,</span> <span class="o">--</span><span class="n">tx</span><span class="p">,</span> <span class="o">--</span><span class="n">ty</span><span class="p">;</span>
 
-    map_data.resize(n, vector&lt;int&gt;(n));
+    <span class="n">map_data</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">));</span>
 
-    for (int i = 0; i &lt; n; ++i) {
-        for (int j = 0; j &lt; n; ++j) {
-            cin &gt;&gt; map_data[i][j];
-            if (map_data[i][j] &gt; 0) {
-                if (ele_data.find(map_data[i][j]) == ele_data.end()) {
-                    ele_data.insert(make_pair(map_data[i][j], vector&lt;pair&lt;int, int&gt;&gt;(1, make_pair(i, j))));
-                }
-                else {
-                    ele_data[map_data[i][j]].emplace_back(make_pair(i, j));
-                }
-            }
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">map_data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">map_data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">ele_data</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">map_data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span> <span class="o">==</span> <span class="n">ele_data</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+                    <span class="n">ele_data</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">map_data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">make_pair</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">))));</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">ele_data</span><span class="p">[</span><span class="n">map_data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]].</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">make_pair</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; bfs();
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">bfs</span><span class="p">();</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

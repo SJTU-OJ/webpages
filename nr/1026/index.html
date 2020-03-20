@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -367,506 +369,505 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 高精度除法 */
-#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-#include &lt;string&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 高精度除法 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int MAXS = 10005;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXS</span> <span class="o">=</span> <span class="mi">10005</span><span class="p">;</span>
 
-int sub(int a[], int b[], int lena, int lenb, int shift = 0){
-    if (lena &lt; lenb + shift) return -1;
-    if (lena == lenb + shift){
-        for (int i = lenb; i &gt;= 1; --i){
-            if (a[i + shift] &gt; b[i]) break;
-            if (a[i + shift] &lt; b[i]) return -1;
-        }
-    }
-    for (int i = shift + 1; i &lt;= lena; ++i){
-        a[i] -= b[i - shift];
-        if (a[i] &lt; 0){
-            a[i] += 10;
-            --a[i + 1];
-        }
-    }
-    for (int i = lena; i != 0; --i){
-        if (a[i]) return i;
-    }
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">sub</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">lena</span><span class="p">,</span> <span class="kt">int</span> <span class="n">lenb</span><span class="p">,</span> <span class="kt">int</span> <span class="n">shift</span> <span class="o">=</span> <span class="mi">0</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">lena</span> <span class="o">&lt;</span> <span class="n">lenb</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">lena</span> <span class="o">==</span> <span class="n">lenb</span> <span class="o">+</span> <span class="n">shift</span><span class="p">){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">lenb</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">shift</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">break</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">shift</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">shift</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">lena</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">shift</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="o">--</span><span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">lena</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-int a[MAXS] = {0}, b[MAXS] = {0}, ans[MAXS] = {0};
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">MAXS</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">b</span><span class="p">[</span><span class="n">MAXS</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">ans</span><span class="p">[</span><span class="n">MAXS</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-int main(){
-    string s1, s2;
-    bool flag = 1;
-    getline(cin ,s1);
-    getline(cin, s2);
-    while (s1.size() != 0 &amp;&amp; s1[0] == '0') s1.erase(s1.begin());
-    while (s2.size() != 0 &amp;&amp; s2[0] == '0') s2.erase(s2.begin());
-    int lena = s1.size(), lenb = s2.size();
-    if (lena == 0){
-        printf(&quot;0\n&quot;);
-        return 0;
-    }
-    for (int i = 1; i &lt;= lena; ++i)
-        a[i] = s1[lena - i] - '0';
-    for (int i = 1; i &lt;= lenb; ++i)
-        b[i] = s2[lenb - i] - '0';
-    if (lena &lt; lenb){
-        printf(&quot;0\n&quot;);
-        return 0;
-    }
-    int def = lena - lenb;
-    int sublen = 0;
-    for (int i = def; i &gt;= 0; --i){
-        while ((sublen = sub(a, b, lena, lenb, i)) &gt;= 0){
-            lena = sublen;
-            ++ans[i + 1];
-        }
-    }
-    int len = def + 1;
-    while (len &gt;= 1 &amp;&amp; ans[len] == 0) --len;
-    if (len &gt; 0){
-        for (int i = len; i != 0; --i) printf(&quot;%d&quot;, ans[i]);
-    }
-    else printf(&quot;0&quot;);
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">string</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">getline</span><span class="p">(</span><span class="n">cin</span> <span class="p">,</span><span class="n">s1</span><span class="p">);</span>
+    <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span> <span class="n">s2</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">s1</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="n">s1</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s1</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">s2</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="n">s2</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">s2</span><span class="p">.</span><span class="n">begin</span><span class="p">());</span>
+    <span class="kt">int</span> <span class="n">lena</span> <span class="o">=</span> <span class="n">s1</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">lenb</span> <span class="o">=</span> <span class="n">s2</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">lena</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;0</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">lena</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s1</span><span class="p">[</span><span class="n">lena</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">lenb</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s2</span><span class="p">[</span><span class="n">lenb</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">lena</span> <span class="o">&lt;</span> <span class="n">lenb</span><span class="p">){</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;0</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">def</span> <span class="o">=</span> <span class="n">lena</span> <span class="o">-</span> <span class="n">lenb</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">sublen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">def</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">sublen</span> <span class="o">=</span> <span class="n">sub</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">lena</span><span class="p">,</span> <span class="n">lenb</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="n">lena</span> <span class="o">=</span> <span class="n">sublen</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">ans</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">def</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">len</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">ans</span><span class="p">[</span><span class="n">len</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">--</span><span class="n">len</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;0&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;string&gt;
-#include &lt;algorithm&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
 
-//定义一个数类，可接收普通整数、大整数、小数等等作为实例
-class Number
-{
-    //请在此添加‘Number’类的实现代码
-    /********** Begin **********/
-public:
-    vector&lt;int&gt; lnum, rnum;
-    //判断是否正常
-    bool status = true, is_rnum = false, op = true;
+<span class="c1">//定义一个数类，可接收普通整数、大整数、小数等等作为实例</span>
+<span class="k">class</span> <span class="nc">Number</span>
+<span class="p">{</span>
+    <span class="c1">//请在此添加‘Number’类的实现代码</span>
+    <span class="cm">/********** Begin **********/</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lnum</span><span class="p">,</span> <span class="n">rnum</span><span class="p">;</span>
+    <span class="c1">//判断是否正常</span>
+    <span class="kt">bool</span> <span class="n">status</span> <span class="o">=</span> <span class="nb">true</span><span class="p">,</span> <span class="n">is_rnum</span> <span class="o">=</span> <span class="nb">false</span><span class="p">,</span> <span class="n">op</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 
-    Number(const Number&amp; other) :lnum(other.lnum), rnum(other.rnum),
-        status(other.status), is_rnum(other.is_rnum), op(other.op) {}
-    Number(const string&amp; str) {
-        int cnt = 0;
-        int length = str.length();
-        for (int i = 0; i &lt; length; ++i) {
-            if (str[i] == '-') {
-                if (i == 0) {
-                    op = false;
-                }
-                else {
-                    status = false;
-                    break;
-                }
-            }
-            else if (str[i] == '.') {
-                is_rnum = true;
-                ++cnt;
-            }
-            else {
-                if (!(str[i] &gt;= '0' &amp;&amp; str[i] &lt;= '9')) {
-                    status = false;
-                    break;
-                }
-                if (cnt == 0) {
-                    lnum.emplace_back(str[i] - '0');
-                }
-                else if (cnt == 1) {
-                    rnum.emplace_back(str[i] - '0');
-                }
-                else {
-                    status = false;
-                    break;
-                }
-            }
-        }
-    }
-    Number(bool op, const vector&lt;int&gt; num_list, int ppos) :op(op) {
-        if (ppos &lt;= num_list.size())
-            lnum.assign(num_list.begin(), num_list.end() - ppos);
-        if (ppos) {
-            if (ppos &gt; num_list.size()) {
-                rnum = vector&lt;int&gt;(ppos - num_list.size(), 0);
-                for (auto p : num_list)
-                    rnum.emplace_back(p);
-            }
-            else
-                rnum.assign(num_list.end() - ppos, num_list.end());
-            is_rnum = true;
-        }
-    }
+    <span class="n">Number</span><span class="p">(</span><span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">:</span><span class="n">lnum</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">lnum</span><span class="p">),</span> <span class="n">rnum</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">rnum</span><span class="p">),</span>
+        <span class="n">status</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">status</span><span class="p">),</span> <span class="n">is_rnum</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">is_rnum</span><span class="p">),</span> <span class="n">op</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">op</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">Number</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span> <span class="n">str</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;-&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">op</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">status</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;.&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">is_rnum</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="sc">&#39;0&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="sc">&#39;9&#39;</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="n">status</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">lnum</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">cnt</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">rnum</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">status</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">Number</span><span class="p">(</span><span class="kt">bool</span> <span class="n">op</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">num_list</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ppos</span><span class="p">)</span> <span class="o">:</span><span class="n">op</span><span class="p">(</span><span class="n">op</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ppos</span> <span class="o">&lt;=</span> <span class="n">num_list</span><span class="p">.</span><span class="n">size</span><span class="p">())</span>
+            <span class="n">lnum</span><span class="p">.</span><span class="n">assign</span><span class="p">(</span><span class="n">num_list</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">num_list</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="n">ppos</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ppos</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ppos</span> <span class="o">&gt;</span> <span class="n">num_list</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">rnum</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ppos</span> <span class="o">-</span> <span class="n">num_list</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">num_list</span><span class="p">)</span>
+                    <span class="n">rnum</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="n">rnum</span><span class="p">.</span><span class="n">assign</span><span class="p">(</span><span class="n">num_list</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="n">ppos</span><span class="p">,</span> <span class="n">num_list</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+            <span class="n">is_rnum</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    bool check() {
-        if (is_rnum &amp;&amp; lnum.size() + rnum.size() + 1 &gt; 128) {
-            status = false;
-        }
-        else if (!is_rnum &amp;&amp; lnum.size() &gt; 128) {
-            status = false;
-        }
+    <span class="kt">bool</span> <span class="n">check</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_rnum</span> <span class="o">&amp;&amp;</span> <span class="n">lnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="n">rnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">128</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_rnum</span> <span class="o">&amp;&amp;</span> <span class="n">lnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">128</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        return status;
-    }
+        <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void cut() {
-        if (is_rnum &gt; 0) {
-            int cut_num = int(!op) + lnum.size() + rnum.size() + 1 - 128;
-            if (rnum.size() &gt;= cut_num) {
-                rnum.erase(rnum.end() - cut_num, rnum.end());
-            }
-        }
-    }
+    <span class="kt">void</span> <span class="n">cut</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">is_rnum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">cut_num</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="o">!</span><span class="n">op</span><span class="p">)</span> <span class="o">+</span> <span class="n">lnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="n">rnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="mi">128</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">rnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">cut_num</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">rnum</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">rnum</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="n">cut_num</span><span class="p">,</span> <span class="n">rnum</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void print() {
-        if (!op)
-            cout &lt;&lt; &quot;-&quot;;
-        for (auto p : lnum)
-            cout &lt;&lt; p;
-    }
-    /********** End **********/
-};
-
-
-//定义一个表达式类，支持任意两个Number类实例的加减乘除操作，计算规则满足一般的数学计算法则
-class Expression
-{
-    //请在此添加‘Expression’类的实现代码
-    /********** Begin **********/
-    //简化运算结果
-    void simplify(Number&amp; num) const {
-        int length = num.lnum.size(), pos = 0;
-        for (; pos &lt; length - 1; ++pos) {
-            if (num.lnum[pos] != 0)
-                break;
-        }
-        if (pos != 0)
-            num.lnum.assign(num.lnum.begin() + pos, num.lnum.end());
-
-        if (num.is_rnum) {
-            for (pos = num.rnum.size() - 1; pos &gt;= 0; --pos) {
-                if (num.rnum[pos] == 0)
-                    num.rnum.pop_back();
-                else
-                    break;
-            }
-            if (pos &lt; 0)
-                num.is_rnum = false;
-        }
-        if (num.lnum.empty())
-            num.lnum.emplace_back(0);
-        if (!num.is_rnum &amp;&amp; num.lnum.size() == 1 &amp;&amp; num.lnum[0] == 0)
-            num.op = true;
-    }
-    void simplify(vector&lt;int&gt;&amp; num) const {
-        int length = num.size(), pos = 0;
-        for (; pos &lt; length; ++pos) {
-            if (num[pos] != 0)
-                break;
-        }
-        if (pos != length) {
-            num.assign(num.begin() + pos, num.end());
-        }
-        else {
-            num = vector&lt;int&gt;(1, 0);
-        }
-    }
-    //转为运算模式数
-    int change(const Number&amp; a, const Number&amp; b, vector&lt;int&gt;&amp; an, vector&lt;int&gt;&amp; bn) const {
-        int ppos = 0;
-        for (auto p : a.lnum)
-            an.emplace_back(p);
-        for (auto p : b.lnum)
-            bn.emplace_back(p);
-        //扩充为小数
-        if (a.is_rnum || b.is_rnum) {
-            ppos = max(a.rnum.size(), b.rnum.size());
-
-            for (int i = 0; i &lt; ppos; ++i) {
-                an.emplace_back(i &lt; a.rnum.size() ? a.rnum[i] : 0);
-                bn.emplace_back(i &lt; b.rnum.size() ? b.rnum[i] : 0);
-            }
-        }
-        return ppos;
-    }
-    //比较数字大小
-    int compare(const vector&lt;int&gt;&amp; an, const vector&lt;int&gt;&amp; bn) const {
-        if (an.size() &lt; bn.size()) {
-            return -1;
-        }
-        else if (an.size() &gt; bn.size()) {
-            return 1;
-        }
-        else {
-            int length = an.size();
-            for (int i = 0; i &lt; length; ++i) {
-                if (an[i] &lt; bn[i])
-                    return -1;
-                if (an[i] &gt; bn[i])
-                    return 1;
-            }
-            return 0;
-        }
-    }
-public:
-    //对正整数的四则运算
-    vector&lt;int&gt; add_raw(const vector&lt;int&gt;&amp; an, const vector&lt;int&gt;&amp; bn) const {
-        vector&lt;int&gt; ans;
-        int jw = 0;
-        for (int i = an.size() - 1, j = bn.size() - 1; jw || i &gt;= 0 || j &gt;= 0;) {
-            int x, y;
-            if (i &gt;= 0) {
-                x = an[i];
-                --i;
-            }
-            else
-                x = 0;
-            if (j &gt;= 0) {
-                y = bn[j];
-                --j;
-            }
-            else
-                y = 0;
-            if (x + y + jw &gt;= 10) {
-                ans.emplace_back(x + y + jw - 10);
-                jw = 1;
-            }
-            else {
-                ans.emplace_back(x + y + jw);
-                jw = 0;
-            }
-        }
-        reverse(ans.begin(), ans.end());
-        return ans;
-    }
-
-    vector&lt;int&gt; minus_raw(const vector&lt;int&gt;&amp; an, const vector&lt;int&gt;&amp; bn) const {
-        vector&lt;int&gt; ans;
-        int jw = 0;
-        for (int i = an.size() - 1, j = bn.size() - 1; jw || i &gt;= 0 || j &gt;= 0;) {
-            int x, y;
-            if (i &gt;= 0) {
-                x = an[i];
-                --i;
-            }
-            else
-                x = 0;
-            if (j &gt;= 0) {
-                y = bn[j];
-                --j;
-            }
-            else
-                y = 0;
-            if (x - y - jw &lt; 0) {
-                ans.emplace_back(x - y - jw + 10);
-                jw = 1;
-            }
-            else {
-                ans.emplace_back(x - y - jw);
-                jw = 0;
-            }
-        }
-        reverse(ans.begin(), ans.end());
-        return ans;
-    }
-
-    vector&lt;int&gt; times_raw(const vector&lt;int&gt;&amp; an, const vector&lt;int&gt;&amp; bn) const {
-        int al = an.size(), bl = bn.size();
-
-        vector&lt;int&gt; ans(1, 0);
-        for (int i = bl - 1; i &gt;= 0; --i) {
-            vector&lt;int&gt; temp;
-            int jw = 0;
-            for (int j = al - 1; j &gt;= 0; --j) {
-                temp.emplace_back((jw + an[j] * bn[i]) % 10);
-                jw = (jw + an[j] * bn[i]) / 10;
-            }
-            if (jw)
-                temp.emplace_back(jw);
-            reverse(temp.begin(), temp.end());
-            for (int k = 0; k &lt; bl - i - 1; ++k)
-                temp.emplace_back(0);
-            ans = add_raw(ans, temp);
-        }
-
-        return ans;
-    }
-
-    int devides_raw(const vector&lt;int&gt;&amp; an_raw, const vector&lt;int&gt;&amp; bn, vector&lt;int&gt;&amp; ans) const {
-        int ppos = 0;
-        vector&lt;int&gt; an(an_raw);
-        int al = an.size(), bl = bn.size();
-
-        //补齐
-        for (; al &lt; bl; ++al) {
-            an.emplace_back(0);
-            ++ppos;
-        }
-
-        //计算9个bl的乘积值
-        vector&lt;vector&lt;int&gt;&gt; fast_ans(10);
-        fast_ans[0] = vector&lt;int&gt;(1, 0);
-        for (int i = 1; i &lt; 10; ++i) {
-            fast_ans[i] = add_raw(fast_ans[i - 1], bn);
-        }
-
-        vector&lt;int&gt; temp(an.begin(), an.begin() + bl);
-        for (int pos = 0;; ++pos) {
-            for (int i = 9; i &gt;= 0; --i) {
-                if (compare(temp, fast_ans[i]) &gt;= 0) {
-                    ans.emplace_back(i);
-                    temp = minus_raw(temp, fast_ans[i]);
-                    break;
-                }
-            }
-            simplify(temp);
-            if (temp.size() == 1 &amp;&amp; temp[0] == 0 &amp;&amp; pos + bl &gt;= al) {
-                break;
-            }
-            if (ppos &gt;= 2)
-                break;
-            //移动到下一位
-            if (pos + bl + 1 &lt;= al) {
-                temp.emplace_back(an[pos + bl]);
-            }
-            else {
-                ++ppos;
-                temp.emplace_back(0);
-            }
-            simplify(temp);
-        }
-
-        return ppos;
-    }
-
-    Number add(const Number&amp; a, const Number&amp; b) {
-        vector&lt;int&gt; an, bn;
-        int ppos = change(a, b, an, bn);
-
-        if (a.op &amp;&amp; b.op) {
-            vector&lt;int&gt; ans = add_raw(an, bn);
-            Number ans_num(true, ans, ppos);
-            simplify(ans_num);
-            return ans_num;
-        }
-        else if (a.op &amp;&amp; !b.op) {
-            if (compare(an, bn) &gt;= 0) {
-                vector&lt;int&gt; ans = minus_raw(an, bn);
-                Number ans_num(true, ans, ppos);
-                simplify(ans_num);
-                return ans_num;
-            }
-            else {
-                vector&lt;int&gt; ans = minus_raw(bn, an);
-                Number ans_num(false, ans, ppos);
-                simplify(ans_num);
-                return ans_num;
-            }
-        }
-        else if (!a.op &amp;&amp; b.op) {
-            if (compare(an, bn) &gt;= 0) {
-                vector&lt;int&gt; ans = minus_raw(an, bn);
-                Number ans_num(false, ans, ppos);
-                simplify(ans_num);
-                return ans_num;
-            }
-            else {
-                vector&lt;int&gt; ans = minus_raw(bn, an);
-                Number ans_num(true, ans, ppos);
-                simplify(ans_num);
-                return ans_num;
-            }
-        }
-        else {
-            vector&lt;int&gt; ans = add_raw(an, bn);
-            Number ans_num(false, ans, ppos);
-            simplify(ans_num);
-            return ans_num;
-        }
-    }
-
-    Number minus(const Number&amp; a, const Number&amp; b) {
-        Number nb(b);
-        nb.op = !nb.op;
-
-        return add(a, nb);
-    }
-
-    Number times(const Number&amp; a, const Number&amp; b) {
-        vector&lt;int&gt; an, bn;
-        int ppos = 2 * change(a, b, an, bn);
-
-        if (a.op == b.op) {
-            vector&lt;int&gt; ans = times_raw(an, bn);
-            Number ans_num(true, ans, ppos);
-            simplify(ans_num);
-            return ans_num;
-        }
-        else {
-            vector&lt;int&gt; ans = times_raw(an, bn);
-            Number ans_num(false, ans, ppos);
-            simplify(ans_num);
-            return ans_num;
-        }
-    }
-
-    Number devides(const Number&amp; a, const Number&amp; b) {
-        vector&lt;int&gt; an, bn, ans;
-        change(a, b, an, bn);
-        simplify(an);
-        simplify(bn);
-
-        int ppos = devides_raw(an, bn, ans);
-        if (bn.size() == 1 &amp;&amp; bn[0] == 0) {
-            Number ans_num(true, ans, ppos);
-            ans_num.status = false;
-            return ans_num;
-        }
-        if (a.op == b.op) {
-            Number ans_num(true, ans, ppos);
-            simplify(ans_num);
-            ans_num.cut();
-            return ans_num;
-        }
-        else {
-            Number ans_num(false, ans, ppos);
-            simplify(ans_num);
-            ans_num.cut();
-            return ans_num;
-        }
-    }
-    /********** End **********/
-};
+    <span class="kt">void</span> <span class="n">print</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">op</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;-&quot;</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">lnum</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="cm">/********** End **********/</span>
+<span class="p">};</span>
 
 
-//定义main函数
-int main()
-{
-    /********** Begin **********/
-    Expression expression;
+<span class="c1">//定义一个表达式类，支持任意两个Number类实例的加减乘除操作，计算规则满足一般的数学计算法则</span>
+<span class="k">class</span> <span class="nc">Expression</span>
+<span class="p">{</span>
+    <span class="c1">//请在此添加‘Expression’类的实现代码</span>
+    <span class="cm">/********** Begin **********/</span>
+    <span class="c1">//简化运算结果</span>
+    <span class="kt">void</span> <span class="n">simplify</span><span class="p">(</span><span class="n">Number</span><span class="o">&amp;</span> <span class="n">num</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">lnum</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">.</span><span class="n">lnum</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">num</span><span class="p">.</span><span class="n">lnum</span><span class="p">.</span><span class="n">assign</span><span class="p">(</span><span class="n">num</span><span class="p">.</span><span class="n">lnum</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">pos</span><span class="p">,</span> <span class="n">num</span><span class="p">.</span><span class="n">lnum</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
 
-    string a, b;
-    cin &gt;&gt; a &gt;&gt; b;
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">.</span><span class="n">is_rnum</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">pos</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">rnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">.</span><span class="n">rnum</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">num</span><span class="p">.</span><span class="n">rnum</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+                <span class="k">else</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">num</span><span class="p">.</span><span class="n">is_rnum</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">.</span><span class="n">lnum</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="n">num</span><span class="p">.</span><span class="n">lnum</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">num</span><span class="p">.</span><span class="n">is_rnum</span> <span class="o">&amp;&amp;</span> <span class="n">num</span><span class="p">.</span><span class="n">lnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">num</span><span class="p">.</span><span class="n">lnum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">num</span><span class="p">.</span><span class="n">op</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">simplify</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">num</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">num</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">num</span><span class="p">.</span><span class="n">assign</span><span class="p">(</span><span class="n">num</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">pos</span><span class="p">,</span> <span class="n">num</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">//转为运算模式数</span>
+    <span class="kt">int</span> <span class="n">change</span><span class="p">(</span><span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">an</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">bn</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">ppos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">a</span><span class="p">.</span><span class="n">lnum</span><span class="p">)</span>
+            <span class="n">an</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">b</span><span class="p">.</span><span class="n">lnum</span><span class="p">)</span>
+            <span class="n">bn</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+        <span class="c1">//扩充为小数</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">is_rnum</span> <span class="o">||</span> <span class="n">b</span><span class="p">.</span><span class="n">is_rnum</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ppos</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">rnum</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">b</span><span class="p">.</span><span class="n">rnum</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
 
-    expression.devides(a, b).print();
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ppos</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">an</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">.</span><span class="n">rnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">?</span> <span class="n">a</span><span class="p">.</span><span class="n">rnum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">);</span>
+                <span class="n">bn</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">rnum</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">?</span> <span class="n">b</span><span class="p">.</span><span class="n">rnum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">ppos</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//比较数字大小</span>
+    <span class="kt">int</span> <span class="n">compare</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">an</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">bn</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">an</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">bn</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">an</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">bn</span><span class="p">.</span><span class="n">size</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="n">an</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">an</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">bn</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">an</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">bn</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//对正整数的四则运算</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">add_raw</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">an</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">bn</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">jw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">an</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">bn</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">jw</span> <span class="o">||</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">an</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="o">--</span><span class="n">i</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">bn</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="o">--</span><span class="n">j</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">jw</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">jw</span> <span class="o">-</span> <span class="mi">10</span><span class="p">);</span>
+                <span class="n">jw</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">+</span> <span class="n">jw</span><span class="p">);</span>
+                <span class="n">jw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">reverse</span><span class="p">(</span><span class="n">ans</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">ans</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //请打印输出运算结果，输出结果时无需换行
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">minus_raw</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">an</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">bn</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">jw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">an</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">bn</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">jw</span> <span class="o">||</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">an</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="o">--</span><span class="n">i</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="n">bn</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="o">--</span><span class="n">j</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span> <span class="o">-</span> <span class="n">jw</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span> <span class="o">-</span> <span class="n">jw</span> <span class="o">+</span> <span class="mi">10</span><span class="p">);</span>
+                <span class="n">jw</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">ans</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">y</span> <span class="o">-</span> <span class="n">jw</span><span class="p">);</span>
+                <span class="n">jw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">reverse</span><span class="p">(</span><span class="n">ans</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">ans</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">times_raw</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">an</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">bn</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">al</span> <span class="o">=</span> <span class="n">an</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">bl</span> <span class="o">=</span> <span class="n">bn</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">bl</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">jw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">al</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">temp</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">((</span><span class="n">jw</span> <span class="o">+</span> <span class="n">an</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">bn</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">%</span> <span class="mi">10</span><span class="p">);</span>
+                <span class="n">jw</span> <span class="o">=</span> <span class="p">(</span><span class="n">jw</span> <span class="o">+</span> <span class="n">an</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">bn</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">jw</span><span class="p">)</span>
+                <span class="n">temp</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">jw</span><span class="p">);</span>
+            <span class="n">reverse</span><span class="p">(</span><span class="n">temp</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">temp</span><span class="p">.</span><span class="n">end</span><span class="p">());</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">bl</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>
+                <span class="n">temp</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">add_raw</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">devides_raw</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">an_raw</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">bn</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">ans</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">ppos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">an</span><span class="p">(</span><span class="n">an_raw</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">al</span> <span class="o">=</span> <span class="n">an</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">bl</span> <span class="o">=</span> <span class="n">bn</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+        <span class="c1">//补齐</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">al</span> <span class="o">&lt;</span> <span class="n">bl</span><span class="p">;</span> <span class="o">++</span><span class="n">al</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">an</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="o">++</span><span class="n">ppos</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//计算9个bl的乘积值</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">fast_ans</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+        <span class="n">fast_ans</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">fast_ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">add_raw</span><span class="p">(</span><span class="n">fast_ans</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">bn</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">temp</span><span class="p">(</span><span class="n">an</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">an</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">+</span> <span class="n">bl</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;;</span> <span class="o">++</span><span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">compare</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">fast_ans</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">ans</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="n">minus_raw</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">fast_ans</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">simplify</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">pos</span> <span class="o">+</span> <span class="n">bl</span> <span class="o">&gt;=</span> <span class="n">al</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ppos</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="c1">//移动到下一位</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">+</span> <span class="n">bl</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">al</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">temp</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">an</span><span class="p">[</span><span class="n">pos</span> <span class="o">+</span> <span class="n">bl</span><span class="p">]);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="o">++</span><span class="n">ppos</span><span class="p">;</span>
+                <span class="n">temp</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">simplify</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">ppos</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">Number</span> <span class="n">add</span><span class="p">(</span><span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ppos</span> <span class="o">=</span> <span class="n">change</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">op</span> <span class="o">&amp;&amp;</span> <span class="n">b</span><span class="p">.</span><span class="n">op</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">add_raw</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">);</span>
+            <span class="n">Number</span> <span class="nf">ans_num</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+            <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">op</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">b</span><span class="p">.</span><span class="n">op</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">compare</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">minus_raw</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">);</span>
+                <span class="n">Number</span> <span class="nf">ans_num</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+                <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">minus_raw</span><span class="p">(</span><span class="n">bn</span><span class="p">,</span> <span class="n">an</span><span class="p">);</span>
+                <span class="n">Number</span> <span class="nf">ans_num</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+                <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">a</span><span class="p">.</span><span class="n">op</span> <span class="o">&amp;&amp;</span> <span class="n">b</span><span class="p">.</span><span class="n">op</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">compare</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">minus_raw</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">);</span>
+                <span class="n">Number</span> <span class="nf">ans_num</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+                <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">minus_raw</span><span class="p">(</span><span class="n">bn</span><span class="p">,</span> <span class="n">an</span><span class="p">);</span>
+                <span class="n">Number</span> <span class="nf">ans_num</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+                <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">add_raw</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">);</span>
+            <span class="n">Number</span> <span class="nf">ans_num</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+            <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Number</span> <span class="n">minus</span><span class="p">(</span><span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Number</span> <span class="n">nb</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+        <span class="n">nb</span><span class="p">.</span><span class="n">op</span> <span class="o">=</span> <span class="o">!</span><span class="n">nb</span><span class="p">.</span><span class="n">op</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">nb</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">Number</span> <span class="n">times</span><span class="p">(</span><span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">ppos</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">change</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">op</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">times_raw</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">);</span>
+            <span class="n">Number</span> <span class="nf">ans_num</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+            <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">times_raw</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">);</span>
+            <span class="n">Number</span> <span class="nf">ans_num</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+            <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+            <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">Number</span> <span class="n">devides</span><span class="p">(</span><span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Number</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">,</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="n">change</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">);</span>
+        <span class="n">simplify</span><span class="p">(</span><span class="n">an</span><span class="p">);</span>
+        <span class="n">simplify</span><span class="p">(</span><span class="n">bn</span><span class="p">);</span>
+
+        <span class="kt">int</span> <span class="n">ppos</span> <span class="o">=</span> <span class="n">devides_raw</span><span class="p">(</span><span class="n">an</span><span class="p">,</span> <span class="n">bn</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">bn</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">bn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Number</span> <span class="n">ans_num</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+            <span class="n">ans_num</span><span class="p">.</span><span class="n">status</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">op</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">op</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Number</span> <span class="n">ans_num</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+            <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+            <span class="n">ans_num</span><span class="p">.</span><span class="n">cut</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">Number</span> <span class="n">ans_num</span><span class="p">(</span><span class="nb">false</span><span class="p">,</span> <span class="n">ans</span><span class="p">,</span> <span class="n">ppos</span><span class="p">);</span>
+            <span class="n">simplify</span><span class="p">(</span><span class="n">ans_num</span><span class="p">);</span>
+            <span class="n">ans_num</span><span class="p">.</span><span class="n">cut</span><span class="p">();</span>
+            <span class="k">return</span> <span class="n">ans_num</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="cm">/********** End **********/</span>
+<span class="p">};</span>
 
 
-    /********** End **********/
-    return 0;
-}
+<span class="c1">//定义main函数</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="cm">/********** Begin **********/</span>
+    <span class="n">Expression</span> <span class="n">expression</span><span class="p">;</span>
 
-</code></pre>
+    <span class="n">string</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
+
+    <span class="n">expression</span><span class="p">.</span><span class="n">devides</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">).</span><span class="n">print</span><span class="p">();</span>
+
+    <span class="c1">//请打印输出运算结果，输出结果时无需换行</span>
+
+
+    <span class="cm">/********** End **********/</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

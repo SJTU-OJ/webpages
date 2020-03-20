@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -399,234 +401,235 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 折线统计 Problem */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 折线统计 Problem */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int MOD = 100007;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MOD</span> <span class="o">=</span> <span class="mi">100007</span><span class="p">;</span>
 
-struct Point{
-    int x = 0, y = 0;
+<span class="k">struct</span> <span class="n">Point</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    bool operator &lt;(const Point &amp;p) const{
-        return x &lt; p.x;
-    }
-};
+    <span class="kt">bool</span> <span class="k">operator</span> <span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">Point</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">)</span> <span class="k">const</span><span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int n, k, maxy;
-Point a[50005];
-long long f[50005][11][2] = {0}, t[100005][11][2] = {0};
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">maxy</span><span class="p">;</span>
+<span class="n">Point</span> <span class="n">a</span><span class="p">[</span><span class="mi">50005</span><span class="p">];</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">f</span><span class="p">[</span><span class="mi">50005</span><span class="p">][</span><span class="mi">11</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">t</span><span class="p">[</span><span class="mi">100005</span><span class="p">][</span><span class="mi">11</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-int lowbit(int x){
-    return (x &amp; (-x));
-}
+<span class="kt">int</span> <span class="nf">lowbit</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">));</span>
+<span class="p">}</span>
 
-void qsort(int l, int r){
-    int i = l, j = r;
-    Point key = a[i];
-    while (i &lt; j){
-        while (i &lt; j &amp;&amp; key &lt; a[j])
-            --j;
-        a[i] = a[j];
-        while (i &lt; j &amp;&amp; a[i] &lt; key)
-            ++i;
-        a[j] = a[i];
-    }
-    a[i] = key;
-    if (l &lt; i)
-        qsort(l, i - 1);
-    if (r &gt; j)
-        qsort(j + 1, r);
-}
+<span class="kt">void</span> <span class="nf">qsort</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">l</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+    <span class="n">Point</span> <span class="n">key</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="o">&amp;&amp;</span> <span class="n">key</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="o">--</span><span class="n">j</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">j</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">key</span><span class="p">)</span>
+            <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">qsort</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">j</span><span class="p">)</span>
+        <span class="n">qsort</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+<span class="p">}</span>
 
-void add(int x, int j, int k, long long d){
-    for (int i = x; i &lt;= maxy; i += lowbit(i))
-        t[i][j][k] = (t[i][j][k] + d) % MOD;
-}
+<span class="kt">void</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">d</span><span class="p">){</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">maxy</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">lowbit</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span> <span class="o">%</span> <span class="n">MOD</span><span class="p">;</span>
+<span class="p">}</span>
 
-long long sum(int x, int j, int k){
-    long long ret = 0;
-    for (int i = x; i != 0; i -= lowbit(i))
-        ret = (ret + t[i][j][k]) % MOD;
-    return ret;
-}
+<span class="kt">long</span> <span class="kt">long</span> <span class="nf">sum</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">){</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">ret</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">-=</span> <span class="n">lowbit</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">(</span><span class="n">ret</span> <span class="o">+</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">])</span> <span class="o">%</span> <span class="n">MOD</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    cin &gt;&gt; n &gt;&gt; k;
-    maxy = 0;
-    for (int i = 1; i &lt;= n; ++i){
-        cin &gt;&gt; a[i].x &gt;&gt; a[i].y;
-        if (a[i].y &gt; maxy)
-            maxy = a[i].y;
-    }
-    qsort(1, n);
-    for (int i = 1; i &lt;= n; ++i){
-        f[i][0][0] = 1;
-        f[i][0][1] = 1;
-        add(a[i].y, 0, 0, 1);
-        add(a[i].y, 0, 1, 1);
-        for (int j = 1; j &lt;= k; ++j){
-            f[i][j][0] += sum(a[i].y - 1, j, 0) + sum(a[i].y - 1, j - 1, 1);
-            f[i][j][1] += sum(maxy, j, 1) - sum(a[i].y, j, 1) +
-                          sum(maxy, j - 1, 0) - sum(a[i].y, j - 1, 0);
-            f[i][j][0] = (f[i][j][0] % MOD + MOD) % MOD;
-            f[i][j][1] = (f[i][j][1] % MOD + MOD) % MOD;
-            add(a[i].y, j, 0, f[i][j][0]);
-            add(a[i].y, j, 1, f[i][j][1]);
-        }
-    }
-    int ans = 0;
-    for (int i = 1; i &lt;= n; ++i)
-        ans = (ans + f[i][k][0] + f[i][k][1]) % MOD;
-    cout &lt;&lt; ans &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">k</span><span class="p">;</span>
+    <span class="n">maxy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">maxy</span><span class="p">)</span>
+            <span class="n">maxy</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
+            <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">sum</span><span class="p">(</span><span class="n">maxy</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span>
+                          <span class="n">sum</span><span class="p">(</span><span class="n">maxy</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">sum</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">,</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">%</span> <span class="n">MOD</span> <span class="o">+</span> <span class="n">MOD</span><span class="p">)</span> <span class="o">%</span> <span class="n">MOD</span><span class="p">;</span>
+            <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">%</span> <span class="n">MOD</span> <span class="o">+</span> <span class="n">MOD</span><span class="p">)</span> <span class="o">%</span> <span class="n">MOD</span><span class="p">;</span>
+            <span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span> <span class="o">%</span> <span class="n">MOD</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>//TLE - 30
+<div class="codehilite"><pre><span></span><code><span class="c1">//TLE - 30</span>
 
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;algorithm&gt;
-using namespace std;
-using pii = pair&lt;int, int&gt;;
-using vi = vector&lt;int&gt;;
-constexpr int mod = 100007;
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">pii</span> <span class="o">=</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">vi</span> <span class="o">=</span> <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">constexpr</span> <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="mi">100007</span><span class="p">;</span>
 
-vector&lt;pii&gt; pdata;
-vector&lt;vector&lt;vi&gt;&gt; dp_data;
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">pii</span><span class="o">&gt;</span> <span class="n">pdata</span><span class="p">;</span>
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">vi</span><span class="o">&gt;&gt;</span> <span class="n">dp_data</span><span class="p">;</span>
 
-int n;
+<span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
 
-int dp(int pos, int k, bool dir, bool isfirst = false) {
-    if (k &lt; 0)
-        return 0;
-    if (dp_data[pos][k][dir])
-        return dp_data[pos][k][dir];
+<span class="kt">int</span> <span class="nf">dp</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">dir</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">isfirst</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">dp_data</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">dir</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">dp_data</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">dir</span><span class="p">];</span>
 
 
-    int ans = 0;
-    if (k == 0)
-        ans = 1;
-    for (int nxt = pos + 1; nxt &lt; n; ++nxt) {
-        if (pdata[nxt].second &lt; pdata[pos].second) {
-            if (dir || isfirst)
-                ans = (ans + dp(nxt, k - 1, false)) % mod;
-            else
-                ans = (ans + dp(nxt, k, false)) % mod;
-        }
-        else {
-            if (!dir || isfirst)
-                ans = (ans + dp(nxt, k - 1, true)) % mod;
-            else
-                ans = (ans + dp(nxt, k, true)) % mod;
-        }
-    }
-    return dp_data[pos][k][dir] = ans;
-}
+    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">nxt</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">nxt</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">nxt</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pdata</span><span class="p">[</span><span class="n">nxt</span><span class="p">].</span><span class="n">second</span> <span class="o">&lt;</span> <span class="n">pdata</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">second</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">dir</span> <span class="o">||</span> <span class="n">isfirst</span><span class="p">)</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">+</span> <span class="n">dp</span><span class="p">(</span><span class="n">nxt</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">false</span><span class="p">))</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">+</span> <span class="n">dp</span><span class="p">(</span><span class="n">nxt</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="nb">false</span><span class="p">))</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dir</span> <span class="o">||</span> <span class="n">isfirst</span><span class="p">)</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">+</span> <span class="n">dp</span><span class="p">(</span><span class="n">nxt</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">true</span><span class="p">))</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">+</span> <span class="n">dp</span><span class="p">(</span><span class="n">nxt</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="nb">true</span><span class="p">))</span> <span class="o">%</span> <span class="n">mod</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">dp_data</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="n">k</span><span class="p">][</span><span class="n">dir</span><span class="p">]</span> <span class="o">=</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int k;
-    cin &gt;&gt; n &gt;&gt; k;
+    <span class="kt">int</span> <span class="n">k</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">k</span><span class="p">;</span>
 
-    pdata.resize(n);
-    dp_data.resize(n, vector&lt;vi&gt;(k + 1, vi(2, 0)));
+    <span class="n">pdata</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="n">dp_data</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">vi</span><span class="o">&gt;</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vi</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)));</span>
 
-    for (int i = 0; i &lt; n; ++i)
-        cin &gt;&gt; pdata[i].first &gt;&gt; pdata[i].second;
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">pdata</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">first</span> <span class="o">&gt;&gt;</span> <span class="n">pdata</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
 
-    sort(pdata.begin(), pdata.end(), [](pii a, pii b) {return a.first &lt; b.first; });
-    cout &lt;&lt; dp(0, k, false, true);
+    <span class="n">sort</span><span class="p">(</span><span class="n">pdata</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">pdata</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="n">pii</span> <span class="n">a</span><span class="p">,</span> <span class="n">pii</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">first</span><span class="p">;</span> <span class="p">});</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-const int M=100007;
-int ftree[262144][11],gtree[262144][11],df[11],dg[11],totalf[11],totalg[11],n,x[100001],y[100001],lastf,lastg,curf,curg,k;
-inline int lowbit(int x) {
-    return x&amp;-x;
-}
-int query(int t[262144][11],int x,int k){
-    int sum=0;
-    while (x&gt;0){
-        sum=(sum+t[x][k])%M;
-        x-=lowbit(x);
-    }
-    return sum;
-}
-void update(int t[262144][11],int x,int k,int d){
-    while (x&lt;=100000){
-        t[x][k]=(t[x][k]+d)%M;
-        x+=lowbit(x);
-    }
-}
-void qsort(int l,int r){
-    if (l+1&gt;=r) return;
-    int i=l,j=r-1,key=x[l],keyy=y[l];
-    while (i&lt;j){
-        while (i&lt;j&amp;&amp;x[j]&gt;=key) --j;
-        if (i&lt;j){
-            x[i]=x[j];
-            y[i]=y[j];
-            ++i;
-        }
-        while (i&lt;j&amp;&amp;x[i]&lt;=key) ++i;
-        if (i&lt;j){
-            x[j]=x[i];
-            y[j]=y[i];
-            --j;
-        }
-    }
-    x[i]=key;
-    y[i]=keyy;
-    qsort(l,i);
-    qsort(i+1,r);
-}
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cin&gt;&gt;n&gt;&gt;k;
-    for (int i=0;i&lt;n;++i)
-        cin &gt;&gt; x[i] &gt;&gt; y[i];
-    qsort(0,n);
-    for (int i=0;i&lt;n;++i) {
-        lastf=query(ftree,y[i]-1,0);
-        lastg=query(gtree,y[i]-1,0);
-        for (int j=1;j&lt;=k;++j)
-        {
-            curf=query(ftree,y[i]-1,j);
-            curg=query(gtree,y[i]-1,j);
-            df[j]=curf+lastg;
-            dg[j]=totalg[j]-curg+totalf[j-1]-lastf;
-            if (dg[j]&lt;0) dg[j]+=M;//WTF???? Be Cautious!!!
-            update(ftree,y[i],j,df[j]);
-            update(gtree,y[i],j,dg[j]);
-            lastf=curf;
-            lastg=curg;
-        }
-        update(ftree,y[i],0,1);
-        update(gtree,y[i],0,1);
-        totalf[0]++;
-        totalg[0]++;
-        for (int j=1;j&lt;=k;++j){
-            totalf[j]=(totalf[j]+df[j])%M;
-            totalg[j]=(totalg[j]+dg[j])%M;
-        }
-    }
-    cout&lt;&lt;(totalf[k]+totalg[k])%M;
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">M</span><span class="o">=</span><span class="mi">100007</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">ftree</span><span class="p">[</span><span class="mi">262144</span><span class="p">][</span><span class="mi">11</span><span class="p">],</span><span class="n">gtree</span><span class="p">[</span><span class="mi">262144</span><span class="p">][</span><span class="mi">11</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span><span class="n">dg</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span><span class="n">totalf</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span><span class="n">totalg</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="mi">100001</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="mi">100001</span><span class="p">],</span><span class="n">lastf</span><span class="p">,</span><span class="n">lastg</span><span class="p">,</span><span class="n">curf</span><span class="p">,</span><span class="n">curg</span><span class="p">,</span><span class="n">k</span><span class="p">;</span>
+<span class="kr">inline</span> <span class="kt">int</span> <span class="nf">lowbit</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">&amp;-</span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">t</span><span class="p">[</span><span class="mi">262144</span><span class="p">][</span><span class="mi">11</span><span class="p">],</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">k</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">sum</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
+        <span class="n">sum</span><span class="o">=</span><span class="p">(</span><span class="n">sum</span><span class="o">+</span><span class="n">t</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">k</span><span class="p">])</span><span class="o">%</span><span class="n">M</span><span class="p">;</span>
+        <span class="n">x</span><span class="o">-=</span><span class="n">lowbit</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">t</span><span class="p">[</span><span class="mi">262144</span><span class="p">][</span><span class="mi">11</span><span class="p">],</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">k</span><span class="p">,</span><span class="kt">int</span> <span class="n">d</span><span class="p">){</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">x</span><span class="o">&lt;=</span><span class="mi">100000</span><span class="p">){</span>
+        <span class="n">t</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="n">d</span><span class="p">)</span><span class="o">%</span><span class="n">M</span><span class="p">;</span>
+        <span class="n">x</span><span class="o">+=</span><span class="n">lowbit</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">qsort</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span><span class="kt">int</span> <span class="n">r</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">1</span><span class="o">&gt;=</span><span class="n">r</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">l</span><span class="p">,</span><span class="n">j</span><span class="o">=</span><span class="n">r</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">l</span><span class="p">],</span><span class="n">keyy</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="n">l</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="o">&amp;&amp;</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;=</span><span class="n">key</span><span class="p">)</span> <span class="o">--</span><span class="n">j</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">){</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="o">&amp;&amp;</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">key</span><span class="p">)</span> <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">j</span><span class="p">){</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="o">--</span><span class="n">j</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">key</span><span class="p">;</span>
+    <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">keyy</span><span class="p">;</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">r</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">n</span><span class="o">&gt;&gt;</span><span class="n">k</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">qsort</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">lastf</span><span class="o">=</span><span class="n">query</span><span class="p">(</span><span class="n">ftree</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+        <span class="n">lastg</span><span class="o">=</span><span class="n">query</span><span class="p">(</span><span class="n">gtree</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">k</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">curf</span><span class="o">=</span><span class="n">query</span><span class="p">(</span><span class="n">ftree</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">);</span>
+            <span class="n">curg</span><span class="o">=</span><span class="n">query</span><span class="p">(</span><span class="n">gtree</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">);</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">curf</span><span class="o">+</span><span class="n">lastg</span><span class="p">;</span>
+            <span class="n">dg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">totalg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="n">curg</span><span class="o">+</span><span class="n">totalf</span><span class="p">[</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">lastf</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">dg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="n">dg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">+=</span><span class="n">M</span><span class="p">;</span><span class="c1">//WTF???? Be Cautious!!!</span>
+            <span class="n">update</span><span class="p">(</span><span class="n">ftree</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">j</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+            <span class="n">update</span><span class="p">(</span><span class="n">gtree</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">j</span><span class="p">,</span><span class="n">dg</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+            <span class="n">lastf</span><span class="o">=</span><span class="n">curf</span><span class="p">;</span>
+            <span class="n">lastg</span><span class="o">=</span><span class="n">curg</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">ftree</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">gtree</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">totalf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">totalg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">k</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">){</span>
+            <span class="n">totalf</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">totalf</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">+</span><span class="n">df</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">%</span><span class="n">M</span><span class="p">;</span>
+            <span class="n">totalg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">totalg</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">+</span><span class="n">dg</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">%</span><span class="n">M</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">totalf</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">+</span><span class="n">totalg</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">%</span><span class="n">M</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

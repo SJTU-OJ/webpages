@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -395,993 +397,995 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
 
-//红黑树实现
-template &lt;class T&gt;
-class mSet {
-    //颜色枚举类型
-    enum colorT { RED, BLACK };
+<span class="c1">//红黑树实现</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">mSet</span> <span class="p">{</span>
+    <span class="c1">//颜色枚举类型</span>
+    <span class="k">enum</span> <span class="n">colorT</span> <span class="p">{</span> <span class="n">RED</span><span class="p">,</span> <span class="n">BLACK</span> <span class="p">};</span>
 
-    //结点
-    class node {
-    public:
-        T* data;
-        node* lchild = nullptr;
-        node* rchild = nullptr;
-        node* parent = nullptr;
+    <span class="c1">//结点</span>
+    <span class="k">class</span> <span class="nc">node</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">T</span><span class="o">*</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">lchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">rchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
 
-        colorT color = RED;
-    };
+        <span class="n">colorT</span> <span class="n">color</span> <span class="o">=</span> <span class="n">RED</span><span class="p">;</span>
+    <span class="p">};</span>
 
-    //根节点
-    node* root = nullptr;
+    <span class="c1">//根节点</span>
+    <span class="n">node</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
 
-    //清空
-    void clear(node* p) {
-        if (p != nullptr) {
-            clear(p-&gt;lchild);
-            clear(p-&gt;rchild);
-            delete p-&gt;data;
-            delete p;
-        }
-        p = nullptr;
-    }
+    <span class="c1">//清空</span>
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">(</span><span class="n">node</span><span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">clear</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+            <span class="n">clear</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
+            <span class="k">delete</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+            <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //旋转
-    //LL旋转
-    void LL(node* gp) {
-        auto p = gp-&gt;lchild, t = p-&gt;lchild;
-        if (gp-&gt;parent != nullptr) {
-            if (gp-&gt;parent-&gt;lchild == gp)
-                gp-&gt;parent-&gt;lchild = p;
-            else
-                gp-&gt;parent-&gt;rchild = p;
-        }
-        else
-            root = p;
-        p-&gt;parent = gp-&gt;parent;
-        gp-&gt;lchild = p-&gt;rchild;
-        if (p-&gt;rchild != nullptr)
-            p-&gt;rchild-&gt;parent = gp;
-        p-&gt;rchild = gp;
-        gp-&gt;parent = p;
-        //修改颜色
-        auto tmp = gp-&gt;color;
-        gp-&gt;color = p-&gt;color;
-        p-&gt;color = tmp;
-        //cout &lt;&lt; &quot;LL &quot;;
-    }
+    <span class="c1">//旋转</span>
+    <span class="c1">//LL旋转</span>
+    <span class="kt">void</span> <span class="nf">LL</span><span class="p">(</span><span class="n">node</span><span class="o">*</span> <span class="n">gp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">gp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">gp</span><span class="p">)</span>
+                <span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="n">p</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+        <span class="n">gp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">gp</span><span class="p">;</span>
+        <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">gp</span><span class="p">;</span>
+        <span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="c1">//修改颜色</span>
+        <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">gp</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
+        <span class="n">gp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
+        <span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="c1">//cout &lt;&lt; &quot;LL &quot;;</span>
+    <span class="p">}</span>
 
-    //RR旋转
-    void RR(node * gp) {
-        auto p = gp-&gt;rchild, t = p-&gt;rchild;
-        if (gp-&gt;parent != nullptr) {
-            if (gp-&gt;parent-&gt;lchild == gp)
-                gp-&gt;parent-&gt;lchild = p;
-            else
-                gp-&gt;parent-&gt;rchild = p;
-        }
-        else
-            root = p;
-        p-&gt;parent = gp-&gt;parent;
-        gp-&gt;rchild = p-&gt;lchild;
-        if (p-&gt;lchild != nullptr)
-            p-&gt;lchild-&gt;parent = gp;
-        p-&gt;lchild = gp;
-        gp-&gt;parent = p;
-        //修改颜色
-        auto tmp = gp-&gt;color;
-        gp-&gt;color = p-&gt;color;
-        p-&gt;color = tmp;
-        //cout &lt;&lt; &quot;RR &quot;;
-    }
+    <span class="c1">//RR旋转</span>
+    <span class="kt">void</span> <span class="nf">RR</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="n">gp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">gp</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="n">t</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">gp</span><span class="p">)</span>
+                <span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="n">p</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+        <span class="n">gp</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">gp</span><span class="p">;</span>
+        <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">gp</span><span class="p">;</span>
+        <span class="n">gp</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="c1">//修改颜色</span>
+        <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">gp</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
+        <span class="n">gp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
+        <span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="c1">//cout &lt;&lt; &quot;RR &quot;;</span>
+    <span class="p">}</span>
 
-    //LR旋转
-    void LR(node * gp) {
-        RR(gp-&gt;lchild);
-        LL(gp);
-        //cout &lt;&lt; &quot;LR &quot;;
-    }
+    <span class="c1">//LR旋转</span>
+    <span class="kt">void</span> <span class="nf">LR</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="n">gp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">RR</span><span class="p">(</span><span class="n">gp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+        <span class="n">LL</span><span class="p">(</span><span class="n">gp</span><span class="p">);</span>
+        <span class="c1">//cout &lt;&lt; &quot;LR &quot;;</span>
+    <span class="p">}</span>
 
-    //RL旋转
-    void RL(node * gp) {
-        LL(gp-&gt;rchild);
-        RR(gp);
-        //cout &lt;&lt; &quot;RL &quot;;
-    }
+    <span class="c1">//RL旋转</span>
+    <span class="kt">void</span> <span class="nf">RL</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="n">gp</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">LL</span><span class="p">(</span><span class="n">gp</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
+        <span class="n">RR</span><span class="p">(</span><span class="n">gp</span><span class="p">);</span>
+        <span class="c1">//cout &lt;&lt; &quot;RL &quot;;</span>
+    <span class="p">}</span>
 
-    //插入调整
-    void insertAdjust(node * &amp;gp, node * &amp;p, node * t) {
-        if (p-&gt;color == BLACK) return;
-        if (p == root) {
-            p-&gt;color = BLACK;
-            return;
-        }
-        if (gp-&gt;lchild == p) {
-            if (p-&gt;lchild == t) {
-                LL(gp);
-                //交换次序
-                auto tmp = gp;
-                gp = p;
-                p = tmp;
+    <span class="c1">//插入调整</span>
+    <span class="kt">void</span> <span class="nf">insertAdjust</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="o">&amp;</span><span class="n">gp</span><span class="p">,</span> <span class="n">node</span> <span class="o">*</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">,</span> <span class="n">node</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">gp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">LL</span><span class="p">(</span><span class="n">gp</span><span class="p">);</span>
+                <span class="c1">//交换次序</span>
+                <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">gp</span><span class="p">;</span>
+                <span class="n">gp</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
 
-            }
-            else {
-                LR(gp);
-                //交换次序
-                auto tmp = gp;
-                gp = t;
-                t = tmp;
-            }
-        }
-        else if (p-&gt;rchild == t) {
-            RR(gp);
-            //交换次序
-            auto tmp = gp;
-            gp = p;
-            p = tmp;
-        }
-        else {
-            RL(gp);
-            //交换次序
-            auto tmp = gp;
-            gp = t;
-            t = tmp;
-        }
-    }
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">LR</span><span class="p">(</span><span class="n">gp</span><span class="p">);</span>
+                <span class="c1">//交换次序</span>
+                <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">gp</span><span class="p">;</span>
+                <span class="n">gp</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">RR</span><span class="p">(</span><span class="n">gp</span><span class="p">);</span>
+            <span class="c1">//交换次序</span>
+            <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">gp</span><span class="p">;</span>
+            <span class="n">gp</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">RL</span><span class="p">(</span><span class="n">gp</span><span class="p">);</span>
+            <span class="c1">//交换次序</span>
+            <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">gp</span><span class="p">;</span>
+            <span class="n">gp</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //删除调整
-    void removeAdjust(node*&amp; p, node*&amp; c, node*&amp; t, const T&amp; del) {
-        if (c-&gt;color == RED) return;
-        if (c == root)
-            if (c-&gt;lchild &amp;&amp; c-&gt;rchild
-                &amp;&amp; c-&gt;rchild-&gt;color == c-&gt;lchild-&gt;color) {
-                c-&gt;color = RED;
-                c-&gt;lchild-&gt;color = c-&gt;rchild-&gt;color = BLACK;
-                return;
-            }
-        if ((c-&gt;lchild &amp;&amp; c-&gt;lchild-&gt;color || c-&gt;lchild == nullptr) &amp;&amp;
-            (c-&gt;rchild &amp;&amp; c-&gt;rchild-&gt;color || c-&gt;rchild == nullptr))
-            if ((t-&gt;lchild &amp;&amp; t-&gt;lchild-&gt;color || t-&gt;lchild == nullptr) &amp;&amp;
-                (t-&gt;rchild &amp;&amp; t-&gt;rchild-&gt;color || t-&gt;rchild == nullptr)) {
-                p-&gt;color = BLACK;
-                t-&gt;color = c-&gt;color = RED;
-            }
-            else {
-                if (p-&gt;lchild == t)
-                    if (t-&gt;lchild != nullptr &amp;&amp; t-&gt;lchild-&gt;color == RED) {
-                        t-&gt;lchild-&gt;color = BLACK;
-                        LL(p);
-                        //交换次序
-                        t = p;
-                    }
-                    else {
-                        auto tmp = t-&gt;rchild;
-                        LR(p);
-                        p = tmp;
-                        p = p-&gt;rchild;
-                        p-&gt;color = BLACK;
-                        t-&gt;color = BLACK;
-                    }
-                else if (t-&gt;rchild&amp;&amp; t-&gt;rchild-&gt;color == RED) {
-                    t-&gt;rchild-&gt;color = BLACK;
-                    RR(p);
-                    t = p;
-                }
-                else {
-                    auto tmp = t-&gt;lchild;
-                    RL(p);
-                    p = tmp;
-                    p = p-&gt;lchild;
-                    p-&gt;color = BLACK;
-                    t-&gt;color = BLACK;
-                }
-                c-&gt;color = RED;
-            }
-        else {
-            if (*c-&gt;data == del) {
-                if (c-&gt;lchild &amp;&amp; c-&gt;rchild) {
-                    if (c-&gt;rchild-&gt;color == BLACK) {
-                        LL(c);
-                    }
-                    return;
-                }
-                if (c-&gt;lchild) {
-                    LL(c);
-                    p = c-&gt;parent;
-                }
-                else {
-                    RR(c);
-                    p = c-&gt;parent;
-                }
-            }
-            else {
-                p = c;
-                c = del &lt; *p-&gt;data ? p-&gt;lchild : p-&gt;rchild;
-                t = c == p-&gt;lchild ? p-&gt;rchild : p-&gt;lchild;
-                if (c-&gt;color == BLACK) {
-                    if (t == p-&gt;rchild)
-                        RR(p);
-                    else
-                        LL(p);
-                    t = p;
-                    t = c == p-&gt;lchild ? p-&gt;rchild : p-&gt;lchild;
-                    removeAdjust(p, c, t, del);
-                }
-            }
-        }
-    }
+    <span class="c1">//删除调整</span>
+    <span class="kt">void</span> <span class="nf">removeAdjust</span><span class="p">(</span><span class="n">node</span><span class="o">*&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="n">node</span><span class="o">*&amp;</span> <span class="n">c</span><span class="p">,</span> <span class="n">node</span><span class="o">*&amp;</span> <span class="n">t</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">del</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">RED</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">root</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span>
+                <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">c</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">RED</span><span class="p">;</span>
+                <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">||</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+            <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">||</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">))</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">&amp;&amp;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">||</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+                <span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">&amp;&amp;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">||</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                <span class="n">t</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">RED</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">t</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">RED</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                        <span class="n">LL</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+                        <span class="c1">//交换次序</span>
+                        <span class="n">t</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span> <span class="p">{</span>
+                        <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                        <span class="n">LR</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+                        <span class="n">p</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                        <span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                        <span class="n">t</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">RED</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                    <span class="n">RR</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                    <span class="n">RL</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                    <span class="n">p</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                    <span class="n">t</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">c</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">RED</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">del</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">LL</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                    <span class="p">}</span>
+                    <span class="k">return</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">LL</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">RR</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">del</span> <span class="o">&lt;</span> <span class="o">*</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">?</span> <span class="n">p</span><span class="o">-&gt;</span><span class="nl">lchild</span> <span class="p">:</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">c</span> <span class="o">==</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">?</span> <span class="n">p</span><span class="o">-&gt;</span><span class="nl">rchild</span> <span class="p">:</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span>
+                        <span class="n">RR</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+                    <span class="k">else</span>
+                        <span class="n">LL</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="n">c</span> <span class="o">==</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">?</span> <span class="n">p</span><span class="o">-&gt;</span><span class="nl">rchild</span> <span class="p">:</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                    <span class="n">removeAdjust</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">del</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //复制
-    void copy(node * posDes, node * posSource) {
-        posDes-&gt;data = new T(*posSource-&gt;data);
-        posDes-&gt;color = posSource-&gt;color;
-        if (posSource-&gt;lchild) {
-            posDes-&gt;lchild = new node;
-            posDes-&gt;lchild-&gt;parent = posDes;
-            copy(posDes-&gt;lchild, posSource-&gt;lchild);
-        }
-        if (posSource-&gt;rchild) {
-            posDes-&gt;rchild = new node;
-            posDes-&gt;rchild-&gt;parent = posDes;
-            copy(posDes-&gt;rchild, posSource-&gt;rchild);
-        }
-    }
+    <span class="c1">//复制</span>
+    <span class="kt">void</span> <span class="nf">copy</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="n">posDes</span><span class="p">,</span> <span class="n">node</span> <span class="o">*</span> <span class="n">posSource</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">posDes</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="o">*</span><span class="n">posSource</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+        <span class="n">posDes</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">posSource</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">posSource</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">posDes</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">posDes</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">posDes</span><span class="p">;</span>
+            <span class="n">copy</span><span class="p">(</span><span class="n">posDes</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span> <span class="n">posSource</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">posSource</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">posDes</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">posDes</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">posDes</span><span class="p">;</span>
+            <span class="n">copy</span><span class="p">(</span><span class="n">posDes</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="n">posSource</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-public:
-    //迭代器（测试模块）
-    class iterator {
-        node* currentData = nullptr;
-        friend iterator mSet::begin();
-        friend iterator mSet::find(const T&amp;);
-        friend void mSet::erase(const iterator&amp;);
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//迭代器（测试模块）</span>
+    <span class="k">class</span> <span class="nc">iterator</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">currentData</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="n">iterator</span> <span class="n">mSet</span><span class="o">::</span><span class="n">begin</span><span class="p">();</span>
+        <span class="k">friend</span> <span class="n">iterator</span> <span class="n">mSet</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span><span class="p">);</span>
+        <span class="k">friend</span> <span class="kt">void</span> <span class="n">mSet</span><span class="o">::</span><span class="n">erase</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span><span class="p">);</span>
 
-    public:
-        iterator() = default;
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">iterator</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
-        iterator(const iterator&amp; b) {
-            currentData = new node;
-            currentData = b.currentData;
-        }
+        <span class="n">iterator</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">currentData</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">currentData</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">currentData</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        T&amp; get() {
-            return *currentData-&gt;data;
-        }
-        //遍历结束或内容为空
-        bool finish() {
-            return currentData == nullptr;
-        }
+        <span class="n">T</span><span class="o">&amp;</span> <span class="n">get</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="o">*</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//遍历结束或内容为空</span>
+        <span class="kt">bool</span> <span class="n">finish</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">currentData</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        //重载++i
-        iterator&amp; operator++() {
-            if (currentData == nullptr)
-                return *this;
-            //假如有右孩子
-            if (currentData-&gt;rchild != nullptr) {
-                for (currentData = currentData-&gt;rchild; currentData-&gt;lchild != nullptr;)
-                    currentData = currentData-&gt;lchild;
-            }
-            //假如是落单的根节点
-            else if (currentData-&gt;parent == nullptr) {
-                currentData = nullptr;
-            }
-            //假如是左叶子
-            else if (currentData-&gt;parent-&gt;lchild == currentData)
-                currentData = currentData-&gt;parent;
-            //假如是右叶子
-            else {
-                auto last = currentData;
-                for (currentData = currentData-&gt;parent;
-                    currentData != nullptr &amp;&amp; currentData-&gt;rchild == last;
-                    currentData = currentData-&gt;parent)
-                    last = currentData;
-            }
-            return *this;
-        }
+        <span class="c1">//重载++i</span>
+        <span class="n">iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">++</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+            <span class="c1">//假如有右孩子</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;)</span>
+                    <span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c1">//假如是落单的根节点</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">currentData</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c1">//假如是左叶子</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">currentData</span><span class="p">)</span>
+                <span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+            <span class="c1">//假如是右叶子</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">last</span> <span class="o">=</span> <span class="n">currentData</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+                    <span class="n">currentData</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="n">last</span><span class="p">;</span>
+                    <span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">)</span>
+                    <span class="n">last</span> <span class="o">=</span> <span class="n">currentData</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        //重载i++
-        iterator operator++(int) {
-            auto temp = *this;
-            if (currentData == nullptr)
-                return temp;
-            //假如有右孩子
-            if (currentData-&gt;rchild != nullptr) {
-                for (currentData = currentData-&gt;rchild; currentData-&gt;lchild != nullptr;)
-                    currentData = currentData-&gt;lchild;
-            }
-            //假如是落单的根节点
-            else if (currentData-&gt;parent == nullptr) {
-                currentData = nullptr;
-            }
-            //假如是左叶子
-            else if (currentData-&gt;parent-&gt;lchild == currentData)
-                currentData = currentData-&gt;parent;
-            //假如是右叶子
-            else {
-                auto last = currentData;
-                for (currentData = currentData-&gt;parent;
-                    currentData != nullptr &amp;&amp; currentData-&gt;rchild == last;
-                    currentData = currentData-&gt;parent)
-                    last = currentData;
-            }
-            return temp;
-        }
+        <span class="c1">//重载i++</span>
+        <span class="n">iterator</span> <span class="k">operator</span><span class="o">++</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="c1">//假如有右孩子</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;)</span>
+                    <span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c1">//假如是落单的根节点</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">currentData</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="c1">//假如是左叶子</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">currentData</span><span class="p">)</span>
+                <span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+            <span class="c1">//假如是右叶子</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">last</span> <span class="o">=</span> <span class="n">currentData</span><span class="p">;</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+                    <span class="n">currentData</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="n">last</span><span class="p">;</span>
+                    <span class="n">currentData</span> <span class="o">=</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">)</span>
+                    <span class="n">last</span> <span class="o">=</span> <span class="n">currentData</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        //重载取值符号
-        T&amp; operator*() const {
-            if (currentData == nullptr)
-                return *new T;
-            else
-                return *currentData-&gt;data;
-        }
+        <span class="c1">//重载取值符号</span>
+        <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="o">*</span><span class="k">new</span> <span class="n">T</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="k">return</span> <span class="o">*</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        //重载==符号
-        bool operator==(const iterator &amp; b) const {
-            return currentData == b.currentData;
-        }
+        <span class="c1">//重载==符号</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">currentData</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">currentData</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        //重载!=符号
-        bool operator!=(const iterator &amp; b) const {
-            return currentData != b.currentData;
-        }
-    };
+        <span class="c1">//重载!=符号</span>
+        <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">currentData</span> <span class="o">!=</span> <span class="n">b</span><span class="p">.</span><span class="n">currentData</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
 
-    //查找
-    iterator find(const T &amp; num) {
-        iterator ans;
-        auto p = root;
-        while (p != nullptr &amp;&amp; *p-&gt;data != num)
-            if (*p-&gt;data &gt; num)
-                p = p-&gt;lchild;
-            else
-                p = p-&gt;rchild;
+    <span class="c1">//查找</span>
+    <span class="n">iterator</span> <span class="nf">find</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">iterator</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">!=</span> <span class="n">num</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">num</span><span class="p">)</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
 
-        ans.currentData = p;
-        return ans;
-    }
+        <span class="n">ans</span><span class="p">.</span><span class="n">currentData</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //清空
-    void clear() {
-        clear(root);
-    }
+    <span class="c1">//清空</span>
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    //插入
-    void insert(const T &amp; x) {
-        node* t, * parent, * grandp;
+    <span class="c1">//插入</span>
+    <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span> <span class="n">parent</span><span class="p">,</span> <span class="o">*</span> <span class="n">grandp</span><span class="p">;</span>
 
-        //在空树上插入
-        if (root == nullptr) {
-            root = new node;
-            root-&gt;color = BLACK;
-            root-&gt;data = new T(x);
-            return;
-        }
+        <span class="c1">//在空树上插入</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">root</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+            <span class="n">root</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        parent = grandp = t = root;
-        while (true) {
-            if (t != nullptr) {
-                if (t-&gt;lchild&amp;&amp; t-&gt;lchild-&gt;color == RED &amp;&amp;
-                    t-&gt;rchild &amp;&amp; t-&gt;rchild-&gt;color == RED) {
-                    t-&gt;lchild-&gt;color = t-&gt;rchild-&gt;color = BLACK;
-                    t-&gt;color = RED;
-                    insertAdjust(grandp, parent, t);
-                }
-                grandp = parent;
-                parent = t;
-                t = *t-&gt;data &gt; x ? t-&gt;lchild : t-&gt;rchild;
-            }
-            else {
-                t = new node;
-                t-&gt;data = new T(x);
-                t-&gt;parent = parent;
-                if (x &lt; *parent-&gt;data)
-                    parent-&gt;lchild = t;
-                else
-                    parent-&gt;rchild = t;
-                insertAdjust(grandp, parent, t);
-                root-&gt;color = BLACK;
-                return;
-            }
-        }
-    }
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">grandp</span> <span class="o">=</span> <span class="n">t</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">&amp;&amp;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">RED</span> <span class="o">&amp;&amp;</span>
+                    <span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">&amp;&amp;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">RED</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">t</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                    <span class="n">t</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">RED</span><span class="p">;</span>
+                    <span class="n">insertAdjust</span><span class="p">(</span><span class="n">grandp</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+                <span class="p">}</span>
+                <span class="n">grandp</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+                <span class="n">parent</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="o">*</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">x</span> <span class="o">?</span> <span class="n">t</span><span class="o">-&gt;</span><span class="nl">lchild</span> <span class="p">:</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+                <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+                <span class="n">t</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="o">*</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span>
+                    <span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+                <span class="k">else</span>
+                    <span class="n">parent</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+                <span class="n">insertAdjust</span><span class="p">(</span><span class="n">grandp</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+                <span class="n">root</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //查找删除
-    void remove(const T &amp; x) {
-        T del = x;
-        node* t, * p, * c;
+    <span class="c1">//查找删除</span>
+    <span class="kt">void</span> <span class="nf">remove</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">T</span> <span class="n">del</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span> <span class="n">p</span><span class="p">,</span> <span class="o">*</span> <span class="n">c</span><span class="p">;</span>
 
-        if (root == nullptr) return;
-        if (*root-&gt;data == x &amp;&amp; root-&gt;lchild == nullptr &amp;&amp; root-&gt;rchild == nullptr) {
-            delete root;
-            root = nullptr;
-            return;
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">delete</span> <span class="n">root</span><span class="p">;</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        p = c = t = root;
-        while (true) {
-            removeAdjust(p, c, t, del);
-            if (*c-&gt;data == del &amp;&amp; c-&gt;lchild &amp;&amp; c-&gt;rchild) {
-                auto tmp = c-&gt;rchild;
-                while (tmp-&gt;lchild)
-                    tmp = tmp-&gt;lchild;
-                c-&gt;data = tmp-&gt;data;
-                del = *tmp-&gt;data;
-                p = c;
-                c = c-&gt;rchild;
-                t = p-&gt;lchild;
-                continue;
-            }
+        <span class="n">p</span> <span class="o">=</span> <span class="n">c</span> <span class="o">=</span> <span class="n">t</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">removeAdjust</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">del</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">del</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                <span class="n">c</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+                <span class="n">del</span> <span class="o">=</span> <span class="o">*</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
 
-            if (*c-&gt;data == del) {
-                if (p-&gt;lchild == c)
-                    p-&gt;lchild = nullptr;
-                else
-                    p-&gt;rchild = nullptr;
-                delete c;
-                root-&gt;color = BLACK;
-                return;
-            }
-            p = c;
-            c = del &lt; *p-&gt;data ? p-&gt;lchild : p-&gt;rchild;
-            t = c == p-&gt;lchild ? p-&gt;rchild : p-&gt;lchild;
-        }
-    }
+            <span class="k">if</span> <span class="p">(</span><span class="o">*</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">del</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span>
+                    <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                <span class="k">else</span>
+                    <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                <span class="k">delete</span> <span class="n">c</span><span class="p">;</span>
+                <span class="n">root</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">del</span> <span class="o">&lt;</span> <span class="o">*</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">?</span> <span class="n">p</span><span class="o">-&gt;</span><span class="nl">lchild</span> <span class="p">:</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">c</span> <span class="o">==</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">?</span> <span class="n">p</span><span class="o">-&gt;</span><span class="nl">rchild</span> <span class="p">:</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //迭代器擦除
-    void erase(const iterator &amp; x) {
-        //判断是否为空
-        if (x.currentData == nullptr)
-            return;
+    <span class="c1">//迭代器擦除</span>
+    <span class="kt">void</span> <span class="nf">erase</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span> <span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//判断是否为空</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">currentData</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
 
-        T * del = x.currentData-&gt;data;
-        node * t, *p, *c;
+        <span class="n">T</span> <span class="o">*</span> <span class="n">del</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+        <span class="n">node</span> <span class="o">*</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="o">*</span><span class="n">c</span><span class="p">;</span>
 
-        if (root == nullptr) return;
-        if (root-&gt;data == del &amp;&amp; root-&gt;lchild == nullptr &amp;&amp; root-&gt;rchild == nullptr) {
-            delete root;
-            root = nullptr;
-            return;
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">del</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">root</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">delete</span> <span class="n">root</span><span class="p">;</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        p = c = t = root;
-        while (true) {
-            removeAdjust(p, c, t, *del);
-            if (c-&gt;data == del &amp;&amp; c-&gt;lchild &amp;&amp; c-&gt;rchild) {
-                auto tmp = c-&gt;rchild;
-                while (tmp-&gt;lchild)
-                    tmp = tmp-&gt;lchild;
-                if (tmp-&gt;parent != c) {
-                    auto temp = *tmp;
-                    tmp-&gt;parent = c-&gt;parent;
-                    if (tmp-&gt;parent)
-                        if (tmp-&gt;parent-&gt;lchild == c)
-                            tmp-&gt;parent-&gt;lchild = tmp;
-                        else tmp-&gt;parent-&gt;rchild = tmp;
-                    else root = tmp;
-                    tmp-&gt;lchild = c-&gt;lchild;
-                    if (c-&gt;lchild) c-&gt;lchild-&gt;parent = tmp;
-                    tmp-&gt;rchild = c-&gt;rchild;
-                    if (c-&gt;rchild) c-&gt;rchild-&gt;parent = tmp;
-                    tmp-&gt;color = c-&gt;color;
+        <span class="n">p</span> <span class="o">=</span> <span class="n">c</span> <span class="o">=</span> <span class="n">t</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">removeAdjust</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="o">*</span><span class="n">del</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">del</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">!=</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">tmp</span><span class="p">;</span>
+                    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span>
+                            <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                        <span class="k">else</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="k">else</span> <span class="n">root</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
 
-                    c-&gt;parent = temp.parent;
-                    if (temp.parent-&gt;lchild == tmp)
-                        temp.parent-&gt;lchild = c;
-                    else temp.parent-&gt;rchild = c;
-                    c-&gt;lchild = temp.lchild;
-                    if (c-&gt;lchild) c-&gt;lchild-&gt;parent = c;
-                    c-&gt;rchild = temp.rchild;
-                    if (c-&gt;rchild) c-&gt;rchild-&gt;parent = c;
-                    c-&gt;color = temp.color;
-                }
-                else {
-                    auto temp = *tmp;
-                    tmp-&gt;parent = c-&gt;parent;
-                    if (tmp-&gt;parent)
-                        if (tmp-&gt;parent-&gt;lchild == c)
-                            tmp-&gt;parent-&gt;lchild = tmp;
-                        else tmp-&gt;parent-&gt;rchild = tmp;
-                    else root = tmp;
-                    if (c-&gt;lchild == tmp) {
-                        tmp-&gt;lchild = c;
-                        tmp-&gt;rchild = c-&gt;rchild;
-                        if (c-&gt;rchild) tmp-&gt;rchild-&gt;parent = tmp;
-                    }
-                    else {
-                        tmp-&gt;rchild = c;
-                        tmp-&gt;lchild = c-&gt;lchild;
-                        if (c-&gt;lchild) tmp-&gt;lchild-&gt;parent = tmp;
-                    }
-                    c-&gt;parent = tmp;
-                    c-&gt;lchild = temp.lchild;
-                    c-&gt;rchild = temp.rchild;
-                    if (c-&gt;lchild) c-&gt;lchild-&gt;parent = c;
-                    if (c-&gt;rchild) c-&gt;rchild-&gt;parent = c;
-                    tmp-&gt;color = c-&gt;color;
-                    c-&gt;color = temp.color;
-                }
+                    <span class="n">c</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">parent</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="p">.</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">tmp</span><span class="p">)</span>
+                        <span class="n">temp</span><span class="p">.</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                    <span class="k">else</span> <span class="n">temp</span><span class="p">.</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                    <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">lchild</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                    <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">rchild</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                    <span class="n">c</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">color</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="o">*</span><span class="n">tmp</span><span class="p">;</span>
+                    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span>
+                            <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                        <span class="k">else</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="k">else</span> <span class="n">root</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">tmp</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                        <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span> <span class="p">{</span>
+                        <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                        <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">c</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">lchild</span><span class="p">;</span>
+                    <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">rchild</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">;</span>
+                    <span class="n">c</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">color</span><span class="p">;</span>
+                <span class="p">}</span>
 
-                p = c = tmp;
-                c = c-&gt;rchild;
-                t = p-&gt;lchild;
-                continue;
-            }
+                <span class="n">p</span> <span class="o">=</span> <span class="n">c</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
 
-            if (c-&gt;data == del) {
-                if (p-&gt;lchild == c)
-                    p-&gt;lchild = nullptr;
-                else
-                    p-&gt;rchild = nullptr;
-                delete c;
-                root-&gt;color = BLACK;
-                return;
-            }
-            p = c;
-            c = *del &lt; *p-&gt;data ? p-&gt;lchild : p-&gt;rchild;
-            t = c == p-&gt;lchild ? p-&gt;rchild : p-&gt;lchild;
-        }
-    }
+            <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">del</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">c</span><span class="p">)</span>
+                    <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                <span class="k">else</span>
+                    <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                <span class="k">delete</span> <span class="n">c</span><span class="p">;</span>
+                <span class="n">root</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">;</span>
+                <span class="k">return</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="o">*</span><span class="n">del</span> <span class="o">&lt;</span> <span class="o">*</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">?</span> <span class="n">p</span><span class="o">-&gt;</span><span class="nl">lchild</span> <span class="p">:</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">c</span> <span class="o">==</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">?</span> <span class="n">p</span><span class="o">-&gt;</span><span class="nl">rchild</span> <span class="p">:</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void erase(const iterator &amp; from, const iterator &amp; to) {
-        if (from == end()) return;
-        for (auto p = from; p != to;)
-            erase(p++);
-    }
+    <span class="kt">void</span> <span class="nf">erase</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span> <span class="o">&amp;</span> <span class="n">from</span><span class="p">,</span> <span class="k">const</span> <span class="n">iterator</span> <span class="o">&amp;</span> <span class="n">to</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">from</span> <span class="o">==</span> <span class="n">end</span><span class="p">())</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">from</span><span class="p">;</span> <span class="n">p</span> <span class="o">!=</span> <span class="n">to</span><span class="p">;)</span>
+            <span class="n">erase</span><span class="p">(</span><span class="n">p</span><span class="o">++</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    //迭代器起始
-    iterator begin() {
-        iterator result;
-        auto p = root;
-        if (p != nullptr)
-            for (; p-&gt;lchild != nullptr;) {
-                p = p-&gt;lchild;
-            }
-        result.currentData = p;
-        return result;
-    }
+    <span class="c1">//迭代器起始</span>
+    <span class="n">iterator</span> <span class="nf">begin</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">iterator</span> <span class="n">result</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;)</span> <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">currentData</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //迭代器结束
-    iterator end() {
-        return *new iterator;
-    }
+    <span class="c1">//迭代器结束</span>
+    <span class="n">iterator</span> <span class="nf">end</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">new</span> <span class="n">iterator</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //重载赋值符号
-    mSet&lt;T&gt; operator=(const mSet&lt;T&gt; &amp; b) {
-        clear();
-        root = nullptr;
-        if (b.root == nullptr) 
-            return *this;
-        root = new node;
-        copy(root, b.root);
-        return *this;
-    }
+    <span class="c1">//重载赋值符号</span>
+    <span class="n">mSet</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">mSet</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">();</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> 
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+        <span class="n">copy</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">root</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //检查是否合法
-    int check(node* pos) {
-        int left=0,right=0;
-        if (pos-&gt;lchild != nullptr)
-            left = check(pos-&gt;lchild);
-        if (pos-&gt;rchild != nullptr)
-            right = check(pos-&gt;rchild);
-        if (left &lt; 0 || right &lt; 0 || left != right)
-            return -1;
-        if (pos-&gt;color == BLACK)
-            return 1 + left;
-        else return left;
-    }
+    <span class="c1">//检查是否合法</span>
+    <span class="kt">int</span> <span class="n">check</span><span class="p">(</span><span class="n">node</span><span class="o">*</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">right</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="n">check</span><span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">left</span> <span class="o">!=</span> <span class="n">right</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">-&gt;</span><span class="n">color</span> <span class="o">==</span> <span class="n">BLACK</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">left</span><span class="p">;</span>
+        <span class="k">else</span> <span class="k">return</span> <span class="n">left</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void check() {
-        if (root == nullptr || check(root) &gt; 0)
-            cout &lt;&lt; &quot;检查合格！&quot; &lt;&lt; endl;
-        else 
-            cout &lt;&lt; &quot;检查不合格！&quot; &lt;&lt; endl;
-    }
-};
+    <span class="kt">void</span> <span class="n">check</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">check</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;检查合格！&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="k">else</span> 
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;检查不合格！&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
 
-    mSet&lt;int&gt; setData;
-    int num;
-    cin &gt;&gt; num;
+    <span class="n">mSet</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">setData</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
 
-    for (; num &gt; 0; num--) {
-        char c;
-        int n;
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">num</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
 
-        cin &gt;&gt; c &gt;&gt; n;
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">c</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
 
-        if (c=='+') {
-            for (; n &gt; 0; n--) {
-                int temp;
-                cin &gt;&gt; temp;
-                if (setData.find(temp) == setData.end())
-                    setData.insert(temp);
-            }
-        }
-        else if (c=='-') {
-            for (; n &gt; 0; n--) {
-                int temp;
-                cin &gt;&gt; temp;
-                setData.erase(setData.find(temp));
-            }
-        }
-        else {
-            mSet&lt;int&gt; newSet;
-            for (; n &gt; 0; n--) {
-                int temp;
-                cin &gt;&gt; temp;
-                if (setData.find(temp) != setData.end() &amp;&amp; newSet.find(temp) == newSet.end())
-                    newSet.insert(temp);
-            }
-            setData = newSet;
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">setData</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">==</span> <span class="n">setData</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+                    <span class="n">setData</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+                <span class="n">setData</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">setData</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">temp</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="n">mSet</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">newSet</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">setData</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">!=</span> <span class="n">setData</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">newSet</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">==</span> <span class="n">newSet</span><span class="p">.</span><span class="n">end</span><span class="p">())</span>
+                    <span class="n">newSet</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">setData</span> <span class="o">=</span> <span class="n">newSet</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        bool first = true;
-        for (auto p : setData)
-            if (!first)
-                cout &lt;&lt; &quot; &quot; &lt;&lt; p;
-            else {
-                first = false;
-                cout &lt;&lt; p;
-            }
-        cout &lt;&lt; endl;
-    }
+        <span class="kt">bool</span> <span class="n">first</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">setData</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">first</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">;</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">first</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 1e5 + 100;
-int lists[maxN] = {0}, length = 0;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">1e5</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">lists</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-void qSort(int *, int, int);
-bool find(int);
-int search(int, int *, int, int);
+<span class="kt">void</span> <span class="nf">qSort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
+<span class="kt">bool</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">search</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int N, M, tmp;
-    char order;
-    cin &gt;&gt; N;
+    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">order</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span><span class="p">;</span>
 
-    for (int i = 0; i &lt; N; i++) {
-        cin &gt;&gt; order &gt;&gt; M;
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">order</span> <span class="o">&gt;&gt;</span> <span class="n">M</span><span class="p">;</span>
 
-        if (order == '+') {
-            for (int j = 0; j &lt; M; j++) {
-                cin &gt;&gt; tmp;
-                if (find(tmp)) {
-                    lists[length] = tmp;
-                    length++;
-                }
-            }
-            qSort(lists, 0, length - 1);
-        } else if (order == '-') {
-            bool isHere[maxN];
-            for (int j = 0; j &lt; length + 10; j++) {
-                isHere[j] = 1;
-            }
+        <span class="k">if</span> <span class="p">(</span><span class="n">order</span> <span class="o">==</span> <span class="sc">&#39;+&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">find</span><span class="p">(</span><span class="n">tmp</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="n">lists</span><span class="p">[</span><span class="n">length</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+                    <span class="n">length</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="n">qSort</span><span class="p">(</span><span class="n">lists</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">order</span> <span class="o">==</span> <span class="sc">&#39;-&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">bool</span> <span class="n">isHere</span><span class="p">[</span><span class="n">maxN</span><span class="p">];</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">length</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">isHere</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
 
-            int listsTmp[maxN] = {0};
-            for (int j = 0; j &lt; M; j++) {
-                cin &gt;&gt; tmp;
-                int pos = search(tmp, lists, 0, length - 1);
-                if (pos != -1) {
-                    isHere[pos] = 0;
-                }
-            }
-            int lengthTmp = length, pos = 0;
-            for (int j = 0; j &lt; lengthTmp; j++) {
-                if (!isHere[j]) {
-                    length--;
-                    continue;
-                } else {
-                    listsTmp[pos] = lists[j];
-                    pos++;
-                }
-            }
+            <span class="kt">int</span> <span class="n">listsTmp</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+                <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">search</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">lists</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">isHere</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="kt">int</span> <span class="n">lengthTmp</span> <span class="o">=</span> <span class="n">length</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">lengthTmp</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isHere</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">length</span><span class="o">--</span><span class="p">;</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">listsTmp</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">lists</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                    <span class="n">pos</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
 
-            for (int j = 0; j &lt; length; j++) {
-                lists[j] = listsTmp[j];
-            }
-        } else if (order == '*') {
-            bool isHere[maxN] = {0};
-            int listsTmp[maxN] = {0};
-            for (int j = 0; j &lt; M; j++) {
-                cin &gt;&gt; tmp;
-                int pos = search(tmp, lists, 0, length - 1);
-                if (pos != -1) {
-                    isHere[pos] = 1;
-                }
-            }
-            int lengthTmp = length, pos = 0;
-            for (int j = 0; j &lt; lengthTmp; j++) {
-                if (!isHere[j]) {
-                    length--;
-                    continue;
-                } else {
-                    listsTmp[pos] = lists[j];
-                    pos++;
-                }
-            }
-            for (int j = 0; j &lt; length; j++) {
-                lists[j] = listsTmp[j];
-            }
-        }
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">lists</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">listsTmp</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">order</span> <span class="o">==</span> <span class="sc">&#39;*&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">bool</span> <span class="n">isHere</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+            <span class="kt">int</span> <span class="n">listsTmp</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tmp</span><span class="p">;</span>
+                <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">search</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">lists</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">isHere</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="kt">int</span> <span class="n">lengthTmp</span> <span class="o">=</span> <span class="n">length</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">lengthTmp</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">isHere</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">length</span><span class="o">--</span><span class="p">;</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">listsTmp</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">lists</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                    <span class="n">pos</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">lists</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">listsTmp</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        for (int j = 0; j &lt; length; j++) {
-            cout &lt;&lt; lists[j] &lt;&lt; ' ';
-        }
-        cout &lt;&lt; '\n';
-    }
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lists</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    return 0;
-}
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-void qSort(int *nums, int l, int h) {
-    if (l &gt;= h) {
-        return;
-    }
-    int first = l, last = h;
-    int key = nums[first];
+<span class="kt">void</span> <span class="nf">qSort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">first</span> <span class="o">=</span> <span class="n">l</span><span class="p">,</span> <span class="n">last</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">key</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">];</span>
 
-    while (first &lt; last) {
-        while (first &lt; last &amp;&amp; nums[last] &gt;= key) {
-            --last;
-        }
-        nums[first] = nums[last];
-        while (first &lt; last &amp;&amp; nums[first] &lt;= key) {
-            ++first;
-        }
-        nums[last] = nums[first];
-    }
-    nums[first] = key;
-    qSort(nums, l, first - 1);
-    qSort(nums, first + 1, h);
-}
+    <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">last</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">last</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">last</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">--</span><span class="n">last</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">last</span><span class="p">];</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">last</span> <span class="o">&amp;&amp;</span> <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+            <span class="o">++</span><span class="n">first</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">last</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">nums</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span><span class="p">;</span>
+    <span class="n">qSort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">first</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">qSort</span><span class="p">(</span><span class="n">nums</span><span class="p">,</span> <span class="n">first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+<span class="p">}</span>
 
-bool find(int x) {
-    for (int i = 0; i &lt; length; i++) {
-        if (x == lists[i]) {
-            return 0;
-        }
-    }
-    return 1;
-}
+<span class="kt">bool</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="n">lists</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
 
-int search(int x, int *nums, int l, int h) {
-    if (l &gt; h) {
-        return -1;
-    }
-    int mid = (l + h) / 2;
-    if (nums[mid] == x) {
-        return mid;
-    } else if (nums[mid] &lt; x) {
-        return search(x, nums, mid + 1, h);
-    } else if (nums[mid] &gt; x) {
-        return search(x, nums, l, mid - 1);
-    }
+<span class="kt">int</span> <span class="nf">search</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;</span> <span class="n">h</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">mid</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">search</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">search</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">nums</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    return -1;
-}
-</code></pre>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class set
-{
-    friend istream &amp;operator&gt;&gt;(istream &amp;is, set &amp;x)
-    {
-        for (int i = 0; i &lt; x.max; i++)
-            is &gt;&gt; x.array[i];
-        x.current_length = x.max;
-        x.sort(x.array);
-        return is;
-    }
-    friend ostream &amp;operator&lt;&lt;(ostream&amp;os,const set &amp;x)
-    {
-        for (int i =0;i&lt;x.current_length;i++)
-            os &lt;&lt; x.array[i]&lt;&lt;' ';
-        return os;
-    }
-public:
-    int max;
-    int current_length;
-    int *array;
+<span class="k">class</span> <span class="nc">set</span>
+<span class="p">{</span>
+    <span class="k">friend</span> <span class="n">istream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span> <span class="o">&amp;</span><span class="n">is</span><span class="p">,</span> <span class="n">set</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">max</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">is</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">current_length</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">max</span><span class="p">;</span>
+        <span class="n">x</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">is</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span><span class="n">os</span><span class="p">,</span><span class="k">const</span> <span class="n">set</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">x</span><span class="p">.</span><span class="n">current_length</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="sc">&#39; &#39;</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">max</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">current_length</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">array</span><span class="p">;</span>
 
-    set(int n)
-    {
-        max = n;
-        current_length = 0;
-        array = new int[max];
-    }
-    ~set() { delete[] array; }
+    <span class="n">set</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">max</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+        <span class="n">current_length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">max</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="n">set</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">array</span><span class="p">;</span> <span class="p">}</span>
 
-    void sort(int x[])
-    {
-        mergeSort(x, 0, current_length-1);
-    }
-    void mergeSort(int a[],int left ,int right);
-    void merge(int a[],int left,int mid,int right);
-    void plus(set &amp;x);
-    void minus(set &amp;x);
-    void intersection(set &amp;x);
-};
+    <span class="kt">void</span> <span class="n">sort</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">[])</span>
+    <span class="p">{</span>
+        <span class="n">mergeSort</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">current_length</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">mergeSort</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span><span class="kt">int</span> <span class="n">left</span> <span class="p">,</span><span class="kt">int</span> <span class="n">right</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">merge</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span><span class="kt">int</span> <span class="n">left</span><span class="p">,</span><span class="kt">int</span> <span class="n">mid</span><span class="p">,</span><span class="kt">int</span> <span class="n">right</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">plus</span><span class="p">(</span><span class="n">set</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">minus</span><span class="p">(</span><span class="n">set</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">intersection</span><span class="p">(</span><span class="n">set</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+<span class="p">};</span>
 
-void set::merge(int a[],int left,int mid,int right)
-{
-    int *tmp = new int [right-left+1];
+<span class="kt">void</span> <span class="n">set</span><span class="o">::</span><span class="n">merge</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span><span class="kt">int</span> <span class="n">left</span><span class="p">,</span><span class="kt">int</span> <span class="n">mid</span><span class="p">,</span><span class="kt">int</span> <span class="n">right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="p">[</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
 
-    int i=left,j =mid,k =0;
+    <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">left</span><span class="p">,</span><span class="n">j</span> <span class="o">=</span><span class="n">mid</span><span class="p">,</span><span class="n">k</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 
-    while (i &lt; mid &amp;&amp; j &lt;= right) {
-      if (a[i] &lt; a[j])
-        tmp[k++] = a[i++];
-      else
-        tmp[k++] = a[j++];
-    }
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">mid</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+      <span class="k">else</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    while (i &lt; mid)
-      tmp[k++] = a[i++];
-    while (j &lt;= right) tmp[k++] = a[j++];
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">mid</span><span class="p">)</span>
+      <span class="n">tmp</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">)</span> <span class="n">tmp</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
 
-    for (i =0,k=left;k&lt;=right;)a[k++] = tmp[i++];
-    delete []tmp;
-}
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="n">left</span><span class="p">;</span><span class="n">k</span><span class="o">&lt;=</span><span class="n">right</span><span class="p">;)</span><span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+    <span class="k">delete</span> <span class="p">[]</span><span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-void set::mergeSort(int a[], int left, int right)
-{
-    int mid = (left+right)/2;
+<span class="kt">void</span> <span class="n">set</span><span class="o">::</span><span class="n">mergeSort</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">right</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span><span class="o">+</span><span class="n">right</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
 
-    if (left == right) return ;
-    mergeSort(a, left, mid);
-    mergeSort(a, mid+1, right);
-    merge(a,left,mid+1,right);
-}
+    <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="o">==</span> <span class="n">right</span><span class="p">)</span> <span class="k">return</span> <span class="p">;</span>
+    <span class="n">mergeSort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">mid</span><span class="p">);</span>
+    <span class="n">mergeSort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">right</span><span class="p">);</span>
+    <span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">left</span><span class="p">,</span><span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">right</span><span class="p">);</span>
+<span class="p">}</span>
 
-void set::plus(set &amp;x)
-{
-    set temp(x.current_length + current_length);
-    int num1, num2, i = 0, j = 0;
+<span class="kt">void</span> <span class="n">set</span><span class="o">::</span><span class="n">plus</span><span class="p">(</span><span class="n">set</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">set</span> <span class="n">temp</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">current_length</span> <span class="o">+</span> <span class="n">current_length</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">num1</span><span class="p">,</span> <span class="n">num2</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    while (i &lt; x.current_length &amp;&amp; j &lt; current_length)
-    {
-        num1 = x.array[i];
-        num2 = array[j];
-        if (num1 &lt; num2)
-        {
-            temp.array[temp.current_length++] = num1;
-            i++;
-        }
-        else if (num2 &lt; num1)
-        {
-            temp.array[temp.current_length++] = num2;
-            j++;
-        }
-        else if (num2 == num1)
-        {
-            temp.array[temp.current_length++] = num1;
-            i++;
-            j++;
-        }
-    }
-    while (i &lt; x.current_length)
-    {
-        temp.array[temp.current_length++] = x.array[i++];
-    }
-    while (j &lt; current_length)
-    {
-        temp.array[temp.current_length++] = array[j++];
-    }
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">current_length</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">current_length</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">num1</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">num2</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num1</span> <span class="o">&lt;</span> <span class="n">num2</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">num1</span><span class="p">;</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">num2</span> <span class="o">&lt;</span> <span class="n">num1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">num2</span><span class="p">;</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">num2</span> <span class="o">==</span> <span class="n">num1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">num1</span><span class="p">;</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">current_length</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;</span> <span class="n">current_length</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    delete[] array;
-    max = temp.current_length;
-    current_length = 0;
-    array = new int[max];
-    for (; current_length &lt; temp.current_length; current_length++)
-    {
-        array[current_length] = temp.array[current_length];
-    }
-}
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">array</span><span class="p">;</span>
+    <span class="n">max</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="p">;</span>
+    <span class="n">current_length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">max</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">current_length</span> <span class="o">&lt;</span> <span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="p">;</span> <span class="n">current_length</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">current_length</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">current_length</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-void set::minus(set &amp;x)
-{
-    int size = (current_length &gt; x.current_length) ? current_length : x.current_length;
-    set temp(size);
+<span class="kt">void</span> <span class="n">set</span><span class="o">::</span><span class="n">minus</span><span class="p">(</span><span class="n">set</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_length</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">current_length</span><span class="p">)</span> <span class="o">?</span> <span class="nl">current_length</span> <span class="p">:</span> <span class="n">x</span><span class="p">.</span><span class="n">current_length</span><span class="p">;</span>
+    <span class="n">set</span> <span class="nf">temp</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
 
-    int i = 0, j = 0;
-    while (i &lt; current_length &amp;&amp; j &lt; x.current_length)
-    {
-        if (array[i] &lt; x.array[j])
-            temp.array[temp.current_length++] = array[i++];
-        else if (array[i] == x.array[j])
-        {
-            i++;
-            j++;
-        }
-        else if(array[i]&gt;x.array[j])
-            j++;
-    }
-    while(i&lt;current_length)temp.array[temp.current_length++] = array[i++];
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">current_length</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">current_length</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="p">{</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">current_length</span><span class="p">)</span><span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">];</span>
 
-    delete[]array;
-    max = temp.current_length;
-    array = new int [max];
-    current_length = 0;
-    for (;current_length&lt;temp.current_length;current_length++)
-    {
-        array[current_length] = temp.array[current_length];
-    }
-}
+    <span class="k">delete</span><span class="p">[]</span><span class="n">array</span><span class="p">;</span>
+    <span class="n">max</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="p">;</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span> <span class="p">[</span><span class="n">max</span><span class="p">];</span>
+    <span class="n">current_length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span><span class="n">current_length</span><span class="o">&lt;</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="p">;</span><span class="n">current_length</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">current_length</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">current_length</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-void set::intersection(set&amp;x)
-{
-    int size = (current_length &gt; x.current_length) ? current_length : x.current_length;
-    set temp(size);
+<span class="kt">void</span> <span class="n">set</span><span class="o">::</span><span class="n">intersection</span><span class="p">(</span><span class="n">set</span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_length</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">current_length</span><span class="p">)</span> <span class="o">?</span> <span class="nl">current_length</span> <span class="p">:</span> <span class="n">x</span><span class="p">.</span><span class="n">current_length</span><span class="p">;</span>
+    <span class="n">set</span> <span class="nf">temp</span><span class="p">(</span><span class="n">size</span><span class="p">);</span>
 
-    int i=0,j=0;
-    while(i&lt;current_length&amp;&amp;j&lt;x.current_length)
-    {   
-        if (array[i]==x.array[j]){
-            temp.array[temp.current_length++] = array[i];
-            i++;
-            j++;
-        }
-        else if (array[i]&lt;x.array[j]) i++;
-        else if (array[i]&gt;x.array[j]) j++;
-    }
+    <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="o">&lt;</span><span class="n">current_length</span><span class="o">&amp;&amp;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">x</span><span class="p">.</span><span class="n">current_length</span><span class="p">)</span>
+    <span class="p">{</span>   
+        <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">]){</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;</span><span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">x</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    delete []array;
-    max = temp.current_length;
-    array = new int[max];
-    current_length = 0;
-    for (;current_length&lt;temp.current_length;current_length++)
-    {
-        array[current_length] = temp.array[current_length];
-    }
-}
+    <span class="k">delete</span> <span class="p">[]</span><span class="n">array</span><span class="p">;</span>
+    <span class="n">max</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="p">;</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">max</span><span class="p">];</span>
+    <span class="n">current_length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span><span class="n">current_length</span><span class="o">&lt;</span><span class="n">temp</span><span class="p">.</span><span class="n">current_length</span><span class="p">;</span><span class="n">current_length</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">current_length</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">array</span><span class="p">[</span><span class="n">current_length</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-int main()
-{   
-    int lines,numofelem;
-    cin &gt;&gt; lines;
-    char op;
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>   
+    <span class="kt">int</span> <span class="n">lines</span><span class="p">,</span><span class="n">numofelem</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">lines</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">op</span><span class="p">;</span>
 
-    set set1(100);
+    <span class="n">set</span> <span class="nf">set1</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
 
-    for (int i=0;i&lt;lines;i++)
-    {
-        cin &gt;&gt;op;
-        cin &gt;&gt;numofelem;
-        set temp(numofelem);
-        cin &gt;&gt; temp;
-        if (op=='+')
-            set1.plus(temp);
-        else if (op=='-')
-            set1.minus(temp);
-        else if (op=='*')
-            set1.intersection(temp);
-        cout &lt;&lt; set1 &lt;&lt;endl;
-    }
-    return 0;
-}
-</code></pre>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">lines</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span><span class="n">op</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span><span class="n">numofelem</span><span class="p">;</span>
+        <span class="n">set</span> <span class="nf">temp</span><span class="p">(</span><span class="n">numofelem</span><span class="p">);</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">op</span><span class="o">==</span><span class="sc">&#39;+&#39;</span><span class="p">)</span>
+            <span class="n">set1</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">op</span><span class="o">==</span><span class="sc">&#39;-&#39;</span><span class="p">)</span>
+            <span class="n">set1</span><span class="p">.</span><span class="n">minus</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">op</span><span class="o">==</span><span class="sc">&#39;*&#39;</span><span class="p">)</span>
+            <span class="n">set1</span><span class="p">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">temp</span><span class="p">);</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">set1</span> <span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

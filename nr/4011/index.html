@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -397,503 +399,505 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstring&quot;
-#include &quot;cmath&quot;
-#include &quot;algorithm&quot;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cmath&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;algorithm&quot;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-//常数
-constexpr auto maxNum = 10000;
-constexpr auto intMax = 20;
+<span class="c1">//常数</span>
+<span class="k">constexpr</span> <span class="k">auto</span> <span class="n">maxNum</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
+<span class="k">constexpr</span> <span class="k">auto</span> <span class="n">intMax</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
 
-//新无符号大整数类
-class unsignedBigInt {
-private:
-    bool del = false;
-public:
-    char* ch;
-    int startNum = 0;
-    int len = 0;
+<span class="c1">//新无符号大整数类</span>
+<span class="k">class</span> <span class="nc">unsignedBigInt</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">bool</span> <span class="n">del</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">startNum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    //初始化
-    unsignedBigInt(const char* input) {
-        if (del)
-            delete[] ch;
+    <span class="c1">//初始化</span>
+    <span class="n">unsignedBigInt</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">del</span><span class="p">)</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">ch</span><span class="p">;</span>
 
-        len = (strlen(input) + 1) * 2;
-        startNum = strlen(input);
-        ch = new char[len];
-        memset(ch, 0, len);
-        for (int i = 0; i &lt; strlen(input); i++)
-            ch[i + startNum] = input[i];
+        <span class="n">len</span> <span class="o">=</span> <span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">input</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">startNum</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">input</span><span class="p">);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">ch</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">startNum</span><span class="p">]</span> <span class="o">=</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 
-        del = true;
-    }
-    unsignedBigInt(int num) {
-        if (del)
-            delete[] ch;
+        <span class="n">del</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">unsignedBigInt</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">del</span><span class="p">)</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">ch</span><span class="p">;</span>
 
-        //临时数组
-        int n = 0, temp[intMax];
-        if (num == 0) {
-            n = 1;
-            temp[0] = 0;
-        }
-        else
-            for (; num &gt; 0; num /= 10)
-                temp[n++] = num % 10;
-
-
-        len = (n + 1) * 2;
-        startNum = n;
-        ch = new char[len];
-        memset(ch, 0, len);
-
-        for (int i = 0; i &lt; n; i++)
-            ch[startNum + i] = temp[n - i - 1] + '0';
-
-        del = true;
-    }
-    unsignedBigInt(void) {
-        if (del)
-            delete[] ch;
-
-        len = 1;
-        startNum = 0;
-        ch = new char[len];
-        memset(ch, 0, len);
-
-        del = true;
-    }
-    unsignedBigInt(int num, int sizen) {
-        if (del)
-            delete[] ch;
-
-        len = (sizen + 1) * 2;
-        startNum = sizen;
-        ch = new char[len];
-        memset(ch, 0, len);
-
-        if (num &gt;= 0) {
-            int n = 0, temp[intMax];
-            if (num == 0) {
-                n = 1;
-                temp[0] = 0;
-            }
-            else
-                for (; num &gt; 0; num /= 10)
-                    temp[n++] = num % 10;
-
-            for (int i = 0; i &lt; n; i++)
-                ch[startNum + i] = temp[n - i - 1] + '0';
-        }
-
-        del = true;
-    }
-
-    //析构
-    ~unsignedBigInt() {
-        if (del)
-            delete[] ch;
-    }
-
-    //计算真实长度
-    int realLength(const unsignedBigInt &amp; b) {
-        return strlen(b.ch + b.startNum);
-    }
-
-    //复制构造函数
-    unsignedBigInt(const unsignedBigInt &amp; b) {
-        if (del)
-            delete[] ch;
-
-        len = b.len;
-        startNum = b.startNum;
-        ch = new char[len];
-        for (int i = 0; i &lt; len; i++)
-            ch[i] = b.ch[i];
-
-        del = true;
-    }
-
-    //输入输出
-    friend ostream &amp; operator&lt;&lt;(ostream &amp; output, const unsignedBigInt &amp; bi);
-    friend istream &amp; operator&gt;&gt;(istream &amp; input, unsignedBigInt &amp; bi);
-
-    //赋值
-    unsignedBigInt &amp; operator=(const unsignedBigInt &amp; b) {
-        //检查自身赋值
-        if (this == &amp;b)
-            return *this;
-
-        if (del)
-            delete[] ch;
-
-        len = b.len;
-        startNum = b.startNum;
-        ch = new char[len];
-        for (int i = 0; i &lt; len; i++)
-            ch[i] = b.ch[i];
-
-        del = true;
-        return *this;
-    }
-
-    unsignedBigInt &amp; operator=(int num) {
-        if (del)
-            delete[] ch;
-
-        //临时数组
-        int n = 0, temp[intMax];
-        if (num == 0) {
-            n = 1;
-            temp[0] = 0;
-        }
-        else
-            for (; num &gt; 0; num /= 10)
-                temp[n++] = num % 10;
+        <span class="c1">//临时数组</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">temp</span><span class="p">[</span><span class="n">intMax</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">num</span> <span class="o">/=</span> <span class="mi">10</span><span class="p">)</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">10</span><span class="p">;</span>
 
 
-        len = (n + 1) * 2;
-        startNum = n;
-        ch = new char[len];
-        memset(ch, 0, len);
+        <span class="n">len</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">startNum</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
 
-        for (int i = 0; i &lt; n; i++)
-            ch[startNum + i] = temp[n - i - 1] + '0';
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">ch</span><span class="p">[</span><span class="n">startNum</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
 
-        del = true;
-        return *this;
-    }
+        <span class="n">del</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">unsignedBigInt</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">del</span><span class="p">)</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">ch</span><span class="p">;</span>
 
-    //比较符
-    //大于
-    bool operator&gt;(const unsignedBigInt &amp; b) {
-        return (strcmp(ch + startNum, b.ch + b.startNum) &gt; 0 &amp;&amp; strlen(ch + startNum) == strlen(b.ch + b.startNum)) || strlen(ch + startNum) &gt; strlen(b.ch + b.startNum) ? true : false;
-    }
-    //运算符
-    //加号
-    unsignedBigInt operator+(const unsignedBigInt &amp; b) {
-        unsignedBigInt temp(-1, max(realLength(*this), realLength(b)) + 2);
-        int jw = 0;
-        int test = realLength(*this);
+        <span class="n">len</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">startNum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
 
-        for (int i = 0; realLength(*this) &gt; i || realLength(b) &gt; i || jw != 0; i++) {
-            //判断加数
-            int j1 = realLength(*this) &lt;= i ? 0 : ch[startNum + strlen(ch + startNum) - i - 1] - '0';
-            int j2 = realLength(b) &lt;= i ? 0 : b.ch[b.startNum + strlen(b.ch + b.startNum) - i - 1] - '0';
+        <span class="n">del</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">unsignedBigInt</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="kt">int</span> <span class="n">sizen</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">del</span><span class="p">)</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">ch</span><span class="p">;</span>
 
-            //运算
-            temp.ch[--temp.startNum] = (j1 + j2 + jw) % 10 + '0';
-            jw = (j1 + j2 + jw) / 10;
-        }
+        <span class="n">len</span> <span class="o">=</span> <span class="p">(</span><span class="n">sizen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">startNum</span> <span class="o">=</span> <span class="n">sizen</span><span class="p">;</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
 
-        //返回
-        return temp;
-    }
-};
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">temp</span><span class="p">[</span><span class="n">intMax</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="k">for</span> <span class="p">(;</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">num</span> <span class="o">/=</span> <span class="mi">10</span><span class="p">)</span>
+                    <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">10</span><span class="p">;</span>
+
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+                <span class="n">ch</span><span class="p">[</span><span class="n">startNum</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="n">del</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//析构</span>
+    <span class="o">~</span><span class="n">unsignedBigInt</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">del</span><span class="p">)</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//计算真实长度</span>
+    <span class="kt">int</span> <span class="n">realLength</span><span class="p">(</span><span class="k">const</span> <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">strlen</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">ch</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">startNum</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//复制构造函数</span>
+    <span class="n">unsignedBigInt</span><span class="p">(</span><span class="k">const</span> <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">del</span><span class="p">)</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">ch</span><span class="p">;</span>
+
+        <span class="n">len</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+        <span class="n">startNum</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">startNum</span><span class="p">;</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">ch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">ch</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+        <span class="n">del</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//输入输出</span>
+    <span class="k">friend</span> <span class="n">ostream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">output</span><span class="p">,</span> <span class="k">const</span> <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="n">bi</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">istream</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="n">bi</span><span class="p">);</span>
+
+    <span class="c1">//赋值</span>
+    <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//检查自身赋值</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">this</span> <span class="o">==</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">del</span><span class="p">)</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">ch</span><span class="p">;</span>
+
+        <span class="n">len</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+        <span class="n">startNum</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">startNum</span><span class="p">;</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">ch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">ch</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+        <span class="n">del</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">del</span><span class="p">)</span>
+            <span class="k">delete</span><span class="p">[]</span> <span class="n">ch</span><span class="p">;</span>
+
+        <span class="c1">//临时数组</span>
+        <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">temp</span><span class="p">[</span><span class="n">intMax</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="k">for</span> <span class="p">(;</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">num</span> <span class="o">/=</span> <span class="mi">10</span><span class="p">)</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span> <span class="o">%</span> <span class="mi">10</span><span class="p">;</span>
 
 
-//输入输出流重载
-//无符号大整数
-ostream&amp; operator&lt;&lt;(ostream &amp; output, const unsignedBigInt &amp; bi) {
-    output &lt;&lt; bi.ch + bi.startNum;
-    return output;
-}
-istream&amp; operator&gt;&gt;(istream &amp; input, unsignedBigInt &amp; bi) {
-    char ch[maxNum];
-    input &gt;&gt; ch;
-    bi = unsignedBigInt(ch);
-    return input;
-}
+        <span class="n">len</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="n">startNum</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">len</span><span class="p">];</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
 
-unsignedBigInt numData[51][51];
-int k, h;
-void cnt(int num, int depth) {
-    if (depth == 1) {
-        numData[num][depth] = 1;
-        return;
-    }
-    if (numData[num][depth] &gt; 0)
-        return;
-    //遍历
-    for (int i = 0; i &lt; num; i++) {
-        cnt(k - i, depth - 1);
-        numData[num][depth] = numData[num][depth] + numData[k - i][depth - 1];
-    }
-    return;
-}
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">ch</span><span class="p">[</span><span class="n">startNum</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">n</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
 
-int main() {
-    cin &gt;&gt; k &gt;&gt; h;
-    for (int i = 0; i &lt;= k; i++)
-        for (int j = 0; j &lt;= h; j++)
-            numData[i][j] = 0;
-    cnt(k, h);
+        <span class="n">del</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; numData[k][h];
+    <span class="c1">//比较符</span>
+    <span class="c1">//大于</span>
+    <span class="kt">bool</span> <span class="k">operator</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span> <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">ch</span> <span class="o">+</span> <span class="n">startNum</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">ch</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">startNum</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">ch</span> <span class="o">+</span> <span class="n">startNum</span><span class="p">)</span> <span class="o">==</span> <span class="n">strlen</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">ch</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">startNum</span><span class="p">))</span> <span class="o">||</span> <span class="n">strlen</span><span class="p">(</span><span class="n">ch</span> <span class="o">+</span> <span class="n">startNum</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">strlen</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">ch</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">startNum</span><span class="p">)</span> <span class="o">?</span> <span class="nb">true</span> <span class="o">:</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//运算符</span>
+    <span class="c1">//加号</span>
+    <span class="n">unsignedBigInt</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">unsignedBigInt</span> <span class="n">temp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">max</span><span class="p">(</span><span class="n">realLength</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">),</span> <span class="n">realLength</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">jw</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">test</span> <span class="o">=</span> <span class="n">realLength</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
 
-    return 0;
-}
-</code></pre>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">realLength</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">||</span> <span class="n">realLength</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">i</span> <span class="o">||</span> <span class="n">jw</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//判断加数</span>
+            <span class="kt">int</span> <span class="n">j1</span> <span class="o">=</span> <span class="n">realLength</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">ch</span><span class="p">[</span><span class="n">startNum</span> <span class="o">+</span> <span class="n">strlen</span><span class="p">(</span><span class="n">ch</span> <span class="o">+</span> <span class="n">startNum</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+            <span class="kt">int</span> <span class="n">j2</span> <span class="o">=</span> <span class="n">realLength</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">b</span><span class="p">.</span><span class="n">ch</span><span class="p">[</span><span class="n">b</span><span class="p">.</span><span class="n">startNum</span> <span class="o">+</span> <span class="n">strlen</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">ch</span> <span class="o">+</span> <span class="n">b</span><span class="p">.</span><span class="n">startNum</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+
+            <span class="c1">//运算</span>
+            <span class="n">temp</span><span class="p">.</span><span class="n">ch</span><span class="p">[</span><span class="o">--</span><span class="n">temp</span><span class="p">.</span><span class="n">startNum</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">j1</span> <span class="o">+</span> <span class="n">j2</span> <span class="o">+</span> <span class="n">jw</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+            <span class="n">jw</span> <span class="o">=</span> <span class="p">(</span><span class="n">j1</span> <span class="o">+</span> <span class="n">j2</span> <span class="o">+</span> <span class="n">jw</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//返回</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+
+<span class="c1">//输入输出流重载</span>
+<span class="c1">//无符号大整数</span>
+<span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span> <span class="o">&amp;</span> <span class="n">output</span><span class="p">,</span> <span class="k">const</span> <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="n">bi</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">output</span> <span class="o">&lt;&lt;</span> <span class="n">bi</span><span class="p">.</span><span class="n">ch</span> <span class="o">+</span> <span class="n">bi</span><span class="p">.</span><span class="n">startNum</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">output</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">istream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">istream</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">unsignedBigInt</span> <span class="o">&amp;</span> <span class="n">bi</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">[</span><span class="n">maxNum</span><span class="p">];</span>
+    <span class="n">input</span> <span class="o">&gt;&gt;</span> <span class="n">ch</span><span class="p">;</span>
+    <span class="n">bi</span> <span class="o">=</span> <span class="n">unsignedBigInt</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">input</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">unsignedBigInt</span> <span class="n">numData</span><span class="p">[</span><span class="mi">51</span><span class="p">][</span><span class="mi">51</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="n">h</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">cnt</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">,</span> <span class="kt">int</span> <span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">depth</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">numData</span><span class="p">[</span><span class="n">num</span><span class="p">][</span><span class="n">depth</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">numData</span><span class="p">[</span><span class="n">num</span><span class="p">][</span><span class="n">depth</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="c1">//遍历</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cnt</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">i</span><span class="p">,</span> <span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">numData</span><span class="p">[</span><span class="n">num</span><span class="p">][</span><span class="n">depth</span><span class="p">]</span> <span class="o">=</span> <span class="n">numData</span><span class="p">[</span><span class="n">num</span><span class="p">][</span><span class="n">depth</span><span class="p">]</span> <span class="o">+</span> <span class="n">numData</span><span class="p">[</span><span class="n">k</span> <span class="o">-</span> <span class="n">i</span><span class="p">][</span><span class="n">depth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">k</span> <span class="o">&gt;&gt;</span> <span class="n">h</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">h</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">numData</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cnt</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">numData</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">h</span><span class="p">];</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 10000;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mi">10000</span><span class="p">;</span>
 
-class bigint {
-   private:
-    long long data[20];
-    const long long base = 1e8;
+<span class="k">class</span> <span class="nc">bigint</span> <span class="p">{</span>
+   <span class="k">private</span><span class="o">:</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">data</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+    <span class="k">const</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">base</span> <span class="o">=</span> <span class="mf">1e8</span><span class="p">;</span>
 
-   public:
-    bigint(int x = 0);
-    bigint&amp; operator=(const bigint&amp;);
-    bigint operator+(const bigint&amp;) const;
-    bool operator==(const int) const;
-    void output() const;
-};
+   <span class="k">public</span><span class="o">:</span>
+    <span class="n">bigint</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">bigint</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">bigint</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">bigint</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">bigint</span><span class="o">&amp;</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">output</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
 
-bigint::bigint(int x) {
-    for (int i = 0; i &lt; 20; i++) {
-        data[i] = 0;
-    }
-    data[0] = x;
-}
+<span class="n">bigint</span><span class="o">::</span><span class="n">bigint</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-bigint&amp; bigint::operator=(const bigint&amp; right) {
-    for (int i = 0; i &lt; 20; i++) {
-        data[i] = right.data[i];
-    }
+<span class="n">bigint</span><span class="o">&amp;</span> <span class="n">bigint</span><span class="o">::</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">bigint</span><span class="o">&amp;</span> <span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    return *this;
-}
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
 
-bigint bigint::operator+(const bigint&amp; right) const {
-    bigint ans(0);
-    long long carry = 0;
+<span class="n">bigint</span> <span class="n">bigint</span><span class="o">::</span><span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">bigint</span><span class="o">&amp;</span> <span class="n">right</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="n">bigint</span> <span class="n">ans</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">carry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    for (int i = 0; i &lt; 20 &amp;&amp; (carry || data[i] || right.data[i]); i++) {
-        ans.data[i] = data[i] + right.data[i] + carry;
-        carry = ans.data[i] / base;
-        ans.data[i] %= base;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">carry</span> <span class="o">||</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">||</span> <span class="n">right</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ans</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">right</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">carry</span><span class="p">;</span>
+        <span class="n">carry</span> <span class="o">=</span> <span class="n">ans</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">base</span><span class="p">;</span>
+        <span class="n">ans</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">%=</span> <span class="n">base</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    return ans;
-}
+    <span class="k">return</span> <span class="n">ans</span><span class="p">;</span>
+<span class="p">}</span>
 
-bool bigint::operator==(const int x) const {
-    for (int i = 19; i &gt; 0; i--) {
-        if (data[i] != 0) {
-            return 0;
-        }
-    }
+<span class="kt">bool</span> <span class="n">bigint</span><span class="o">::</span><span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">19</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return data[0] == x;
-}
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-void bigint::output() const {
-    int i = 19;
-    while (data[i] == 0) {
-        i--;
-    }
+<span class="kt">void</span> <span class="n">bigint</span><span class="o">::</span><span class="n">output</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">19</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">i</span><span class="o">--</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    printf(&quot;%lld&quot;, data[i]);
-    i--;
-    for (; i &gt;= 0; i--) {
-        printf(&quot;%08lld&quot;, data[i]);
-    }
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%lld&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="n">i</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%08lld&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
 
-    return;
-}
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
 
-bigint dp[maxN][maxN];
+<span class="n">bigint</span> <span class="n">dp</span><span class="p">[</span><span class="n">maxN</span><span class="p">][</span><span class="n">maxN</span><span class="p">];</span>
 
-bigint DP(int, int, int);
+<span class="n">bigint</span> <span class="nf">DP</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
 
-int main() {
-    int k, h;
-    bigint ans;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="n">h</span><span class="p">;</span>
+    <span class="n">bigint</span> <span class="n">ans</span><span class="p">;</span>
 
-    scanf(&quot;%d%d&quot;, &amp;k, &amp;h);
-    ans = DP(k, h, k);
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">k</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">h</span><span class="p">);</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="n">DP</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
 
-    ans.output();
+    <span class="n">ans</span><span class="p">.</span><span class="n">output</span><span class="p">();</span>
 
-    return 0;
-}
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-bigint DP(int a, int b, int k) {
-    if (!(dp[a][b] == 0)) {
-        return dp[a][b];
-    } else if (b == 2) {
-        dp[a][b] = a;
-        return dp[a][b];
-    } else {
-        for (int i = 0; i &lt; a; i++) {
-            dp[a][b] = dp[a][b] + DP(k - i, b - 1, k);
-        }
-        return dp[a][b];
-    }
-}
-</code></pre>
+<span class="n">bigint</span> <span class="nf">DP</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span> <span class="o">+</span> <span class="n">DP</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-#include &lt;iomanip&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
 
-using namespace std;
-const int p=1000000000;
-//Same as 4152
-class longint{
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">p</span><span class="o">=</span><span class="mi">1000000000</span><span class="p">;</span>
+<span class="c1">//Same as 4152</span>
+<span class="k">class</span> <span class="nc">longint</span><span class="p">{</span>
 
-    long long num[3000];
-    int len;
-public:
-    longint(){
-        memset(num,0,sizeof(num));
-        len=1;
-    };
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">num</span><span class="p">[</span><span class="mi">3000</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">longint</span><span class="p">(){</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">num</span><span class="p">));</span>
+        <span class="n">len</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">};</span>
 
-    longint(const char *s){
-        memset(num,0,sizeof(num));
-        int l=(strlen(s)-1)/9+1,length=strlen(s);
-        for (int i=0;i&lt;l;++i){
-            for (int j=length-9*i-9;j&lt;length-9*i;++j)
-                if (j&gt;=0)
-                    num[i]=num[i]*10+s[j]-48;
-        }
-        len=l;
-    }
+    <span class="n">longint</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">){</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">num</span><span class="p">));</span>
+        <span class="kt">int</span> <span class="n">l</span><span class="o">=</span><span class="p">(</span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">9</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">length</span><span class="o">=</span><span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">l</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">length</span><span class="o">-</span><span class="mi">9</span><span class="o">*</span><span class="n">i</span><span class="o">-</span><span class="mi">9</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">length</span><span class="o">-</span><span class="mi">9</span><span class="o">*</span><span class="n">i</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="o">+</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">-</span><span class="mi">48</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">len</span><span class="o">=</span><span class="n">l</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    longint(int x){
-        memset(num,0,sizeof(num));
-        len=0;
-        while (x!=0)
-        {
-            num[len++]=x%p;
-            x/=p;
-        }
-    }
+    <span class="n">longint</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">num</span><span class="p">));</span>
+        <span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">x</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">num</span><span class="p">[</span><span class="n">len</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="o">%</span><span class="n">p</span><span class="p">;</span>
+            <span class="n">x</span><span class="o">/=</span><span class="n">p</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    longint(const longint &amp;a):len(a.len){
-        memset(num,0,sizeof(num));
-        for (int i=0;i&lt;a.len;++i)
-            num[i]=a.num[i];
-    }
+    <span class="n">longint</span><span class="p">(</span><span class="k">const</span> <span class="n">longint</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">)</span><span class="o">:</span><span class="n">len</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">){</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">num</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    longint &amp;operator=(const longint&amp; a){
-        memset(num,0,sizeof(num));
-        len=a.len;
-        for (int i=0;i&lt;a.len;++i)
-            num[i]=a.num[i];
-        return *this;
-    }
+    <span class="n">longint</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">){</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">num</span><span class="p">));</span>
+        <span class="n">len</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    friend longint operator+(const longint&amp; a,const longint&amp; b){
-        long long c=0;
-        longint r;
-        r.len=max(a.len,b.len);
-        for (int i=0;i&lt;r.len;++i){
-            r.num[i]=a.num[i]+b.num[i]+c;
-            c=r.num[i]/p;
-            r.num[i]%=p;
-        }
-        if (c&gt;0) r.num[r.len++]=c;
-        return r;
-    }
+    <span class="k">friend</span> <span class="n">longint</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">){</span>
+        <span class="kt">long</span> <span class="kt">long</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">longint</span> <span class="n">r</span><span class="p">;</span>
+        <span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="o">=</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">,</span><span class="n">b</span><span class="p">.</span><span class="n">len</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+            <span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">b</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">c</span><span class="p">;</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">p</span><span class="p">;</span>
+            <span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">%=</span><span class="n">p</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">c</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    friend longint operator-(const longint&amp; a,const longint&amp; b){
-        int c=0;
-        longint r;
-        r.len=max(a.len,b.len);
-        for (int i=0;i&lt;max(a.len,b.len);++i){
-            r.num[i]=a.num[i]-b.num[i]-c;
-            c=0;
-            if (r.num[i]&lt;0){
-                r.num[i]+=p;
-                c=1;
-            }
-        }
-        while (r.len&gt;1&amp;&amp;!r.num[r.len-1]) r.len--;
-        return r;
-    }
+    <span class="k">friend</span> <span class="n">longint</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">longint</span> <span class="n">r</span><span class="p">;</span>
+        <span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="o">=</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">,</span><span class="n">b</span><span class="p">.</span><span class="n">len</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">max</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">,</span><span class="n">b</span><span class="p">.</span><span class="n">len</span><span class="p">);</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+            <span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">b</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">c</span><span class="p">;</span>
+            <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">){</span>
+                <span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+=</span><span class="n">p</span><span class="p">;</span>
+                <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&amp;&amp;!</span><span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    friend longint operator*(const longint&amp; a,const longint&amp; b){
-        long long c=0,pos;
-        int x=0;
-        longint r;
-        for (int i=0;i&lt;b.len;++i){
-            x=i;
-            c=0;
-            longint tmp;
-            for (int j=0;j&lt;a.len;++j){
-                pos=a.num[j]*b.num[i]+c;
-                c=pos/p;
-                tmp.num[x]=pos%p;
-                x++;
-            }
-            tmp.len=x;
-            if (c&gt;0) tmp.num[tmp.len++]=c;
-            r=r+tmp;
-        }
-        return r;
-    }
+    <span class="k">friend</span> <span class="n">longint</span> <span class="k">operator</span><span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">){</span>
+        <span class="kt">long</span> <span class="kt">long</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">pos</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="n">longint</span> <span class="n">r</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">b</span><span class="p">.</span><span class="n">len</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+            <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+            <span class="n">longint</span> <span class="n">tmp</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">){</span>
+                <span class="n">pos</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">c</span><span class="p">;</span>
+                <span class="n">c</span><span class="o">=</span><span class="n">pos</span><span class="o">/</span><span class="n">p</span><span class="p">;</span>
+                <span class="n">tmp</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">=</span><span class="n">pos</span><span class="o">%</span><span class="n">p</span><span class="p">;</span>
+                <span class="n">x</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">tmp</span><span class="p">.</span><span class="n">len</span><span class="o">=</span><span class="n">x</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="n">tmp</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">tmp</span><span class="p">.</span><span class="n">len</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">c</span><span class="p">;</span>
+            <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="o">+</span><span class="n">tmp</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    friend longint div(const longint&amp; a){
-        longint r;
-        long long x=0;
-        for (int i=a.len-1;i&gt;=0;i--){
-            x=x*p+a.num[i];
-            r.num[i]=x/2;
-            x%=2;
-        }
-        r.len=a.len;
-        if (!r.num[r.len-1]) r.len--;
-        return r;
-    }
+    <span class="k">friend</span> <span class="n">longint</span> <span class="n">div</span><span class="p">(</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">){</span>
+        <span class="n">longint</span> <span class="n">r</span><span class="p">;</span>
+        <span class="kt">long</span> <span class="kt">long</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">--</span><span class="p">){</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="o">*</span><span class="n">p</span><span class="o">+</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="n">x</span><span class="o">%=</span><span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">r</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="n">r</span><span class="p">.</span><span class="n">len</span><span class="o">--</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    friend bool operator&gt;(const longint&amp; a,const longint&amp; b){
-        if (a.len&gt;b.len) return true;
-        if (a.len&lt;b.len) return false;
-        for (int i=a.len-1;i&gt;=0;--i){
-            if (a.num[i]&gt;b.num[i]) return true;
-            if (a.num[i]&lt;b.num[i]) return false;
-        }
-        return false;
-    }
+    <span class="k">friend</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span><span class="k">const</span> <span class="n">longint</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="o">&gt;</span><span class="n">b</span><span class="p">.</span><span class="n">len</span><span class="p">)</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="o">&lt;</span><span class="n">b</span><span class="p">.</span><span class="n">len</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="o">--</span><span class="n">i</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">b</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;</span><span class="n">b</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    friend ostream&amp; operator&lt;&lt;(ostream&amp; os,const longint &amp;a){
-        os.fill('0');
-        os&lt;&lt;a.num[a.len-1];
-        for (int i=a.len-2;i&gt;=0;--i) {
-            os&lt;&lt;setw(9)&lt;&lt;a.num[i];
-        }
-        return os;
-    }
+    <span class="k">friend</span> <span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span><span class="k">const</span> <span class="n">longint</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">){</span>
+        <span class="n">os</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="sc">&#39;0&#39;</span><span class="p">);</span>
+        <span class="n">os</span><span class="o">&lt;&lt;</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">a</span><span class="p">.</span><span class="n">len</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span><span class="n">i</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">;</span><span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">os</span><span class="o">&lt;&lt;</span><span class="n">setw</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">&lt;&lt;</span><span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    friend bool odd(longint &amp;a){
-        return a.num[0]%2!=0;
-    }
-};
-longint x[51][51];
-int h,k;
-int main() {
-    cin&gt;&gt;k&gt;&gt;h;
-    for (int i=0;i&lt;=k-1;++i) x[1][i]=k-i;
-    for (int i=2;i&lt;=h-1;++i){
-        for (int j=0;j&lt;=k-1;++j)
-            for (int l=0;l&lt;k-j;++l) x[i][j]=x[i][j]+x[i-1][l];
-    }
-    cout&lt;&lt;x[h-1][0];
-}
-</code></pre>
+    <span class="k">friend</span> <span class="kt">bool</span> <span class="n">odd</span><span class="p">(</span><span class="n">longint</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">){</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">num</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">%</span><span class="mi">2</span><span class="o">!=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="n">longint</span> <span class="n">x</span><span class="p">[</span><span class="mi">51</span><span class="p">][</span><span class="mi">51</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">h</span><span class="p">,</span><span class="n">k</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">k</span><span class="o">&gt;&gt;</span><span class="n">h</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">k</span><span class="o">-</span><span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">h</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">l</span><span class="o">&lt;</span><span class="n">k</span><span class="o">-</span><span class="n">j</span><span class="p">;</span><span class="o">++</span><span class="n">l</span><span class="p">)</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">+</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">l</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">x</span><span class="p">[</span><span class="n">h</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

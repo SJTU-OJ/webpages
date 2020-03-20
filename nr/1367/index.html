@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -369,154 +371,155 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;algorithm&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;algorithm&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-//二叉树
-class special_tree {
-public:
-    class node {
-    public:
-        //左孩子代表0
-        node* lchild = nullptr;
-        //右孩子代表1
-        node* rchild = nullptr;
-    };
-    node* root = nullptr;
-    special_tree() {
-        root = new node;
-    }
-};
+<span class="c1">//二叉树</span>
+<span class="k">class</span> <span class="nc">special_tree</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">class</span> <span class="nc">node</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="c1">//左孩子代表0</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">lchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="c1">//右孩子代表1</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">rchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">node</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">special_tree</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int cur_ans = 0;
+<span class="kt">int</span> <span class="n">cur_ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-void dfs(special_tree::node* p1, special_tree::node* p2,int ans) {
-    if (p1-&gt;lchild == nullptr &amp;&amp; p1-&gt;rchild == nullptr) {
-        if (ans &gt; cur_ans)
-            cur_ans = ans;
-        return;
-    }
-    ans = ans &lt;&lt; 1;
-    if (p1-&gt;lchild &amp;&amp; p2-&gt;rchild &amp;&amp; p1-&gt;rchild &amp;&amp; p2-&gt;lchild) {
-        dfs(p1-&gt;lchild, p2-&gt;rchild, 1 + ans);
-        dfs(p1-&gt;rchild, p2-&gt;lchild, 1 + ans);
-    }
-    else if (p1-&gt;lchild &amp;&amp; p2-&gt;rchild) {
-        dfs(p1-&gt;lchild, p2-&gt;rchild, 1 + ans);
-    }
-    else if (p1-&gt;rchild &amp;&amp; p2-&gt;lchild) {
-        dfs(p1-&gt;rchild, p2-&gt;lchild,1 + ans);
-    }
-    else if (p1-&gt;lchild &amp;&amp; p2-&gt;lchild) {
-        dfs(p1-&gt;lchild, p2-&gt;lchild, ans);
-    }
-    else if (p1-&gt;rchild &amp;&amp; p2-&gt;rchild) {
-        dfs(p1-&gt;rchild, p2-&gt;rchild, ans);
-    }
-}
+<span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="n">special_tree</span><span class="o">::</span><span class="n">node</span><span class="o">*</span> <span class="n">p1</span><span class="p">,</span> <span class="n">special_tree</span><span class="o">::</span><span class="n">node</span><span class="o">*</span> <span class="n">p2</span><span class="p">,</span><span class="kt">int</span> <span class="n">ans</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">&amp;&amp;</span> <span class="n">p1</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ans</span> <span class="o">&gt;</span> <span class="n">cur_ans</span><span class="p">)</span>
+            <span class="n">cur_ans</span> <span class="o">=</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">&amp;&amp;</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">&amp;&amp;</span> <span class="n">p1</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">&amp;&amp;</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">ans</span><span class="p">);</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">&amp;&amp;</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">&amp;&amp;</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span><span class="mi">1</span> <span class="o">+</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">&amp;&amp;</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">&amp;&amp;</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">dfs</span><span class="p">(</span><span class="n">p1</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="n">p2</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="n">ans</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-int main() {
-    int N, M;
-    scanf(&quot;%d %d&quot;, &amp;N, &amp;M);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">N</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">M</span><span class="p">);</span>
 
-    special_tree tree_a, tree_b;
+    <span class="n">special_tree</span> <span class="n">tree_a</span><span class="p">,</span> <span class="n">tree_b</span><span class="p">;</span>
 
-    for (; N &gt; 0; --N) {
-        int temp;
-        scanf(&quot;%d&quot;, &amp;temp);
-        //化为2进制
-        bool ans[32] = { 0 };
-        for (int i = 31; i &gt;= 0; temp = temp &gt;&gt; 1, --i)
-            ans[i] = temp % 2;
-        //写入二叉树
-        auto p = tree_a.root;
-        for (int i = 0; i &lt; 32; ++i) {
-            if (ans[i]) {
-                if (p-&gt;rchild == nullptr)
-                    p-&gt;rchild = new special_tree::node;
-                p = p-&gt;rchild;
-            }
-            else {
-                if (p-&gt;lchild == nullptr)
-                    p-&gt;lchild = new special_tree::node;
-                p = p-&gt;lchild;
-            }
-        }
-    }
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">N</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">temp</span><span class="p">);</span>
+        <span class="c1">//化为2进制</span>
+        <span class="kt">bool</span> <span class="n">ans</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">31</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">%</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="c1">//写入二叉树</span>
+        <span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">tree_a</span><span class="p">.</span><span class="n">root</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                    <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="k">new</span> <span class="n">special_tree</span><span class="o">::</span><span class="n">node</span><span class="p">;</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                    <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="k">new</span> <span class="n">special_tree</span><span class="o">::</span><span class="n">node</span><span class="p">;</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    for (; M &gt; 0; --M) {
-        int temp;
-        scanf(&quot;%d&quot;, &amp;temp);
-        //化为2进制
-        bool ans[32] = { 0 };
-        for (int i = 31; i &gt;= 0; temp = temp &gt;&gt; 1, --i)
-            ans[i] = temp % 2;
-        //写入二叉树
-        auto p = tree_b.root;
-        for (int i = 0; i &lt; 32; ++i) {
-            if (ans[i]) {
-                if (p-&gt;rchild == nullptr)
-                    p-&gt;rchild = new special_tree::node;
-                p = p-&gt;rchild;
-            }
-            else {
-                if (p-&gt;lchild == nullptr)
-                    p-&gt;lchild = new special_tree::node;
-                p = p-&gt;lchild;
-            }
-        }
-    }
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">M</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">M</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">temp</span><span class="p">);</span>
+        <span class="c1">//化为2进制</span>
+        <span class="kt">bool</span> <span class="n">ans</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">31</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">%</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="c1">//写入二叉树</span>
+        <span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">tree_b</span><span class="p">.</span><span class="n">root</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                    <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="k">new</span> <span class="n">special_tree</span><span class="o">::</span><span class="n">node</span><span class="p">;</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                    <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="k">new</span> <span class="n">special_tree</span><span class="o">::</span><span class="n">node</span><span class="p">;</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //寻找最大值
-    auto p1 = tree_a.root, p2 = tree_b.root;
-    dfs(p1, p2, 0);
-    printf(&quot;%d&quot;,cur_ans);
+    <span class="c1">//寻找最大值</span>
+    <span class="k">auto</span> <span class="n">p1</span> <span class="o">=</span> <span class="n">tree_a</span><span class="p">.</span><span class="n">root</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">tree_b</span><span class="p">.</span><span class="n">root</span><span class="p">;</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="n">cur_ans</span><span class="p">);</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 3e4 + 100;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">3e4</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
 
-long long a[maxN], b[maxN];
-long long ans = 0;
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">a</span><span class="p">[</span><span class="n">maxN</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">maxN</span><span class="p">];</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int N, M;
+    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">;</span>
 
-    cin &gt;&gt; N &gt;&gt; M;
-    for (int i = 0; i &lt; N; i++) {
-        cin &gt;&gt; a[i];
-    }
-    for (int i = 0; i &lt; M; i++) {
-        cin &gt;&gt; b[i];
-    }
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span> <span class="o">&gt;&gt;</span> <span class="n">M</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    for (int i = 0; i &lt; N; i++) {
-        for (int j = 0; j &lt; M; j++) {
-            long long temp = (a[i] xor b[j]);
-            if (temp &gt; ans) {
-                ans = temp;
-            }
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">long</span> <span class="kt">long</span> <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="n">xor</span> <span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">&gt;</span> <span class="n">ans</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">ans</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; ans;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

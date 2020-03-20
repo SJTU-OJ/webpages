@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -401,108 +403,107 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 小F的苹果树 */
-#include &lt;iostream&gt;
-#include &lt;set&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 小F的苹果树 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class Node{
-public:
-    set&lt;int&gt; edge;
-    int father = 0;
-    int apple = 0, sumApple = 0, sum = 0;
-};
+<span class="k">class</span> <span class="nc">Node</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">set</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">edge</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">father</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">apple</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sumApple</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-class Edge{
-public:
-    int u = 0, v = 0, w = 0;
-};
+<span class="k">class</span> <span class="nc">Edge</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-Node a[105];
-Edge e[105];
-int n, q;
-int f[105][105] = {0};
+<span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="mi">105</span><span class="p">];</span>
+<span class="n">Edge</span> <span class="n">e</span><span class="p">[</span><span class="mi">105</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">q</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="mi">105</span><span class="p">][</span><span class="mi">105</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-void buildTree(int x, int f){
-    a[x].father = f;
-    for (int i : a[x].edge){
-        if (i != f)
-            buildTree(i, x);
-    }
-}
+<span class="kt">void</span> <span class="nf">buildTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">f</span><span class="p">){</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">father</span> <span class="o">=</span> <span class="n">f</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">edge</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">f</span><span class="p">)</span>
+            <span class="n">buildTree</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-void countApple(int x){
-    a[x].sumApple = a[x].apple;
-    a[x].sum = 1;
-    for (int i : a[x].edge){
-        if (i != a[x].father){
-            countApple(i);
-            a[x].sumApple += a[i].sumApple;
-            a[x].sum += a[i].sum;
-        }
-    }
-}
+<span class="kt">void</span> <span class="nf">countApple</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sumApple</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">apple</span><span class="p">;</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">edge</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">father</span><span class="p">){</span>
+            <span class="n">countApple</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sumApple</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sumApple</span><span class="p">;</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sum</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-int dp(int x, int m){
-    if (f[x][m] != 0)
-        return f[x][m];
-    if (m == 0){
-        f[x][m] = 0;
-        return 0;
-    }
-    if (m &gt;= a[x].sum){
-        f[x][m] = a[x].sumApple;
-        return f[x][m];
-    }
-    if (a[x].edge.size() == 1){
-        f[x][m] = a[x].apple;
-        return f[x][m];
-    }
-    int s1 = 0, s2 = 0;
-    for (int i : a[x].edge){
-        if (i != a[x].father){
-            if (s1 == 0)
-                s1 = i;
-            else
-                s2 = i;
-        }
-    }
-    for (int k = 0; k &lt; m; ++k){
-        f[x][m] = max(f[x][m], dp(s1, k) + dp(s2, m - k - 1) + a[x].apple);
-    }
-    return f[x][m];
-}
+<span class="kt">int</span> <span class="nf">dp</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sum</span><span class="p">){</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sumApple</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">edge</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">apple</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">s1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">s2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">edge</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">father</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">s1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">s1</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">s2</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">){</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">],</span> <span class="n">dp</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="o">+</span> <span class="n">dp</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="n">m</span> <span class="o">-</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">apple</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">m</span><span class="p">];</span>
+<span class="p">}</span>
 
-void print(int x){
-    cout &lt;&lt; x &lt;&lt; ' ' &lt;&lt; a[x].father &lt;&lt; ' ' &lt;&lt; a[x].apple &lt;&lt; ' ' &lt;&lt; a[x].sumApple &lt;&lt; ' ' &lt;&lt; a[x].sum &lt;&lt; endl;
-    for (int i : a[x].edge)
-        if (i != a[x].father)
-            print(i);
-}
+<span class="kt">void</span> <span class="nf">print</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">father</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">apple</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sumApple</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sum</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">edge</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">father</span><span class="p">)</span>
+            <span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main(){
-    cin &gt;&gt; n &gt;&gt; q;
-    for (int i = 1; i &lt; n; ++i){
-        cin &gt;&gt; e[i].u &gt;&gt; e[i].v &gt;&gt; e[i].w;
-        a[e[i].u].edge.insert(e[i].v);
-        a[e[i].v].edge.insert(e[i].u);
-    }
-    buildTree(1, 0);
-    for (int i = 1; i &lt; n; ++i){
-        if (a[e[i].u].father == e[i].v)
-            a[e[i].u].apple = e[i].w;
-        else
-            a[e[i].v].apple = e[i].w;
-    }
-    countApple(1);
-    //print(1);
-    ++q;
-    dp(1, q);
-    cout &lt;&lt; f[1][q] &lt;&lt; endl;
-    return 0;
-}
-
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">q</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u</span> <span class="o">&gt;&gt;</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span> <span class="o">&gt;&gt;</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u</span><span class="p">].</span><span class="n">edge</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">);</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">].</span><span class="n">edge</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">buildTree</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u</span><span class="p">].</span><span class="n">father</span> <span class="o">==</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u</span><span class="p">].</span><span class="n">apple</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">].</span><span class="n">apple</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">w</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">countApple</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="c1">//print(1);</span>
+    <span class="o">++</span><span class="n">q</span><span class="p">;</span>
+    <span class="n">dp</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">q</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">q</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

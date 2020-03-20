@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -370,149 +372,149 @@
 </details>
 
 <h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;class Type&gt;
-class priorityQueue
-{
-public:
-    priorityQueue(int capacity = 100);
-    priorityQueue(const Type data[],int size);
-    ~priorityQueue();
-    bool isEmpty()const;
-    void enQueue(const Type &amp;x);
-    Type deQueue();
-    Type getHead() const;
-    int currentSize;
-private:
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">priorityQueue</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">priorityQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">capacity</span> <span class="o">=</span> <span class="mi">100</span><span class="p">);</span>
+    <span class="n">priorityQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Type</span> <span class="n">data</span><span class="p">[],</span><span class="kt">int</span> <span class="n">size</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">priorityQueue</span><span class="p">();</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">()</span><span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Type</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">Type</span> <span class="nf">deQueue</span><span class="p">();</span>
+    <span class="n">Type</span> <span class="nf">getHead</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">currentSize</span><span class="p">;</span>
+<span class="k">private</span><span class="o">:</span>
 
-    Type *array;//array[0]不放东西
-    int maxSize;
+    <span class="n">Type</span> <span class="o">*</span><span class="n">array</span><span class="p">;</span><span class="c1">//array[0]不放东西</span>
+    <span class="kt">int</span> <span class="n">maxSize</span><span class="p">;</span>
 
-    void doubleSpace();
-    void buildHeap();//对一串数字进行有序化建堆
-    void percolateDown(int hole);
-};
+    <span class="kt">void</span> <span class="nf">doubleSpace</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">buildHeap</span><span class="p">();</span><span class="c1">//对一串数字进行有序化建堆</span>
+    <span class="kt">void</span> <span class="nf">percolateDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">hole</span><span class="p">);</span>
+<span class="p">};</span>
 
-template &lt;class Type&gt;
-priorityQueue&lt;Type&gt;::priorityQueue(int capacity)
-{
-    array = new Type[capacity];
-    maxSize = capacity;
-    currentSize = 0;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">priorityQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">capacity</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Type</span><span class="p">[</span><span class="n">capacity</span><span class="p">];</span>
+    <span class="n">maxSize</span> <span class="o">=</span> <span class="n">capacity</span><span class="p">;</span>
+    <span class="n">currentSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type&gt;
-priorityQueue&lt;Type&gt;::~priorityQueue()
-{
-    delete[] array;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::~</span><span class="n">priorityQueue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">array</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type&gt;
-bool priorityQueue&lt;Type&gt;::isEmpty() const
-{
-    return currentSize == 0;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">currentSize</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type&gt;
-Type priorityQueue&lt;Type&gt;::getHead() const
-{
-    return array[1];
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="n">Type</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">getHead</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
 
-template &lt;class Type &gt;
-void priorityQueue&lt;Type&gt;::enQueue(const Type &amp;x)
-{
-    if (currentSize == maxSize-1)//因为array[0]不放东西
-        doubleSpace();
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Type</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">currentSize</span> <span class="o">==</span> <span class="n">maxSize</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="c1">//因为array[0]不放东西</span>
+        <span class="n">doubleSpace</span><span class="p">();</span>
 
-    //向上过滤
-    int hole = ++currentSize;
-    for (; hole &gt; 1 &amp;&amp; x &lt;= array[hole / 2]; hole /= 2)
-        array[hole] = array[hole / 2];
-    array[hole] = x;
-}
+    <span class="c1">//向上过滤</span>
+    <span class="kt">int</span> <span class="n">hole</span> <span class="o">=</span> <span class="o">++</span><span class="n">currentSize</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">hole</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">array</span><span class="p">[</span><span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span> <span class="n">hole</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+    <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type &gt;
-Type priorityQueue&lt;Type &gt;::deQueue()
-{
-    Type miniItem;
-    miniItem = array[1];
-    array[1] = array[currentSize--];//把最大(maybe)的数放在第一个，再向下过滤
-    percolateDown(1);
-    return miniItem;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="n">Type</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span> <span class="o">&gt;::</span><span class="n">deQueue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Type</span> <span class="n">miniItem</span><span class="p">;</span>
+    <span class="n">miniItem</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">currentSize</span><span class="o">--</span><span class="p">];</span><span class="c1">//把最大(maybe)的数放在第一个，再向下过滤</span>
+    <span class="n">percolateDown</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">miniItem</span><span class="p">;</span>
+<span class="p">}</span>
 
-template&lt;class Type &gt;
-void priorityQueue&lt;Type &gt;:: percolateDown(int hole)//向下过滤
-{
-    int child;
-    Type tmp = array[hole];
-    for (; hole * 2 &lt;= currentSize; hole = child){
-        child = hole * 2;
-        if (child!=currentSize &amp;&amp; array[child+1]&lt;array[child])//找小的儿子，如果child==currentSize，则没有右儿子
-            child++;
-        if(array[child]&lt;tmp)
-            array[hole] = array[child];
-        else
-            break;
-    }
-    array[hole] = tmp;
-}
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span> <span class="o">&gt;::</span> <span class="n">percolateDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">hole</span><span class="p">)</span><span class="c1">//向下过滤</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">child</span><span class="p">;</span>
+    <span class="n">Type</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">currentSize</span><span class="p">;</span> <span class="n">hole</span> <span class="o">=</span> <span class="n">child</span><span class="p">){</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">child</span><span class="o">!=</span><span class="n">currentSize</span> <span class="o">&amp;&amp;</span> <span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="p">])</span><span class="c1">//找小的儿子，如果child==currentSize，则没有右儿子</span>
+            <span class="n">child</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">&lt;</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="p">];</span>
+        <span class="k">else</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class Type &gt;
-void priorityQueue&lt;Type &gt;::buildHeap()
-{
-    for (int i = currentSize / 2; i &gt; 0;i--)
-        percolateDown(i);
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span> <span class="o">&gt;::</span><span class="n">buildHeap</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">currentSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="n">percolateDown</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
 
-template &lt;class Type&gt;
-priorityQueue&lt;Type&gt;::priorityQueue(const Type *items, int size) : maxSize(size + 10), currentSize(size)
-{
-    array = new Type[maxSize];
-    for (int i = 0; i &lt; size;i++)
-        array[i + 1] = items[i];
-    buildHeap();
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span><span class="o">&gt;</span>
+<span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;::</span><span class="n">priorityQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">Type</span> <span class="o">*</span><span class="n">items</span><span class="p">,</span> <span class="kt">int</span> <span class="n">size</span><span class="p">)</span> <span class="o">:</span> <span class="n">maxSize</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="mi">10</span><span class="p">),</span> <span class="n">currentSize</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Type</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">buildHeap</span><span class="p">();</span>
+<span class="p">}</span>
 
-template &lt;class Type &gt;
-void priorityQueue&lt;Type &gt;::doubleSpace()
-{
-    Type *tmp = array;
-    maxSize *= 2;
-    array = new Type[maxSize];
-    for (int i = 0; i &lt;= currentSize; i++) //当currentSize == maxSize-1时，调用doubleSpace()
-        array[i] = tmp[i];
-    delete[] tmp;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">Type</span> <span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="n">Type</span> <span class="o">&gt;::</span><span class="n">doubleSpace</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">Type</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="p">;</span>
+    <span class="n">maxSize</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Type</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">currentSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">//当currentSize == maxSize-1时，调用doubleSpace()</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main()
-{
-    int num;
-    int item;
-    int sum = 0;
-    cin &gt;&gt; num;
-    priorityQueue&lt;int&gt; que(num*2);
-    for (int i = 0; i &lt; num;i++)
-    {
-        cin &gt;&gt; item;
-        que.enQueue(item);
-    }
-    while (que.currentSize&gt;1)
-    {
-        int temp1 = 0,temp2 = 0;
-        temp1 = que.deQueue();
-        temp2 = que.deQueue();
-        sum += temp1;
-        sum += temp2;
-        que.enQueue(temp1 + temp2);
-    }
-    cout &lt;&lt; sum;
-}
-</code></pre>
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">item</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
+    <span class="n">priorityQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">que</span><span class="p">(</span><span class="n">num</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">item</span><span class="p">;</span>
+        <span class="n">que</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">item</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">que</span><span class="p">.</span><span class="n">currentSize</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">temp2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">temp1</span> <span class="o">=</span> <span class="n">que</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+        <span class="n">temp2</span> <span class="o">=</span> <span class="n">que</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">temp1</span><span class="p">;</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">temp2</span><span class="p">;</span>
+        <span class="n">que</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">temp1</span> <span class="o">+</span> <span class="n">temp2</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

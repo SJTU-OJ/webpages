@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -460,87 +462,87 @@ SAM: How are you??
 </details>
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;string&gt;
-using namespace std;
-string s,name[30],who,towho,days[7]={&quot;Monday.&quot;,&quot;Tuesday.&quot;,&quot;Wednesday.&quot;,&quot;Thursday.&quot;,&quot;Friday.&quot;,&quot;Saturday.&quot;,&quot;Sunday.&quot;};
-int m,n,p,mh,f,t,c,succ,pos;
-char ch;
-int findname(string name1)
-{
-    for (int j=0;j&lt;m;++j)
-        if (name1==name[j])
-            return j;
-    return -1;
-}
-int main() {
-    cin&gt;&gt;m&gt;&gt;n&gt;&gt;p;
-    ch=getchar();
-    for (int i=0;i&lt;m;++i){
-        getline(cin,name[i]);
-    }
-    for (int i=0;i&lt;p;++i){
-        getline(cin,s);
-        mh=s.find(':');
-        who=s.substr(0,mh);
-        c=-1;
-        f=findname(who);
-        if (f==-1) continue;
-        pos=s.find('.');
-        if (pos!=s.length()-1) continue;
-        pos=s.find(&quot; have the ring.&quot;);
-        if (pos!=-1) {
-            if (pos - mh == 3 &amp;&amp; s[pos - 1] == 'I' &amp;&amp; s[mh + 2] == 'I') {
-                t = f;
-                c = 1;
-            }
-        }
-        else{
-            pos=s.find(&quot; have not the ring.&quot;);
-            if (pos!=-1) {
-                if (pos - mh == 3 &amp;&amp; s[pos - 1] == 'I' &amp;&amp; s[mh + 2] == 'I') {
-                    t = f;
-                    c = 2;
-                }
-            }
-            else{
-                pos=s.find(&quot; has the ring.&quot;);
-                if (pos!=-1){
-                    t=findname(s.substr(mh+2,pos-2-mh));
-                    if (t!=-1) c=1;
-                }
-                else{
-                    pos=s.find(&quot; has not the ring.&quot;);
-                    if (pos!=-1){
-                        t=findname(s.substr(mh+2,pos-2-mh));
-                        if (t!=-1) c=2;
-                    }
-                    else{
-                        pos=s.find(&quot; Today is &quot;);
-                        if (pos!=-1){
-                            t=-1;
-                            for (int j=0;j&lt;7;++j)
-                                if (s.find(days[j])==pos+10)
-                                {
-                                    t=j+1;
-                                    break;
-                                }
-                            if (t!=-1) c=3;
-                        }
-                    }
-                }
-            }
-        }
-        if (c!=-1)
-        {
-            succ++;
-            cout&lt;&lt;f&lt;&lt;&quot; &quot;&lt;&lt;t&lt;&lt;&quot; &quot;&lt;&lt;c&lt;&lt;endl;
-        }
-    }
-    if (!succ) cout&lt;&lt;&quot;Orz&quot;&lt;&lt;endl;
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="n">string</span> <span class="n">s</span><span class="p">,</span><span class="n">name</span><span class="p">[</span><span class="mi">30</span><span class="p">],</span><span class="n">who</span><span class="p">,</span><span class="n">towho</span><span class="p">,</span><span class="n">days</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="s">&quot;Monday.&quot;</span><span class="p">,</span><span class="s">&quot;Tuesday.&quot;</span><span class="p">,</span><span class="s">&quot;Wednesday.&quot;</span><span class="p">,</span><span class="s">&quot;Thursday.&quot;</span><span class="p">,</span><span class="s">&quot;Friday.&quot;</span><span class="p">,</span><span class="s">&quot;Saturday.&quot;</span><span class="p">,</span><span class="s">&quot;Sunday.&quot;</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">mh</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">succ</span><span class="p">,</span><span class="n">pos</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">findname</span><span class="p">(</span><span class="n">string</span> <span class="n">name1</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">name1</span><span class="o">==</span><span class="n">name</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">j</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">m</span><span class="o">&gt;&gt;</span><span class="n">n</span><span class="o">&gt;&gt;</span><span class="n">p</span><span class="p">;</span>
+    <span class="n">ch</span><span class="o">=</span><span class="n">getchar</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span><span class="n">name</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">p</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">getline</span><span class="p">(</span><span class="n">cin</span><span class="p">,</span><span class="n">s</span><span class="p">);</span>
+        <span class="n">mh</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">&#39;:&#39;</span><span class="p">);</span>
+        <span class="n">who</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">mh</span><span class="p">);</span>
+        <span class="n">c</span><span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">f</span><span class="o">=</span><span class="n">findname</span><span class="p">(</span><span class="n">who</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="o">==-</span><span class="mi">1</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="n">pos</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">&#39;.&#39;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">!=</span><span class="n">s</span><span class="p">.</span><span class="n">length</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="n">pos</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot; have the ring.&quot;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">mh</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;I&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">mh</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;I&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">f</span><span class="p">;</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="n">pos</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot; have not the ring.&quot;</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">mh</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">pos</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;I&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">[</span><span class="n">mh</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;I&#39;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="n">f</span><span class="p">;</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+                <span class="n">pos</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot; has the ring.&quot;</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">!=-</span><span class="mi">1</span><span class="p">){</span>
+                    <span class="n">t</span><span class="o">=</span><span class="n">findname</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">mh</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="n">pos</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">mh</span><span class="p">));</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span><span class="p">{</span>
+                    <span class="n">pos</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot; has not the ring.&quot;</span><span class="p">);</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">!=-</span><span class="mi">1</span><span class="p">){</span>
+                        <span class="n">t</span><span class="o">=</span><span class="n">findname</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">mh</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span><span class="n">pos</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="n">mh</span><span class="p">));</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span> <span class="n">c</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span><span class="p">{</span>
+                        <span class="n">pos</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot; Today is &quot;</span><span class="p">);</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">pos</span><span class="o">!=-</span><span class="mi">1</span><span class="p">){</span>
+                            <span class="n">t</span><span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+                            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">7</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">days</span><span class="p">[</span><span class="n">j</span><span class="p">])</span><span class="o">==</span><span class="n">pos</span><span class="o">+</span><span class="mi">10</span><span class="p">)</span>
+                                <span class="p">{</span>
+                                    <span class="n">t</span><span class="o">=</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+                                    <span class="k">break</span><span class="p">;</span>
+                                <span class="p">}</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">;</span>
+                        <span class="p">}</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">succ</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">f</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="o">&lt;&lt;</span><span class="n">t</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="o">&lt;&lt;</span><span class="n">c</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">succ</span><span class="p">)</span> <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;Orz&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

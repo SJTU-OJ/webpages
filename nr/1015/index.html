@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -364,215 +366,213 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;string&gt;
-#include &lt;vector&gt;
-#include &lt;cmath&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-//const int MAXSIZE = 10000;
-const double pi = 3.1415926;
+<span class="c1">//const int MAXSIZE = 10000;</span>
+<span class="k">const</span> <span class="kt">double</span> <span class="n">pi</span> <span class="o">=</span> <span class="mf">3.1415926</span><span class="p">;</span>
 
-class comp{//complex number
-    //friend
-    friend comp operator +(const comp&amp;, const comp&amp;);
-    friend comp operator -(const comp&amp;, const comp&amp;);
-    friend comp operator *(const comp&amp;, const comp&amp;);
-    friend comp operator /(const comp&amp;, const comp&amp;);
-public:
-    //constructor
-    comp() : x(0.0), y(0.0) {}
-    comp(double xx, double yy) : x(xx), y(yy) {};
-    comp(const comp &amp;cmp) : x(cmp.x), y(cmp.y) {};
+<span class="k">class</span> <span class="nc">comp</span><span class="p">{</span><span class="c1">//complex number</span>
+    <span class="c1">//friend</span>
+    <span class="k">friend</span> <span class="n">comp</span> <span class="k">operator</span> <span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">comp</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">comp</span> <span class="k">operator</span> <span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">comp</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">comp</span> <span class="k">operator</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">comp</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">comp</span> <span class="k">operator</span> <span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">comp</span><span class="o">&amp;</span><span class="p">);</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//constructor</span>
+    <span class="n">comp</span><span class="p">()</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">comp</span><span class="p">(</span><span class="kt">double</span> <span class="n">xx</span><span class="p">,</span> <span class="kt">double</span> <span class="n">yy</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">yy</span><span class="p">)</span> <span class="p">{};</span>
+    <span class="n">comp</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">cmp</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">cmp</span><span class="p">.</span><span class="n">x</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">cmp</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="p">{};</span>
 
-    comp operator ~() const;//conjugation
-    comp operator -() const;//minus
-    comp&amp; operator =(const comp&amp;);
-    double mod() const {return sqrt(x * x + y * y);}
-    double smod() const {return x * x + y * y;}
-    comp recp() const;
-    double x, y;
-};
-comp comp::operator ~() const {return comp(x, -y);}
-comp comp::operator -() const {return comp(-x, -y);}
-comp&amp; comp::operator =(const comp &amp;rhs){
-    x = rhs.x;
-    y = rhs.y;
-    return *this;
-}
-inline comp operator +(const comp &amp;lhs, const comp &amp;rhs){return comp(lhs.x + rhs.x, lhs.y + rhs.y);}
-inline comp operator -(const comp &amp;lhs, const comp &amp;rhs){return comp(lhs.x - rhs.x, lhs.y - rhs.y);}
-inline comp operator *(const comp &amp;lhs, const comp &amp;rhs){
-    return comp(lhs.x * rhs.x - lhs.y * rhs.y, lhs.x * rhs.y + lhs.y * rhs.x);
-}
-inline comp operator /(const comp &amp;lhs, const comp &amp;rhs){
-    double module = rhs.smod();
-    return comp((lhs.x * rhs.x - lhs.y * rhs.y) / module, (lhs.x * rhs.y + lhs.y * rhs.x) / module);
-}
-inline comp comp::recp() const {
-    double module = this-&gt;smod();
-    return comp(x / module, -y / module);
-}
+    <span class="n">comp</span> <span class="k">operator</span> <span class="o">~</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span><span class="c1">//conjugation</span>
+    <span class="n">comp</span> <span class="k">operator</span> <span class="o">-</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span><span class="c1">//minus</span>
+    <span class="n">comp</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="kt">double</span> <span class="nf">mod</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span><span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">);}</span>
+    <span class="kt">double</span> <span class="nf">smod</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span><span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">;}</span>
+    <span class="n">comp</span> <span class="nf">recp</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">comp</span> <span class="n">comp</span><span class="o">::</span><span class="k">operator</span> <span class="o">~</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span><span class="k">return</span> <span class="n">comp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span><span class="p">);}</span>
+<span class="n">comp</span> <span class="n">comp</span><span class="o">::</span><span class="k">operator</span> <span class="o">-</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span><span class="k">return</span> <span class="n">comp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span><span class="p">);}</span>
+<span class="n">comp</span><span class="o">&amp;</span> <span class="n">comp</span><span class="o">::</span><span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="n">comp</span> <span class="k">operator</span> <span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span><span class="k">return</span> <span class="n">comp</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">);}</span>
+<span class="kr">inline</span> <span class="n">comp</span> <span class="k">operator</span> <span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span><span class="k">return</span> <span class="n">comp</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">);}</span>
+<span class="kr">inline</span> <span class="n">comp</span> <span class="k">operator</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">comp</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="n">comp</span> <span class="k">operator</span> <span class="o">/</span><span class="p">(</span><span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">comp</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="kt">double</span> <span class="k">module</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">smod</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nf">comp</span><span class="p">((</span><span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="k">module</span><span class="p">,</span> <span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">x</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">lhs</span><span class="p">.</span><span class="n">y</span> <span class="o">*</span> <span class="n">rhs</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="k">module</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="n">comp</span> <span class="n">comp</span><span class="o">::</span><span class="n">recp</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="k">module</span> <span class="o">=</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">smod</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nf">comp</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="k">module</span><span class="p">,</span> <span class="o">-</span><span class="n">y</span> <span class="o">/</span> <span class="k">module</span><span class="p">);</span>
+<span class="p">}</span>
 
-class BigInt{
-    //friend
-    friend ostream&amp; operator &lt;&lt;(ostream&amp;, const BigInt&amp;);
-    friend BigInt operator *(const BigInt&amp;, const BigInt&amp;);
-public:
-    //constructor
-    BigInt();
-    BigInt(const string&amp;);
-    vector&lt;int&gt; data;
-    int len;
-};
-BigInt::BigInt() : len(1), data(0) {}
-BigInt::BigInt(const string &amp;s) : len(s.size()){
-    for (int i = 1; i &lt;= len; ++i)
-        data.push_back(s[len - i] - '0');
-}
+<span class="k">class</span> <span class="nc">BigInt</span><span class="p">{</span>
+    <span class="c1">//friend</span>
+    <span class="k">friend</span> <span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">BigInt</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="k">friend</span> <span class="n">BigInt</span> <span class="k">operator</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">BigInt</span><span class="o">&amp;</span><span class="p">,</span> <span class="k">const</span> <span class="n">BigInt</span><span class="o">&amp;</span><span class="p">);</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//constructor</span>
+    <span class="n">BigInt</span><span class="p">();</span>
+    <span class="n">BigInt</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="n">BigInt</span><span class="o">::</span><span class="n">BigInt</span><span class="p">()</span> <span class="o">:</span> <span class="n">len</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">data</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
+<span class="n">BigInt</span><span class="o">::</span><span class="n">BigInt</span><span class="p">(</span><span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span><span class="n">s</span><span class="p">)</span> <span class="o">:</span> <span class="n">len</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">size</span><span class="p">()){</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">);</span>
+<span class="p">}</span>
 
-ostream&amp; operator &lt;&lt;(ostream&amp; os, const BigInt &amp;b){
-    for (int i = b.len - 1; i &gt;= 0; --i)
-        os &lt;&lt; b.data[i];
-    return os;
-}
+<span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span> <span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">BigInt</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">){</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">return</span> <span class="n">os</span><span class="p">;</span>
+<span class="p">}</span>
 
-vector&lt;comp&gt; FFT(const vector&lt;comp&gt; &amp;f, bool inv = false){
-    int len = f.size();
-    if (len == 1){
-        vector&lt;comp&gt; ret;
-        ret.push_back(f[0]);
-        return ret;
-    }
-    vector&lt;comp&gt; f1 , f2;
-    for (int i = 0; i &lt; len; i += 2){
-        f1.push_back(f[i]);
-        f2.push_back(f[i + 1]);
-    }
-    vector&lt;comp&gt; ret1, ret2, ret;
-    ret1 = FFT(f1, inv);
-    ret2 = FFT(f2, inv);
-    for (int i = 0; i &lt; len; ++i){
-        comp w(cos(2.0 * pi * i / len), sin(2.0 * pi * i / len));
-        if (inv) w = w.recp();
-        comp reti(ret1[i % (len / 2)] + w * ret2[i % (len / 2)]);
-        ret.push_back(reti);
-    }
-    return ret;
-}
+<span class="n">vector</span><span class="o">&lt;</span><span class="n">comp</span><span class="o">&gt;</span> <span class="n">FFT</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&lt;</span><span class="n">comp</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">f</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">inv</span> <span class="o">=</span> <span class="nb">false</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">f</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">len</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">comp</span><span class="o">&gt;</span> <span class="n">ret</span><span class="p">;</span>
+        <span class="n">ret</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+        <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">comp</span><span class="o">&gt;</span> <span class="n">f1</span> <span class="p">,</span> <span class="n">f2</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">){</span>
+        <span class="n">f1</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">f2</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">comp</span><span class="o">&gt;</span> <span class="n">ret1</span><span class="p">,</span> <span class="n">ret2</span><span class="p">,</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="n">ret1</span> <span class="o">=</span> <span class="n">FFT</span><span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">inv</span><span class="p">);</span>
+    <span class="n">ret2</span> <span class="o">=</span> <span class="n">FFT</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="n">inv</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">comp</span> <span class="n">w</span><span class="p">(</span><span class="n">cos</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="n">len</span><span class="p">),</span> <span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="n">len</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">inv</span><span class="p">)</span> <span class="n">w</span> <span class="o">=</span> <span class="n">w</span><span class="p">.</span><span class="n">recp</span><span class="p">();</span>
+        <span class="n">comp</span> <span class="nf">reti</span><span class="p">(</span><span class="n">ret1</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="p">(</span><span class="n">len</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]</span> <span class="o">+</span> <span class="n">w</span> <span class="o">*</span> <span class="n">ret2</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="p">(</span><span class="n">len</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)]);</span>
+        <span class="n">ret</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">reti</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
 
-BigInt operator *(const BigInt &amp;lhs, const BigInt &amp;rhs){
-    vector&lt;comp&gt; fx1, fx2;
-    int len = max(lhs.len, rhs.len), k = 1;
-    while (len &gt; k) k *= 2;
-    len = k * 2;
-    for (int i = 0; i &lt; len; ++i){
-        if (i &lt; lhs.len) fx1.push_back(comp(double(lhs.data[i]), 0.0));
-        else fx1.push_back(comp(0.0, 0.0));
-    }
-    for (int i = 0; i &lt; len; ++i){
-        if (i &lt; rhs.len) fx2.push_back(comp(double(rhs.data[i]), 0.0));
-        else fx2.push_back(comp(0.0, 0.0));
-    }
-    vector&lt;comp&gt; y1 = FFT(fx1), y2 = FFT(fx2), y;
-    for (int i = 0; i &lt; len; ++i)
-        y.push_back(y1[i] * y2[i]);
-    vector&lt;comp&gt; fx = FFT(y, 1);
-    for (int i = 0; i &lt; len; ++i)
-        fx[i].x /= len;
-    BigInt ret(&quot;&quot;);
-    for (int i = 0; i &lt; len; ++i)
-        ret.data.push_back(round(fx[i].x));
-    for (int i = 0; i &lt; len - 1; ++i){
-        if (ret.data[i] &gt;= 10){
-            ret.data[i + 1] += ret.data[i] / 10;
-            ret.data[i] %= 10;
-        }
-    }
-    while (ret.data[len - 1] == 0){
-        --len;
-        ret.data.erase(ret.data.end() - 1);
-    }
-    ret.len = len;
-    return ret;
-}
+<span class="n">BigInt</span> <span class="k">operator</span> <span class="o">*</span><span class="p">(</span><span class="k">const</span> <span class="n">BigInt</span> <span class="o">&amp;</span><span class="n">lhs</span><span class="p">,</span> <span class="k">const</span> <span class="n">BigInt</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">){</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">comp</span><span class="o">&gt;</span> <span class="n">fx1</span><span class="p">,</span> <span class="n">fx2</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">len</span><span class="p">,</span> <span class="n">rhs</span><span class="p">.</span><span class="n">len</span><span class="p">),</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">len</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">)</span> <span class="n">k</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">len</span> <span class="o">=</span> <span class="n">k</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">lhs</span><span class="p">.</span><span class="n">len</span><span class="p">)</span> <span class="n">fx1</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="kt">double</span><span class="p">(</span><span class="n">lhs</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">));</span>
+        <span class="k">else</span> <span class="n">fx1</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">rhs</span><span class="p">.</span><span class="n">len</span><span class="p">)</span> <span class="n">fx2</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="kt">double</span><span class="p">(</span><span class="n">rhs</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="mf">0.0</span><span class="p">));</span>
+        <span class="k">else</span> <span class="n">fx2</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">comp</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">comp</span><span class="o">&gt;</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">FFT</span><span class="p">(</span><span class="n">fx1</span><span class="p">),</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">FFT</span><span class="p">(</span><span class="n">fx2</span><span class="p">),</span> <span class="n">y</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">y1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">y2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">comp</span><span class="o">&gt;</span> <span class="n">fx</span> <span class="o">=</span> <span class="n">FFT</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">fx</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">/=</span> <span class="n">len</span><span class="p">;</span>
+    <span class="n">BigInt</span> <span class="nf">ret</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">ret</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">round</span><span class="p">(</span><span class="n">fx</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ret</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">){</span>
+            <span class="n">ret</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ret</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="n">ret</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">%=</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ret</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="o">--</span><span class="n">len</span><span class="p">;</span>
+        <span class="n">ret</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">ret</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">end</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">ret</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="n">len</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    string s1, s2;
-    cin &gt;&gt; s1 &gt;&gt; s2;
-    BigInt lhs(s1), rhs(s2);
-    cout &lt;&lt; lhs * rhs &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">string</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s1</span> <span class="o">&gt;&gt;</span> <span class="n">s2</span><span class="p">;</span>
+    <span class="n">BigInt</span> <span class="nf">lhs</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="n">rhs</span><span class="p">(</span><span class="n">s2</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">lhs</span> <span class="o">*</span> <span class="n">rhs</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-
-</code></pre>
 
 <h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-using namespace std;
-const int MAXSIZE = 100000;
-void Add(char* num_1, char* num_2, char* num_3)
-{
-    char* head;
-    int temp = 0, size_1 = strlen(num_1), size_2 = strlen(num_2), size_3 = 2 + (size_1 &gt; size_2 ? size_1 : size_2);
-    head = new char[size_3];
-    head[size_3] = '\0';
-    --size_1; --size_2; --size_3;
-    for(;temp != 0 || size_1 &gt;= 0 || size_2 &gt;= 0; --size_1, --size_2, --size_3)
-    {
-        int add_1 = size_1 &gt;= 0 ? (num_1[size_1] - '0') : 0;
-        int add_2 = size_2 &gt;= 0 ? (num_2[size_2] - '0') : 0;
-        head[size_3] = (add_1 + add_2 + temp) % 10 + '0';
-        temp = (add_1 + add_2 + temp) / 10;
-    }
-    head = head + size_3 + 1;
-    strcpy(num_3, head);
-    delete [] head;
-}
-void MultiSingle(char* num_1, int num_2, char* num_3)
-{
-    char* head;
-    int temp = 0, size_1 = strlen(num_1);
-    head = new char[size_1];
-    head[size_1] = '\0';
-    --size_1;
-    for(;temp != 0 || size_1 &gt;= 0; --size_1)
-    {
-        int multi = size_1 &gt;= 0 ? (num_1[size_1] - '0') : 0;
-        head[size_1] = (multi * num_2 + temp) % 10 + '0';
-        temp = (multi * num_2 + temp) / 10;
-    }
-    head = head + size_1 + 1;
-    strcpy(num_3, head);
-    delete [] head;
-}
-void Multi(char* num_1, char* num_2, char* num_3)
-{
-    char head[MAXSIZE], temp[MAXSIZE];
-    int size_2 = strlen(num_2);
-    for (int i = 0; i &lt; size_2; ++i)
-    {
-        MultiSingle(num_1, num_2[i] - '0', temp);
-        int j = 0;
-        for(j = i; j &lt; size_2 - 1; ++j)
-            temp[strlen(temp)] = '0';
-        temp[strlen(temp)] = '\0';
-        Add(head, temp, head);
-    }
-    strcpy(num_3, head);
-}
-int main(void)
-{
-    char num_1[MAXSIZE], num_2[MAXSIZE], num_3[MAXSIZE];
-    cin &gt;&gt; num_1 &gt;&gt; num_2;
-    Multi(num_1, num_2, num_3);
-    cout &lt;&lt; num_3;
-    return 0;
-}
-
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXSIZE</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">Add</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">num_1</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">num_2</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">num_3</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">head</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size_1</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">num_1</span><span class="p">),</span> <span class="n">size_2</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">num_2</span><span class="p">),</span> <span class="n">size_3</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">size_1</span> <span class="o">&gt;</span> <span class="n">size_2</span> <span class="o">?</span> <span class="nl">size_1</span> <span class="p">:</span> <span class="n">size_2</span><span class="p">);</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">size_3</span><span class="p">];</span>
+    <span class="n">head</span><span class="p">[</span><span class="n">size_3</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+    <span class="o">--</span><span class="n">size_1</span><span class="p">;</span> <span class="o">--</span><span class="n">size_2</span><span class="p">;</span> <span class="o">--</span><span class="n">size_3</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(;</span><span class="n">temp</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">size_1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">size_2</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">size_1</span><span class="p">,</span> <span class="o">--</span><span class="n">size_2</span><span class="p">,</span> <span class="o">--</span><span class="n">size_3</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">add_1</span> <span class="o">=</span> <span class="n">size_1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">(</span><span class="n">num_1</span><span class="p">[</span><span class="n">size_1</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">add_2</span> <span class="o">=</span> <span class="n">size_2</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">(</span><span class="n">num_2</span><span class="p">[</span><span class="n">size_2</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">head</span><span class="p">[</span><span class="n">size_3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">add_1</span> <span class="o">+</span> <span class="n">add_2</span> <span class="o">+</span> <span class="n">temp</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="n">add_1</span> <span class="o">+</span> <span class="n">add_2</span> <span class="o">+</span> <span class="n">temp</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">head</span> <span class="o">+</span> <span class="n">size_3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">strcpy</span><span class="p">(</span><span class="n">num_3</span><span class="p">,</span> <span class="n">head</span><span class="p">);</span>
+    <span class="k">delete</span> <span class="p">[]</span> <span class="n">head</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">MultiSingle</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">num_1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num_2</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">num_3</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">head</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size_1</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">num_1</span><span class="p">);</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="p">[</span><span class="n">size_1</span><span class="p">];</span>
+    <span class="n">head</span><span class="p">[</span><span class="n">size_1</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+    <span class="o">--</span><span class="n">size_1</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(;</span><span class="n">temp</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">size_1</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">size_1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">multi</span> <span class="o">=</span> <span class="n">size_1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">?</span> <span class="p">(</span><span class="n">num_1</span><span class="p">[</span><span class="n">size_1</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">)</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">head</span><span class="p">[</span><span class="n">size_1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">multi</span> <span class="o">*</span> <span class="n">num_2</span> <span class="o">+</span> <span class="n">temp</span><span class="p">)</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">+</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="n">multi</span> <span class="o">*</span> <span class="n">num_2</span> <span class="o">+</span> <span class="n">temp</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">head</span> <span class="o">=</span> <span class="n">head</span> <span class="o">+</span> <span class="n">size_1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">strcpy</span><span class="p">(</span><span class="n">num_3</span><span class="p">,</span> <span class="n">head</span><span class="p">);</span>
+    <span class="k">delete</span> <span class="p">[]</span> <span class="n">head</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">Multi</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">num_1</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">num_2</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">num_3</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">head</span><span class="p">[</span><span class="n">MAXSIZE</span><span class="p">],</span> <span class="n">temp</span><span class="p">[</span><span class="n">MAXSIZE</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">size_2</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">num_2</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size_2</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">MultiSingle</span><span class="p">(</span><span class="n">num_1</span><span class="p">,</span> <span class="n">num_2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">size_2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">temp</span><span class="p">[</span><span class="n">strlen</span><span class="p">(</span><span class="n">temp</span><span class="p">)]</span> <span class="o">=</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+        <span class="n">temp</span><span class="p">[</span><span class="n">strlen</span><span class="p">(</span><span class="n">temp</span><span class="p">)]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+        <span class="n">Add</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">head</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">strcpy</span><span class="p">(</span><span class="n">num_3</span><span class="p">,</span> <span class="n">head</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">char</span> <span class="n">num_1</span><span class="p">[</span><span class="n">MAXSIZE</span><span class="p">],</span> <span class="n">num_2</span><span class="p">[</span><span class="n">MAXSIZE</span><span class="p">],</span> <span class="n">num_3</span><span class="p">[</span><span class="n">MAXSIZE</span><span class="p">];</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num_1</span> <span class="o">&gt;&gt;</span> <span class="n">num_2</span><span class="p">;</span>
+    <span class="n">Multi</span><span class="p">(</span><span class="n">num_1</span><span class="p">,</span> <span class="n">num_2</span><span class="p">,</span> <span class="n">num_3</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">num_3</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

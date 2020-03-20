@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -400,103 +402,103 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* BJ_drunbier */
-#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;iomanip&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* BJ_drunbier */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class Node{
-public:
-    vector&lt;int&gt; edge;
-    int sub = 1;
-};
-class Edge{
-public:
-    int u = 0, v = 0, len = 0;
-};
+<span class="k">class</span> <span class="nc">Node</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">edge</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">sub</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">Edge</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-Node a[10005];
-Edge e[10005];
+<span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="mi">10005</span><span class="p">];</span>
+<span class="n">Edge</span> <span class="n">e</span><span class="p">[</span><span class="mi">10005</span><span class="p">];</span>
 
-int calcSub(int root){
-    for (auto i : a[root].edge){
-        a[root].sub += calcSub(i);
-    }
-    return a[root].sub;
-}
+<span class="kt">int</span> <span class="nf">calcSub</span><span class="p">(</span><span class="kt">int</span> <span class="n">root</span><span class="p">){</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">edge</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">sub</span> <span class="o">+=</span> <span class="n">calcSub</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">sub</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    int n, f, w, root, cnte = 0;
-    cin &gt;&gt; n;
-    if (n == 1){
-        cout &lt;&lt; &quot;0.00&quot; &lt;&lt; endl;
-        return 0;
-    }
-    for (int i = 1; i &lt;= n; ++i){
-        cin &gt;&gt; f &gt;&gt; w;
-        if (f == 0){
-            root = i;
-        }
-        else{
-            a[f].edge.push_back(i);
-            ++cnte;
-            e[cnte].u = f;
-            e[cnte].v = i;
-            e[cnte].len = w;
-        }
-    }
-    calcSub(root);
-    //for (int i = 1; i &lt;= n; ++i)
-    //    cout &lt;&lt; i &lt;&lt; ' ' &lt;&lt; a[i].sub &lt;&lt; endl;
-    double ans = 0, tmp;
-    for (int i = 1; i &lt;= cnte; ++i){
-        tmp = n - a[e[i].v].sub;
-        tmp = tmp * a[e[i].v].sub;
-        tmp = tmp * e[i].len;
-        ans = ans + tmp;
-    }
-    ans = ans / n / (n - 1) * 2;
-    cout &lt;&lt; setiosflags(ios::fixed) &lt;&lt; setprecision(2) &lt;&lt; ans &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">cnte</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;0.00&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">f</span> <span class="o">&gt;&gt;</span> <span class="n">w</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">f</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="n">root</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">f</span><span class="p">].</span><span class="n">edge</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+            <span class="o">++</span><span class="n">cnte</span><span class="p">;</span>
+            <span class="n">e</span><span class="p">[</span><span class="n">cnte</span><span class="p">].</span><span class="n">u</span> <span class="o">=</span> <span class="n">f</span><span class="p">;</span>
+            <span class="n">e</span><span class="p">[</span><span class="n">cnte</span><span class="p">].</span><span class="n">v</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+            <span class="n">e</span><span class="p">[</span><span class="n">cnte</span><span class="p">].</span><span class="n">len</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">calcSub</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="c1">//for (int i = 1; i &lt;= n; ++i)</span>
+    <span class="c1">//    cout &lt;&lt; i &lt;&lt; &#39; &#39; &lt;&lt; a[i].sub &lt;&lt; endl;</span>
+    <span class="kt">double</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">cnte</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">n</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">].</span><span class="n">sub</span><span class="p">;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">].</span><span class="n">sub</span><span class="p">;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span> <span class="o">*</span> <span class="n">e</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">len</span><span class="p">;</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="n">ans</span> <span class="o">/</span> <span class="n">n</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">fixed</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-double sum;
-long long l[10001];
-int num,n,nxt[10001],last[10001],to[10001],root,f,v;
-void add(int x,int y,int v){
-    num++;
-    nxt[num]=last[x];
-    last[x]=num;
-    to[num]=y;
-    l[num]=v;
-}
-int dfs(int x){
-    int son=1,tmp;
-    for (int i=last[x];i!=0;i=nxt[i]){
-        tmp=dfs(to[i]);
-        son+=tmp;
-        sum+=(n-tmp)*tmp*l[i];
-    }
-    return son;
-}
-int main() {
-    scanf(&quot;%d&quot;,&amp;n);
-    for (int i=1;i&lt;=n;++i){
-        scanf(&quot;%d%d&quot;,&amp;f,&amp;v);
-        if (f==0) root=i;
-        else add(f,i,v);
-    }
-    dfs(root);
-    printf(&quot;%.2f&quot;,sum/(n*(n-1)/2));
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">sum</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">l</span><span class="p">[</span><span class="mi">10001</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">num</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">nxt</span><span class="p">[</span><span class="mi">10001</span><span class="p">],</span><span class="n">last</span><span class="p">[</span><span class="mi">10001</span><span class="p">],</span><span class="n">to</span><span class="p">[</span><span class="mi">10001</span><span class="p">],</span><span class="n">root</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">v</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">,</span><span class="kt">int</span> <span class="n">v</span><span class="p">){</span>
+    <span class="n">num</span><span class="o">++</span><span class="p">;</span>
+    <span class="n">nxt</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">=</span><span class="n">last</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+    <span class="n">last</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">=</span><span class="n">num</span><span class="p">;</span>
+    <span class="n">to</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">=</span><span class="n">y</span><span class="p">;</span>
+    <span class="n">l</span><span class="p">[</span><span class="n">num</span><span class="p">]</span><span class="o">=</span><span class="n">v</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">son</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">tmp</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">last</span><span class="p">[</span><span class="n">x</span><span class="p">];</span><span class="n">i</span><span class="o">!=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">=</span><span class="n">nxt</span><span class="p">[</span><span class="n">i</span><span class="p">]){</span>
+        <span class="n">tmp</span><span class="o">=</span><span class="n">dfs</span><span class="p">(</span><span class="n">to</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">son</span><span class="o">+=</span><span class="n">tmp</span><span class="p">;</span>
+        <span class="n">sum</span><span class="o">+=</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">tmp</span><span class="p">)</span><span class="o">*</span><span class="n">tmp</span><span class="o">*</span><span class="n">l</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">son</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">f</span><span class="p">,</span><span class="o">&amp;</span><span class="n">v</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="n">root</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+        <span class="k">else</span> <span class="n">add</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">v</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%.2f&quot;</span><span class="p">,</span><span class="n">sum</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

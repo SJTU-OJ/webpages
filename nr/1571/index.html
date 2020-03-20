@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -453,241 +455,242 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;cmath&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cmath&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
 
 
-long long myMergeSort(int *data, int num) {
-    if (num == 0) return 0;
-    else if (num == 1) return 0;
+<span class="kt">long</span> <span class="kt">long</span> <span class="nf">myMergeSort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-    long long result = 0;
-    result += myMergeSort(data, num / 2);
-    result += myMergeSort(data + num / 2, num - num / 2);
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">myMergeSort</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">myMergeSort</span><span class="p">(</span><span class="n">data</span> <span class="o">+</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">num</span> <span class="o">-</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
 
-    //合并
-    int *temp = new int[num];
+    <span class="c1">//合并</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">temp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">num</span><span class="p">];</span>
 
-    for (int i = 0, j = num / 2, n = 0; i &lt; num / 2 || j &lt; num;n++) {
-        if (i &lt; num / 2 &amp;&amp; j &lt; num) {
-            if (data[i] &lt; data[j]) {
-                temp[n] = data[i];
-                i++;
-                result += j-num/2;
-            }
-            else {
-                temp[n] = data[j];
-                j++;
-            }
-        }
-        else if (i == num / 2) {
-            temp[n] = data[j];
-            j++;
-        }
-        else if (j == num ) {
-            temp[n] = data[i];
-            i++;
-            result += j-num/2;
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span><span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">j</span><span class="o">-</span><span class="n">num</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">num</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">j</span><span class="o">-</span><span class="n">num</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //复制
-    for (int i = 0; i &lt; num; i++)
-        data[i] = temp[i];
+    <span class="c1">//复制</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
 
-    delete temp;
-    return result;
-}
+    <span class="k">delete</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
 
-long long myMergeSort(int *data,int *datab,int num) {
-    if (num == 0) return 0;
-    else if (num == 1) return 0;
+<span class="kt">long</span> <span class="kt">long</span> <span class="nf">myMergeSort</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">data</span><span class="p">,</span><span class="kt">int</span> <span class="o">*</span><span class="n">datab</span><span class="p">,</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 
-    long long result = 0;
-    result += myMergeSort(data,datab, num / 2);
-    result += myMergeSort(data + num / 2,datab+num/2, num - num / 2);
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">result</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">myMergeSort</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">datab</span><span class="p">,</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">result</span> <span class="o">+=</span> <span class="n">myMergeSort</span><span class="p">(</span><span class="n">data</span> <span class="o">+</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span><span class="n">datab</span><span class="o">+</span><span class="n">num</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">num</span> <span class="o">-</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
 
-    //合并
-    int *temp = new int[num];
-    int *tempb = new int[num];
+    <span class="c1">//合并</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">temp</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">num</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">tempb</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">num</span><span class="p">];</span>
 
-    for (int i = 0, j = num / 2, n = 0; i &lt; num / 2 || j &lt; num; n++) {
-        if (i &lt; num / 2 &amp;&amp; j &lt; num) {
-            if (data[i] &lt; data[j]) {
-                temp[n] = data[i];
-                tempb[n] = datab[i];
-                i++;
-                result += j - num / 2;
-            }
-            else {
-                temp[n] = data[j];
-                tempb[n] = datab[j];
-                j++;
-            }
-        }
-        else if (i == num / 2) {
-            temp[n] = data[j];
-            tempb[n] = datab[j];
-            j++;
-        }
-        else if (j == num) {
-            temp[n] = data[i];
-            tempb[n] = datab[i];
-            i++;
-            result += j - num / 2;
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">tempb</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">datab</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+                <span class="n">result</span> <span class="o">+=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="n">tempb</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">datab</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="n">tempb</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">datab</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="n">j</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">temp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">tempb</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">datab</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">i</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">j</span> <span class="o">-</span> <span class="n">num</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //复制
-    for (int i = 0; i &lt; num; i++) {
-        data[i] = temp[i];
-        datab[i] = tempb[i];
-    }
+    <span class="c1">//复制</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">datab</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempb</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    delete temp;
-    delete tempb;
-    return result;
-}
+    <span class="k">delete</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="n">tempb</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
 
-int a[100009], b[100009],aList[100009],bList[100009],temp[100009];
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">100009</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">100009</span><span class="p">],</span><span class="n">aList</span><span class="p">[</span><span class="mi">100009</span><span class="p">],</span><span class="n">bList</span><span class="p">[</span><span class="mi">100009</span><span class="p">],</span><span class="n">temp</span><span class="p">[</span><span class="mi">100009</span><span class="p">];</span>
 
-int main() {
-    int num;
-    cin &gt;&gt; num;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
 
-    for (int i = 0; i &lt; num; i++) {
-        scanf(&quot;%d&quot;, &amp;a[i]);
-        aList[i] = i;
-    }
-    for (int i = 0; i &lt; num; i++) {
-        scanf(&quot;%d&quot;, &amp;b[i]);
-        bList[i] = i;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">aList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">bList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //排序
-    myMergeSort(a, aList, num);
-    myMergeSort(b, bList, num);
+    <span class="c1">//排序</span>
+    <span class="n">myMergeSort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">aList</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
+    <span class="n">myMergeSort</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">bList</span><span class="p">,</span> <span class="n">num</span><span class="p">);</span>
 
-    //按情况排序
-    for (int i = 0; i &lt; num; i++) {
-        temp[bList[i]] = aList[i];
-    }
+    <span class="c1">//按情况排序</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">temp</span><span class="p">[</span><span class="n">bList</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">aList</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    //再排序
-    cout &lt;&lt; myMergeSort(temp, b, num)%99999997;
+    <span class="c1">//再排序</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">myMergeSort</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span><span class="o">%</span><span class="mi">99999997</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;algorithm&gt;
-#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-struct Node {
-    int pos;
-    int data;
-};
+<span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">pos</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">};</span>
 
-bool cmp(Node, Node);
+<span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">Node</span><span class="p">,</span> <span class="n">Node</span><span class="p">);</span>
 
-int Low(int);
+<span class="kt">int</span> <span class="nf">Low</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
 
-void plus1(int);
+<span class="kt">void</span> <span class="nf">plus1</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
 
-int sum1(int);
+<span class="kt">int</span> <span class="nf">sum1</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
 
-Node A[100010], B[100010];
-int c[100010], d[100010], N, ans;
-int main() {
-    cin &gt;&gt; N;
-    for (int i = 1; i &lt; N + 1; i++) {
-        cin &gt;&gt; A[i].data;
-        A[i].pos = i;
-    }
-    for (int i = 1; i &lt; N + 1; i++) {
-        cin &gt;&gt; B[i].data;
-        B[i].pos = i;
-    }
+<span class="n">Node</span> <span class="n">A</span><span class="p">[</span><span class="mi">100010</span><span class="p">],</span> <span class="n">B</span><span class="p">[</span><span class="mi">100010</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">c</span><span class="p">[</span><span class="mi">100010</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="mi">100010</span><span class="p">],</span> <span class="n">N</span><span class="p">,</span> <span class="n">ans</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">;</span>
+        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pos</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">;</span>
+        <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pos</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    sort(A + 1, A + N + 1, cmp);
-    sort(B + 1, B + N + 1, cmp);
+    <span class="n">sort</span><span class="p">(</span><span class="n">A</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">A</span> <span class="o">+</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cmp</span><span class="p">);</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">B</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">B</span> <span class="o">+</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">cmp</span><span class="p">);</span>
 
-    for (int i = 1; i &lt; N + 1; i++) {
-        d[A[i].pos] = B[i].pos;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">d</span><span class="p">[</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">pos</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    for (int i = N; i &gt; 0; i--) {
-        plus1(d[i]);
-        ans = (ans + sum1(d[i] - 1)) % 99999997;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">plus1</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">ans</span> <span class="o">+</span> <span class="n">sum1</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">%</span> <span class="mi">99999997</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; ans % 99999997;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">%</span> <span class="mi">99999997</span><span class="p">;</span>
 
-    return 0;
-}
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-bool cmp(Node x, Node y) { return x.data &lt; y.data; }
+<span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">Node</span> <span class="n">x</span><span class="p">,</span> <span class="n">Node</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">y</span><span class="p">.</span><span class="n">data</span><span class="p">;</span> <span class="p">}</span>
 
-int Low(int x) { return x &amp; (-x); }
+<span class="kt">int</span> <span class="nf">Low</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">x</span> <span class="o">&amp;</span> <span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">);</span> <span class="p">}</span>
 
-void plus1(int x) {
-    for (int i = x; i &lt; N + 1; i += Low(i)) {
-        c[i]++;
-    }
-    return;
-}
+<span class="kt">void</span> <span class="nf">plus1</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">Low</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
 
-int sum1(int x) {
-    int sum = 0;
-    for (int i = x; i != 0; i -= Low(i)) {
-        sum = (sum + c[i]) % 99999997;
-    }
+<span class="kt">int</span> <span class="nf">sum1</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">-=</span> <span class="n">Low</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="p">{</span>
+        <span class="n">sum</span> <span class="o">=</span> <span class="p">(</span><span class="n">sum</span> <span class="o">+</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">%</span> <span class="mi">99999997</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    return sum % 99999997;
-}
+    <span class="k">return</span> <span class="n">sum</span> <span class="o">%</span> <span class="mi">99999997</span><span class="p">;</span>
+<span class="p">}</span>
 
-/*void sort(Node *N,int a,int b) {
-    if(a&gt;b) {
-        return;
-    } else {
-        int first = a, last = b;
-        Node n = N[first];
+<span class="cm">/*void sort(Node *N,int a,int b) {</span>
+<span class="cm">    if(a&gt;b) {</span>
+<span class="cm">        return;</span>
+<span class="cm">    } else {</span>
+<span class="cm">        int first = a, last = b;</span>
+<span class="cm">        Node n = N[first];</span>
 
-        while (first &lt; last) {
-            while (first &lt; last &amp;&amp; !cmp(N[last], n)) {
-                last--;
-            }
+<span class="cm">        while (first &lt; last) {</span>
+<span class="cm">            while (first &lt; last &amp;&amp; !cmp(N[last], n)) {</span>
+<span class="cm">                last--;</span>
+<span class="cm">            }</span>
 
-            N[first] = N[last];
+<span class="cm">            N[first] = N[last];</span>
 
-            while (first &lt; last &amp;&amp; cmp(N[last], n)) {
-                first++;
-            }
+<span class="cm">            while (first &lt; last &amp;&amp; cmp(N[last], n)) {</span>
+<span class="cm">                first++;</span>
+<span class="cm">            }</span>
 
-            N[last] = N[first];
-        }
-        N[first] = n;
-        sort(N, a, first - 1);
-        sort(N, first + 1, b);
-    }
-    for(int i=a;i&lt;b-1;i++) {
-        for(int j=a;j&lt;b-i-1;j++) {
-            Node tmp;
-            if(cmp(N[j],N[j+1])!=0) {
-                tmp=N[j];
-                N[j]=N[j+1];
-                N[j+1]=tmp;
-            }
-        }
-    }
-}*/
-</code></pre>
+<span class="cm">            N[last] = N[first];</span>
+<span class="cm">        }</span>
+<span class="cm">        N[first] = n;</span>
+<span class="cm">        sort(N, a, first - 1);</span>
+<span class="cm">        sort(N, first + 1, b);</span>
+<span class="cm">    }</span>
+<span class="cm">    for(int i=a;i&lt;b-1;i++) {</span>
+<span class="cm">        for(int j=a;j&lt;b-i-1;j++) {</span>
+<span class="cm">            Node tmp;</span>
+<span class="cm">            if(cmp(N[j],N[j+1])!=0) {</span>
+<span class="cm">                tmp=N[j];</span>
+<span class="cm">                N[j]=N[j+1];</span>
+<span class="cm">                N[j+1]=tmp;</span>
+<span class="cm">            }</span>
+<span class="cm">        }</span>
+<span class="cm">    }</span>
+<span class="cm">}*/</span>
+</code></pre></div>
                 
                   
                 

@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -398,267 +400,267 @@
 </details>
 
 <h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cmath&gt;
-#include &lt;cstring&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class poly
-{
-    friend int cal(const poly &amp;tmp, int x) { return tmp.a * x * x + tmp.b * x + tmp.c; }
-public:
-    int a, b, c;
-    int minx; //if (minx&gt;0) plus 1 each time;else minus;
-    bool grater0;
-    int miny;
-    bool haveaddfirst = false;
-    poly(){};
-    poly(int a1,int b1,int c1):a(a1),b(b1),c(c1){
-        minx = -b / 2 / a;
-        miny = a * minx * minx + b * minx + c;
-        if (b&lt;=0)
-            grater0 = true;
-        else
-            grater0 = false;
-    }
-    ~poly(){};
-};
+<span class="k">class</span> <span class="nc">poly</span>
+<span class="p">{</span>
+    <span class="k">friend</span> <span class="kt">int</span> <span class="n">cal</span><span class="p">(</span><span class="k">const</span> <span class="n">poly</span> <span class="o">&amp;</span><span class="n">tmp</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">tmp</span><span class="p">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">.</span><span class="n">b</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">.</span><span class="n">c</span><span class="p">;</span> <span class="p">}</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">minx</span><span class="p">;</span> <span class="c1">//if (minx&gt;0) plus 1 each time;else minus;</span>
+    <span class="kt">bool</span> <span class="n">grater0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">miny</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">haveaddfirst</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">poly</span><span class="p">(){};</span>
+    <span class="n">poly</span><span class="p">(</span><span class="kt">int</span> <span class="n">a1</span><span class="p">,</span><span class="kt">int</span> <span class="n">b1</span><span class="p">,</span><span class="kt">int</span> <span class="n">c1</span><span class="p">)</span><span class="o">:</span><span class="n">a</span><span class="p">(</span><span class="n">a1</span><span class="p">),</span><span class="n">b</span><span class="p">(</span><span class="n">b1</span><span class="p">),</span><span class="n">c</span><span class="p">(</span><span class="n">c1</span><span class="p">){</span>
+        <span class="n">minx</span> <span class="o">=</span> <span class="o">-</span><span class="n">b</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">a</span><span class="p">;</span>
+        <span class="n">miny</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">minx</span> <span class="o">*</span> <span class="n">minx</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">minx</span> <span class="o">+</span> <span class="n">c</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">grater0</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">grater0</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="n">poly</span><span class="p">(){};</span>
+<span class="p">};</span>
 
-class priorityQueue
-{
-public:
-    priorityQueue(){};
-    priorityQueue(int capacity);
-    ~priorityQueue();
-    void enQueue(int x);
-    int deQueue();
-    int getHead() const;
-private:
-    int currentSize;
-    int *array;
-    int maxSize;
+<span class="k">class</span> <span class="nc">priorityQueue</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">priorityQueue</span><span class="p">(){};</span>
+    <span class="n">priorityQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">capacity</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">priorityQueue</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">enQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="nf">deQueue</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="nf">getHead</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">currentSize</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">array</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxSize</span><span class="p">;</span>
 
-    void doubleSpace();
-    void buildHeap();
-    void percolateDown(int hole);
-};
+    <span class="kt">void</span> <span class="nf">doubleSpace</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">buildHeap</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">percolateDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">hole</span><span class="p">);</span>
+<span class="p">};</span>
 
-priorityQueue::priorityQueue(int capacity)
-{
-    array = new int[capacity];
-    maxSize = capacity;
-    currentSize = 0;
-}
+<span class="n">priorityQueue</span><span class="o">::</span><span class="n">priorityQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">capacity</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">capacity</span><span class="p">];</span>
+    <span class="n">maxSize</span> <span class="o">=</span> <span class="n">capacity</span><span class="p">;</span>
+    <span class="n">currentSize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-priorityQueue::~priorityQueue()
-{
-    delete[] array;
-}
+<span class="n">priorityQueue</span><span class="o">::~</span><span class="n">priorityQueue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">array</span><span class="p">;</span>
+<span class="p">}</span>
 
-int priorityQueue::getHead() const
-{
-    return array[1];
-}
+<span class="kt">int</span> <span class="n">priorityQueue</span><span class="o">::</span><span class="n">getHead</span><span class="p">()</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
 
-void priorityQueue::enQueue(int x)
-{
-    if (currentSize == maxSize-1)//因为array[0]不放东西
-        doubleSpace();
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">::</span><span class="n">enQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">currentSize</span> <span class="o">==</span> <span class="n">maxSize</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="c1">//因为array[0]不放东西</span>
+        <span class="n">doubleSpace</span><span class="p">();</span>
 
-    //向上过滤
-    int hole = ++currentSize;
-    for (; hole &gt; 1 &amp;&amp; x &gt; array[hole / 2]; hole /= 2)
-        array[hole] = array[hole / 2];
-    array[hole] = x;
-}
+    <span class="c1">//向上过滤</span>
+    <span class="kt">int</span> <span class="n">hole</span> <span class="o">=</span> <span class="o">++</span><span class="n">currentSize</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">hole</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="n">array</span><span class="p">[</span><span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span> <span class="n">hole</span> <span class="o">/=</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
+    <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-int priorityQueue::deQueue()
-{
-    int maxItem;
-    maxItem = array[1];
-    array[1] = array[currentSize--];
-    percolateDown(1);
-    return maxItem;
-}
+<span class="kt">int</span> <span class="n">priorityQueue</span><span class="o">::</span><span class="n">deQueue</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">maxItem</span><span class="p">;</span>
+    <span class="n">maxItem</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">currentSize</span><span class="o">--</span><span class="p">];</span>
+    <span class="n">percolateDown</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">maxItem</span><span class="p">;</span>
+<span class="p">}</span>
 
-void priorityQueue:: percolateDown(int hole)//向下过滤
-{
-    int child;
-    int tmp = array[hole];
-    for (; hole * 2 &lt;= currentSize; hole = child){
-        child = hole * 2;
-        if (child!=currentSize &amp;&amp; array[child+1]&gt;array[child])//找大的儿子，如果child==currentSize，则没有右儿子
-            child++;
-        if(array[child]&gt;tmp)
-            array[hole] = array[child];
-        else
-            break;
-    }
-    array[hole] = tmp;
-}
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">::</span> <span class="n">percolateDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">hole</span><span class="p">)</span><span class="c1">//向下过滤</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">child</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">currentSize</span><span class="p">;</span> <span class="n">hole</span> <span class="o">=</span> <span class="n">child</span><span class="p">){</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">child</span><span class="o">!=</span><span class="n">currentSize</span> <span class="o">&amp;&amp;</span> <span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">&gt;</span><span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="p">])</span><span class="c1">//找大的儿子，如果child==currentSize，则没有右儿子</span>
+            <span class="n">child</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">&gt;</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">child</span><span class="p">];</span>
+        <span class="k">else</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">array</span><span class="p">[</span><span class="n">hole</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-void priorityQueue::buildHeap()
-{
-    for (int i = currentSize / 2; i &gt; 0;i--)
-        percolateDown(i);
-}
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">::</span><span class="n">buildHeap</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">currentSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">--</span><span class="p">)</span>
+        <span class="n">percolateDown</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
 
-void priorityQueue::doubleSpace()
-{
-    int *tmp = array;
-    maxSize *= 2;
-    array = new int[maxSize];
-    for (int i = 1; i &lt;= currentSize; i++) //当currentSize == maxSize-1时，调用intSpace()
-        array[i] = tmp[i];
-    delete[] tmp;
-}
+<span class="kt">void</span> <span class="n">priorityQueue</span><span class="o">::</span><span class="n">doubleSpace</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="p">;</span>
+    <span class="n">maxSize</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">array</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">maxSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">currentSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="c1">//当currentSize == maxSize-1时，调用intSpace()</span>
+        <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main()
-{
-    int a, b, c;
-    int n, k,count,countforadd;
-    cin &gt;&gt; n &gt;&gt; k;
-    bool flag = false;
-    poly *polyarray = new poly[n];
-    priorityQueue output(k+1);
-    for (int i = 0; i &lt; n;i++)
-    {
-        cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
-        poly tmp(a,b,c);
-        polyarray[i] = tmp;
-    }
-    //初始化
-    if (n&gt;=k)
-        for (int i = 0; i &lt; k;i++)
-        {
-            polyarray[i].haveaddfirst = true;
-            output.enQueue(polyarray[i].miny);
-        }
-    else
-        {
-            flag = true;
-            for (int i = 0; i &lt; n;i++){
-                output.enQueue(polyarray[i].miny);
-                polyarray[i].haveaddfirst = true; 
-            }
-            count = n+1;
-            countforadd = count;
-            while(true)
-            {
-                if (polyarray[0].grater0)
-                {
-                    if (count &gt; k)
-                        break;
-                    output.enQueue(cal(polyarray[0], polyarray[0].minx + (countforadd-n)));
-                    count++;
-                    if (count &gt; k)
-                    {   
-                        if (cal(polyarray[0], polyarray[0].minx - (countforadd-n))&lt;output.getHead())
-                        {
-                            output.deQueue();
-                            output.enQueue(cal(polyarray[0], polyarray[0].minx - (countforadd-n)));
-                            countforadd++;
-                            count++;
-                        }
-                        break;
-                    }
-                    else{
-                        output.enQueue(cal(polyarray[0], polyarray[0].minx - (countforadd-n)));
-                        count++;
-                        countforadd++;
-                    }
-                }
-                else
-                {
-                    if (count &gt; k)
-                        break;
-                    output.enQueue(cal(polyarray[0], polyarray[0].minx - (countforadd-n)));
-                    count++;
-                    if (count &gt; k)
-                    {   
-                        if (cal(polyarray[0], polyarray[0].minx + (countforadd-n))&lt;output.getHead())
-                        {
-                            output.deQueue();
-                            output.enQueue(cal(polyarray[0], polyarray[0].minx + (countforadd-n)));
-                            count++;
-                            countforadd++;
-                        }
-                        break;
-                    }
-                    else{
-                        output.enQueue(cal(polyarray[0], polyarray[0].minx + (countforadd-n)));
-                        count++;
-                        countforadd++;
-                    }
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span><span class="n">count</span><span class="p">,</span><span class="n">countforadd</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">k</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="n">poly</span> <span class="o">*</span><span class="n">polyarray</span> <span class="o">=</span> <span class="k">new</span> <span class="n">poly</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="n">priorityQueue</span> <span class="nf">output</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">;</span>
+        <span class="n">poly</span> <span class="nf">tmp</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+        <span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//初始化</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">&gt;=</span><span class="n">k</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">haveaddfirst</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">miny</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+                <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">miny</span><span class="p">);</span>
+                <span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">haveaddfirst</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> 
+            <span class="p">}</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+            <span class="n">countforadd</span> <span class="o">=</span> <span class="n">count</span><span class="p">;</span>
+            <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">grater0</span><span class="p">)</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">)</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">minx</span> <span class="o">+</span> <span class="p">(</span><span class="n">countforadd</span><span class="o">-</span><span class="n">n</span><span class="p">)));</span>
+                    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">)</span>
+                    <span class="p">{</span>   
+                        <span class="k">if</span> <span class="p">(</span><span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">minx</span> <span class="o">-</span> <span class="p">(</span><span class="n">countforadd</span><span class="o">-</span><span class="n">n</span><span class="p">))</span><span class="o">&lt;</span><span class="n">output</span><span class="p">.</span><span class="n">getHead</span><span class="p">())</span>
+                        <span class="p">{</span>
+                            <span class="n">output</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                            <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">minx</span> <span class="o">-</span> <span class="p">(</span><span class="n">countforadd</span><span class="o">-</span><span class="n">n</span><span class="p">)));</span>
+                            <span class="n">countforadd</span><span class="o">++</span><span class="p">;</span>
+                            <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span><span class="p">{</span>
+                        <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">minx</span> <span class="o">-</span> <span class="p">(</span><span class="n">countforadd</span><span class="o">-</span><span class="n">n</span><span class="p">)));</span>
+                        <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+                        <span class="n">countforadd</span><span class="o">++</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+                <span class="k">else</span>
+                <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">)</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">minx</span> <span class="o">-</span> <span class="p">(</span><span class="n">countforadd</span><span class="o">-</span><span class="n">n</span><span class="p">)));</span>
+                    <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">)</span>
+                    <span class="p">{</span>   
+                        <span class="k">if</span> <span class="p">(</span><span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">minx</span> <span class="o">+</span> <span class="p">(</span><span class="n">countforadd</span><span class="o">-</span><span class="n">n</span><span class="p">))</span><span class="o">&lt;</span><span class="n">output</span><span class="p">.</span><span class="n">getHead</span><span class="p">())</span>
+                        <span class="p">{</span>
+                            <span class="n">output</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                            <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">minx</span> <span class="o">+</span> <span class="p">(</span><span class="n">countforadd</span><span class="o">-</span><span class="n">n</span><span class="p">)));</span>
+                            <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+                            <span class="n">countforadd</span><span class="o">++</span><span class="p">;</span>
+                        <span class="p">}</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="k">else</span><span class="p">{</span>
+                        <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">minx</span> <span class="o">+</span> <span class="p">(</span><span class="n">countforadd</span><span class="o">-</span><span class="n">n</span><span class="p">)));</span>
+                        <span class="n">count</span><span class="o">++</span><span class="p">;</span>
+                        <span class="n">countforadd</span><span class="o">++</span><span class="p">;</span>
+                    <span class="p">}</span>
 
-                }
-            }
-        }
-    //for (int i = 0; i &lt; k;i++)
-    //{
-    //    cout &lt;&lt; output.deQueue() &lt;&lt; ' ';
-    //}
-    for (int i = 0; i &lt; n;i++)
-    {
-        bool plus=false;
-        if (polyarray[i].grater0)
-            plus = true;
-        int sumplus,summinus;
-        int j;
-        if (i == 0 &amp;&amp; flag == true)
-        {
-            j = countforadd - n;
-        }
-        else
-            j = polyarray[i].haveaddfirst;
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="c1">//for (int i = 0; i &lt; k;i++)</span>
+    <span class="c1">//{</span>
+    <span class="c1">//    cout &lt;&lt; output.deQueue() &lt;&lt; &#39; &#39;;</span>
+    <span class="c1">//}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">bool</span> <span class="n">plus</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">grater0</span><span class="p">)</span>
+            <span class="n">plus</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">sumplus</span><span class="p">,</span><span class="n">summinus</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">flag</span> <span class="o">==</span> <span class="nb">true</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">countforadd</span> <span class="o">-</span> <span class="n">n</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">haveaddfirst</span><span class="p">;</span>
 
-        for (;;j++)
-        {
-            sumplus = cal(polyarray[i], polyarray[i].minx + j);
-            summinus = cal(polyarray[i], polyarray[i].minx - j);
-            if (plus)
-            {   
-                if (sumplus&gt;output.getHead())
-                    break;
-                output.deQueue();
-                output.enQueue(sumplus);
-                if (j==0)
-                    continue;
-                if (summinus&gt;output.getHead())
-                    break;
-                output.deQueue();
-                output.enQueue(summinus);
-            }
-            else if(!plus)
-            {   
-                if (summinus&gt;output.getHead())
-                    break;
-                output.deQueue();
-                output.enQueue(summinus);
-                if (j ==0)
-                    continue;
-                if (sumplus&gt;output.getHead())
-                    break;
-                output.deQueue();
-                output.enQueue(sumplus);
-            }
-        }
-    }
-    int *outputarray = new int[k];
-    for (int i = k - 1; i &gt;= 0; i--)
-    {
-        outputarray[i] = output.deQueue();
-    }
-    for (int i = 0; i &lt; k;i++)
-    {
-        cout &lt;&lt; outputarray[i] &lt;&lt; ' ';
-    }
-    delete[] outputarray;
-    delete[] polyarray;
-    return 0;
-}
-</code></pre>
+        <span class="k">for</span> <span class="p">(;;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">sumplus</span> <span class="o">=</span> <span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">minx</span> <span class="o">+</span> <span class="n">j</span><span class="p">);</span>
+            <span class="n">summinus</span> <span class="o">=</span> <span class="n">cal</span><span class="p">(</span><span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">polyarray</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">minx</span> <span class="o">-</span> <span class="n">j</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">plus</span><span class="p">)</span>
+            <span class="p">{</span>   
+                <span class="k">if</span> <span class="p">(</span><span class="n">sumplus</span><span class="o">&gt;</span><span class="n">output</span><span class="p">.</span><span class="n">getHead</span><span class="p">())</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="n">output</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">sumplus</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">summinus</span><span class="o">&gt;</span><span class="n">output</span><span class="p">.</span><span class="n">getHead</span><span class="p">())</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="n">output</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">summinus</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">plus</span><span class="p">)</span>
+            <span class="p">{</span>   
+                <span class="k">if</span> <span class="p">(</span><span class="n">summinus</span><span class="o">&gt;</span><span class="n">output</span><span class="p">.</span><span class="n">getHead</span><span class="p">())</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="n">output</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">summinus</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="k">continue</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">sumplus</span><span class="o">&gt;</span><span class="n">output</span><span class="p">.</span><span class="n">getHead</span><span class="p">())</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="n">output</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                <span class="n">output</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">sumplus</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">outputarray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">outputarray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">outputarray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">outputarray</span><span class="p">;</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">polyarray</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

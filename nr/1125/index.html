@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -381,134 +383,133 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* typist */
-#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-#include &lt;cmath&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* typist */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int FACT[6] = {100000, 10000, 1000, 100, 10, 1};
-const int MAXS = 2000000;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">FACT</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">100000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXS</span> <span class="o">=</span> <span class="mi">2000000</span><span class="p">;</span>
 
-struct String{
-    int s = 0, cursor = 0;
-    long long step = 0;
+<span class="k">struct</span> <span class="n">String</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cursor</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    String() = default;
+    <span class="n">String</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
 
-    String(const String &amp;ss){
-        s = ss.s;
-        step = ss.step;
-        cursor = ss.cursor;
-    }
+    <span class="n">String</span><span class="p">(</span><span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span><span class="n">ss</span><span class="p">){</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">ss</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">ss</span><span class="p">.</span><span class="n">step</span><span class="p">;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">ss</span><span class="p">.</span><span class="n">cursor</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    String &amp;operator =(const String &amp;ss){
-        s = ss.s;
-        step = ss.step;
-        cursor = ss.cursor;
-        return *this;
-    }
+    <span class="n">String</span> <span class="o">&amp;</span><span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span><span class="n">ss</span><span class="p">){</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">ss</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">ss</span><span class="p">.</span><span class="n">step</span><span class="p">;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="n">ss</span><span class="p">.</span><span class="n">cursor</span><span class="p">;</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    bool operator ==(const String &amp;ss){
-        return s == ss.s;
-    }
+    <span class="kt">bool</span> <span class="k">operator</span> <span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span><span class="n">ss</span><span class="p">){</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">==</span> <span class="n">ss</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    const int operator [](int x) const {
-        return s / FACT[x] % 10;
-    }
+    <span class="k">const</span> <span class="kt">int</span> <span class="k">operator</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">x</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">/</span> <span class="n">FACT</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">%</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void inc(int x){
-        s += FACT[x];
-    }
-    void dec(int x){
-        s -= FACT[x];
-    }
+    <span class="kt">void</span> <span class="n">inc</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">FACT</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">dec</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+        <span class="n">s</span> <span class="o">-=</span> <span class="n">FACT</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    void swap(int x, int y){
-        int p = s / FACT[x] % 10, q = s / FACT[y] % 10;
-        s += (q - p) * FACT[x];
-        s += (p - q) * FACT[y];
-    }
-};
+    <span class="kt">void</span> <span class="n">swap</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">p</span> <span class="o">=</span> <span class="n">s</span> <span class="o">/</span> <span class="n">FACT</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">%</span> <span class="mi">10</span><span class="p">,</span> <span class="n">q</span> <span class="o">=</span> <span class="n">s</span> <span class="o">/</span> <span class="n">FACT</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">%</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">FACT</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="p">(</span><span class="n">p</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">FACT</span><span class="p">[</span><span class="n">y</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-String s, a;
-String q[2000005];
-bool v[1000000][7] = {0};
-int front = 0, rear = 0;
+<span class="n">String</span> <span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">;</span>
+<span class="n">String</span> <span class="n">q</span><span class="p">[</span><span class="mi">2000005</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="n">v</span><span class="p">[</span><span class="mi">1000000</span><span class="p">][</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">front</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rear</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-void push(const String &amp;n){
-    if (v[n.s][n.cursor])
-        return;
-    rear = (rear + 1) % MAXS;
-    q[rear] = n;
-    v[n.s][n.cursor] = true;
-}
+<span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">String</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">n</span><span class="p">.</span><span class="n">s</span><span class="p">][</span><span class="n">n</span><span class="p">.</span><span class="n">cursor</span><span class="p">])</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="n">rear</span> <span class="o">=</span> <span class="p">(</span><span class="n">rear</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">MAXS</span><span class="p">;</span>
+    <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">v</span><span class="p">[</span><span class="n">n</span><span class="p">.</span><span class="n">s</span><span class="p">][</span><span class="n">n</span><span class="p">.</span><span class="n">cursor</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
 
-long long bfs(){
-    push(s);
-    while (front != rear){
-        front = (front + 1) % MAXS;
-        String t = q[front];
-        if (t == a){
-            return t.step;
-        }
-        String n;
-        int i = t.cursor;
-        if (i != 0){
-            n = t;
-            ++n.step;
-            n.swap(i, 0);
-            push(n);
-        }
-        if (i != 5){
-            n = t;
-            ++n.step;
-            n.swap(i, 5);
-            push(n);
-        }
-        if (t[i] != a[i]){
-            if (t[i] != 0){
-                n = t;
-                ++n.step;
-                n.dec(i);
-                push(n);
-            }
-            if (t[i] != 9){
-                n = t;
-                ++n.step;
-                n.inc(i);
-                push(n);
-            }
-        }
-        if (i != 0){
-            n = t;
-            ++n.step;
-            --n.cursor;
-            push(n);
-        }
-        if (i != 5){
-            n = t;
-            ++n.step;
-            ++n.cursor;
-            push(n);
-        }
-    }
-    return -1;
-}
+<span class="kt">long</span> <span class="kt">long</span> <span class="nf">bfs</span><span class="p">(){</span>
+    <span class="n">push</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">front</span> <span class="o">!=</span> <span class="n">rear</span><span class="p">){</span>
+        <span class="n">front</span> <span class="o">=</span> <span class="p">(</span><span class="n">front</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">MAXS</span><span class="p">;</span>
+        <span class="n">String</span> <span class="n">t</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">front</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="n">a</span><span class="p">){</span>
+            <span class="k">return</span> <span class="n">t</span><span class="p">.</span><span class="n">step</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">String</span> <span class="n">n</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">cursor</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">n</span><span class="p">.</span><span class="n">step</span><span class="p">;</span>
+            <span class="n">n</span><span class="p">.</span><span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+            <span class="n">push</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">){</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">n</span><span class="p">.</span><span class="n">step</span><span class="p">;</span>
+            <span class="n">n</span><span class="p">.</span><span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+            <span class="n">push</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+                <span class="o">++</span><span class="n">n</span><span class="p">.</span><span class="n">step</span><span class="p">;</span>
+                <span class="n">n</span><span class="p">.</span><span class="n">dec</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+                <span class="n">push</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">9</span><span class="p">){</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+                <span class="o">++</span><span class="n">n</span><span class="p">.</span><span class="n">step</span><span class="p">;</span>
+                <span class="n">n</span><span class="p">.</span><span class="n">inc</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+                <span class="n">push</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">n</span><span class="p">.</span><span class="n">step</span><span class="p">;</span>
+            <span class="o">--</span><span class="n">n</span><span class="p">.</span><span class="n">cursor</span><span class="p">;</span>
+            <span class="n">push</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">){</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">n</span><span class="p">.</span><span class="n">step</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">n</span><span class="p">.</span><span class="n">cursor</span><span class="p">;</span>
+            <span class="n">push</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    char p[7], q[7];
-    cin &gt;&gt; p &gt;&gt; q;
-    for (int i = 0; i &lt; 6; ++i){
-        s.s = s.s * 10 + p[i] - '0';
-        a.s = a.s * 10 + q[i] - '0';
-    }
-    long long ans = bfs();
-    cout &lt;&lt; ans &lt;&lt; endl;
-    return 0;
-}
-
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="kt">char</span> <span class="n">p</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">q</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">p</span> <span class="o">&gt;&gt;</span> <span class="n">q</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">s</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">s</span> <span class="o">*</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="sc">&#39;0&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">bfs</span><span class="p">();</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

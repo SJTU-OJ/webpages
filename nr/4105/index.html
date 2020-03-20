@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -401,149 +403,149 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* difference */
-#include &lt;iostream&gt;
-#include &lt;cmath&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* difference */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-struct Heap{
-    int heapsize = 0;
-    int a[200005] = {0};
+<span class="k">struct</span> <span class="n">Heap</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">heapsize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">200005</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-    void swap(int x, int y){
-        int t = a[x];
-        a[x] = a[y];
-        a[y] = t;
-    }
+    <span class="kt">void</span> <span class="nf">swap</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">];</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void siftup(int x){
-        while (x != 1){
-            if (a[x] &lt; a[x &gt;&gt; 1]){
-                swap(x, x &gt;&gt; 1);
-                x &gt;&gt;= 1;
-            }
-            else
-                break;
-        }
-    }
+    <span class="kt">void</span> <span class="nf">siftup</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">x</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">]){</span>
+                <span class="n">swap</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">x</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void siftdown(){
-        int i = 2;
-        while (i &lt;= heapsize){
-            if (i + 1 &lt;= heapsize &amp;&amp; a[i] &gt; a[i + 1])
-                ++i;
-            if (a[i &gt;&gt; 1] &gt; a[i]){
-                swap(i, i &gt;&gt; 1);
-                i &lt;&lt;= 1;
-            }
-            else
-                break;
-        }
-    }
+    <span class="kt">void</span> <span class="nf">siftdown</span><span class="p">(){</span>
+        <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="n">heapsize</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">heapsize</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                <span class="o">++</span><span class="n">i</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]){</span>
+                <span class="n">swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">i</span> <span class="o">&lt;&lt;=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void insert(int x){
-        a[++heapsize] = x;
-        siftup(heapsize);
-    }
+    <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="o">++</span><span class="n">heapsize</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+        <span class="n">siftup</span><span class="p">(</span><span class="n">heapsize</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    void pop(){
-        swap(1, heapsize);
-        --heapsize;
-        siftdown();
-    }
+    <span class="kt">void</span> <span class="nf">pop</span><span class="p">(){</span>
+        <span class="n">swap</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">heapsize</span><span class="p">);</span>
+        <span class="o">--</span><span class="n">heapsize</span><span class="p">;</span>
+        <span class="n">siftdown</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    int top(){
-        return a[1];
-    }
-};
+    <span class="kt">int</span> <span class="nf">top</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int n, m;
-Heap heap;
-int a[200005];
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+<span class="n">Heap</span> <span class="n">heap</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">200005</span><span class="p">];</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; n &gt;&gt; m;
-    for (int i = 1; i &lt;= n; ++i){
-        int t;
-        cin &gt;&gt; t;
-        heap.insert(t);
-    }
-    for (int i = 1; i &lt;= n; ++i){
-        a[i] = heap.top();
-        //cout &lt;&lt; a[i] &lt;&lt; endl;
-        heap.pop();
-    }
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">;</span>
+        <span class="n">heap</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">heap</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="c1">//cout &lt;&lt; a[i] &lt;&lt; endl;</span>
+        <span class="n">heap</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    while (m--){
-        int q;
-        cin &gt;&gt; q;
-        int l = 1, r = n, mid;
-        while (l &lt;= r){
-            mid = (l + r) / 2;
-            if (a[mid] == q)
-                break;
-            if (a[mid] &gt; q)
-                r = mid - 1;
-            else
-                l = mid + 1;
-        }
-        int ans = abs(q - a[mid]);
-        if (mid &gt; 1){
-            ans = min(ans, abs(q - a[mid - 1]));
-        }
-        if (mid &lt; n){
-            ans = min(ans, abs(q - a[mid + 1]));
-        }
-        cout &lt;&lt; ans &lt;&lt; '\n';
-    }
-    return 0;
-}
+    <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="o">--</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">q</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">q</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">n</span><span class="p">,</span> <span class="n">mid</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">){</span>
+            <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">==</span> <span class="n">q</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">q</span><span class="p">)</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mid</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">){</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">abs</span><span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]));</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mid</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">){</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">ans</span><span class="p">,</span> <span class="n">abs</span><span class="p">(</span><span class="n">q</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]));</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-using namespace std;
-struct btype{
-    int v;
-    int ind;
-} b[200001];
-bool cmp(btype x,btype y){
-    return x.v&lt;y.v;
-}
-int a[200001],m,n,l,r,mid,ans[200001],minn;
-int main() {
-    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
-    for (int i=0;i&lt;n;++i) scanf(&quot;%d&quot;,&amp;a[i]);
-    sort(a,a+n);
-    for (int i=0;i&lt;m;++i) {scanf(&quot;%d&quot;,&amp;b[i].v);b[i].ind=i;}
-    sort(b,b+m,cmp);
-    l=0;
-    for (int i=0;i&lt;m;++i){
-        r=n-1;
-        while (l&lt;=r){
-            mid=(l+r)/2;
-            if (a[mid]&lt;b[i].v) l=mid+1;
-            else if (a[mid]&gt;b[i].v) r=mid-1;
-            else {
-                l=mid;
-                break;
-            }
-        }
-        minn=2000000001;
-        if (l&lt;n) minn=min(minn,abs(a[l]-b[i].v));
-        if (l&gt;=1) minn=min(minn,abs(a[l-1]-b[i].v));
-        ans[b[i].ind]=minn;
-    }
-    for (int i=0;i&lt;m;++i)
-        printf(&quot;%d\n&quot;,ans[i]);
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">btype</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">v</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">ind</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">b</span><span class="p">[</span><span class="mi">200001</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="n">btype</span> <span class="n">x</span><span class="p">,</span><span class="n">btype</span> <span class="n">y</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">v</span><span class="o">&lt;</span><span class="n">y</span><span class="p">.</span><span class="n">v</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">200001</span><span class="p">],</span><span class="n">m</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">l</span><span class="p">,</span><span class="n">r</span><span class="p">,</span><span class="n">mid</span><span class="p">,</span><span class="n">ans</span><span class="p">[</span><span class="mi">200001</span><span class="p">],</span><span class="n">minn</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">a</span><span class="o">+</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span><span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">);</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span><span class="o">=</span><span class="n">i</span><span class="p">;}</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">b</span><span class="o">+</span><span class="n">m</span><span class="p">,</span><span class="n">cmp</span><span class="p">);</span>
+    <span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">r</span><span class="o">=</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">l</span><span class="o">&lt;=</span><span class="n">r</span><span class="p">){</span>
+            <span class="n">mid</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="n">r</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span><span class="o">&lt;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">)</span> <span class="n">l</span><span class="o">=</span><span class="n">mid</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span><span class="o">&gt;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">)</span> <span class="n">r</span><span class="o">=</span><span class="n">mid</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">l</span><span class="o">=</span><span class="n">mid</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">minn</span><span class="o">=</span><span class="mi">2000000001</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span><span class="o">&lt;</span><span class="n">n</span><span class="p">)</span> <span class="n">minn</span><span class="o">=</span><span class="n">min</span><span class="p">(</span><span class="n">minn</span><span class="p">,</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">-</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">l</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)</span> <span class="n">minn</span><span class="o">=</span><span class="n">min</span><span class="p">(</span><span class="n">minn</span><span class="p">,</span><span class="n">abs</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">));</span>
+        <span class="n">ans</span><span class="p">[</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ind</span><span class="p">]</span><span class="o">=</span><span class="n">minn</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ans</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

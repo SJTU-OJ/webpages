@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -385,337 +387,338 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 撤退 */
-#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-#include &lt;cmath&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 撤退 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int MAXN = 20000;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXN</span> <span class="o">=</span> <span class="mi">20000</span><span class="p">;</span>
 
-int n, A, B, C;
-int head[MAXN + 5] = {0}, ed[MAXN + 5] = {0}, nxt[MAXN + 5] = {0}, len[MAXN + 5] = {0};
-int cnt = 0;
-int h[MAXN + 5] = {0}, e[MAXN + 5] = {0}, nn[MAXN + 5] = {0}, l[MAXN + 5] = {0};
-int m = 0;
-int dist[MAXN + 5] = {0}, depth[MAXN + 5] = {0}, fa[MAXN + 5][20] = {0};
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">head</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">ed</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">nxt</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">len</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">h</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">e</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">nn</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">l</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">dist</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">depth</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">fa</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">][</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-inline void addEdge(int u, int v, int w){
-    ++cnt;
-    nxt[cnt] = head[u];
-    ed[cnt] = v;
-    head[u] = cnt;
-    len[cnt] = w;
-}
+<span class="kr">inline</span> <span class="kt">void</span> <span class="nf">addEdge</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span><span class="p">){</span>
+    <span class="o">++</span><span class="n">cnt</span><span class="p">;</span>
+    <span class="n">nxt</span><span class="p">[</span><span class="n">cnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">u</span><span class="p">];</span>
+    <span class="n">ed</span><span class="p">[</span><span class="n">cnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+    <span class="n">head</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnt</span><span class="p">;</span>
+    <span class="n">len</span><span class="p">[</span><span class="n">cnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+<span class="p">}</span>
 
-inline void addedge(int u, int v, int w){
-    ++m;
-    nn[m] = h[u];
-    e[m] = v;
-    h[u] = m;
-    l[m] = w;
-}
+<span class="kr">inline</span> <span class="kt">void</span> <span class="nf">addedge</span><span class="p">(</span><span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="kt">int</span> <span class="n">v</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span><span class="p">){</span>
+    <span class="o">++</span><span class="n">m</span><span class="p">;</span>
+    <span class="n">nn</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="n">u</span><span class="p">];</span>
+    <span class="n">e</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+    <span class="n">h</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">l</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+<span class="p">}</span>
 
-void calcDist(int x){
-    int q[MAXN + 5];
-    bool b[MAXN + 5]= {0};
-    int front = 0, rear = 0;
-    q[rear++] = x;
-    dist[x] = 0;
-    depth[x] = 1;
-    b[x] = true;
-    while (front != rear){
-        int now = q[front];
-        ++front;
-        for (int i = head[now]; i != 0; i = nxt[i]){
-            int next = ed[i];
-            if (!b[next]){
-                b[next] = true;
-                addedge(now, next, len[i]);
-                fa[next][0] = now;
-                depth[next] = depth[now] + 1;
-                dist[next] = dist[now] + len[i];
-                q[rear++] = next;
-            }
-        }
-    }
-}
+<span class="kt">void</span> <span class="nf">calcDist</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">q</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">];</span>
+    <span class="kt">bool</span> <span class="n">b</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">+</span> <span class="mi">5</span><span class="p">]</span><span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+    <span class="kt">int</span> <span class="n">front</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rear</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">depth</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">front</span> <span class="o">!=</span> <span class="n">rear</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">now</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">front</span><span class="p">];</span>
+        <span class="o">++</span><span class="n">front</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">head</span><span class="p">[</span><span class="n">now</span><span class="p">];</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">nxt</span><span class="p">[</span><span class="n">i</span><span class="p">]){</span>
+            <span class="kt">int</span> <span class="n">next</span> <span class="o">=</span> <span class="n">ed</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">b</span><span class="p">[</span><span class="n">next</span><span class="p">]){</span>
+                <span class="n">b</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="n">addedge</span><span class="p">(</span><span class="n">now</span><span class="p">,</span> <span class="n">next</span><span class="p">,</span> <span class="n">len</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">fa</span><span class="p">[</span><span class="n">next</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">now</span><span class="p">;</span>
+                <span class="n">depth</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="n">depth</span><span class="p">[</span><span class="n">now</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="n">dist</span><span class="p">[</span><span class="n">next</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="n">now</span><span class="p">]</span> <span class="o">+</span> <span class="n">len</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">next</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-inline int lca(int p, int q){
-    if (depth[p] &gt; depth[q]){
-        int t = p;
-        p = q;
-        q = t;
-    }
-    int def = depth[q]  - depth[p];
-    for (int i = 0; (1 &lt;&lt; i) &lt;= def; ++i){
-        if ((1 &lt;&lt; i) &amp; def)
-            q = fa[q][i];
-    }
-    if (p != q){
-        for (int i = (int)log2(n); i &gt;= 0; --i){
-            if (fa[p][i] != fa[q][i]){
-                p = fa[p][i];
-                q = fa[q][i];
-            }
-        }
-        p = fa[p][0];
-    }
-    return p;
-}
+<span class="kr">inline</span> <span class="kt">int</span> <span class="nf">lca</span><span class="p">(</span><span class="kt">int</span> <span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">q</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">depth</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">depth</span><span class="p">[</span><span class="n">q</span><span class="p">]){</span>
+        <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">q</span><span class="p">;</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">def</span> <span class="o">=</span> <span class="n">depth</span><span class="p">[</span><span class="n">q</span><span class="p">]</span>  <span class="o">-</span> <span class="n">depth</span><span class="p">[</span><span class="n">p</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">def</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">((</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">i</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">def</span><span class="p">)</span>
+            <span class="n">q</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="n">q</span><span class="p">){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">log2</span><span class="p">(</span><span class="n">n</span><span class="p">);</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">fa</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">fa</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">]){</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">q</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="n">q</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="n">p</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
+<span class="p">}</span>
 
-inline int dis(int p, int q){
-    int x = lca(p, q);
-    return dist[p] + dist[q] - 2 * dist[x];
-}
+<span class="kr">inline</span> <span class="kt">int</span> <span class="nf">dis</span><span class="p">(</span><span class="kt">int</span> <span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">q</span><span class="p">){</span>
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">lca</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">dist</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">+</span> <span class="n">dist</span><span class="p">[</span><span class="n">q</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dist</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; n &gt;&gt; A &gt;&gt; B &gt;&gt; C;
-    for (int i = 1; i &lt; n; ++i){
-        int u, v, w;
-        cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
-        addEdge(u, v, w);
-        addEdge(v, u, w);
-    }
-    calcDist(1);
-    for (int j = 1; (1 &lt;&lt; j) &lt;= n; ++j){
-        for (int i = 1; i &lt;= n; ++i)
-            fa[i][j] = fa[fa[i][j - 1]][j - 1];
-    }
-    int ans = 2147483647, ansi = 0;
-    for (int i = 1; i &lt;= n; ++i){
-        int d = dis(i, A) + dis(i, B) + dis(i, C);
-        if (ans &gt; d){
-            ans = d;
-            ansi = i;
-        }
-    }
-    cout &lt;&lt; ansi &lt;&lt; '\n' &lt;&lt; ans &lt;&lt; '\n';
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">A</span> <span class="o">&gt;&gt;</span> <span class="n">B</span> <span class="o">&gt;&gt;</span> <span class="n">C</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">u</span> <span class="o">&gt;&gt;</span> <span class="n">v</span> <span class="o">&gt;&gt;</span> <span class="n">w</span><span class="p">;</span>
+        <span class="n">addEdge</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">);</span>
+        <span class="n">addEdge</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">w</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">calcDist</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">j</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">fa</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">fa</span><span class="p">[</span><span class="n">fa</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]][</span><span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">2147483647</span><span class="p">,</span> <span class="n">ansi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="n">dis</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span> <span class="o">+</span> <span class="n">dis</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span> <span class="o">+</span> <span class="n">dis</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">C</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">ans</span> <span class="o">&gt;</span> <span class="n">d</span><span class="p">){</span>
+            <span class="n">ans</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+            <span class="n">ansi</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ansi</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;cmath&quot;
-#include &quot;cstring&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cmath&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class edge {
-public:
-    int to = 0;
-    int length = 0;
-    edge* next = nullptr;
-};
+<span class="k">class</span> <span class="nc">edge</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">to</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">edge</span><span class="o">*</span> <span class="n">next</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+<span class="p">};</span>
 
-class tree_node {
-public:
-    int parent = 0;
-    int depth = 0;
-    int dist = 0;
-    int parent_list[16] = { 0 };
-    edge* head = nullptr, * rear = nullptr;
-};
+<span class="k">class</span> <span class="nc">tree_node</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">parent</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">dist</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">parent_list</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+    <span class="n">edge</span><span class="o">*</span> <span class="n">head</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">*</span> <span class="n">rear</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+<span class="p">};</span>
 
-tree_node tree_data[20009];
-int root_pos = 0;
+<span class="n">tree_node</span> <span class="n">tree_data</span><span class="p">[</span><span class="mi">20009</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">root_pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-void dfs(int pos) {
-    if (pos == root_pos) {
-        tree_data[pos].depth = 0;
-    }
-    else {
-        tree_data[pos].depth = tree_data[tree_data[pos].parent].depth + 1;
-        int k = (int)(log(tree_data[pos].depth) / log(2));
-        tree_data[pos].parent_list[0] = tree_data[pos].parent;
-        for (int i = 1; i &lt;= k; ++i) {
-            tree_data[pos].parent_list[i] = tree_data[tree_data[pos].parent_list[i - 1]].parent_list[i - 1];
-        }
-    }
-    for (auto p = tree_data[pos].head-&gt;next; p; p = p-&gt;next) {
-        if (p-&gt;to != tree_data[pos].parent) {
-            tree_data[p-&gt;to].parent = pos;
-            tree_data[p-&gt;to].dist = tree_data[pos].dist + p-&gt;length;
-            dfs(p-&gt;to);
-        }
-    }
-}
+<span class="kt">void</span> <span class="nf">dfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">==</span> <span class="n">root_pos</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">depth</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">parent</span><span class="p">].</span><span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">log</span><span class="p">(</span><span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">depth</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">parent_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">parent</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">parent_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">parent_list</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]].</span><span class="n">parent_list</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span> <span class="n">p</span><span class="p">;</span> <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">to</span> <span class="o">!=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">parent</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">tree_data</span><span class="p">[</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">to</span><span class="p">].</span><span class="n">parent</span> <span class="o">=</span> <span class="n">pos</span><span class="p">;</span>
+            <span class="n">tree_data</span><span class="p">[</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">to</span><span class="p">].</span><span class="n">dist</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos</span><span class="p">].</span><span class="n">dist</span> <span class="o">+</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">length</span><span class="p">;</span>
+            <span class="n">dfs</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">to</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-int LCA(int pos1, int pos2) {
-    while (tree_data[pos1].depth &lt; tree_data[pos2].depth) {
-        int k = int(log(tree_data[pos2].depth - tree_data[pos1].depth) / log(2));
-        pos2 = tree_data[pos2].parent_list[k];
-    }
-    while (tree_data[pos2].depth &lt; tree_data[pos1].depth) {
-        int k = int(log(tree_data[pos1].depth - tree_data[pos2].depth) / log(2));
-        pos1 = tree_data[pos1].parent_list[k];
-    }
-    while (pos1 != pos2) {
-        int k = int(log(tree_data[pos1].depth) / log(2));
-        for (int i = k; i &gt;= 0; --i) {
-            if (i == 0 || tree_data[pos1].parent_list[i] != tree_data[pos2].parent_list[i]) {
-                pos1 = tree_data[pos1].parent_list[i];
-                pos2 = tree_data[pos2].parent_list[i];
-            }
-        }
-    }
-    return pos1;
-}
+<span class="kt">int</span> <span class="nf">LCA</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pos2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">tree_data</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">depth</span> <span class="o">&lt;</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">tree_data</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">depth</span> <span class="o">-</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">depth</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+        <span class="n">pos2</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">parent_list</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">tree_data</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">depth</span> <span class="o">&lt;</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">depth</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">tree_data</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">depth</span> <span class="o">-</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">depth</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+        <span class="n">pos1</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">parent_list</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">pos1</span> <span class="o">!=</span> <span class="n">pos2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">tree_data</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">depth</span><span class="p">)</span> <span class="o">/</span> <span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">parent_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">parent_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">pos1</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">parent_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="n">pos2</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">parent_list</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">pos1</span><span class="p">;</span>
+<span class="p">}</span>
 
-int cal_distance(int pos1, int pos2) {
-    int lca = LCA(pos1, pos2);
-    return tree_data[pos1].dist + tree_data[pos2].dist - 2 * tree_data[lca].dist;
-}
+<span class="kt">int</span> <span class="nf">cal_distance</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pos2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">lca</span> <span class="o">=</span> <span class="n">LCA</span><span class="p">(</span><span class="n">pos1</span><span class="p">,</span> <span class="n">pos2</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">dist</span> <span class="o">+</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">dist</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">lca</span><span class="p">].</span><span class="n">dist</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int n, a, b, c;
-    cin &gt;&gt; n &gt;&gt; a &gt;&gt; b &gt;&gt; c;
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">;</span>
 
-    for (int i = 1; i &lt;= n; ++i) {
-        tree_data[i].rear = tree_data[i].head = new edge;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">rear</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">edge</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    for (int i = 0; i &lt; n - 1; ++i) {
-        int u, v, w;
-        cin &gt;&gt; u &gt;&gt; v &gt;&gt; w;
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">u</span> <span class="o">&gt;&gt;</span> <span class="n">v</span> <span class="o">&gt;&gt;</span> <span class="n">w</span><span class="p">;</span>
 
-        tree_data[u].rear-&gt;next = new edge;
-        tree_data[u].rear = tree_data[u].rear-&gt;next;
-        tree_data[u].rear-&gt;to = v;
-        tree_data[u].rear-&gt;length = w;
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="n">edge</span><span class="p">;</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">rear</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">to</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">length</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
 
-        tree_data[v].rear-&gt;next = new edge;
-        tree_data[v].rear = tree_data[v].rear-&gt;next;
-        tree_data[v].rear-&gt;to = u;
-        tree_data[v].rear-&gt;length = w;
-    }
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="k">new</span> <span class="n">edge</span><span class="p">;</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rear</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">to</span> <span class="o">=</span> <span class="n">u</span><span class="p">;</span>
+        <span class="n">tree_data</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">rear</span><span class="o">-&gt;</span><span class="n">length</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    root_pos = a;
-    dfs(a);
+    <span class="n">root_pos</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+    <span class="n">dfs</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
 
-    int ans_pos = LCA(b, c), ans_val = tree_data[b].dist + tree_data[c].dist - tree_data[ans_pos].dist;
+    <span class="kt">int</span> <span class="n">ans_pos</span> <span class="o">=</span> <span class="n">LCA</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">),</span> <span class="n">ans_val</span> <span class="o">=</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">b</span><span class="p">].</span><span class="n">dist</span> <span class="o">+</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">c</span><span class="p">].</span><span class="n">dist</span> <span class="o">-</span> <span class="n">tree_data</span><span class="p">[</span><span class="n">ans_pos</span><span class="p">].</span><span class="n">dist</span><span class="p">;</span>
 
-    cout &lt;&lt; ans_pos &lt;&lt; &quot;\n&quot; &lt;&lt; ans_val;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans_pos</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">ans_val</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 2e4 + 100;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">2e4</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
 
-struct edgeNode {
-    int data;
-    int weight;
-    edgeNode *next;
+<span class="k">struct</span> <span class="n">edgeNode</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">weight</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
 
-    edgeNode(int d = 0, int w = 0, edgeNode *n = 0)
-        : data(d), weight(w), next(n) {}
-};
+    <span class="n">edgeNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">edgeNode</span> <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">weight</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">next</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
 
-struct verNode {
-    int data;
-    edgeNode *head;
+<span class="k">struct</span> <span class="n">verNode</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
 
-    verNode(int d = 0, edgeNode *h = 0) : data(d), head(h) {}
-};
+    <span class="n">verNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">edgeNode</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">head</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
 
-struct Node {
-    int data;
-    int sum;
+<span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">sum</span><span class="p">;</span>
 
-    Node(int d = 0, int s = 0) : data(d), sum(s) {}
-};
+    <span class="n">Node</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">sum</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
 
-int N, A, B, C, sum = 1e9, pos = 0;
-int Distance[4][maxN] = {0};
-verNode *nodes[maxN];
-bool isVisited[maxN] = {0};
-Node que[100000];
+<span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">sum</span> <span class="o">=</span> <span class="mf">1e9</span><span class="p">,</span> <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">Distance</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">verNode</span> <span class="o">*</span><span class="n">nodes</span><span class="p">[</span><span class="n">maxN</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="n">isVisited</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">Node</span> <span class="n">que</span><span class="p">[</span><span class="mi">100000</span><span class="p">];</span>
 
-void BFS(int);
+<span class="kt">void</span> <span class="nf">BFS</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    cin &gt;&gt; N &gt;&gt; A &gt;&gt; B &gt;&gt; C;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span> <span class="o">&gt;&gt;</span> <span class="n">A</span> <span class="o">&gt;&gt;</span> <span class="n">B</span> <span class="o">&gt;&gt;</span> <span class="n">C</span><span class="p">;</span>
 
-    for (int i = 1; i &lt;= N; i++) {
-        nodes[i] = new verNode(i);
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">verNode</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    for (int i = 0; i &lt; N - 1; i++) {
-        int temp1, temp2, temp3;
-        cin &gt;&gt; temp1 &gt;&gt; temp2 &gt;&gt; temp3;
-        nodes[temp1]-&gt;head = new edgeNode(temp2, temp3, nodes[temp1]-&gt;head);
-        nodes[temp2]-&gt;head = new edgeNode(temp1, temp3, nodes[temp2]-&gt;head);
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp1</span><span class="p">,</span> <span class="n">temp2</span><span class="p">,</span> <span class="n">temp3</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp1</span> <span class="o">&gt;&gt;</span> <span class="n">temp2</span> <span class="o">&gt;&gt;</span> <span class="n">temp3</span><span class="p">;</span>
+        <span class="n">nodes</span><span class="p">[</span><span class="n">temp1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">edgeNode</span><span class="p">(</span><span class="n">temp2</span><span class="p">,</span> <span class="n">temp3</span><span class="p">,</span> <span class="n">nodes</span><span class="p">[</span><span class="n">temp1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">);</span>
+        <span class="n">nodes</span><span class="p">[</span><span class="n">temp2</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">edgeNode</span><span class="p">(</span><span class="n">temp1</span><span class="p">,</span> <span class="n">temp3</span><span class="p">,</span> <span class="n">nodes</span><span class="p">[</span><span class="n">temp2</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    BFS(A);
-    BFS(B);
-    BFS(C);
+    <span class="n">BFS</span><span class="p">(</span><span class="n">A</span><span class="p">);</span>
+    <span class="n">BFS</span><span class="p">(</span><span class="n">B</span><span class="p">);</span>
+    <span class="n">BFS</span><span class="p">(</span><span class="n">C</span><span class="p">);</span>
 
-    for (int i = N; i &gt;= 1; i--) {
-        int temp = Distance[0][i] + Distance[1][i] + Distance[2][i];
-        if (temp &lt;= sum) {
-            sum = temp;
-            pos = i;
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">Distance</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">Distance</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">Distance</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">&lt;=</span> <span class="n">sum</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">sum</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; pos &lt;&lt; '\n' &lt;&lt; sum;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">pos</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span><span class="p">;</span>
 
-    return 0;
-}
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-void BFS(int s) {
-    for (int i = 0; i &lt;= N; i++) {
-        isVisited[i] = 0;
-    }
+<span class="kt">void</span> <span class="nf">BFS</span><span class="p">(</span><span class="kt">int</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">isVisited</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    int head = 0, tail = 0;
-    isVisited[s] = 1;
-    que[tail++] = Node(s, 0);
+    <span class="kt">int</span> <span class="n">head</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tail</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">isVisited</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">que</span><span class="p">[</span><span class="n">tail</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-    while (head != tail) {
-        Node temp = que[head++];
-        edgeNode *p = nodes[temp.data]-&gt;head;
+    <span class="k">while</span> <span class="p">(</span><span class="n">head</span> <span class="o">!=</span> <span class="n">tail</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Node</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">que</span><span class="p">[</span><span class="n">head</span><span class="o">++</span><span class="p">];</span>
+        <span class="n">edgeNode</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">data</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">;</span>
 
-        while (p != 0) {
-            if (isVisited[p-&gt;data]) {
-                p = p-&gt;next;
-                continue;
-            } else {
-                isVisited[p-&gt;data] = 1;
-                que[tail++] = Node(p-&gt;data, temp.sum + p-&gt;weight);
-                if (s == A) {
-                    Distance[0][p-&gt;data] = temp.sum + p-&gt;weight;
-                } else if (s == B) {
-                    Distance[1][p-&gt;data] = temp.sum + p-&gt;weight;
-                } else {
-                    Distance[2][p-&gt;data] = temp.sum + p-&gt;weight;
-                }
-                p = p-&gt;next;
-            }
-        }
-    }
-}
-</code></pre>
+        <span class="k">while</span> <span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">isVisited</span><span class="p">[</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">])</span> <span class="p">{</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">isVisited</span><span class="p">[</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="n">que</span><span class="p">[</span><span class="n">tail</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">temp</span><span class="p">.</span><span class="n">sum</span> <span class="o">+</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">weight</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">A</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">Distance</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">sum</span> <span class="o">+</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">weight</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">Distance</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">sum</span> <span class="o">+</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">weight</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">Distance</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">.</span><span class="n">sum</span> <span class="o">+</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">weight</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

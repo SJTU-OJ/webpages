@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -418,217 +420,217 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 二哥炒股票 */
-#include &lt;iostream&gt;
-#include &lt;iomanip&gt;
-#include &lt;cmath&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 二哥炒股票 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int EndOfTrade = 100000005;
-struct TradeRecord{
-    //constructor
-    TradeRecord() : t(0), a(0), d(0) {};
-    TradeRecord(const TradeRecord &amp;TR) : t(TR.t), a(TR.a), d(TR.d) {}
-    int t, a;
-    short d;
-};
+<span class="k">const</span> <span class="kt">int</span> <span class="n">EndOfTrade</span> <span class="o">=</span> <span class="mi">100000005</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">TradeRecord</span><span class="p">{</span>
+    <span class="c1">//constructor</span>
+    <span class="n">TradeRecord</span><span class="p">()</span> <span class="o">:</span> <span class="n">t</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">a</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">d</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{};</span>
+    <span class="n">TradeRecord</span><span class="p">(</span><span class="k">const</span> <span class="n">TradeRecord</span> <span class="o">&amp;</span><span class="n">TR</span><span class="p">)</span> <span class="o">:</span> <span class="n">t</span><span class="p">(</span><span class="n">TR</span><span class="p">.</span><span class="n">t</span><span class="p">),</span> <span class="n">a</span><span class="p">(</span><span class="n">TR</span><span class="p">.</span><span class="n">a</span><span class="p">),</span> <span class="n">d</span><span class="p">(</span><span class="n">TR</span><span class="p">.</span><span class="n">d</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">;</span>
+    <span class="kt">short</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
 
-double profit(const TradeRecord &amp;trade, const int &amp;v){
-    double ret = 0.0;
-    if (trade.d == 1){
-        double outcome = 100.0 * v * trade.a;
-        outcome += (outcome - 2500 &gt; -1e-6) ? outcome * 0.002 : 5.0;
-        outcome += trade.a / 10.0;
-        outcome += 1.0;
-        ret -= outcome;
-    }
-    else{
-        double income = 100.0 * v * trade.a;
-        double t = income;
-        income -= t * 0.001;
-        income -= (t - 2500 &gt; -1e-6) ? t * 0.002 : 5.0;
-        income -= trade.a / 10.0;
-        income -= 1.0;
-        ret += income;
-    }
-    return ret;
-}
+<span class="kt">double</span> <span class="nf">profit</span><span class="p">(</span><span class="k">const</span> <span class="n">TradeRecord</span> <span class="o">&amp;</span><span class="n">trade</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">v</span><span class="p">){</span>
+    <span class="kt">double</span> <span class="n">ret</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">trade</span><span class="p">.</span><span class="n">d</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="kt">double</span> <span class="n">outcome</span> <span class="o">=</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="n">trade</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
+        <span class="n">outcome</span> <span class="o">+=</span> <span class="p">(</span><span class="n">outcome</span> <span class="o">-</span> <span class="mi">2500</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1e-6</span><span class="p">)</span> <span class="o">?</span> <span class="n">outcome</span> <span class="o">*</span> <span class="mf">0.002</span> <span class="o">:</span> <span class="mf">5.0</span><span class="p">;</span>
+        <span class="n">outcome</span> <span class="o">+=</span> <span class="n">trade</span><span class="p">.</span><span class="n">a</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">;</span>
+        <span class="n">outcome</span> <span class="o">+=</span> <span class="mf">1.0</span><span class="p">;</span>
+        <span class="n">ret</span> <span class="o">-=</span> <span class="n">outcome</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span><span class="p">{</span>
+        <span class="kt">double</span> <span class="n">income</span> <span class="o">=</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="n">trade</span><span class="p">.</span><span class="n">a</span><span class="p">;</span>
+        <span class="kt">double</span> <span class="n">t</span> <span class="o">=</span> <span class="n">income</span><span class="p">;</span>
+        <span class="n">income</span> <span class="o">-=</span> <span class="n">t</span> <span class="o">*</span> <span class="mf">0.001</span><span class="p">;</span>
+        <span class="n">income</span> <span class="o">-=</span> <span class="p">(</span><span class="n">t</span> <span class="o">-</span> <span class="mi">2500</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mf">1e-6</span><span class="p">)</span> <span class="o">?</span> <span class="n">t</span> <span class="o">*</span> <span class="mf">0.002</span> <span class="o">:</span> <span class="mf">5.0</span><span class="p">;</span>
+        <span class="n">income</span> <span class="o">-=</span> <span class="n">trade</span><span class="p">.</span><span class="n">a</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">;</span>
+        <span class="n">income</span> <span class="o">-=</span> <span class="mf">1.0</span><span class="p">;</span>
+        <span class="n">ret</span> <span class="o">+=</span> <span class="n">income</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    TradeRecord tr[55];
-    int m = 0;
-    cin &gt;&gt; m;
-    for (int i = 1; i &lt;= m; ++i){
-        cin &gt;&gt; tr[i].t &gt;&gt; tr[i].a &gt;&gt; tr[i].d;
-    }
-    int n = 0;
-    cin &gt;&gt; n;
-    int t[10005], v[10005];
-    for (int i = 1; i &lt;= n; ++i)
-        cin &gt;&gt; t[i] &gt;&gt; v[i];
-    int j = 1;
-    double NetProfit = 0.0;
-    for (int i = 1; i &lt;= n; ++i){
-        if (t[i] &lt; tr[j].t) continue;
-        while (j &lt;= m &amp;&amp; tr[j].t &lt; t[i]){
-            NetProfit += profit(tr[j], v[i - 1]);
-            ++j;
-        }
-        if (j &gt; m) break;
-    }
-    for (int i = j; i &lt;= m; ++i){
-        NetProfit += profit(tr[i], v[n]);
-    }
-    cout &lt;&lt; setiosflags(ios::fixed) &lt;&lt; setprecision(2) &lt;&lt; NetProfit &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">TradeRecord</span> <span class="n">tr</span><span class="p">[</span><span class="mi">55</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">tr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">t</span> <span class="o">&gt;&gt;</span> <span class="n">tr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">tr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">d</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">t</span><span class="p">[</span><span class="mi">10005</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">10005</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;&gt;</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">NetProfit</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">tr</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">t</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">j</span> <span class="o">&lt;=</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">tr</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]){</span>
+            <span class="n">NetProfit</span> <span class="o">+=</span> <span class="n">profit</span><span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+            <span class="o">++</span><span class="n">j</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">&gt;</span> <span class="n">m</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">NetProfit</span> <span class="o">+=</span> <span class="n">profit</span><span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">fixed</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">NetProfit</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;algorithm&gt;
-#include &lt;vector&gt;
-#include &lt;iomanip&gt;
-#include &lt;functional&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-typedef pair&lt;int, int&gt; pii;
+<span class="k">typedef</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">pii</span><span class="p">;</span>
 
-class type {
-public:
-    int t, a, d;
-};
+<span class="k">class</span> <span class="nc">type</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">t</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+<span class="p">};</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int m, n;
-    cin &gt;&gt; m;
-    vector&lt;type&gt; buy_data(m);
+    <span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">type</span><span class="o">&gt;</span> <span class="n">buy_data</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
 
-    for (int i = 0; i &lt; m; ++i) {
-        cin &gt;&gt; buy_data[i].t &gt;&gt; buy_data[i].a &gt;&gt; buy_data[i].d;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">buy_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">t</span> <span class="o">&gt;&gt;</span> <span class="n">buy_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">buy_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">d</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    cin &gt;&gt; n;
-    vector&lt;pair&lt;int, int&gt;&gt; val_data(n);
-    for (int i = 0; i &lt; n; ++i)
-        cin &gt;&gt; val_data[i].first &gt;&gt; val_data[i].second;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">val_data</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">val_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">first</span> <span class="o">&gt;&gt;</span> <span class="n">val_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
 
-    function&lt;bool(const pii&amp;,const pii&amp;)&gt; cmp = [](const pair&lt;int, int&gt;&amp; a,const pair&lt;int, int&gt;&amp; b) {
-        return a.first &lt; b.first;
-    };
+    <span class="n">function</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">(</span><span class="k">const</span> <span class="n">pii</span><span class="o">&amp;</span><span class="p">,</span><span class="k">const</span> <span class="n">pii</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">cmp</span> <span class="o">=</span> <span class="p">[](</span><span class="k">const</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">,</span><span class="k">const</span> <span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">first</span><span class="p">;</span>
+    <span class="p">};</span>
 
-    sort(buy_data.begin(), buy_data.end(), [](type&amp; a, type&amp; b) {return a.t &lt; b.t; });
-    sort(val_data.begin(), val_data.end(), cmp);
+    <span class="n">sort</span><span class="p">(</span><span class="n">buy_data</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">buy_data</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="p">[](</span><span class="n">type</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="n">type</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">t</span><span class="p">;</span> <span class="p">});</span>
+    <span class="n">sort</span><span class="p">(</span><span class="n">val_data</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">val_data</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">cmp</span><span class="p">);</span>
 
-    double ans = 0.0;
-    for (int i = 0, j = 0; i &lt; m; ++i) {
-        for (; j &lt; n - 1 &amp;&amp; buy_data[i].t &gt;= val_data[j + 1].first; ++j);
-        if (buy_data[i].d == 1) {
-            double cur_num = 100.0 * buy_data[i].a * val_data[j].second;
-            ans -= cur_num * 0.002 &gt; 5.0 ? cur_num * 0.002 : 5.0;
-            ans -= 1.0 * buy_data[i].a / 10;
-            ans -= 1.0;
-            ans -= cur_num;
-        }
-        else {
-            double cur_num = 100.0 * buy_data[i].a * val_data[j].second;
-            ans -= cur_num * 0.002 &gt; 5.0 ? cur_num * 0.002 : 5.0;
-            ans -= 1.0 * buy_data[i].a / 10;
-            ans -= 1.0;
-            ans += cur_num;
-            ans -= cur_num * 0.001;
-        }
-    }
+    <span class="kt">double</span> <span class="n">ans</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">buy_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">t</span> <span class="o">&gt;=</span> <span class="n">val_data</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">first</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">buy_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">d</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">cur_num</span> <span class="o">=</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="n">buy_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">a</span> <span class="o">*</span> <span class="n">val_data</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">-=</span> <span class="n">cur_num</span> <span class="o">*</span> <span class="mf">0.002</span> <span class="o">&gt;</span> <span class="mf">5.0</span> <span class="o">?</span> <span class="n">cur_num</span> <span class="o">*</span> <span class="mf">0.002</span> <span class="o">:</span> <span class="mf">5.0</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">-=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">buy_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">a</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">-=</span> <span class="mf">1.0</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">-=</span> <span class="n">cur_num</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">cur_num</span> <span class="o">=</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="n">buy_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">a</span> <span class="o">*</span> <span class="n">val_data</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">-=</span> <span class="n">cur_num</span> <span class="o">*</span> <span class="mf">0.002</span> <span class="o">&gt;</span> <span class="mf">5.0</span> <span class="o">?</span> <span class="n">cur_num</span> <span class="o">*</span> <span class="mf">0.002</span> <span class="o">:</span> <span class="mf">5.0</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">-=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">buy_data</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">a</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">-=</span> <span class="mf">1.0</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">+=</span> <span class="n">cur_num</span><span class="p">;</span>
+            <span class="n">ans</span> <span class="o">-=</span> <span class="n">cur_num</span> <span class="o">*</span> <span class="mf">0.001</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; ans;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">fixed</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;iomanip&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-struct Trade
-{
-    int time;
-    int num;
-    int way;
-    int price;
-};
-int main(void)
-{
-    Trade arr[50];
-    int m;
-    cin &gt;&gt; m;
-    for (int i = 0; i &lt; m; ++i)
-    {
-        cin &gt;&gt; arr[i].time &gt;&gt; arr[i].num &gt;&gt; arr[i].way;
-    }
-    int n;
-    cin &gt;&gt; n;
-    int price_former = 0, price_last = 0, time_former = 0, time_last = 0;
-    for (int i = 0; i &lt; n; ++i)
-    {
-        cin &gt;&gt; time_last &gt;&gt; price_last;
-        for (int j = 0; j &lt; m; ++j)
-        {
-            if (arr[j].time &gt;= time_former &amp;&amp; arr[j].time &lt; time_last)
-                arr[j].price = price_former;
-            else if (j == m - 1 &amp;&amp; arr[j].time &gt;= time_last)
-                arr[j].price = price_last;
-        }
-        time_former = time_last;
-        price_former = price_last;
-    }
-    double sum = 0.0;
-    int trsc = 0;
-    double cmss = 0.0;
-    for (int i = 0; i &lt; m; ++i)
-    {
-        if (arr[i].way == 1)
-        {
-            trsc = arr[i].num * arr[i].price * 100;
-            sum -= (double)trsc;
-            cmss = (double)trsc * 0.002;
-            if (cmss &lt; 5)
-                cmss = 5;
-            sum -= cmss;
-            sum -= (double)arr[i].num / 10;
-            sum -= 1.0;
-        }
-        else
-        {
-            trsc = arr[i].num * arr[i].price * 100;
-            sum += (double)trsc;
-            cmss = (double)trsc * 0.002;
-            if (cmss &lt; 5)
-                cmss = 5;
-            sum -= cmss;
-            sum -= (double)arr[i].num / 10;
-            sum -= 1.0;
-            sum -= (double)trsc * 0.001;
-        }
-    }
-    /*sum *= 100.0;
-    if (sum &gt;= 0.0)
-        sum += 0.5;
-    else
-        sum -= 0.5;
-    sum = (int)sum;
-    sum /= 100;*/
-    cout &lt;&lt; setiosflags(ios::fixed) &lt;&lt; setprecision(2) &lt;&lt; sum;
-    return 0;
-}
-
-</code></pre>
+<span class="k">struct</span> <span class="n">Trade</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">time</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">way</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">price</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">Trade</span> <span class="n">arr</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">time</span> <span class="o">&gt;&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">num</span> <span class="o">&gt;&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">way</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">price_former</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">price_last</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">time_former</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">time_last</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">time_last</span> <span class="o">&gt;&gt;</span> <span class="n">price_last</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="n">time_former</span> <span class="o">&amp;&amp;</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">time</span> <span class="o">&lt;</span> <span class="n">time_last</span><span class="p">)</span>
+                <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">price</span> <span class="o">=</span> <span class="n">price_former</span><span class="p">;</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">time</span> <span class="o">&gt;=</span> <span class="n">time_last</span><span class="p">)</span>
+                <span class="n">arr</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">price</span> <span class="o">=</span> <span class="n">price_last</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">time_former</span> <span class="o">=</span> <span class="n">time_last</span><span class="p">;</span>
+        <span class="n">price_former</span> <span class="o">=</span> <span class="n">price_last</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">double</span> <span class="n">sum</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">trsc</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">cmss</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">way</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">trsc</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">num</span> <span class="o">*</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">price</span> <span class="o">*</span> <span class="mi">100</span><span class="p">;</span>
+            <span class="n">sum</span> <span class="o">-=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">trsc</span><span class="p">;</span>
+            <span class="n">cmss</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">trsc</span> <span class="o">*</span> <span class="mf">0.002</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cmss</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span>
+                <span class="n">cmss</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+            <span class="n">sum</span> <span class="o">-=</span> <span class="n">cmss</span><span class="p">;</span>
+            <span class="n">sum</span> <span class="o">-=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">num</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="n">sum</span> <span class="o">-=</span> <span class="mf">1.0</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">trsc</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">num</span> <span class="o">*</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">price</span> <span class="o">*</span> <span class="mi">100</span><span class="p">;</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">trsc</span><span class="p">;</span>
+            <span class="n">cmss</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">trsc</span> <span class="o">*</span> <span class="mf">0.002</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">cmss</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">)</span>
+                <span class="n">cmss</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+            <span class="n">sum</span> <span class="o">-=</span> <span class="n">cmss</span><span class="p">;</span>
+            <span class="n">sum</span> <span class="o">-=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">num</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="n">sum</span> <span class="o">-=</span> <span class="mf">1.0</span><span class="p">;</span>
+            <span class="n">sum</span> <span class="o">-=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">trsc</span> <span class="o">*</span> <span class="mf">0.001</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="cm">/*sum *= 100.0;</span>
+<span class="cm">    if (sum &gt;= 0.0)</span>
+<span class="cm">        sum += 0.5;</span>
+<span class="cm">    else</span>
+<span class="cm">        sum -= 0.5;</span>
+<span class="cm">    sum = (int)sum;</span>
+<span class="cm">    sum /= 100;*/</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">fixed</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

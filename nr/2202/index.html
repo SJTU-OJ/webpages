@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -385,110 +387,110 @@
 </details>
 
 <h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;stack&gt;
-#include &lt;unordered_map&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stack&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;unordered_map&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-inline bool valid_messi(int** mat, int n1, int m1, int n, int m) {
-    return n1 &lt; n &amp;&amp; n1 &gt;= 0 &amp;&amp; m1 &lt; m &amp;&amp; m1 &gt;= 0 &amp;&amp; (mat[n1][m1] == 0 || mat[n1][m1] == 1);
-}
-inline bool valid_door(int** mat, int n1, int m1, int n, int m) {
-    return n1 &lt; n &amp;&amp; n1 &gt;= 0 &amp;&amp; m1 &lt; m &amp;&amp; m1 &gt;= 0 &amp;&amp; (mat[n1][m1] == 0 || mat[n1][m1] == 1 || mat[n1][m1] == 3);
-}
-bool check() {
-    int n, m;
-    cin &gt;&gt; n &gt;&gt; m;
-    int** inputmat = new int*[n];
-    for (int i = 0; i &lt; n; i++) {
-        inputmat[i] = new int[m]();
-        for (int j = 0; j &lt; m; j++)
-            cin &gt;&gt; inputmat[i][j];
-    }
-    stack&lt;int&gt; lll;
-    stack&lt;int&gt; rrr;
-    lll.push(0);
-    rrr.push(0);
-    while (!lll.empty()) {
-        int n0 = lll.top();
-        int m0 = rrr.top();
-        lll.pop();
-        rrr.pop();
-        if (n0 == n - 1 &amp;&amp; m0 == m - 1)
-            return true;
-        if (inputmat[n0][m0] == 0) {
-            if (valid_messi(inputmat, n0 + 1, m0, n, m)) {
-                lll.push(n0 + 1);
-                rrr.push(m0);
-            }
-            if (valid_messi(inputmat, n0, m0 + 1, n, m)) {
-                lll.push(n0);
-                rrr.push(m0 + 1);
-            }
-            if (valid_messi(inputmat, n0, m0 - 1, n, m)) {
-                lll.push(n0);
-                rrr.push(m0 - 1);
-            }
-            if (valid_messi(inputmat, n0 - 1, m0, n, m)) {
-                lll.push(n0 - 1);
-                rrr.push(m0);
-            }
-            inputmat[n0][m0] = 2;
-        }
-        if (inputmat[n0][m0] == 1) {
-            inputmat[n0][m0] = 3;
-        }
-    }
-    lll.push(n - 1);
-    rrr.push(m - 1);
-    while (!lll.empty()) {
-        int n0 = lll.top();
-        int m0 = rrr.top();
-        lll.pop();
-        rrr.pop();
-        if (inputmat[n0][m0] == 3)
-            return true;
-        if (inputmat[n0][m0] == 0) {
-            if (valid_door(inputmat, n0 + 1, m0, n, m)) {
-                lll.push(n0 + 1);
-                rrr.push(m0);
-            }
-            if (valid_door(inputmat, n0, m0 + 1, n, m)) {
-                lll.push(n0);
-                rrr.push(m0 + 1);
-            }
-            if (valid_door(inputmat, n0, m0 - 1, n, m)) {
-                lll.push(n0);
-                rrr.push(m0 - 1);
-            }
-            if (valid_door(inputmat, n0 - 1, m0, n, m)) {
-                lll.push(n0 - 1);
-                rrr.push(m0);
-            }
-            inputmat[n0][m0] = 4;
-        }
-        if (inputmat[n0][m0] == 1) {
-            inputmat[n0][m0] = 5;
-        }
-    }
-    return false;
-}
-int main() {
-    int totalis;
-    int* ii = new int[totalis];
-    cin &gt;&gt; totalis;
-    for (int i = 0; i &lt; totalis; i++) {
-        ii[i] = check();
-    }
-    for (int i = 0; i &lt; totalis; i++) {
-        if (i)
-            cout &lt;&lt; endl;
-        cout &lt;&lt; to_string(ii[i]);
-    }
-    return 0;
-}
-</code></pre>
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">valid_messi</span><span class="p">(</span><span class="kt">int</span><span class="o">**</span> <span class="n">mat</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">n1</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">n1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">m1</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">m1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="n">n1</span><span class="p">][</span><span class="n">m1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">mat</span><span class="p">[</span><span class="n">n1</span><span class="p">][</span><span class="n">m1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">valid_door</span><span class="p">(</span><span class="kt">int</span><span class="o">**</span> <span class="n">mat</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">n1</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span> <span class="n">n1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">m1</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span> <span class="n">m1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="n">n1</span><span class="p">][</span><span class="n">m1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">mat</span><span class="p">[</span><span class="n">n1</span><span class="p">][</span><span class="n">m1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">mat</span><span class="p">[</span><span class="n">n1</span><span class="p">][</span><span class="n">m1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="nf">check</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">**</span> <span class="n">inputmat</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">*</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">inputmat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">m</span><span class="p">]();</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">inputmat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">lll</span><span class="p">;</span>
+    <span class="n">stack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">rrr</span><span class="p">;</span>
+    <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">lll</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n0</span> <span class="o">=</span> <span class="n">lll</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">m0</span> <span class="o">=</span> <span class="n">rrr</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">lll</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="n">rrr</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n0</span> <span class="o">==</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">m0</span> <span class="o">==</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">inputmat</span><span class="p">[</span><span class="n">n0</span><span class="p">][</span><span class="n">m0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">valid_messi</span><span class="p">(</span><span class="n">inputmat</span><span class="p">,</span> <span class="n">n0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">n0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m0</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">valid_messi</span><span class="p">(</span><span class="n">inputmat</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">m0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">n0</span><span class="p">);</span>
+                <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">valid_messi</span><span class="p">(</span><span class="n">inputmat</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">m0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">n0</span><span class="p">);</span>
+                <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">valid_messi</span><span class="p">(</span><span class="n">inputmat</span><span class="p">,</span> <span class="n">n0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">n0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m0</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">inputmat</span><span class="p">[</span><span class="n">n0</span><span class="p">][</span><span class="n">m0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">inputmat</span><span class="p">[</span><span class="n">n0</span><span class="p">][</span><span class="n">m0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">inputmat</span><span class="p">[</span><span class="n">n0</span><span class="p">][</span><span class="n">m0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">lll</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">n0</span> <span class="o">=</span> <span class="n">lll</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">m0</span> <span class="o">=</span> <span class="n">rrr</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+        <span class="n">lll</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="n">rrr</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">inputmat</span><span class="p">[</span><span class="n">n0</span><span class="p">][</span><span class="n">m0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">inputmat</span><span class="p">[</span><span class="n">n0</span><span class="p">][</span><span class="n">m0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">valid_door</span><span class="p">(</span><span class="n">inputmat</span><span class="p">,</span> <span class="n">n0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">n0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m0</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">valid_door</span><span class="p">(</span><span class="n">inputmat</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">m0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">n0</span><span class="p">);</span>
+                <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">valid_door</span><span class="p">(</span><span class="n">inputmat</span><span class="p">,</span> <span class="n">n0</span><span class="p">,</span> <span class="n">m0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">n0</span><span class="p">);</span>
+                <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">valid_door</span><span class="p">(</span><span class="n">inputmat</span><span class="p">,</span> <span class="n">n0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">lll</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">n0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">rrr</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">m0</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="n">inputmat</span><span class="p">[</span><span class="n">n0</span><span class="p">][</span><span class="n">m0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">inputmat</span><span class="p">[</span><span class="n">n0</span><span class="p">][</span><span class="n">m0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">inputmat</span><span class="p">[</span><span class="n">n0</span><span class="p">][</span><span class="n">m0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">totalis</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">ii</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">totalis</span><span class="p">];</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">totalis</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">totalis</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ii</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">check</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">totalis</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">to_string</span><span class="p">(</span><span class="n">ii</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

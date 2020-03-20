@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -379,107 +381,107 @@
 </details>
 
 <h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-//! Ugly
-using namespace std;
-int maxnum = -1000;
-int inline maxi(int a, int b) { return a &gt; b ? a : b; }
-int inline mini(int a) { return a &lt;= 24 ? a : -1000; }
-int polirovat(int a, int b, int calctype) {
-    switch (calctype) {
-    case 0:
-        return a + b;
-    case 1:
-        return a - b;
-    case 2:
-        return a * b;
-    case 3:
-        return a / b;
-    case 4:
-        return b - a;
-    case 5:
-        return b / a;
-    }
-    return 0;
-}
-int summation(int c1) {
-    maxnum = maxi(mini(c1), maxnum);
-    return maxnum;
-}
-int maxa(int c1, int c2) {
-    for (int i = 0; i &lt; 6; i++)
-        if ((i != 3 &amp;&amp; i != 5) || (c2 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c1 % c2))) || (c1 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c2 % c1))))
-            summation(polirovat(c1, c2, i));
-    return maxnum;
-}
-int maxa(int c1, int c2, int c3) {
-    for (int i = 0; i &lt; 6; i++) {
-        if ((i != 3 &amp;&amp; i != 5) || (c2 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c1 % c2))) || (c1 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c2 % c1))))
-            summation(maxa(polirovat(c1, c2, i), c3));
-        if ((i != 3 &amp;&amp; i != 5) || (c3 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c1 % c3))) || (c1 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c3 % c1))))
-            summation(maxa(polirovat(c1, c3, i), c2));
-        if ((i != 3 &amp;&amp; i != 5) || (c3 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c2 % c3))) || (c2 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c3 % c2))))
-            summation(maxa(polirovat(c2, c3, i), c1));
-    }
-    return maxnum;
-}
-int maxa(int c1, int c2, int c3, int c4) {
-    for (int i = 0; i &lt; 6; i++) {
-        if ((i != 3 &amp;&amp; i != 5) || (c2 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c1 % c2))) || (c1 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c2 % c1))))
-            summation(maxa(polirovat(c1, c2, i), c3, c4));
-        if ((i != 3 &amp;&amp; i != 5) || (c3 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c1 % c3))) || (c1 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c3 % c1))))
-            summation(maxa(polirovat(c1, c3, i), c2, c4));
-        if ((i != 3 &amp;&amp; i != 5) || (c3 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c2 % c3))) || (c2 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c3 % c2))))
-            summation(maxa(polirovat(c2, c3, i), c1, c4));
-        if ((i != 3 &amp;&amp; i != 5) || (c4 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c1 % c4))) || (c1 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c4 % c1))))
-            summation(maxa(polirovat(c1, c4, i), c3, c2));
-        if ((i != 3 &amp;&amp; i != 5) || (c4 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c2 % c4))) || (c2 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c4 % c2))))
-            summation(maxa(polirovat(c2, c4, i), c1, c3));
-        if ((i != 3 &amp;&amp; i != 5) || (c4 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c3 % c4))) || (c3 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c4 % c3))))
-            summation(maxa(polirovat(c3, c4, i), c1, c2));
-        for (int j = 0; j &lt; 6; j++) {
-            if (((i != 3 &amp;&amp; i != 5) || (c2 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c1 % c2))) ||
-                 (c1 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c2 % c1)))) &amp;&amp;
-                ((j != 3 &amp;&amp; j != 5) || (c4 != 0 &amp;&amp; j == 3 &amp;&amp; (!(c3 % c4))) || (c3 != 0 &amp;&amp; j == 5 &amp;&amp; (!(c4 % c3)))))
-                summation(maxa(polirovat(c1, c2, i), polirovat(c3, c4, j)));
-            if (((i != 3 &amp;&amp; i != 5) || (c3 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c2 % c3))) ||
-                 (c2 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c3 % c2)))) &amp;&amp;
-                ((j != 3 &amp;&amp; j != 5) || (c4 != 0 &amp;&amp; j == 3 &amp;&amp; (!(c1 % c4))) || (c1 != 0 &amp;&amp; j == 5 &amp;&amp; (!(c4 % c1)))))
-                summation(maxa(polirovat(c2, c3, i), polirovat(c1, c4, j)));
-            if (((i != 3 &amp;&amp; i != 5) || (c4 != 0 &amp;&amp; i == 3 &amp;&amp; (!(c2 % c4))) ||
-                 (c2 != 0 &amp;&amp; i == 5 &amp;&amp; (!(c4 % c2)))) &amp;&amp;
-                ((j != 3 &amp;&amp; j != 5) || (c3 != 0 &amp;&amp; j == 3 &amp;&amp; (!(c1 % c3))) || (c1 != 0 &amp;&amp; j == 5 &amp;&amp; (!(c3 % c1)))))
-                summation(maxa(polirovat(c2, c4, i), polirovat(c1, c3, j)));
-        }
-    }
-    return maxnum;
-}
-int main() {
-    int N, c1, c2, c3, c4;
-    cin &gt;&gt; N;
-    int* s = new int[N];
-    for (int i = 0; i &lt; N; i++) {
-        cin &gt;&gt; c1 &gt;&gt; c2 &gt;&gt; c3 &gt;&gt; c4;
-        s[i]   = maxa(c1, c2, c3, c4);
-        maxnum = -1000;
-    }
-    for (int i = 0; i &lt; N; i++) {
-        if (i)
-            cout &lt;&lt; endl;
-        cout &lt;&lt; s[i];
-    }
-    // int z = 0;
-    // for (int c1 = 1; c1 &lt; 14; c1++)
-    //     for (int c2 = c1; c2 &lt; 14; c2++)
-    //         for (int c3 = c2; c3 &lt; 14; c3++) {
-    //             for (int c4 = c3; c4 &lt; 14; c4++) {
-    //                 z += !(maxa(c1, c2, c3, c4) == 24);
-    //                 maxnum = -1000;
-    //             }
-    //         }
-    // cout &lt;&lt; z;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="c1">//! Ugly</span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">maxnum</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1000</span><span class="p">;</span>
+<span class="kt">int</span> <span class="kr">inline</span> <span class="nf">maxi</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">&gt;</span> <span class="n">b</span> <span class="o">?</span> <span class="nl">a</span> <span class="p">:</span> <span class="n">b</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">int</span> <span class="kr">inline</span> <span class="nf">mini</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span> <span class="o">&lt;=</span> <span class="mi">24</span> <span class="o">?</span> <span class="nl">a</span> <span class="p">:</span> <span class="o">-</span><span class="mi">1000</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">int</span> <span class="nf">polirovat</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">calctype</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">calctype</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+    <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">;</span>
+    <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">;</span>
+    <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="p">;</span>
+    <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
+        <span class="k">return</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">;</span>
+    <span class="k">case</span> <span class="mi">5</span><span class="o">:</span>
+        <span class="k">return</span> <span class="n">b</span> <span class="o">/</span> <span class="n">a</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">summation</span><span class="p">(</span><span class="kt">int</span> <span class="n">c1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">maxnum</span> <span class="o">=</span> <span class="n">maxi</span><span class="p">(</span><span class="n">mini</span><span class="p">(</span><span class="n">c1</span><span class="p">),</span> <span class="n">maxnum</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">maxnum</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">maxa</span><span class="p">(</span><span class="kt">int</span> <span class="n">c1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c1</span> <span class="o">%</span> <span class="n">c2</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c2</span> <span class="o">%</span> <span class="n">c1</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">i</span><span class="p">));</span>
+    <span class="k">return</span> <span class="n">maxnum</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">maxa</span><span class="p">(</span><span class="kt">int</span> <span class="n">c1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c1</span> <span class="o">%</span> <span class="n">c2</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c2</span> <span class="o">%</span> <span class="n">c1</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">c3</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c3</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c1</span> <span class="o">%</span> <span class="n">c3</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c3</span> <span class="o">%</span> <span class="n">c1</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">c2</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c3</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c2</span> <span class="o">%</span> <span class="n">c3</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c3</span> <span class="o">%</span> <span class="n">c2</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">c1</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">maxnum</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">maxa</span><span class="p">(</span><span class="kt">int</span> <span class="n">c1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c3</span><span class="p">,</span> <span class="kt">int</span> <span class="n">c4</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c1</span> <span class="o">%</span> <span class="n">c2</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c2</span> <span class="o">%</span> <span class="n">c1</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">c3</span><span class="p">,</span> <span class="n">c4</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c3</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c1</span> <span class="o">%</span> <span class="n">c3</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c3</span> <span class="o">%</span> <span class="n">c1</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c4</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c3</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c2</span> <span class="o">%</span> <span class="n">c3</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c3</span> <span class="o">%</span> <span class="n">c2</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c4</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c4</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c1</span> <span class="o">%</span> <span class="n">c4</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c4</span> <span class="o">%</span> <span class="n">c1</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c4</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">c3</span><span class="p">,</span> <span class="n">c2</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c4</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c2</span> <span class="o">%</span> <span class="n">c4</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c4</span> <span class="o">%</span> <span class="n">c2</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">c4</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c3</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c4</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c3</span> <span class="o">%</span> <span class="n">c4</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c3</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c4</span> <span class="o">%</span> <span class="n">c3</span><span class="p">))))</span>
+            <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c3</span><span class="p">,</span> <span class="n">c4</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c1</span> <span class="o">%</span> <span class="n">c2</span><span class="p">)))</span> <span class="o">||</span>
+                 <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c2</span> <span class="o">%</span> <span class="n">c1</span><span class="p">))))</span> <span class="o">&amp;&amp;</span>
+                <span class="p">((</span><span class="n">j</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c4</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c3</span> <span class="o">%</span> <span class="n">c4</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c3</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c4</span> <span class="o">%</span> <span class="n">c3</span><span class="p">)))))</span>
+                <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">polirovat</span><span class="p">(</span><span class="n">c3</span><span class="p">,</span> <span class="n">c4</span><span class="p">,</span> <span class="n">j</span><span class="p">)));</span>
+            <span class="k">if</span> <span class="p">(((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c3</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c2</span> <span class="o">%</span> <span class="n">c3</span><span class="p">)))</span> <span class="o">||</span>
+                 <span class="p">(</span><span class="n">c2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c3</span> <span class="o">%</span> <span class="n">c2</span><span class="p">))))</span> <span class="o">&amp;&amp;</span>
+                <span class="p">((</span><span class="n">j</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c4</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c1</span> <span class="o">%</span> <span class="n">c4</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c4</span> <span class="o">%</span> <span class="n">c1</span><span class="p">)))))</span>
+                <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">polirovat</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c4</span><span class="p">,</span> <span class="n">j</span><span class="p">)));</span>
+            <span class="k">if</span> <span class="p">(((</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c4</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c2</span> <span class="o">%</span> <span class="n">c4</span><span class="p">)))</span> <span class="o">||</span>
+                 <span class="p">(</span><span class="n">c2</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c4</span> <span class="o">%</span> <span class="n">c2</span><span class="p">))))</span> <span class="o">&amp;&amp;</span>
+                <span class="p">((</span><span class="n">j</span> <span class="o">!=</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">!=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">c3</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c1</span> <span class="o">%</span> <span class="n">c3</span><span class="p">)))</span> <span class="o">||</span> <span class="p">(</span><span class="n">c1</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">5</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">c3</span> <span class="o">%</span> <span class="n">c1</span><span class="p">)))))</span>
+                <span class="n">summation</span><span class="p">(</span><span class="n">maxa</span><span class="p">(</span><span class="n">polirovat</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="n">c4</span><span class="p">,</span> <span class="n">i</span><span class="p">),</span> <span class="n">polirovat</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">j</span><span class="p">)));</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">maxnum</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">c4</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">*</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">c1</span> <span class="o">&gt;&gt;</span> <span class="n">c2</span> <span class="o">&gt;&gt;</span> <span class="n">c3</span> <span class="o">&gt;&gt;</span> <span class="n">c4</span><span class="p">;</span>
+        <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>   <span class="o">=</span> <span class="n">maxa</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">c4</span><span class="p">);</span>
+        <span class="n">maxnum</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1000</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="c1">// int z = 0;</span>
+    <span class="c1">// for (int c1 = 1; c1 &lt; 14; c1++)</span>
+    <span class="c1">//     for (int c2 = c1; c2 &lt; 14; c2++)</span>
+    <span class="c1">//         for (int c3 = c2; c3 &lt; 14; c3++) {</span>
+    <span class="c1">//             for (int c4 = c3; c4 &lt; 14; c4++) {</span>
+    <span class="c1">//                 z += !(maxa(c1, c2, c3, c4) == 24);</span>
+    <span class="c1">//                 maxnum = -1000;</span>
+    <span class="c1">//             }</span>
+    <span class="c1">//         }</span>
+    <span class="c1">// cout &lt;&lt; z;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

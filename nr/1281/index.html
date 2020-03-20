@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -366,121 +368,121 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;cstring&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;class T&gt;
-class my_queue {
-public:
-    T queue_[50000];
-    int start = 0, end = 0;
-    int mod = 50000;
-    void clear() {
-        start = 0;
-        end = 0;
-        memset(queue_, 0, sizeof(queue_));
-    }
-    bool empty() const {
-        return end - start == 0;
-    }
-    T front() const {
-        return queue_[start % mod];
-    }
-    void pop() {
-        ++start;
-    }
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">my_queue</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">T</span> <span class="n">queue_</span><span class="p">[</span><span class="mi">50000</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">mod</span> <span class="o">=</span> <span class="mi">50000</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">queue_</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">queue_</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="kt">bool</span> <span class="nf">empty</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">T</span> <span class="nf">front</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">queue_</span><span class="p">[</span><span class="n">start</span> <span class="o">%</span> <span class="n">mod</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">pop</span><span class="p">()</span> <span class="p">{</span>
+        <span class="o">++</span><span class="n">start</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    void push(const T&amp; val) {
-        queue_[(end++) % mod] = val;
-    }
-    int size() {
-        return end - start;
-    }
-};
+    <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">queue_</span><span class="p">[(</span><span class="n">end</span><span class="o">++</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="nf">size</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-class position {
-public:
-    int distance = 0;
-    int pos_x = 0, pos_y = 0;
+<span class="k">class</span> <span class="nc">position</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">distance</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">pos_x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pos_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    position() = default;
-    position(int dis, int x, int y) :distance(dis), pos_x(x), pos_y(y) {}
-};
+    <span class="n">position</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">position</span><span class="p">(</span><span class="kt">int</span> <span class="n">dis</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="o">:</span><span class="n">distance</span><span class="p">(</span><span class="n">dis</span><span class="p">),</span> <span class="n">pos_x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">pos_y</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
 
-int map_data[49][49] = { 0 };
+<span class="kt">int</span> <span class="n">map_data</span><span class="p">[</span><span class="mi">49</span><span class="p">][</span><span class="mi">49</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
 
-bool visited[49][49] = { 0 };
-int dx[8], dy[8];
-int n, m;
+<span class="kt">bool</span> <span class="n">visited</span><span class="p">[</span><span class="mi">49</span><span class="p">][</span><span class="mi">49</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="kt">int</span> <span class="n">dx</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">dy</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
 
-my_queue&lt;position&gt; queue_data;
-int bfs(int start_x, int start_y, int end_x, int end_y) {
-    queue_data.clear();
-    memset(visited, 0, sizeof(visited));
-    position start_point(0, start_x, start_y);
-    queue_data.push(start_point);
-    visited[start_x][start_y] = true;
+<span class="n">my_queue</span><span class="o">&lt;</span><span class="n">position</span><span class="o">&gt;</span> <span class="n">queue_data</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">bfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">start_x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">start_y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end_x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end_y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">queue_data</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">visited</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">visited</span><span class="p">));</span>
+    <span class="n">position</span> <span class="n">start_point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">start_x</span><span class="p">,</span> <span class="n">start_y</span><span class="p">);</span>
+    <span class="n">queue_data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">start_point</span><span class="p">);</span>
+    <span class="n">visited</span><span class="p">[</span><span class="n">start_x</span><span class="p">][</span><span class="n">start_y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 
-    while (!queue_data.empty()) {
-        auto temp = queue_data.front();
-        queue_data.pop();
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">queue_data</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queue_data</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">queue_data</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
 
-        if (temp.pos_x == end_x &amp;&amp; temp.pos_y == end_y) {
-            return temp.distance;
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="p">.</span><span class="n">pos_x</span> <span class="o">==</span> <span class="n">end_x</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="p">.</span><span class="n">pos_y</span> <span class="o">==</span> <span class="n">end_y</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">temp</span><span class="p">.</span><span class="n">distance</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        for (int i = 0; i &lt; 8; ++i) {
-            if (temp.pos_x + dx[i] &gt;= 0 &amp;&amp; temp.pos_x + dx[i] &lt; m &amp;&amp;
-                temp.pos_y + dy[i] &gt;= 0 &amp;&amp; temp.pos_y + dy[i] &lt; n &amp;&amp;
-                !visited[temp.pos_x + dx[i]][temp.pos_y + dy[i]]
-                &amp;&amp; map_data[temp.pos_x + dx[i]][temp.pos_y + dy[i]] != 0
-                &amp;&amp; map_data[temp.pos_x + dx[i]][temp.pos_y + dy[i]] != 2) {
-                position next_point(temp.distance + 1, temp.pos_x + dx[i], temp.pos_y + dy[i]);
-                queue_data.push(next_point);
-                visited[next_point.pos_x][next_point.pos_y] = true;
-            }
-        }
-    }
-    return -1;
-}
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">temp</span><span class="p">.</span><span class="n">pos_x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="p">.</span><span class="n">pos_x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">m</span> <span class="o">&amp;&amp;</span>
+                <span class="n">temp</span><span class="p">.</span><span class="n">pos_y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">temp</span><span class="p">.</span><span class="n">pos_y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">&amp;&amp;</span>
+                <span class="o">!</span><span class="n">visited</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">pos_x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="n">temp</span><span class="p">.</span><span class="n">pos_y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="o">&amp;&amp;</span> <span class="n">map_data</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">pos_x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="n">temp</span><span class="p">.</span><span class="n">pos_y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">0</span>
+                <span class="o">&amp;&amp;</span> <span class="n">map_data</span><span class="p">[</span><span class="n">temp</span><span class="p">.</span><span class="n">pos_x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="n">temp</span><span class="p">.</span><span class="n">pos_y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">position</span> <span class="n">next_point</span><span class="p">(</span><span class="n">temp</span><span class="p">.</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">temp</span><span class="p">.</span><span class="n">pos_x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">temp</span><span class="p">.</span><span class="n">pos_y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+                <span class="n">queue_data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">next_point</span><span class="p">);</span>
+                <span class="n">visited</span><span class="p">[</span><span class="n">next_point</span><span class="p">.</span><span class="n">pos_x</span><span class="p">][</span><span class="n">next_point</span><span class="p">.</span><span class="n">pos_y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
 
 
-int main() {
-    int m1, m2;
-    scanf(&quot;%d %d %d %d&quot;, &amp;m, &amp;n, &amp;m1, &amp;m2);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d %d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m2</span><span class="p">);</span>
 
-    dx[0] = m1, dy[0] = m2;
-    dx[1] = m1, dy[1] = -m2;
-    dx[2] = -m1, dy[2] = m2;
-    dx[3] = -m1, dy[3] = -m2;
-    dx[4] = m2, dy[4] = m1;
-    dx[5] = m2, dy[5] = -m1;
-    dx[6] = -m2, dy[6] = m1;
-    dx[7] = -m2, dy[7] = -m1;
+    <span class="n">dx</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">m1</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">m2</span><span class="p">;</span>
+    <span class="n">dx</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">m1</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">m2</span><span class="p">;</span>
+    <span class="n">dx</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">m1</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">m2</span><span class="p">;</span>
+    <span class="n">dx</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">m1</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">m2</span><span class="p">;</span>
+    <span class="n">dx</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">m2</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">m1</span><span class="p">;</span>
+    <span class="n">dx</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">m2</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">m1</span><span class="p">;</span>
+    <span class="n">dx</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">m2</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">m1</span><span class="p">;</span>
+    <span class="n">dx</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">m2</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">m1</span><span class="p">;</span>
 
-    int start_x, start_y, end_x, end_y;
+    <span class="kt">int</span> <span class="n">start_x</span><span class="p">,</span> <span class="n">start_y</span><span class="p">,</span> <span class="n">end_x</span><span class="p">,</span> <span class="n">end_y</span><span class="p">;</span>
 
-    for (int i = 0; i &lt; m; ++i) {
-        for (int j = 0; j &lt; n; ++j) {
-            scanf(&quot;%d&quot;, &amp;map_data[i][j]);
-            if (map_data[i][j] == 3) {
-                start_x = i;
-                start_y = j;
-            }
-            else if (map_data[i][j] == 4) {
-                end_x = i;
-                end_y = j;
-            }
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">map_data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">map_data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">start_x</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="n">start_y</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">map_data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">end_x</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+                <span class="n">end_y</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; bfs(start_x, start_y, end_x, end_y);
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">bfs</span><span class="p">(</span><span class="n">start_x</span><span class="p">,</span> <span class="n">start_y</span><span class="p">,</span> <span class="n">end_x</span><span class="p">,</span> <span class="n">end_y</span><span class="p">);</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -388,79 +390,78 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 选课 */
-#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 选课 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int INF = 100000000;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">INF</span> <span class="o">=</span> <span class="mi">100000000</span><span class="p">;</span>
 
-class Node{
-public:
-    int edge[201] = {0}, ecnt = 0, score = 0;
-    int child = 0, sibling = 0, father = 0;
-};
+<span class="k">class</span> <span class="nc">Node</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">edge</span><span class="p">[</span><span class="mi">201</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">ecnt</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">child</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sibling</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">father</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-Node a[205];
-int m, n;
-int f[205][205] = {0};
+<span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="mi">205</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="mi">205</span><span class="p">][</span><span class="mi">205</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-void makeTree(int x){
-    for (int i = 1; i &lt;= a[x].ecnt; ++i){
-        if (a[x].child == 0)
-            a[x].child = a[x].edge[i];
-        else{
-            int t = a[x].child;
-            while (a[t].sibling != 0)
-                t = a[t].sibling;
-            a[t].sibling = a[x].edge[i];
-        }
-        makeTree(a[x].edge[i]);
-    }
-}
+<span class="kt">void</span> <span class="nf">makeTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">ecnt</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">child</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">child</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">edge</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">else</span><span class="p">{</span>
+            <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">child</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">sibling</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">sibling</span><span class="p">;</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">sibling</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">edge</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+        <span class="n">makeTree</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">edge</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-void printTree(int x){
-    cout &lt;&lt; x &lt;&lt; endl;
-    if (a[x].child != 0)
-        printTree(a[x].child);
-    if (a[x].sibling != 0)
-        printTree(a[x].sibling);
-}
+<span class="kt">void</span> <span class="nf">printTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">child</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">printTree</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">child</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sibling</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">printTree</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sibling</span><span class="p">);</span>
+<span class="p">}</span>
 
-int dp(int x, int k){
-    if (f[x][k] != -1)
-        return f[x][k];
-    int ret = -INF;
-    for (int i = 0; i &lt; k; ++i){
-        int t = dp(a[x].child, i) + dp(a[x].sibling, k - i - 1) + a[x].score;
-        ret = max(ret, t);
-    }
-    ret = max(ret, dp(a[x].sibling, k));
-    f[x][k] = ret;
-    return ret;
-}
+<span class="kt">int</span> <span class="nf">dp</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">k</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">ret</span> <span class="o">=</span> <span class="o">-</span><span class="n">INF</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">dp</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">child</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">dp</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sibling</span><span class="p">,</span> <span class="n">k</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">score</span><span class="p">;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">t</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">dp</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">sibling</span><span class="p">,</span> <span class="n">k</span><span class="p">));</span>
+    <span class="n">f</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">ret</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">ret</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    cin &gt;&gt; m &gt;&gt; n;
-    for (int i = 1; i &lt;= m; ++i){
-        int v, w;
-        cin &gt;&gt; v &gt;&gt; w;
-        a[v].edge[++a[v].ecnt] = i;
-        a[i].score = w;
-        a[i].father = v;
-    }
-    makeTree(0);
-    //printTree(0);
-    memset(f, -1, sizeof(f));
-    for (int i = 0; i &lt;= m; ++i)
-        f[i][0] = 0;
-    for (int i = 0; i &lt;= n; ++i)
-        f[0][i] = 0;
-    cout &lt;&lt; dp(a[0].child, n) &lt;&lt; endl;
-    return 0;
-}
-
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">m</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">v</span> <span class="o">&gt;&gt;</span> <span class="n">w</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">edge</span><span class="p">[</span><span class="o">++</span><span class="n">a</span><span class="p">[</span><span class="n">v</span><span class="p">].</span><span class="n">ecnt</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">father</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">makeTree</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="c1">//printTree(0);</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">dp</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">child</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

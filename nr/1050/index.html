@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -421,158 +423,158 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 二哥的优先队列 */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 二哥的优先队列 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class Node{
-public:
-    int data = 0, dist = -1;
-    Node *l = nullptr, *r = nullptr;
-};
+<span class="k">class</span> <span class="nc">Node</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">data</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">l</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">*</span><span class="n">r</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+<span class="p">};</span>
 
-Node* a[300005];
-bool b[300005];
-int n, m;
+<span class="n">Node</span><span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="mi">300005</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="n">b</span><span class="p">[</span><span class="mi">300005</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
 
-template&lt;class T&gt;
-inline void swp(T &amp;x, T &amp;y){
-    T t = x; x = y; y = t;
-}
+<span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="kr">inline</span> <span class="kt">void</span> <span class="n">swp</span><span class="p">(</span><span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">){</span>
+    <span class="n">T</span> <span class="n">t</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span> <span class="n">y</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+<span class="p">}</span>
 
-Node *merge(Node *x, Node *y){
-    if (x == nullptr) return y;
-    if (y == nullptr) return x;
-    if (x-&gt;data &gt; y-&gt;data)
-        swp(x, y);
-    x-&gt;r = merge(x-&gt;r, y);
-    if (x-&gt;l == nullptr || x-&gt;l-&gt;dist &lt; x-&gt;r-&gt;dist)
-        swp(x-&gt;l, x-&gt;r);
-    if (x-&gt;r == nullptr)
-        x-&gt;dist = 0;
-    else
-        x-&gt;dist = x-&gt;r-&gt;dist + 1;
-    return x;
-}
+<span class="n">Node</span> <span class="o">*</span><span class="n">merge</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="n">Node</span> <span class="o">*</span><span class="n">y</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="n">y</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">y</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">swp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    <span class="n">x</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">r</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">x</span><span class="o">-&gt;</span><span class="n">l</span><span class="o">-&gt;</span><span class="n">dist</span> <span class="o">&lt;</span> <span class="n">x</span><span class="o">-&gt;</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">dist</span><span class="p">)</span>
+        <span class="n">swp</span><span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">l</span><span class="p">,</span> <span class="n">x</span><span class="o">-&gt;</span><span class="n">r</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+        <span class="n">x</span><span class="o">-&gt;</span><span class="n">dist</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">x</span><span class="o">-&gt;</span><span class="n">dist</span> <span class="o">=</span> <span class="n">x</span><span class="o">-&gt;</span><span class="n">r</span><span class="o">-&gt;</span><span class="n">dist</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-void dispose(Node *x){
-    if (x == nullptr)
-        return;
-    if (x-&gt;l != nullptr)
-        dispose(x-&gt;l);
-    if (x-&gt;r != nullptr)
-        dispose(x-&gt;r);
-    delete x;
-}
+<span class="kt">void</span> <span class="n">dispose</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">x</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">l</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+        <span class="n">dispose</span><span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">l</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">r</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+        <span class="n">dispose</span><span class="p">(</span><span class="n">x</span><span class="o">-&gt;</span><span class="n">r</span><span class="p">);</span>
+    <span class="k">delete</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; n &gt;&gt; m;
-    for (int i = 1; i &lt;= n; ++i){
-        Node *t = new Node;
-        cin &gt;&gt; t-&gt;data;
-        t-&gt;dist = 0;
-        a[i] = t;
-        b[i] = true;
-    }
-    while (m--){
-        int imp, x, y;
-        cin &gt;&gt; imp;
-        switch (imp){
-        case 0:
-            cin &gt;&gt; x &gt;&gt; y;
-            ++x; ++y;
-            a[x] = merge(a[x], a[y]);
-            b[y] = false;
-            break;
-        case 1:
-            cin &gt;&gt; x;
-            ++x;
-            if (!b[x] || a[x] == nullptr) cout &lt;&lt; &quot;-1&quot; &lt;&lt; '\n';
-            else{
-                cout &lt;&lt; a[x]-&gt;data &lt;&lt; '\n';
-                Node *t = a[x];
-                a[x] = merge(a[x]-&gt;l, a[x]-&gt;r);
-                delete t;
-            }
-            break;
-        case 2:{
-            cin &gt;&gt; x &gt;&gt; y;
-            ++x;
-            Node *t = new Node;
-            t-&gt;data = y;
-            t-&gt;dist = 0;
-            a[x] = merge(a[x], t);
-            break;
-        }
-        default:
-            break;
-        }
-    }
-    for (int i = 1; i &lt;= n; ++i){
-        if (b[i])
-            dispose(a[i]);
-    }
-    return 0;
-}
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">Node</span> <span class="o">*</span><span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+        <span class="n">t</span><span class="o">-&gt;</span><span class="n">dist</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
+        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">m</span><span class="o">--</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">imp</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">imp</span><span class="p">;</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">imp</span><span class="p">){</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">x</span><span class="p">;</span> <span class="o">++</span><span class="n">y</span><span class="p">;</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">y</span><span class="p">]);</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">x</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">||</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;-1&quot;</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+            <span class="k">else</span><span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+                <span class="n">Node</span> <span class="o">*</span><span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">l</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">r</span><span class="p">);</span>
+                <span class="k">delete</span> <span class="n">t</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span><span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
+            <span class="o">++</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">Node</span> <span class="o">*</span><span class="n">t</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">;</span>
+            <span class="n">t</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+            <span class="n">t</span><span class="o">-&gt;</span><span class="n">dist</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">t</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">dispose</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-using namespace std;
-const int mxn=1000000;
-int n,m;
-int f[mxn],v[mxn],ch[mxn][2],dis[mxn],root[mxn],opt,x,y;
-int merge(int x,int y){
-    if (x==0||y==0)
-        return x+y;
-    if (v[x]&gt;v[y]||(v[x]==v[y]&amp;&amp;x&gt;y))
-        swap(x,y);
-    ch[x][1]=merge(ch[x][1],y);
-    f[ch[x][1]]=x;
-    if (dis[ch[x][0]]&lt;dis[ch[x][1]])
-        swap(ch[x][1],ch[x][0]);
-    dis[x]=dis[ch[x][1]]+1;
-    return x;
-}
-int main(){
-    scanf(&quot;%d%d&quot;,&amp;n,&amp;m);
-    for(int i=1;i&lt;=n;i++) {
-        scanf(&quot;%d&quot;,&amp;v[i]);
-        root[i]=i;
-    }
-    v[0]=-1;
-    for(int i=0;i&lt;m;i++){
-        scanf(&quot;%d&quot;,&amp;opt);
-        if (opt==0){
-            scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
-            root[x+1]=merge(root[x+1],root[y+1]);
-            if (!root[y+1]) root[y+1]=-1;
-        }
-        if (opt==1){
-            scanf(&quot;%d&quot;,&amp;x);
-            printf(&quot;%d\n&quot;,v[root[x+1]]);
-            if (v[root[x+1]]!=-1) {
-                v[root[x + 1]] = -1;
-                if (ch[root[x + 1]][0]||ch[root[x+1]][1])
-                    root[x + 1] = merge(ch[root[x + 1]][0], ch[root[x + 1]][1]);
-                else root[x+1]=0;
-            }
-        }
-        if (opt==2){
-            scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
-            n++;
-            root[n]=n;
-            v[n]=y;
-            root[x+1]=merge(root[x+1],root[n]);
-        }
-    }
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">mxn</span><span class="o">=</span><span class="mi">1000000</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">f</span><span class="p">[</span><span class="n">mxn</span><span class="p">],</span><span class="n">v</span><span class="p">[</span><span class="n">mxn</span><span class="p">],</span><span class="n">ch</span><span class="p">[</span><span class="n">mxn</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span><span class="n">dis</span><span class="p">[</span><span class="n">mxn</span><span class="p">],</span><span class="n">root</span><span class="p">[</span><span class="n">mxn</span><span class="p">],</span><span class="n">opt</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">;</span>
+<span class="kt">int</span> <span class="nf">merge</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">0</span><span class="o">||</span><span class="n">y</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">&gt;</span><span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">||</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">==</span><span class="n">v</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">&amp;&amp;</span><span class="n">x</span><span class="o">&gt;</span><span class="n">y</span><span class="p">))</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">);</span>
+    <span class="n">ch</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">merge</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">y</span><span class="p">);</span>
+    <span class="n">f</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span><span class="o">=</span><span class="n">x</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">dis</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span><span class="o">&lt;</span><span class="n">dis</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">swap</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">ch</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="n">dis</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">=</span><span class="n">dis</span><span class="p">[</span><span class="n">ch</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="n">root</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">opt</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">opt</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
+            <span class="n">root</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">merge</span><span class="p">(</span><span class="n">root</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">root</span><span class="p">[</span><span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">root</span><span class="p">[</span><span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="n">root</span><span class="p">[</span><span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">opt</span><span class="o">==</span><span class="mi">1</span><span class="p">){</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">v</span><span class="p">[</span><span class="n">root</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">]]);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">root</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span><span class="o">!=-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">v</span><span class="p">[</span><span class="n">root</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="n">root</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span><span class="o">||</span><span class="n">ch</span><span class="p">[</span><span class="n">root</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">root</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="n">root</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">],</span> <span class="n">ch</span><span class="p">[</span><span class="n">root</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]][</span><span class="mi">1</span><span class="p">]);</span>
+                <span class="k">else</span> <span class="n">root</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">opt</span><span class="o">==</span><span class="mi">2</span><span class="p">){</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x</span><span class="p">,</span><span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
+            <span class="n">n</span><span class="o">++</span><span class="p">;</span>
+            <span class="n">root</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="n">n</span><span class="p">;</span>
+            <span class="n">v</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">=</span><span class="n">y</span><span class="p">;</span>
+            <span class="n">root</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">merge</span><span class="p">(</span><span class="n">root</span><span class="p">[</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">root</span><span class="p">[</span><span class="n">n</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

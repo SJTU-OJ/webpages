@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -363,90 +365,90 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* pilots */
-#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-#include &lt;cmath&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* pilots */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int INF = 2147483647;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">INF</span> <span class="o">=</span> <span class="mi">2147483647</span><span class="p">;</span>
 
-int k, n, a[3000005];
-pair&lt;int, int&gt; qmin[3000005], qmax[3000005];
+<span class="kt">int</span> <span class="n">k</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">3000005</span><span class="p">];</span>
+<span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">qmin</span><span class="p">[</span><span class="mi">3000005</span><span class="p">],</span> <span class="n">qmax</span><span class="p">[</span><span class="mi">3000005</span><span class="p">];</span>
 
-bool check(int len){
-    memset(qmin, 0, sizeof(qmax));
-    memset(qmax, 0, sizeof(qmax));
-    int frontMin = 0, rearMin = 0;
-    int frontMax = 0, rearMax = 0;
-    qmin[rearMin++] = make_pair(0, 0);
-    qmax[rearMax++] = make_pair(0, INF);
-    for (int i = 1; i &lt;= n; ++i){
-        while (frontMin != rearMin &amp;&amp; qmin[frontMin].first &lt;= i - len)
-            ++frontMin;
-        while (frontMax != rearMax &amp;&amp; qmax[frontMax].first &lt;= i - len)
-            ++frontMax;
-        while (frontMin != rearMin &amp;&amp; a[i] &lt;= qmin[rearMin - 1].second)
-            --rearMin;
-        qmin[rearMin++] = make_pair(i, a[i]);
-        while (frontMax != rearMax &amp;&amp; a[i] &gt;= qmax[rearMax - 1].second)
-            --rearMax;
-        qmax[rearMax++] = make_pair(i, a[i]);
-        if (i &lt; len)
-            continue;
-        if (qmax[frontMax].second - qmin[frontMin].second &lt;= k)
-            return true;
-    }
-    return false;
-}
+<span class="kt">bool</span> <span class="nf">check</span><span class="p">(</span><span class="kt">int</span> <span class="n">len</span><span class="p">){</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">qmin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">qmax</span><span class="p">));</span>
+    <span class="n">memset</span><span class="p">(</span><span class="n">qmax</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">qmax</span><span class="p">));</span>
+    <span class="kt">int</span> <span class="n">frontMin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rearMin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">frontMax</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rearMax</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">qmin</span><span class="p">[</span><span class="n">rearMin</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_pair</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">qmax</span><span class="p">[</span><span class="n">rearMax</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_pair</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">INF</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">frontMin</span> <span class="o">!=</span> <span class="n">rearMin</span> <span class="o">&amp;&amp;</span> <span class="n">qmin</span><span class="p">[</span><span class="n">frontMin</span><span class="p">].</span><span class="n">first</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">len</span><span class="p">)</span>
+            <span class="o">++</span><span class="n">frontMin</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">frontMax</span> <span class="o">!=</span> <span class="n">rearMax</span> <span class="o">&amp;&amp;</span> <span class="n">qmax</span><span class="p">[</span><span class="n">frontMax</span><span class="p">].</span><span class="n">first</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">len</span><span class="p">)</span>
+            <span class="o">++</span><span class="n">frontMax</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">frontMin</span> <span class="o">!=</span> <span class="n">rearMin</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">qmin</span><span class="p">[</span><span class="n">rearMin</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="p">)</span>
+            <span class="o">--</span><span class="n">rearMin</span><span class="p">;</span>
+        <span class="n">qmin</span><span class="p">[</span><span class="n">rearMin</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_pair</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">frontMax</span> <span class="o">!=</span> <span class="n">rearMax</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">qmax</span><span class="p">[</span><span class="n">rearMax</span> <span class="o">-</span> <span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="p">)</span>
+            <span class="o">--</span><span class="n">rearMax</span><span class="p">;</span>
+        <span class="n">qmax</span><span class="p">[</span><span class="n">rearMax</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_pair</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">qmax</span><span class="p">[</span><span class="n">frontMax</span><span class="p">].</span><span class="n">second</span> <span class="o">-</span> <span class="n">qmin</span><span class="p">[</span><span class="n">frontMin</span><span class="p">].</span><span class="n">second</span> <span class="o">&lt;=</span> <span class="n">k</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    cin &gt;&gt; k &gt;&gt; n;
-    for (int i = 1; i &lt;= n; ++i)
-        cin &gt;&gt; a[i];
-    int l = 1, r = n, mid;
-    while (l &lt; r){
-        mid = (l + r) / 2 + (l + r) % 2;
-        if (check(mid))
-            l = mid;
-        else
-            r = mid - 1;
-    }
-    cout &lt;&lt; l &lt;&lt; endl;
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">k</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">n</span><span class="p">,</span> <span class="n">mid</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">){</span>
+        <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">check</span><span class="p">(</span><span class="n">mid</span><span class="p">))</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">mid</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">l</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;set&gt;
-#include &lt;vector&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;set&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    uint32_t n, k;
-    cin &gt;&gt; k &gt;&gt; n;
+    <span class="kt">uint32_t</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">k</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
 
-    multiset&lt;uint32_t&gt; sdata;
-    vector&lt;uint32_t&gt; vdata(n);
-    uint32_t cur_ans = 0u;
-    for (uint32_t i = 0u, cur_left = 0u; i &lt; n; ++i) {
-        cin &gt;&gt; vdata[i];
-        sdata.insert(vdata[i]);
-        for (; *sdata.rbegin() - *sdata.begin() &gt; k; sdata.erase(sdata.find(vdata[cur_left++])));
-        cur_ans = i - cur_left + 1u &gt; cur_ans ? i - cur_left + 1u : cur_ans;
-    }
+    <span class="n">multiset</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span> <span class="n">sdata</span><span class="p">;</span>
+    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span> <span class="n">vdata</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="kt">uint32_t</span> <span class="n">cur_ans</span> <span class="o">=</span> <span class="mi">0u</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">uint32_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0u</span><span class="p">,</span> <span class="n">cur_left</span> <span class="o">=</span> <span class="mi">0u</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">vdata</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">sdata</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">vdata</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="o">*</span><span class="n">sdata</span><span class="p">.</span><span class="n">rbegin</span><span class="p">()</span> <span class="o">-</span> <span class="o">*</span><span class="n">sdata</span><span class="p">.</span><span class="n">begin</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">sdata</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">sdata</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">vdata</span><span class="p">[</span><span class="n">cur_left</span><span class="o">++</span><span class="p">])));</span>
+        <span class="n">cur_ans</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="n">cur_left</span> <span class="o">+</span> <span class="mi">1u</span> <span class="o">&gt;</span> <span class="n">cur_ans</span> <span class="o">?</span> <span class="n">i</span> <span class="o">-</span> <span class="n">cur_left</span> <span class="o">+</span> <span class="mi">1u</span> <span class="o">:</span> <span class="n">cur_ans</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; cur_ans;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">cur_ans</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -397,220 +399,220 @@
 </details>
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 10 + 10;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
 
-struct edgeNode {
-    int data;
-    int weight;
-    edgeNode *next;
+<span class="k">struct</span> <span class="n">edgeNode</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">weight</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
 
-    edgeNode(int d = 0, int w = 0, edgeNode *n = 0)
-        : data(d), weight(w), next(n) {}
-};
+    <span class="n">edgeNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">edgeNode</span> <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">weight</span><span class="p">(</span><span class="n">w</span><span class="p">),</span> <span class="n">next</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
 
-struct verNode {
-    int data;
-    edgeNode *head;
+<span class="k">struct</span> <span class="n">verNode</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
 
-    verNode(int d = 0, edgeNode *h = 0) : data(d), head(h) {}
-};
+    <span class="n">verNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">edgeNode</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">head</span><span class="p">(</span><span class="n">h</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
 
-int n, m, Start, End, temp1, temp2, temp3, ans = 1e9;
-verNode *nodes[maxN];
-bool isVisited[maxN] = {0};
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">Start</span><span class="p">,</span> <span class="n">End</span><span class="p">,</span> <span class="n">temp1</span><span class="p">,</span> <span class="n">temp2</span><span class="p">,</span> <span class="n">temp3</span><span class="p">,</span> <span class="n">ans</span> <span class="o">=</span> <span class="mf">1e9</span><span class="p">;</span>
+<span class="n">verNode</span> <span class="o">*</span><span class="n">nodes</span><span class="p">[</span><span class="n">maxN</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="n">isVisited</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-void DFS(int i, int w);
+<span class="kt">void</span> <span class="nf">DFS</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span><span class="p">);</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    cin &gt;&gt; n &gt;&gt; m &gt;&gt; Start &gt;&gt; End;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span> <span class="o">&gt;&gt;</span> <span class="n">Start</span> <span class="o">&gt;&gt;</span> <span class="n">End</span><span class="p">;</span>
 
-    for (int i = 1; i &lt;= n; i++) {
-        nodes[i] = new verNode(i);
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">verNode</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    for (int i = 0; i &lt; m; i++) {
-        cin &gt;&gt; temp1 &gt;&gt; temp2 &gt;&gt; temp3;
-        nodes[temp1]-&gt;head = new edgeNode(temp2, temp3, nodes[temp1]-&gt;head);
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp1</span> <span class="o">&gt;&gt;</span> <span class="n">temp2</span> <span class="o">&gt;&gt;</span> <span class="n">temp3</span><span class="p">;</span>
+        <span class="n">nodes</span><span class="p">[</span><span class="n">temp1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">edgeNode</span><span class="p">(</span><span class="n">temp2</span><span class="p">,</span> <span class="n">temp3</span><span class="p">,</span> <span class="n">nodes</span><span class="p">[</span><span class="n">temp1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    DFS(Start, 0);
+    <span class="n">DFS</span><span class="p">(</span><span class="n">Start</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 
-    cout &lt;&lt; ans;
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">;</span>
 
-    return 0;
-}
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-void DFS(int i, int w) {
-    if (isVisited[i]) {
-        return;
-    }
-    if (i == End) {
-        ans = (w &lt; ans) ? w : ans;
-        return;
-    }
-    isVisited[i] = 1;
-    edgeNode *p = nodes[i]-&gt;head;
-    while (p) {
-        DFS(p-&gt;data, w + p-&gt;weight);
-        p = p-&gt;next;
-    }
-    isVisited[i] = 0;
-}
-</code></pre>
+<span class="kt">void</span> <span class="nf">DFS</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">isVisited</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">End</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span> <span class="o">&lt;</span> <span class="n">ans</span><span class="p">)</span> <span class="o">?</span> <span class="nl">w</span> <span class="p">:</span> <span class="n">ans</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">isVisited</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">head</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">DFS</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span> <span class="n">w</span> <span class="o">+</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">weight</span><span class="p">);</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">isVisited</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;queue&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class adjListGraph
-{
-public:
-    adjListGraph(int vSize, const int d[]);
-    void insert(int x, int y, int w);
-    void spfa(int start, int end) const;
-    ~adjListGraph();
+<span class="k">class</span> <span class="nc">adjListGraph</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="n">adjListGraph</span><span class="p">(</span><span class="kt">int</span> <span class="n">vSize</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">d</span><span class="p">[]);</span>
+    <span class="kt">void</span> <span class="nf">insert</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">spfa</span><span class="p">(</span><span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
+    <span class="o">~</span><span class="n">adjListGraph</span><span class="p">();</span>
 
-private:
-    struct edgeNode
-    {
-        int end;
-        int weight;
-        edgeNode *next;
+<span class="k">private</span><span class="o">:</span>
+    <span class="k">struct</span> <span class="n">edgeNode</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">end</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">weight</span><span class="p">;</span>
+        <span class="n">edgeNode</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
 
-        edgeNode(int e, int w, edgeNode *n = NULL)
-        {
-            end = e;
-            weight = w;
-            next = n;
-        }
-    };
-    struct verNode
-    {
-        int ver;
-        edgeNode *head;
+        <span class="n">edgeNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">e</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span><span class="p">,</span> <span class="n">edgeNode</span> <span class="o">*</span><span class="n">n</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="n">e</span><span class="p">;</span>
+            <span class="n">weight</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+            <span class="n">next</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+    <span class="k">struct</span> <span class="n">verNode</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">ver</span><span class="p">;</span>
+        <span class="n">edgeNode</span> <span class="o">*</span><span class="n">head</span><span class="p">;</span>
 
-        verNode(edgeNode *h = NULL) { head = h; }
-    };
+        <span class="n">verNode</span><span class="p">(</span><span class="n">edgeNode</span> <span class="o">*</span><span class="n">h</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span> <span class="n">head</span> <span class="o">=</span> <span class="n">h</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">};</span>
 
-    int Vers, Edges;
-    verNode *verList;
+    <span class="kt">int</span> <span class="n">Vers</span><span class="p">,</span> <span class="n">Edges</span><span class="p">;</span>
+    <span class="n">verNode</span> <span class="o">*</span><span class="n">verList</span><span class="p">;</span>
 
-    void printPath(int start, int end, int prev[]) const;
-};
+    <span class="kt">void</span> <span class="nf">printPath</span><span class="p">(</span><span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prev</span><span class="p">[])</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
 
-adjListGraph::adjListGraph(int vSize, const int d[])
-{
-    this-&gt;Vers = vSize;
+<span class="n">adjListGraph</span><span class="o">::</span><span class="n">adjListGraph</span><span class="p">(</span><span class="kt">int</span> <span class="n">vSize</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">d</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="k">this</span><span class="o">-&gt;</span><span class="n">Vers</span> <span class="o">=</span> <span class="n">vSize</span><span class="p">;</span>
 
-    verList = new verNode[vSize];
-    for (int i = 0; i &lt; vSize; i++)
-    {
-        verList[i].ver = d[i];
-    }
-}
+    <span class="n">verList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">verNode</span><span class="p">[</span><span class="n">vSize</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">vSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">verList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">ver</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-adjListGraph::~adjListGraph()
-{
-    int i;
-    edgeNode *p;
+<span class="n">adjListGraph</span><span class="o">::~</span><span class="n">adjListGraph</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
 
-    for (i = 0; i &lt; this-&gt;Vers; i++)
-        while ((p = verList[i].head) != NULL)
-        {
-            verList[i].head = p-&gt;next;
-            delete p;
-        }
-    delete[] verList;
-}
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">Vers</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">while</span> <span class="p">((</span><span class="n">p</span> <span class="o">=</span> <span class="n">verList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">head</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">verList</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">head</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+            <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">verList</span><span class="p">;</span>
+<span class="p">}</span>
 
-void adjListGraph::insert(int x, int y, int w)
-{
-    int u = x - 1, v = y - 1;
-    verList[u].head = new edgeNode(v, w, verList[u].head);
-    ++this-&gt;Edges;
-}
+<span class="kt">void</span> <span class="n">adjListGraph</span><span class="o">::</span><span class="n">insert</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">w</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">u</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">verList</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="n">edgeNode</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">verList</span><span class="p">[</span><span class="n">u</span><span class="p">].</span><span class="n">head</span><span class="p">);</span>
+    <span class="o">++</span><span class="k">this</span><span class="o">-&gt;</span><span class="n">Edges</span><span class="p">;</span>
+<span class="p">}</span>
 
-void adjListGraph::printPath(int start, int end, int prev[]) const
-{
-    if (start == end)
-    {
-        cout &lt;&lt; verList[start].ver;
-        return;
-    }
-    printPath(start, prev[end], prev);
-    cout &lt;&lt; ' ' &lt;&lt; verList[end].ver;
-}
+<span class="kt">void</span> <span class="n">adjListGraph</span><span class="o">::</span><span class="n">printPath</span><span class="p">(</span><span class="kt">int</span> <span class="n">start</span><span class="p">,</span> <span class="kt">int</span> <span class="n">end</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prev</span><span class="p">[])</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">start</span> <span class="o">==</span> <span class="n">end</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">verList</span><span class="p">[</span><span class="n">start</span><span class="p">].</span><span class="n">ver</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">printPath</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">prev</span><span class="p">[</span><span class="n">end</span><span class="p">],</span> <span class="n">prev</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">verList</span><span class="p">[</span><span class="n">end</span><span class="p">].</span><span class="n">ver</span><span class="p">;</span>
+<span class="p">}</span>
 
-void adjListGraph::spfa(int start ,int end) const
-{
-    int *distance = new int[Vers];
-    int *prev = new int[Vers];
-    queue&lt;verNode&gt; que;
-    bool *inQue = new bool [Vers];
+<span class="kt">void</span> <span class="n">adjListGraph</span><span class="o">::</span><span class="n">spfa</span><span class="p">(</span><span class="kt">int</span> <span class="n">start</span> <span class="p">,</span><span class="kt">int</span> <span class="n">end</span><span class="p">)</span> <span class="k">const</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">distance</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">Vers</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">prev</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">Vers</span><span class="p">];</span>
+    <span class="n">queue</span><span class="o">&lt;</span><span class="n">verNode</span><span class="o">&gt;</span> <span class="n">que</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="o">*</span><span class="n">inQue</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">bool</span> <span class="p">[</span><span class="n">Vers</span><span class="p">];</span>
 
-    int sNo,i;
-    edgeNode *p;
-    verNode v;
+    <span class="kt">int</span> <span class="n">sNo</span><span class="p">,</span><span class="n">i</span><span class="p">;</span>
+    <span class="n">edgeNode</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
+    <span class="n">verNode</span> <span class="n">v</span><span class="p">;</span>
 
-    for (i =0;i&lt;Vers;i++){
-        distance[i] = 1e5+5;
-        inQue[i] = false;
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">Vers</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">distance</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e5</span><span class="o">+</span><span class="mi">5</span><span class="p">;</span>
+        <span class="n">inQue</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    sNo = start-1;
-    distance[sNo] = 0;
-    que.push(verList[sNo]);
-    inQue[sNo] = true;
+    <span class="n">sNo</span> <span class="o">=</span> <span class="n">start</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="n">distance</span><span class="p">[</span><span class="n">sNo</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">que</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">verList</span><span class="p">[</span><span class="n">sNo</span><span class="p">]);</span>
+    <span class="n">inQue</span><span class="p">[</span><span class="n">sNo</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
 
-    while(!que.empty()){
-        v = que.front();
-        que.pop();
-        inQue[v.ver-1] = false;
-        for (p = verList[v.ver-1].head;p!=NULL;p = p-&gt;next){
-            if (distance[v.ver-1]+p-&gt;weight &lt; distance[p-&gt;end]){
-                distance[p-&gt;end] = distance[v.ver-1] + p-&gt;weight;
-                prev[p-&gt;end] = v.ver-1;
-                if (!inQue[p-&gt;end])
-                    que.push(verList[p-&gt;end]);
-            }
-        }
-    }
+    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">que</span><span class="p">.</span><span class="n">empty</span><span class="p">()){</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">que</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+        <span class="n">que</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="n">inQue</span><span class="p">[</span><span class="n">v</span><span class="p">.</span><span class="n">ver</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="n">verList</span><span class="p">[</span><span class="n">v</span><span class="p">.</span><span class="n">ver</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="n">head</span><span class="p">;</span><span class="n">p</span><span class="o">!=</span><span class="nb">NULL</span><span class="p">;</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">distance</span><span class="p">[</span><span class="n">v</span><span class="p">.</span><span class="n">ver</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">weight</span> <span class="o">&lt;</span> <span class="n">distance</span><span class="p">[</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">]){</span>
+                <span class="n">distance</span><span class="p">[</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="n">v</span><span class="p">.</span><span class="n">ver</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">weight</span><span class="p">;</span>
+                <span class="n">prev</span><span class="p">[</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">.</span><span class="n">ver</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">inQue</span><span class="p">[</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">])</span>
+                    <span class="n">que</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">verList</span><span class="p">[</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">end</span><span class="p">]);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; distance[end-1]&lt;&lt;endl;
-    //printPath(start-1, end, prev);
-}
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">distance</span><span class="p">[</span><span class="n">end</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="c1">//printPath(start-1, end, prev);</span>
+<span class="p">}</span>
 
-int main()
-{
-    int n, m, start, end, edgestart, edgeend, edgeweight;
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">edgestart</span><span class="p">,</span> <span class="n">edgeend</span><span class="p">,</span> <span class="n">edgeweight</span><span class="p">;</span>
 
-    cin &gt;&gt; n &gt;&gt; m &gt;&gt; start &gt;&gt; end;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span> <span class="o">&gt;&gt;</span> <span class="n">m</span> <span class="o">&gt;&gt;</span> <span class="n">start</span> <span class="o">&gt;&gt;</span> <span class="n">end</span><span class="p">;</span>
 
-    int *verarray = new int[n];
-    for (int i = 0; i &lt; n; i++)
-    {
-        verarray[i] = i + 1;
-    }
-    adjListGraph graph(n, verarray);
-    for (int i = 0; i &lt; m; i++)
-    {
-        cin &gt;&gt; edgestart &gt;&gt; edgeend &gt;&gt; edgeweight;
-        graph.insert(edgestart, edgeend, edgeweight);
-    }
-    graph.spfa(start, end);
-    return 0;
-}
-
-</code></pre>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">verarray</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">verarray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">adjListGraph</span> <span class="n">graph</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">verarray</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">edgestart</span> <span class="o">&gt;&gt;</span> <span class="n">edgeend</span> <span class="o">&gt;&gt;</span> <span class="n">edgeweight</span><span class="p">;</span>
+        <span class="n">graph</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="n">edgestart</span><span class="p">,</span> <span class="n">edgeend</span><span class="p">,</span> <span class="n">edgeweight</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">graph</span><span class="p">.</span><span class="n">spfa</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

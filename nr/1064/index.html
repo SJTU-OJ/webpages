@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -379,97 +381,96 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 小M爱炒股 */
-#include &lt;iostream&gt;
-#include &lt;cassert&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 小M爱炒股 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cassert&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class Bignum{
-public:
-    int len = 1;
-    long long data[1005] = {0};
+<span class="k">class</span> <span class="nc">Bignum</span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">data</span><span class="p">[</span><span class="mi">1005</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-    long long &amp;operator [](int x){
-        return data[x];
-    }
+    <span class="kt">long</span> <span class="kt">long</span> <span class="o">&amp;</span><span class="k">operator</span> <span class="p">[](</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">x</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    void clear(){
-        for (int i = 1; i &lt;= len; ++i)
-            data[i] = 0;
-        len = 1;
-    }
+    <span class="kt">void</span> <span class="n">clear</span><span class="p">(){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">len</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    Bignum &amp;operator =(const Bignum &amp;b){
-        clear();
-        len = b.len;
-        for (int i = 1; i &lt;= len; ++i)
-            data[i] = b.data[i];
-        return *this;
-    }
-};
+    <span class="n">Bignum</span> <span class="o">&amp;</span><span class="k">operator</span> <span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Bignum</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">){</span>
+        <span class="n">clear</span><span class="p">();</span>
+        <span class="n">len</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-Bignum operator +(const Bignum &amp;b1, const Bignum &amp;b2){
-    Bignum c;
-    c.len = max(b1.len, b2.len);
-    for (int i = 1; i &lt;= c.len; ++i){
-        c.data[i] = c.data[i] + b1.data[i] + b2.data[i];
-        c.data[i + 1] += c.data[i] / 10;
-        c.data[i] %= 10;
-    }
-    ++c.len;
-    while (c.data[c.len] != 0){
-        c.data[c.len + 1] += c.data[c.len] / 10;
-        c.data[c.len] %= 10;
-        ++c.len;
-    }
-    if (c.data[c.len] == 0 &amp;&amp; c.len != 1)
-        --c.len;
-    return c;
-}
+<span class="n">Bignum</span> <span class="k">operator</span> <span class="o">+</span><span class="p">(</span><span class="k">const</span> <span class="n">Bignum</span> <span class="o">&amp;</span><span class="n">b1</span><span class="p">,</span> <span class="k">const</span> <span class="n">Bignum</span> <span class="o">&amp;</span><span class="n">b2</span><span class="p">){</span>
+    <span class="n">Bignum</span> <span class="n">c</span><span class="p">;</span>
+    <span class="n">c</span><span class="p">.</span><span class="n">len</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">b1</span><span class="p">.</span><span class="n">len</span><span class="p">,</span> <span class="n">b2</span><span class="p">.</span><span class="n">len</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">.</span><span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b1</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b2</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">%=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="o">++</span><span class="n">c</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">.</span><span class="n">len</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">.</span><span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">.</span><span class="n">len</span><span class="p">]</span> <span class="o">/</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">.</span><span class="n">len</span><span class="p">]</span> <span class="o">%=</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="o">++</span><span class="n">c</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">c</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">c</span><span class="p">.</span><span class="n">len</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">c</span><span class="p">.</span><span class="n">len</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="o">--</span><span class="n">c</span><span class="p">.</span><span class="n">len</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
 
-long long a[5005], len;
-int n;
-long long t[5005];
-Bignum c, cnt[5005];
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">a</span><span class="p">[</span><span class="mi">5005</span><span class="p">],</span> <span class="n">len</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">t</span><span class="p">[</span><span class="mi">5005</span><span class="p">];</span>
+<span class="n">Bignum</span> <span class="n">c</span><span class="p">,</span> <span class="n">cnt</span><span class="p">[</span><span class="mi">5005</span><span class="p">];</span>
 
-int main(){
-    cin &gt;&gt; n;
-    for (int i = 1; i &lt;= n; ++i){
-        cin &gt;&gt; a[i];
-        t[i] = 1;
-        cnt[i][1] = 1;
-    }
-    len = 0;
-    for (int i = 1; i &lt;= n; ++i){
-        for (int j = 1; j &lt; i; ++j){
-            if (a[j] &gt; a[i]){
-                if (t[i] &lt; t[j] + 1){
-                    t[i] = t[j] + 1;
-                    cnt[i] = cnt[j];
-                }
-                else if (t[i] == t[j] + 1)
-                    cnt[i] = cnt[i] + cnt[j];
-            }
-        }
-        for (int j = 1; j &lt; i; ++j){
-            if (a[i] == a[j] &amp;&amp; t[i] == t[j])
-                cnt[j].clear();
-        }
-        if (t[i] &gt; len)
-            len = t[i];
-    }
-    for (int i = 1; i &lt;= n; ++i){
-        if (t[i] == len)
-            c = c + cnt[i];
-    }
-    cout &lt;&lt; len &lt;&lt; ' ';
-    for (int i = c.len; i &gt;= 1; --i)
-        cout &lt;&lt; c[i];
-    cout &lt;&lt; endl;
-    return 0;
-}
-
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="n">cnt</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]){</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">){</span>
+                    <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                    <span class="n">cnt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnt</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">cnt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnt</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">cnt</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">t</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                <span class="n">cnt</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">clear</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">len</span><span class="p">)</span>
+            <span class="n">len</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">len</span><span class="p">)</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">cnt</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">len</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">c</span><span class="p">.</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

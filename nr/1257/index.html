@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -389,352 +391,353 @@ Error!
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;queue&quot;
-#include &quot;stack&quot;
-#include &quot;cstdio&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;queue&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;stack&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-//二叉树类
-template &lt;class T&gt;
-class myBinaryTree {
-public:
-    class node {
-    public:
-        T data;
-        node *lchild = nullptr, *rchild = nullptr, *parent = nullptr;
-    };
-    node *root = nullptr;
-    node **nodeList = nullptr;
-    long long sizeOfTree = 0;
+<span class="c1">//二叉树类</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">myBinaryTree</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">class</span> <span class="nc">node</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">T</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">node</span> <span class="o">*</span><span class="n">lchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">*</span><span class="n">rchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">*</span><span class="n">parent</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">node</span> <span class="o">*</span><span class="n">root</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">node</span> <span class="o">**</span><span class="n">nodeList</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">sizeOfTree</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    //创建一个相应大小的树
-    void createTree(int num) {
-        nodeList = new node*[num + 1]{ nullptr };
-        sizeOfTree = num;
-    }
-    //创建结点（全部完成后需要CheckRoot进行根节点识别）
-    void createNode(int nodeNum, int lchild, int rchild, T data) {
-        if (nodeList[nodeNum] == nullptr)
-            nodeList[nodeNum] = new node;
+    <span class="c1">//创建一个相应大小的树</span>
+    <span class="kt">void</span> <span class="nf">createTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nodeList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="o">*</span><span class="p">[</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]{</span> <span class="k">nullptr</span> <span class="p">};</span>
+        <span class="n">sizeOfTree</span> <span class="o">=</span> <span class="n">num</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//创建结点（全部完成后需要CheckRoot进行根节点识别）</span>
+    <span class="kt">void</span> <span class="nf">createNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">nodeNum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">lchild</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rchild</span><span class="p">,</span> <span class="n">T</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
 
-        nodeList[nodeNum]-&gt;data = data;
+        <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
 
-        if (lchild != 0) {
-            if (nodeList[lchild] == nullptr)
-                nodeList[lchild] = new node;
-            nodeList[lchild]-&gt;parent = nodeList[nodeNum];
-            nodeList[nodeNum]-&gt;lchild = nodeList[lchild];
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">lchild</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">];</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">];</span>
+        <span class="p">}</span>
 
-        if (rchild != 0) {
-            if (nodeList[rchild] == nullptr)
-                nodeList[rchild] = new node;
-            nodeList[rchild]-&gt;parent = nodeList[nodeNum];
-            nodeList[nodeNum]-&gt;rchild = nodeList[rchild];
-        }
-    }
+        <span class="k">if</span> <span class="p">(</span><span class="n">rchild</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">];</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    void checkRoot() {
-        for (int i = 1; i &lt;= sizeOfTree; i++) {
-            if (nodeList[i]-&gt;parent == nullptr) {
-                root = nodeList[i];
-                break;
-            }
-        }
-    }
+    <span class="kt">void</span> <span class="nf">checkRoot</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">sizeOfTree</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //清空
-    void clear() {
-        clear(root);
-    }
+    <span class="c1">//清空</span>
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    void clear(node *p) {
-        if (p == nullptr)
-            return;
-        clear(p-&gt;lchild);
-        clear(p-&gt;rchild);
-        delete p;
-        p = nullptr;
-    }
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
+        <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //构造
-    myBinaryTree() {}
+    <span class="c1">//构造</span>
+    <span class="n">myBinaryTree</span><span class="p">()</span> <span class="p">{}</span>
 
-    //析构
-    ~myBinaryTree() {
-        clear(root);
-    }
+    <span class="c1">//析构</span>
+    <span class="o">~</span><span class="n">myBinaryTree</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    //判断是否非空
-    bool empty() {
-        return root == nullptr;
-    }
+    <span class="c1">//判断是否非空</span>
+    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
 
 
-    //返回大小
-    long long size() {
-        return sizeOfTree;
-    }
+    <span class="c1">//返回大小</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">size</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">sizeOfTree</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //迭代器
-    class preorderIterator {
-        stack&lt;node*&gt; myStack;
-        node* currentData = nullptr;
-        friend preorderIterator myBinaryTree::preorderBegin();
-    public:
-        T&amp; get() {
-            return currentData-&gt;data;
-        }
-        //遍历结束或内容为空
-        bool finish() {
-            return currentData == nullptr&amp;&amp;myStack.empty();
-        }
+    <span class="c1">//迭代器</span>
+    <span class="k">class</span> <span class="nc">preorderIterator</span> <span class="p">{</span>
+        <span class="n">stack</span><span class="o">&lt;</span><span class="n">node</span><span class="o">*&gt;</span> <span class="n">myStack</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">currentData</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+        <span class="k">friend</span> <span class="n">preorderIterator</span> <span class="n">myBinaryTree</span><span class="o">::</span><span class="n">preorderBegin</span><span class="p">();</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">T</span><span class="o">&amp;</span> <span class="n">get</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">currentData</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//遍历结束或内容为空</span>
+        <span class="kt">bool</span> <span class="n">finish</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">currentData</span> <span class="o">==</span> <span class="k">nullptr</span><span class="o">&amp;&amp;</span><span class="n">myStack</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+        <span class="p">}</span>
 
-        preorderIterator&amp; operator++() {
-            if (finish())
-                return *this;
-            if (myStack.empty()) {
-                currentData = nullptr;
-                return *this;
-            }
-            currentData = myStack.top();
-            myStack.pop();
-            if (currentData-&gt;rchild != nullptr)
-                myStack.push(currentData-&gt;rchild);
-            if (currentData-&gt;lchild != nullptr)
-                myStack.push(currentData-&gt;lchild);
-            return *this;
-        }
-    };
+        <span class="n">preorderIterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">++</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">finish</span><span class="p">())</span>
+                <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">myStack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
+                <span class="n">currentData</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+                <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">currentData</span> <span class="o">=</span> <span class="n">myStack</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+            <span class="n">myStack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">myStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">myStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">currentData</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
 
-    preorderIterator preorderBegin() {
-        preorderIterator result;
-        result.myStack.push(root);
-        ++result;
-        return result;
-    }
-};
+    <span class="n">preorderIterator</span> <span class="nf">preorderBegin</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">preorderIterator</span> <span class="n">result</span><span class="p">;</span>
+        <span class="n">result</span><span class="p">.</span><span class="n">myStack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+        <span class="o">++</span><span class="n">result</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int main() {
-    int opNum;
-    cin &gt;&gt; opNum;
-    myBinaryTree&lt;int&gt; bTree;
-    bTree.createTree(100000);
-    bTree.createNode(1, 0, 0, 1);
-    bTree.root = bTree.nodeList[1];
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">opNum</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">opNum</span><span class="p">;</span>
+    <span class="n">myBinaryTree</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">bTree</span><span class="p">;</span>
+    <span class="n">bTree</span><span class="p">.</span><span class="n">createTree</span><span class="p">(</span><span class="mi">100000</span><span class="p">);</span>
+    <span class="n">bTree</span><span class="p">.</span><span class="n">createNode</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">bTree</span><span class="p">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
 
-    for (; opNum &gt; 0; opNum--) {
-        int op;
-        scanf(&quot;%d&quot;, &amp;op);
-        if (op == 1) {
-            int a, b, c;
-            scanf(&quot;%d %d %d&quot;, &amp;a, &amp;b, &amp;c);
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">opNum</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">opNum</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">op</span><span class="p">;</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">op</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">);</span>
 
-            //判断是否合法
-            if (bTree.nodeList[a] == nullptr ||
-                bTree.nodeList[a]-&gt;lchild != nullptr || bTree.nodeList[a]-&gt;rchild != nullptr ||
-                bTree.nodeList[b] != nullptr || bTree.nodeList[c] != nullptr) {
-                printf(&quot;Error!\n&quot;);
-                continue;
-            }
-            else {
-                bTree.createNode(a, b, c, a);
-                bTree.nodeList[b]-&gt;data = b;
-                bTree.nodeList[c]-&gt;data = c;
-                printf(&quot;Ok!\n&quot;);
-            }
-        }
-        else if (op == 2) {
-            int a;
-            scanf(&quot;%d&quot;, &amp;a);
-            //判断是否合法
-            if (bTree.nodeList[a] == nullptr) {
-                printf(&quot;Error!\n&quot;);
-                continue;
-            }
-            else {
-                printf(&quot;%d %d %d\n&quot;,
-                    bTree.nodeList[a]-&gt;parent == nullptr ? 0 : bTree.nodeList[a]-&gt;parent-&gt;data,
-                    bTree.nodeList[a]-&gt;lchild == nullptr ? 0 : bTree.nodeList[a]-&gt;lchild-&gt;data,
-                    bTree.nodeList[a]-&gt;rchild == nullptr ? 0 : bTree.nodeList[a]-&gt;rchild-&gt;data);
-            }
-        }
-        else if (op == 3) {
-            int a;
-            scanf(&quot;%d&quot;, &amp;a);
-            //判断是否合法
-            if (a == 1 || bTree.nodeList[a] == nullptr) {
-                printf(&quot;Error!\n&quot;);
-                continue;
-            }
-            else {
-                auto father = bTree.nodeList[a]-&gt;parent;
-                auto temp = father-&gt;lchild;
-                father-&gt;lchild = father-&gt;rchild;
-                father-&gt;rchild = temp;
-                printf(&quot;%d\n&quot;, father-&gt;lchild == bTree.nodeList[a] ? father-&gt;rchild-&gt;data : father-&gt;lchild-&gt;data);
-            }
-        }
-    }
+            <span class="c1">//判断是否合法</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">||</span>
+                <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">||</span>
+                <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">!=</span> <span class="k">nullptr</span> <span class="o">||</span> <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">bTree</span><span class="p">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
+                <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">b</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+                <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Ok!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+            <span class="c1">//判断是否合法</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d %d %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+                    <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span>
+                    <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">,</span>
+                    <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">==</span> <span class="k">nullptr</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+            <span class="c1">//判断是否合法</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">father</span> <span class="o">=</span> <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">;</span>
+                <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">father</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">;</span>
+                <span class="n">father</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">father</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">;</span>
+                <span class="n">father</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">father</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">==</span> <span class="n">bTree</span><span class="p">.</span><span class="n">nodeList</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">?</span> <span class="n">father</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="o">-&gt;</span><span class="nl">data</span> <span class="p">:</span> <span class="n">father</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //输出
-    bool firstWrite = true;
-    for (auto p = bTree.preorderBegin(); !p.finish(); ++p) {
-        if (firstWrite)
-            firstWrite = false;
-        else
-            printf(&quot; &quot;);
-        printf(&quot;%d&quot;, p.get());
-    }
+    <span class="c1">//输出</span>
+    <span class="kt">bool</span> <span class="n">firstWrite</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">bTree</span><span class="p">.</span><span class="n">preorderBegin</span><span class="p">();</span> <span class="o">!</span><span class="n">p</span><span class="p">.</span><span class="n">finish</span><span class="p">();</span> <span class="o">++</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">firstWrite</span><span class="p">)</span>
+            <span class="n">firstWrite</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 100000;
-class bTree {
-   private:
-    struct Node {
-        int data;
-        Node *parent;
-        Node *left;
-        Node *right;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
+<span class="k">class</span> <span class="nc">bTree</span> <span class="p">{</span>
+   <span class="k">private</span><span class="o">:</span>
+    <span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">Node</span> <span class="o">*</span><span class="n">parent</span><span class="p">;</span>
+        <span class="n">Node</span> <span class="o">*</span><span class="n">left</span><span class="p">;</span>
+        <span class="n">Node</span> <span class="o">*</span><span class="n">right</span><span class="p">;</span>
 
-        Node(int d, Node *p = NULL, Node *l = NULL, Node *r = NULL)
-            : data(d), parent(p), left(l), right(r) {}
-    };
-    Node *nodes[maxN + 100] = {NULL};
-    void clear(Node *n);
-    void preOrder(Node *p) const;
+        <span class="n">Node</span><span class="p">(</span><span class="kt">int</span> <span class="n">d</span><span class="p">,</span> <span class="n">Node</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">Node</span> <span class="o">*</span><span class="n">l</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">,</span> <span class="n">Node</span> <span class="o">*</span><span class="n">r</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">data</span><span class="p">(</span><span class="n">d</span><span class="p">),</span> <span class="n">parent</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">left</span><span class="p">(</span><span class="n">l</span><span class="p">),</span> <span class="n">right</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="p">};</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">nodes</span><span class="p">[</span><span class="n">maxN</span> <span class="o">+</span> <span class="mi">100</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="nb">NULL</span><span class="p">};</span>
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">n</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">preOrder</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="k">const</span><span class="p">;</span>
 
-   public:
-    bTree();
-    ~bTree();
-    void add(int n, int a, int b);
-    void find(int n);
-    void change(int n);
-    void preOrder() const;
-};
+   <span class="k">public</span><span class="o">:</span>
+    <span class="n">bTree</span><span class="p">();</span>
+    <span class="o">~</span><span class="n">bTree</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">change</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">preOrder</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
 
-bTree::bTree() {
-    Node *tmp = new Node(1);
-    nodes[1] = tmp;
-}
+<span class="n">bTree</span><span class="o">::</span><span class="n">bTree</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">Node</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-bTree::~bTree() {
-    // clear(nodes[1]);
-}
+<span class="n">bTree</span><span class="o">::~</span><span class="n">bTree</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// clear(nodes[1]);</span>
+<span class="p">}</span>
 
-void bTree::clear(Node *n) {
-    nodes[n-&gt;data] = 0;
-    if (n-&gt;left) {
-        clear(n-&gt;left);
-    }
-    if (n-&gt;right) {
-        clear(n-&gt;right);
-    }
-    delete n;
-}
+<span class="kt">void</span> <span class="n">bTree</span><span class="o">::</span><span class="n">clear</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">n</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">delete</span> <span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
 
-void bTree::add(int n, int a, int b) {
-    if (nodes[n] == NULL || nodes[n]-&gt;left != NULL || nodes[n]-&gt;right != NULL ||
-        nodes[a] != NULL || nodes[b] != NULL || a == b) {
-        cout &lt;&lt; &quot;Error!&quot; &lt;&lt; '\n';
-        return;
-    }
-    nodes[a] = new Node(a, nodes[n], 0, 0);
-    nodes[b] = new Node(b, nodes[n], 0, 0);
-    nodes[n]-&gt;left = nodes[a];
-    nodes[n]-&gt;right = nodes[b];
-    cout &lt;&lt; &quot;Ok!&quot; &lt;&lt; '\n';
-}
+<span class="kt">void</span> <span class="n">bTree</span><span class="o">::</span><span class="n">add</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">||</span>
+        <span class="n">nodes</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">nodes</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Error!&quot;</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">a</span><span class="p">];</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Ok!&quot;</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+<span class="p">}</span>
 
-void bTree::find(int n) {
-    if (nodes[n] == NULL) {
-        cout &lt;&lt; &quot;Error!&quot; &lt;&lt; '\n';
-        return;
-    }
-    if (nodes[n]-&gt;parent == NULL) {
-        cout &lt;&lt; 0 &lt;&lt; ' ';
-    } else {
-        cout &lt;&lt; nodes[n]-&gt;parent-&gt;data &lt;&lt; ' ';
-    }
-    if (nodes[n]-&gt;left == NULL) {
-        cout &lt;&lt; 0 &lt;&lt; ' ';
-    } else {
-        cout &lt;&lt; nodes[n]-&gt;left-&gt;data &lt;&lt; ' ';
-    }
-    if (nodes[n]-&gt;right == NULL) {
-        cout &lt;&lt; 0 &lt;&lt; ' ';
-    } else {
-        cout &lt;&lt; nodes[n]-&gt;right-&gt;data &lt;&lt; ' ';
-    }
-    cout &lt;&lt; '\n';
+<span class="kt">void</span> <span class="n">bTree</span><span class="o">::</span><span class="n">find</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Error!&quot;</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
 
-    return;
-}
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
 
-void bTree::change(int n) {
-    if (nodes[n] == NULL || n == 1) {
-        cout &lt;&lt; &quot;Error!&quot; &lt;&lt; '\n';
-        return;
-    }
+<span class="kt">void</span> <span class="n">bTree</span><span class="o">::</span><span class="n">change</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="o">||</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Error!&quot;</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    Node *tmp = nodes[n]-&gt;parent, *lTmp = tmp-&gt;left;
-    if (tmp-&gt;left == nodes[n]) {
-        cout &lt;&lt; tmp-&gt;right-&gt;data &lt;&lt; '\n';
-    } else {
-        cout &lt;&lt; tmp-&gt;left-&gt;data &lt;&lt; '\n';
-    }
-    tmp-&gt;left = tmp-&gt;right;
-    tmp-&gt;right = lTmp;
+    <span class="n">Node</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span><span class="p">,</span> <span class="o">*</span><span class="n">lTmp</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">==</span> <span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">right</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">left</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">left</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">;</span>
+    <span class="n">tmp</span><span class="o">-&gt;</span><span class="n">right</span> <span class="o">=</span> <span class="n">lTmp</span><span class="p">;</span>
 
-    return;
-}
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
 
-void bTree::preOrder() const { preOrder(nodes[1]); }
+<span class="kt">void</span> <span class="n">bTree</span><span class="o">::</span><span class="n">preOrder</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="n">preOrder</span><span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span> <span class="p">}</span>
 
-void bTree::preOrder(Node *p) const {
-    if (p == NULL) {
-        return;
-    }
-    cout &lt;&lt; p-&gt;data &lt;&lt; ' ';
-    preOrder(p-&gt;left);
-    preOrder(p-&gt;right);
-}
+<span class="kt">void</span> <span class="n">bTree</span><span class="o">::</span><span class="n">preOrder</span><span class="p">(</span><span class="n">Node</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+    <span class="n">preOrder</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+    <span class="n">preOrder</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-    int m, n, a, b, c;
-    bTree tree1;
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
+    <span class="n">bTree</span> <span class="n">tree1</span><span class="p">;</span>
 
-    cin &gt;&gt; m;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
 
-    for (int i = 0; i &lt; m; i++) {
-        cin &gt;&gt; n;
-        if (n == 1) {
-            cin &gt;&gt; a &gt;&gt; b &gt;&gt; c;
-            tree1.add(a, b, c);
-        } else if (n == 2) {
-            cin &gt;&gt; a;
-            tree1.find(a);
-        } else if (n == 3) {
-            cin &gt;&gt; a;
-            tree1.change(a);
-        }
-    }
-    tree1.preOrder();
-    return 0;
-}
-</code></pre>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span> <span class="o">&gt;&gt;</span> <span class="n">c</span><span class="p">;</span>
+            <span class="n">tree1</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">;</span>
+            <span class="n">tree1</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">;</span>
+            <span class="n">tree1</span><span class="p">.</span><span class="n">change</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">tree1</span><span class="p">.</span><span class="n">preOrder</span><span class="p">();</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

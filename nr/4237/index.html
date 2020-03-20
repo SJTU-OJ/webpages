@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -418,121 +420,121 @@ YES
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;cstring&quot;
-#include &quot;cstdio&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-class node {
-public:
-    //unsigned long long val=0;
-    int left = 0, right = 0;
-    unsigned long long tag = 0, tag_num = 0;
-};
+<span class="k">class</span> <span class="nc">node</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="c1">//unsigned long long val=0;</span>
+    <span class="kt">int</span> <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">tag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tag_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-node smt[800009];
-unsigned long long pnum[200009] = { 0 };
+<span class="n">node</span> <span class="n">smt</span><span class="p">[</span><span class="mi">800009</span><span class="p">];</span>
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">pnum</span><span class="p">[</span><span class="mi">200009</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
 
-void build_tree(int l, int r, int root) {
-    smt[root].left = l;
-    smt[root].right = r;
-    if (l == r - 1) {
-        return;
-    }
-    int mid = (l + r) &gt;&gt; 1;
-    build_tree(l, mid, root * 2);
-    build_tree(mid, r, root * 2 + 1);
-}
+<span class="kt">void</span> <span class="nf">build_tree</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">left</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
+    <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">right</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">==</span> <span class="n">r</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">build_tree</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">root</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="n">build_tree</span><span class="p">(</span><span class="n">mid</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">root</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
 
-void push_down(int root) {
-    smt[root * 2].tag = (smt[root * 2].tag * pnum[smt[root].tag_num] + smt[root].tag);
-    smt[root * 2].tag_num += smt[root].tag_num;
-    smt[root * 2 + 1].tag = (smt[root * 2 + 1].tag * pnum[smt[root].tag_num] + smt[root].tag);
-    smt[root * 2 + 1].tag_num += smt[root].tag_num;
-    smt[root].tag = 0;
-    smt[root].tag_num = 0;
-}
+<span class="kt">void</span> <span class="nf">push_down</span><span class="p">(</span><span class="kt">int</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">smt</span><span class="p">[</span><span class="n">root</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">tag</span> <span class="o">=</span> <span class="p">(</span><span class="n">smt</span><span class="p">[</span><span class="n">root</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">tag</span> <span class="o">*</span> <span class="n">pnum</span><span class="p">[</span><span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag_num</span><span class="p">]</span> <span class="o">+</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag</span><span class="p">);</span>
+    <span class="n">smt</span><span class="p">[</span><span class="n">root</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">tag_num</span> <span class="o">+=</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag_num</span><span class="p">;</span>
+    <span class="n">smt</span><span class="p">[</span><span class="n">root</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">tag</span> <span class="o">=</span> <span class="p">(</span><span class="n">smt</span><span class="p">[</span><span class="n">root</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">tag</span> <span class="o">*</span> <span class="n">pnum</span><span class="p">[</span><span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag_num</span><span class="p">]</span> <span class="o">+</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag</span><span class="p">);</span>
+    <span class="n">smt</span><span class="p">[</span><span class="n">root</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">tag_num</span> <span class="o">+=</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag_num</span><span class="p">;</span>
+    <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-void update(int l, int r, unsigned long long val, int root) {
-    if (l &lt;= smt[root].left &amp;&amp; smt[root].right &lt;= r) {
-        smt[root].tag = smt[root].tag * (unsigned long long)257 + val;
-        smt[root].tag_num++;
-        return;
-    }
-    int mid = (smt[root].left + smt[root].right) &gt;&gt; 1;
-    push_down(root);
-    if (l &lt; mid) {
-        update(l, r, val, root * 2);
-    }
-    if (r &gt; mid) {
-        update(l, r, val, root * 2 + 1);
-    }
-}
+<span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">val</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">right</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag</span> <span class="o">=</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag</span> <span class="o">*</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="p">)</span><span class="mi">257</span> <span class="o">+</span> <span class="n">val</span><span class="p">;</span>
+        <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag_num</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">left</span> <span class="o">+</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">push_down</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">root</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">root</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-unsigned long long query(int l, int r, int root) {
-    if (l &lt;= smt[root].left &amp;&amp; smt[root].right &lt;= r) {
-        return smt[root].tag;
-    }
-    int mid = (smt[root].left + smt[root].right) &gt;&gt; 1;
-    push_down(root);
-    if (l &lt; mid) {
-        return query(l, r, root * 2);
-    }
-    if (r &gt; mid) {
-        return query(l, r, root * 2 + 1);
-    }
-}
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span> <span class="nf">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;=</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">left</span> <span class="o">&amp;&amp;</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">right</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">tag</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">left</span> <span class="o">+</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">right</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="n">push_down</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&lt;</span> <span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">root</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">r</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">query</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">root</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-int get_pos(int pos, int root) {
-    if (smt[root].right - smt[root].left == 1) {
-        return root;
-    }
-    int mid = (smt[root].right + smt[root].left) &gt;&gt; 1;
-    if (pos &lt; mid)
-        return get_pos(pos, root * 2);
-    else
-        return get_pos(pos, root * 2 + 1);
-}
+<span class="kt">int</span> <span class="nf">get_pos</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">right</span> <span class="o">-</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">left</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">root</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">right</span> <span class="o">+</span> <span class="n">smt</span><span class="p">[</span><span class="n">root</span><span class="p">].</span><span class="n">left</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">&lt;</span> <span class="n">mid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">get_pos</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">root</span> <span class="o">*</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="n">get_pos</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">root</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main() {
-    pnum[0] = 1;
-    for (int i = 1; i &lt; 200000; ++i)
-        pnum[i] = pnum[i - 1] * (unsigned long long)257;
-    int n, m;
-    scanf(&quot;%d %d&quot;, &amp;n, &amp;m);
-    build_tree(0, n, 1);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">pnum</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">200000</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">pnum</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">pnum</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">long</span> <span class="kt">long</span><span class="p">)</span><span class="mi">257</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+    <span class="n">build_tree</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 
-    for (; m &gt; 0; --m) {
-        int op;
-        scanf(&quot;%d&quot;, &amp;op);
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">m</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">op</span><span class="p">;</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">op</span><span class="p">);</span>
 
-        if (op == 0) {
-            int L, R, K;
-            scanf(&quot;%d %d %d&quot;, &amp;L, &amp;R, &amp;K);
-            update(L - 1, R, K, 1);
-        }
-        else {
-            int X, Y;
-            scanf(&quot;%d %d&quot;, &amp;X, &amp;Y);
-            auto a = query(X - 1, X, 1), b = query(Y - 1, Y, 1);
-            if (a == b) {
-                printf(&quot;YES\n&quot;);
-                auto pos1 = get_pos(X - 1, 1), pos2 = get_pos(Y - 1, 1);
-                smt[pos1].tag = 0;
-                smt[pos2].tag = 0;
-                smt[pos1].tag_num = 0;
-                smt[pos2].tag_num = 0;
-            }
-            else {
-                printf(&quot;NO\n&quot;);
-            }
-        }
-    }
+        <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">L</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">K</span><span class="p">;</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">L</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">R</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">K</span><span class="p">);</span>
+            <span class="n">update</span><span class="p">(</span><span class="n">L</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">;</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">X</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Y</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">a</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">b</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;YES</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">auto</span> <span class="n">pos1</span> <span class="o">=</span> <span class="n">get_pos</span><span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">pos2</span> <span class="o">=</span> <span class="n">get_pos</span><span class="p">(</span><span class="n">Y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+                <span class="n">smt</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">tag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="n">smt</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">tag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="n">smt</span><span class="p">[</span><span class="n">pos1</span><span class="p">].</span><span class="n">tag_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="n">smt</span><span class="p">[</span><span class="n">pos2</span><span class="p">].</span><span class="n">tag_num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;NO</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

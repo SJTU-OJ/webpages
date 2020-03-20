@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -383,194 +385,195 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-#include &quot;queue&quot;
-#include &quot;cmath&quot;
-#include &quot;stack&quot;
-#include &quot;cstring&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;queue&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cmath&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;stack&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-//二叉树类
-template &lt;class T&gt;
-class myBinaryTree {
-public:
-    class node {
-    public:
-        T data;
-        node* lchild = nullptr, * rchild = nullptr, * parent = nullptr;
-    };
-    node* root = nullptr;
-    node** nodeList = nullptr;
-    long long sizeOfTree = 0;
+<span class="c1">//二叉树类</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">myBinaryTree</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">class</span> <span class="nc">node</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">T</span> <span class="n">data</span><span class="p">;</span>
+        <span class="n">node</span><span class="o">*</span> <span class="n">lchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">*</span> <span class="n">rchild</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">,</span> <span class="o">*</span> <span class="n">parent</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">node</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="n">node</span><span class="o">**</span> <span class="n">nodeList</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">sizeOfTree</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-    //创建一个相应大小的树
-    void createTree(int num) {
-        nodeList = new node * [num + 1]{ nullptr };
-        sizeOfTree = num;
-    }
-    //创建结点（全部完成后需要CheckRoot进行根节点识别）
-    void createNode(int nodeNum, int lchild, int rchild, T data) {
-        if (nodeList[nodeNum] == nullptr)
-            nodeList[nodeNum] = new node;
+    <span class="c1">//创建一个相应大小的树</span>
+    <span class="kt">void</span> <span class="nf">createTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nodeList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span> <span class="o">*</span> <span class="p">[</span><span class="n">num</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]{</span> <span class="k">nullptr</span> <span class="p">};</span>
+        <span class="n">sizeOfTree</span> <span class="o">=</span> <span class="n">num</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//创建结点（全部完成后需要CheckRoot进行根节点识别）</span>
+    <span class="kt">void</span> <span class="nf">createNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">nodeNum</span><span class="p">,</span> <span class="kt">int</span> <span class="n">lchild</span><span class="p">,</span> <span class="kt">int</span> <span class="n">rchild</span><span class="p">,</span> <span class="n">T</span> <span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
 
-        nodeList[nodeNum]-&gt;data = data;
+        <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
 
-        if (lchild != 0) {
-            if (nodeList[lchild] == nullptr)
-                nodeList[lchild] = new node;
-            nodeList[lchild]-&gt;parent = nodeList[nodeNum];
-            nodeList[nodeNum]-&gt;lchild = nodeList[lchild];
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">lchild</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">];</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">lchild</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">lchild</span><span class="p">];</span>
+        <span class="p">}</span>
 
-        if (rchild != 0) {
-            if (nodeList[rchild] == nullptr)
-                nodeList[rchild] = new node;
-            nodeList[rchild]-&gt;parent = nodeList[nodeNum];
-            nodeList[nodeNum]-&gt;rchild = nodeList[rchild];
-        }
-    }
-    //创建一个num大小的树，数据为treeData
-    void createTree(T * treeData, int num) {
-        createTree(num);
-        for (int i = 1; i &lt;= num; i++) {
-            int lchild = i * 2 &lt;= num ? i * 2 : 0,
-                rchild = i * 2 + 1 &lt;= num ? i * 2 + 1 : 0;
-            createNode(i, lchild, rchild, treeData[i - 1]);
-        }
-        checkRoot();
-    }
+        <span class="k">if</span> <span class="p">(</span><span class="n">rchild</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">]</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+                <span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">node</span><span class="p">;</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">];</span>
+            <span class="n">nodeList</span><span class="p">[</span><span class="n">nodeNum</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">rchild</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">rchild</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">//创建一个num大小的树，数据为treeData</span>
+    <span class="kt">void</span> <span class="nf">createTree</span><span class="p">(</span><span class="n">T</span> <span class="o">*</span> <span class="n">treeData</span><span class="p">,</span> <span class="kt">int</span> <span class="n">num</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">createTree</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">lchild</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">num</span> <span class="o">?</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="n">rchild</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">num</span> <span class="o">?</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">createNode</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">lchild</span><span class="p">,</span> <span class="n">rchild</span><span class="p">,</span> <span class="n">treeData</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="n">checkRoot</span><span class="p">();</span>
+    <span class="p">}</span>
 
-    void checkRoot() {
-        for (int i = 1; i &lt;= sizeOfTree; i++) {
-            if (nodeList[i]-&gt;parent == nullptr) {
-                root = nodeList[i];
-                break;
-            }
-        }
-    }
+    <span class="kt">void</span> <span class="nf">checkRoot</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">sizeOfTree</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">nodeList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">parent</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">root</span> <span class="o">=</span> <span class="n">nodeList</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    //清空
-    void clear() {
-        clear(root);
-    }
+    <span class="c1">//清空</span>
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    void clear(node * p) {
-        if (p == nullptr)
-            return;
-        clear(p-&gt;lchild);
-        clear(p-&gt;rchild);
-        delete p;
-        p = nullptr;
-    }
+    <span class="kt">void</span> <span class="nf">clear</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+            <span class="k">return</span><span class="p">;</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">);</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">);</span>
+        <span class="k">delete</span> <span class="n">p</span><span class="p">;</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //构造
-    myBinaryTree() {}
+    <span class="c1">//构造</span>
+    <span class="n">myBinaryTree</span><span class="p">()</span> <span class="p">{}</span>
 
-    //析构
-    ~myBinaryTree() {
-        clear(root);
-    }
+    <span class="c1">//析构</span>
+    <span class="o">~</span><span class="n">myBinaryTree</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">clear</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    //判断是否非空
-    bool empty() {
-        return root == nullptr;
-    }
+    <span class="c1">//判断是否非空</span>
+    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">root</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    //返回大小
-    long long size() {
-        return sizeOfTree;
-    }
-};
+    <span class="c1">//返回大小</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">size</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">sizeOfTree</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int ans = 0;
-//lca(节点)
-int lca(myBinaryTree&lt;int&gt;::node* curNode, int d1, int d2) {
-    if (curNode == nullptr)
-        return 0;
-    auto l = lca(curNode-&gt;lchild, d1, d2), r = lca(curNode-&gt;rchild, d1, d2);
-    if (ans &gt; 0)
-        return 2;
-    else if (l + r + int(curNode-&gt;data == d1 || curNode-&gt;data == d2) &gt;= 2) {
-        ans = curNode-&gt;data;
-        return 2;
-    }
-    else
-        return l + r + int(curNode-&gt;data == d1 || curNode-&gt;data == d2);
-}
+<span class="kt">int</span> <span class="n">ans</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="c1">//lca(节点)</span>
+<span class="kt">int</span> <span class="nf">lca</span><span class="p">(</span><span class="n">myBinaryTree</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;::</span><span class="n">node</span><span class="o">*</span> <span class="n">curNode</span><span class="p">,</span> <span class="kt">int</span> <span class="n">d1</span><span class="p">,</span> <span class="kt">int</span> <span class="n">d2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">curNode</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="n">l</span> <span class="o">=</span> <span class="n">lca</span><span class="p">(</span><span class="n">curNode</span><span class="o">-&gt;</span><span class="n">lchild</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span> <span class="n">r</span> <span class="o">=</span> <span class="n">lca</span><span class="p">(</span><span class="n">curNode</span><span class="o">-&gt;</span><span class="n">rchild</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ans</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="kt">int</span><span class="p">(</span><span class="n">curNode</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">d1</span> <span class="o">||</span> <span class="n">curNode</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">d2</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="n">curNode</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="n">l</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="kt">int</span><span class="p">(</span><span class="n">curNode</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">d1</span> <span class="o">||</span> <span class="n">curNode</span><span class="o">-&gt;</span><span class="n">data</span> <span class="o">==</span> <span class="n">d2</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>
 
-    myBinaryTree&lt;int&gt; bTree;
-    int N, X, Y;
-    cin &gt;&gt; N &gt;&gt; X &gt;&gt; Y;
+    <span class="n">myBinaryTree</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">bTree</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span> <span class="o">&gt;&gt;</span> <span class="n">X</span> <span class="o">&gt;&gt;</span> <span class="n">Y</span><span class="p">;</span>
 
-    bTree.createTree(N);
-    for (int i = 1; i &lt;= N; i++) {
-        int lchild, rchild;
-        cin &gt;&gt; lchild &gt;&gt; rchild;
-        bTree.createNode(i, lchild, rchild, i);
-    }
-    bTree.checkRoot();
-    lca(bTree.root, X, Y);
-    cout &lt;&lt; ans;
+    <span class="n">bTree</span><span class="p">.</span><span class="n">createTree</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">lchild</span><span class="p">,</span> <span class="n">rchild</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">lchild</span> <span class="o">&gt;&gt;</span> <span class="n">rchild</span><span class="p">;</span>
+        <span class="n">bTree</span><span class="p">.</span><span class="n">createNode</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">lchild</span><span class="p">,</span> <span class="n">rchild</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">bTree</span><span class="p">.</span><span class="n">checkRoot</span><span class="p">();</span>
+    <span class="n">lca</span><span class="p">(</span><span class="n">bTree</span><span class="p">.</span><span class="n">root</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">ans</span><span class="p">;</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 1e6 + 100;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">1e6</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
 
-int size1 = 0;
-long long N, X, Y, Xtemp, Ytemp;
-long long father[maxN] = {0}, XFather[maxN] = {0};
+<span class="kt">int</span> <span class="n">size1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">N</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Xtemp</span><span class="p">,</span> <span class="n">Ytemp</span><span class="p">;</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">father</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">XFather</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    cin &gt;&gt; N &gt;&gt; X &gt;&gt; Y;
-    long long temp1, temp2;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span> <span class="o">&gt;&gt;</span> <span class="n">X</span> <span class="o">&gt;&gt;</span> <span class="n">Y</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">temp1</span><span class="p">,</span> <span class="n">temp2</span><span class="p">;</span>
 
-    for (long long i = 1; i &lt;= N; i++) {
-        cin &gt;&gt; temp1 &gt;&gt; temp2;
-        if (temp1 != 0) {
-            father[temp1] = i;
-        }
-        if (temp2 != 0) {
-            father[temp2] = i;
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">long</span> <span class="kt">long</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">temp1</span> <span class="o">&gt;&gt;</span> <span class="n">temp2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp1</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">father</span><span class="p">[</span><span class="n">temp1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">father</span><span class="p">[</span><span class="n">temp2</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    Xtemp = X;
-    Ytemp = Y;
-    while (Xtemp != 0) {
-        XFather[size1++] = Xtemp;
-        Xtemp = father[Xtemp];
-    }
+    <span class="n">Xtemp</span> <span class="o">=</span> <span class="n">X</span><span class="p">;</span>
+    <span class="n">Ytemp</span> <span class="o">=</span> <span class="n">Y</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">Xtemp</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">XFather</span><span class="p">[</span><span class="n">size1</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">Xtemp</span><span class="p">;</span>
+        <span class="n">Xtemp</span> <span class="o">=</span> <span class="n">father</span><span class="p">[</span><span class="n">Xtemp</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    while (Ytemp != 0) {
-        for (int i = 0; i &lt; size1; i++) {
-            if (XFather[i] == Ytemp) {
-                cout &lt;&lt; Ytemp &lt;&lt; '\n';
-                return 0;
-            }
-        }
+    <span class="k">while</span> <span class="p">(</span><span class="n">Ytemp</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">XFather</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">Ytemp</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">Ytemp</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        Ytemp = father[Ytemp];
-    }
+        <span class="n">Ytemp</span> <span class="o">=</span> <span class="n">father</span><span class="p">[</span><span class="n">Ytemp</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

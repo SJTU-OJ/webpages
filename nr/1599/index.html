@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -411,91 +413,90 @@ NO
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* Brackets Stack */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* Brackets Stack */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-char full[1000005], inco[1000005];
-bool isco[1000005] = {0};
-int n, fsize = 0, isize = 0;
+<span class="kt">char</span> <span class="n">full</span><span class="p">[</span><span class="mi">1000005</span><span class="p">],</span> <span class="n">inco</span><span class="p">[</span><span class="mi">1000005</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="n">isco</span><span class="p">[</span><span class="mi">1000005</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">fsize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">isize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-inline bool isLeft(char ch){
-    return (ch == '(' || ch == '[' || ch == '{');
-}
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">isLeft</span><span class="p">(</span><span class="kt">char</span> <span class="n">ch</span><span class="p">){</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;[&#39;</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;{&#39;</span><span class="p">);</span>
+<span class="p">}</span>
 
-inline char getRight(char ch){
-    if (ch == '(') return ')';
-    else if (ch == '[') return ']';
-    else if (ch == '{') return '}';
-    else return ' ';
-}
+<span class="kr">inline</span> <span class="kt">char</span> <span class="nf">getRight</span><span class="p">(</span><span class="kt">char</span> <span class="n">ch</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;)&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;[&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;]&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;{&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;}&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">return</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+<span class="p">}</span>
 
-inline char getLeft(char ch){
-    if (ch == ')') return '(';
-    else if (ch == ']') return '[';
-    else if (ch == '}') return '{';
-    else return ' ';
-}
+<span class="kr">inline</span> <span class="kt">char</span> <span class="nf">getLeft</span><span class="p">(</span><span class="kt">char</span> <span class="n">ch</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;)&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;(&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;[&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;{&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">return</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; n;
-    while (n--){
-        int op;
-        char ch;
-        cin &gt;&gt; op;
-        switch(op){
-        case 1:
-            cin &gt;&gt; ch;
-            full[fsize++] = ch;
-            if (isLeft(ch)){
-                inco[isize++] = ch;
-                isco[fsize - 1] = true;
-            }
-            else{
-                if (isize != 0 &amp;&amp; isLeft(inco[isize - 1]) &amp;&amp; ch == getRight(inco[isize - 1])){
-                    --isize;
-                    isco[fsize - 1] = true;
-                }
-                else{
-                    inco[isize++] = ch;
-                    isco[fsize - 1] = false;
-                }
-            }
-            break;
-        case 2:
-            if (fsize == 0)
-                break;
-            ch = full[fsize - 1];
-            if (isLeft(ch))
-                --isize;
-            else{
-                if (isco[fsize - 1])
-                    inco[isize++] = getLeft(ch);
-                else
-                    --isize;
-            }
-            --fsize;
-            break;
-        case 3:
-            if (fsize != 0)
-                cout &lt;&lt; full[fsize - 1] &lt;&lt; '\n';
-            break;
-        case 4:
-            if (isize)
-                cout &lt;&lt; &quot;NO\n&quot;;
-            else
-                cout &lt;&lt; &quot;YES\n&quot;;
-            break;
-        }
-    }
-    return 0;
-}
-
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">ios_base</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">n</span><span class="o">--</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">op</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">op</span><span class="p">;</span>
+        <span class="k">switch</span><span class="p">(</span><span class="n">op</span><span class="p">){</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ch</span><span class="p">;</span>
+            <span class="n">full</span><span class="p">[</span><span class="n">fsize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">isLeft</span><span class="p">(</span><span class="n">ch</span><span class="p">)){</span>
+                <span class="n">inco</span><span class="p">[</span><span class="n">isize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+                <span class="n">isco</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">isize</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">isLeft</span><span class="p">(</span><span class="n">inco</span><span class="p">[</span><span class="n">isize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="n">ch</span> <span class="o">==</span> <span class="n">getRight</span><span class="p">(</span><span class="n">inco</span><span class="p">[</span><span class="n">isize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])){</span>
+                    <span class="o">--</span><span class="n">isize</span><span class="p">;</span>
+                    <span class="n">isco</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span><span class="p">{</span>
+                    <span class="n">inco</span><span class="p">[</span><span class="n">isize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+                    <span class="n">isco</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">fsize</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="n">ch</span> <span class="o">=</span> <span class="n">full</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">isLeft</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span>
+                <span class="o">--</span><span class="n">isize</span><span class="p">;</span>
+            <span class="k">else</span><span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">isco</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                    <span class="n">inco</span><span class="p">[</span><span class="n">isize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">getLeft</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+                <span class="k">else</span>
+                    <span class="o">--</span><span class="n">isize</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="o">--</span><span class="n">fsize</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">fsize</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">full</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">isize</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;NO</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;YES</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -393,114 +395,114 @@
 </details>
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int maxN = 2e6 + 100;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">maxN</span> <span class="o">=</span> <span class="mf">2e6</span> <span class="o">+</span> <span class="mi">100</span><span class="p">;</span>
 
-struct Node {
-    int id;
-    int like;
-    int date;
-};
+<span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">like</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">date</span><span class="p">;</span>
+<span class="p">};</span>
 
-int pos[maxN] = {0}, N, M, date = 1;
-Node heap[maxN] = {0};
+<span class="kt">int</span> <span class="n">pos</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">},</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">date</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">Node</span> <span class="n">heap</span><span class="p">[</span><span class="n">maxN</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-void buildHeap();
-void percolateUp(int);
-void percolateDown(int);
+<span class="kt">void</span> <span class="nf">buildHeap</span><span class="p">();</span>
+<span class="kt">void</span> <span class="nf">percolateUp</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">percolateDown</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    cin &gt;&gt; N &gt;&gt; M;
-    for (int i = 1; i &lt;= N; i++) {
-        cin &gt;&gt; heap[i].like;
-        heap[i].id = i;
-        heap[i].date = date++;
-        pos[i] = i;
-    }
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span> <span class="o">&gt;&gt;</span> <span class="n">M</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">like</span><span class="p">;</span>
+        <span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">heap</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    buildHeap();
+    <span class="n">buildHeap</span><span class="p">();</span>
 
-    int x, y;
-    for (int i = 0; i &lt; M; i++) {
-        cin &gt;&gt; x &gt;&gt; y;
-        heap[pos[x]].like += y;
-        heap[pos[x]].date = date++;
-        if (y &gt; 0) {
-            percolateDown(pos[x]);
-        } else if (y &lt; 0) {
-            percolateUp(pos[x]);
-        }
-        cout &lt;&lt; heap[1].id &lt;&lt; '\n';
-    }
+    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">heap</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">]].</span><span class="n">like</span> <span class="o">+=</span> <span class="n">y</span><span class="p">;</span>
+        <span class="n">heap</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">]].</span><span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="o">++</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">percolateDown</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">percolateUp</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">x</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">id</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    return 0;
-}
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 
-void buildHeap() {
-    for (int i = N / 2; i &gt; 0; i--) {
-        percolateDown(i);
-    }
-}
+<span class="kt">void</span> <span class="nf">buildHeap</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">N</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">percolateDown</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-void percolateUp(int hole) {
-    int like = heap[hole].like, id = heap[hole].id, date = heap[hole].date,
-        parent;
+<span class="kt">void</span> <span class="nf">percolateUp</span><span class="p">(</span><span class="kt">int</span> <span class="n">hole</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">like</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">like</span><span class="p">,</span> <span class="n">id</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">id</span><span class="p">,</span> <span class="n">date</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">date</span><span class="p">,</span>
+        <span class="n">parent</span><span class="p">;</span>
 
-    while (hole / 2 != 0) {
-        parent = hole / 2;
-        if (like &lt;= heap[parent].like) {
-            heap[hole].like = heap[parent].like;
-            heap[hole].id = heap[parent].id;
-            heap[hole].date = heap[hole].date;
-            pos[heap[hole].id] = hole;
-            hole = parent;
-        } else {
-            break;
-        }
-    }
-    heap[hole].id = id;
-    heap[hole].like = like;
-    heap[hole].date = date;
-    pos[id] = hole;
-}
+    <span class="k">while</span> <span class="p">(</span><span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">hole</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">like</span> <span class="o">&lt;=</span> <span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">].</span><span class="n">like</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">like</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">].</span><span class="n">like</span><span class="p">;</span>
+            <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">id</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">parent</span><span class="p">].</span><span class="n">id</span><span class="p">;</span>
+            <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">date</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">date</span><span class="p">;</span>
+            <span class="n">pos</span><span class="p">[</span><span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">hole</span><span class="p">;</span>
+            <span class="n">hole</span> <span class="o">=</span> <span class="n">parent</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">id</span> <span class="o">=</span> <span class="n">id</span><span class="p">;</span>
+    <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">like</span> <span class="o">=</span> <span class="n">like</span><span class="p">;</span>
+    <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="p">;</span>
+    <span class="n">pos</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">hole</span><span class="p">;</span>
+<span class="p">}</span>
 
-void percolateDown(int hole) {
-    int like = heap[hole].like, id = heap[hole].id, data = heap[hole].date,
-        child;
+<span class="kt">void</span> <span class="nf">percolateDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">hole</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">like</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">like</span><span class="p">,</span> <span class="n">id</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">id</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">date</span><span class="p">,</span>
+        <span class="n">child</span><span class="p">;</span>
 
-    while ((hole * 2) &lt;= N) {
-        child = hole * 2;
-        if (child &lt; N) {
-            if (heap[child + 1].like &lt; heap[child].like ||
-                (heap[child + 1].like == heap[child].like &amp;&amp;
-                 heap[child + 1].date &gt; heap[child].date)) {
-                child += 1;
-            }
-        }
-        if (like &gt; heap[child].like ||
-            (like == heap[child].like &amp;&amp; date &lt; heap[child].date)) {
-            heap[hole].like = heap[child].like;
-            heap[hole].id = heap[child].id;
-            heap[hole].date = heap[child].date;
-            pos[heap[hole].id] = hole;
-            hole = child;
-        } else {
-            break;
-        }
-    }
-    heap[hole].id = id;
-    heap[hole].date = date;
-    heap[hole].like = like;
-    pos[id] = hole;
-}
-</code></pre>
+    <span class="k">while</span> <span class="p">((</span><span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">hole</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">child</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">child</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">like</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">].</span><span class="n">like</span> <span class="o">||</span>
+                <span class="p">(</span><span class="n">heap</span><span class="p">[</span><span class="n">child</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">like</span> <span class="o">==</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">].</span><span class="n">like</span> <span class="o">&amp;&amp;</span>
+                 <span class="n">heap</span><span class="p">[</span><span class="n">child</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">date</span> <span class="o">&gt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">].</span><span class="n">date</span><span class="p">))</span> <span class="p">{</span>
+                <span class="n">child</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">like</span> <span class="o">&gt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">].</span><span class="n">like</span> <span class="o">||</span>
+            <span class="p">(</span><span class="n">like</span> <span class="o">==</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">].</span><span class="n">like</span> <span class="o">&amp;&amp;</span> <span class="n">date</span> <span class="o">&lt;</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">].</span><span class="n">date</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">like</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">].</span><span class="n">like</span><span class="p">;</span>
+            <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">id</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">].</span><span class="n">id</span><span class="p">;</span>
+            <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">date</span> <span class="o">=</span> <span class="n">heap</span><span class="p">[</span><span class="n">child</span><span class="p">].</span><span class="n">date</span><span class="p">;</span>
+            <span class="n">pos</span><span class="p">[</span><span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">hole</span><span class="p">;</span>
+            <span class="n">hole</span> <span class="o">=</span> <span class="n">child</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">id</span> <span class="o">=</span> <span class="n">id</span><span class="p">;</span>
+    <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">date</span> <span class="o">=</span> <span class="n">date</span><span class="p">;</span>
+    <span class="n">heap</span><span class="p">[</span><span class="n">hole</span><span class="p">].</span><span class="n">like</span> <span class="o">=</span> <span class="n">like</span><span class="p">;</span>
+    <span class="n">pos</span><span class="p">[</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">hole</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

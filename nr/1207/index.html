@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -405,202 +407,203 @@
 </details>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;queue&quot;
-#include &quot;iomanip&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;queue&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;iomanip&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int main() {
-    queue&lt;int&gt; car;
-    queue&lt;int&gt; truck;
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">car</span><span class="p">;</span>
+    <span class="n">queue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">truck</span><span class="p">;</span>
 
-    //输入
-    int num;
-    cin &gt;&gt; num;
-    for (int i = 0; i &lt; num; i++) {
-        int temp,arrive;
-        scanf(&quot;%d %d&quot;, &amp;temp, &amp;arrive);
-        if (temp == 0)
-            car.push(arrive);
-        else
-            truck.push(arrive);
-    }
+    <span class="c1">//输入</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp</span><span class="p">,</span><span class="n">arrive</span><span class="p">;</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">temp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">arrive</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">car</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">arrive</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="n">truck</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">arrive</span><span class="p">);</span>
+    <span class="p">}</span>
 
-    long long carTime = 0, truckTime = 0;
-    int carNum = car.size(), truckNum = truck.size();
+    <span class="kt">long</span> <span class="kt">long</span> <span class="n">carTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">truckTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">carNum</span> <span class="o">=</span> <span class="n">car</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">truckNum</span> <span class="o">=</span> <span class="n">truck</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
 
-    //开始模拟
-    for (int t = 0;!car.empty()||!truck.empty(); t += 10) {
-        //上船
-        for (int n = 0,carn=0; n &lt; 10; n++) {
-            if (!car.empty()&amp;&amp;car.front() &lt;= t &amp;&amp; !truck.empty()&amp;&amp;truck.front() &lt;= t) {
-                if (carn&lt; 4) {
-                    carTime += t-car.front();
-                    car.pop();
-                    carn++;
-                }
-                else {
-                    truckTime += t-truck.front();
-                    truck.pop();
-                    carn = 0;
-                }
-            }
-            else if (!car.empty()&amp;&amp;car.front() &lt;= t) {
-                carTime += t-car.front();
-                car.pop();
-                carn++;
-            }
-            else if (!truck.empty()&amp;&amp;truck.front() &lt;= t) {
-                truckTime += t-truck.front();
-                truck.pop();
-            }
-        }
-    }
+    <span class="c1">//开始模拟</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="o">!</span><span class="n">car</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="o">||!</span><span class="n">truck</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span> <span class="n">t</span> <span class="o">+=</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//上船</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">carn</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">car</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="o">&amp;&amp;</span><span class="n">car</span><span class="p">.</span><span class="n">front</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">t</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">truck</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="o">&amp;&amp;</span><span class="n">truck</span><span class="p">.</span><span class="n">front</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">carn</span><span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">carTime</span> <span class="o">+=</span> <span class="n">t</span><span class="o">-</span><span class="n">car</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+                    <span class="n">car</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="n">carn</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">truckTime</span> <span class="o">+=</span> <span class="n">t</span><span class="o">-</span><span class="n">truck</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+                    <span class="n">truck</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                    <span class="n">carn</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">car</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="o">&amp;&amp;</span><span class="n">car</span><span class="p">.</span><span class="n">front</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">carTime</span> <span class="o">+=</span> <span class="n">t</span><span class="o">-</span><span class="n">car</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+                <span class="n">car</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="n">carn</span><span class="o">++</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">truck</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="o">&amp;&amp;</span><span class="n">truck</span><span class="p">.</span><span class="n">front</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">truckTime</span> <span class="o">+=</span> <span class="n">t</span><span class="o">-</span><span class="n">truck</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+                <span class="n">truck</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    printf(&quot;%.3f %.3f&quot;,(double)carTime / (double)carNum, (double)truckTime / (double)truckNum);
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%.3f %.3f&quot;</span><span class="p">,(</span><span class="kt">double</span><span class="p">)</span><span class="n">carTime</span> <span class="o">/</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">carNum</span><span class="p">,</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">truckTime</span> <span class="o">/</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">truckNum</span><span class="p">);</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iomanip&gt;
-#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-template &lt;class elemType&gt;
-class queue {
-   public:
-    virtual bool isEmpty() const = 0;
-    virtual void enQueue(const elemType &amp;) = 0;
-    virtual elemType deQueue() = 0;
-    virtual elemType getHead() const = 0;
-    virtual ~queue() {}
-};
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">queue</span> <span class="p">{</span>
+   <span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">isEmpty</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">elemType</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="n">elemType</span> <span class="nf">deQueue</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="n">elemType</span> <span class="nf">getHead</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="o">~</span><span class="n">queue</span><span class="p">()</span> <span class="p">{}</span>
+<span class="p">};</span>
 
-template &lt;class elemType&gt;
-class seqQueue : public queue&lt;elemType&gt; {
-   private:
-    elemType *data;
-    int maxSize;
-    int front, rear;
-    void doubleSpace();
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">seqQueue</span> <span class="o">:</span> <span class="k">public</span> <span class="n">queue</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span> <span class="p">{</span>
+   <span class="k">private</span><span class="o">:</span>
+    <span class="n">elemType</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxSize</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">front</span><span class="p">,</span> <span class="n">rear</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">doubleSpace</span><span class="p">();</span>
 
-   public:
-    seqQueue(int size = 5);
-    ~seqQueue();
-    bool isEmpty() const;
-    void enQueue(const elemType &amp;);
-    elemType deQueue();
-    elemType getHead() const;
-    int length() const;
-};
+   <span class="k">public</span><span class="o">:</span>
+    <span class="n">seqQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">);</span>
+    <span class="o">~</span><span class="n">seqQueue</span><span class="p">();</span>
+    <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">void</span> <span class="nf">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">elemType</span> <span class="o">&amp;</span><span class="p">);</span>
+    <span class="n">elemType</span> <span class="nf">deQueue</span><span class="p">();</span>
+    <span class="n">elemType</span> <span class="nf">getHead</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="nf">length</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
 
-template &lt;class elemType&gt;
-void seqQueue&lt;elemType&gt;::doubleSpace() {
-    elemType *tmp = data;
-    data = new elemType[maxSize * 2];
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqQueue</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">doubleSpace</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">elemType</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">elemType</span><span class="p">[</span><span class="n">maxSize</span> <span class="o">*</span> <span class="mi">2</span><span class="p">];</span>
 
-    for (int i = 1; i &lt;= maxSize; i++) {
-        data[i] = tmp[(front + i) % maxSize];
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">maxSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[(</span><span class="n">front</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="n">maxSize</span><span class="p">];</span>
+    <span class="p">}</span>
 
-    front = 0;
-    maxSize *= 2;
-    delete tmp;
-}
+    <span class="n">front</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">maxSize</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-seqQueue&lt;elemType&gt;::seqQueue(int size) : maxSize(size), front(0), rear(0) {
-    data = new elemType[size];
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">seqQueue</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">seqQueue</span><span class="p">(</span><span class="kt">int</span> <span class="n">size</span><span class="p">)</span> <span class="o">:</span> <span class="n">maxSize</span><span class="p">(</span><span class="n">size</span><span class="p">),</span> <span class="n">front</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">rear</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">elemType</span><span class="p">[</span><span class="n">size</span><span class="p">];</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-seqQueue&lt;elemType&gt;::~seqQueue() {
-    delete[] data;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">seqQueue</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::~</span><span class="n">seqQueue</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-bool seqQueue&lt;elemType&gt;::isEmpty() const {
-    return front == rear;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">seqQueue</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">front</span> <span class="o">==</span> <span class="n">rear</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-void seqQueue&lt;elemType&gt;::enQueue(const elemType &amp;x) {
-    if ((rear + 1) % maxSize == front) {
-        doubleSpace();
-    }
-    rear = (rear + 1) % maxSize;
-    data[rear] = x;
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqQueue</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">enQueue</span><span class="p">(</span><span class="k">const</span> <span class="n">elemType</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">rear</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">maxSize</span> <span class="o">==</span> <span class="n">front</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">doubleSpace</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">rear</span> <span class="o">=</span> <span class="p">(</span><span class="n">rear</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">maxSize</span><span class="p">;</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">rear</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-elemType seqQueue&lt;elemType&gt;::deQueue() {
-    front = (front + 1) % maxSize;
-    return data[front];
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">elemType</span> <span class="n">seqQueue</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">deQueue</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">front</span> <span class="o">=</span> <span class="p">(</span><span class="n">front</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">maxSize</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">front</span><span class="p">];</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-elemType seqQueue&lt;elemType&gt;::getHead() const {
-    return data[(front + 1) % maxSize];
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">elemType</span> <span class="n">seqQueue</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">getHead</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[(</span><span class="n">front</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">maxSize</span><span class="p">];</span>
+<span class="p">}</span>
 
-template &lt;class elemType&gt;
-int seqQueue&lt;elemType&gt;::length() const {
-    return ((rear + maxSize - front) % maxSize);
-}
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">int</span> <span class="n">seqQueue</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">length</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">((</span><span class="n">rear</span> <span class="o">+</span> <span class="n">maxSize</span> <span class="o">-</span> <span class="n">front</span><span class="p">)</span> <span class="o">%</span> <span class="n">maxSize</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main() {
-    int n, nCoach = 0, nTruck = 0, type, time1, totalTime, currentTime = 0;
-    double coachTime = 0, truckTime = 0;
-    seqQueue&lt;int&gt; q1, q2;
-    cin &gt;&gt; n;
+<span class="kt">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">nCoach</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nTruck</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">type</span><span class="p">,</span> <span class="n">time1</span><span class="p">,</span> <span class="n">totalTime</span><span class="p">,</span> <span class="n">currentTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">coachTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">truckTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">seqQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
 
-    for (int i = 0; i &lt; n; i++) {
-        cin &gt;&gt; type &gt;&gt; time1;
-        if (!type) {
-            q1.enQueue(time1);
-            nCoach++;
-        } else {
-            q2.enQueue(time1);
-            nTruck++;
-        }
-    }
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">type</span> <span class="o">&gt;&gt;</span> <span class="n">time1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">type</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">q1</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">time1</span><span class="p">);</span>
+            <span class="n">nCoach</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">q2</span><span class="p">.</span><span class="n">enQueue</span><span class="p">(</span><span class="n">time1</span><span class="p">);</span>
+            <span class="n">nTruck</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    while (!(q1.isEmpty() &amp;&amp; q2.isEmpty())) {
-        int coachOnFerry = 0, allOnFerry = 0;
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">q1</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">q2</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()))</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">coachOnFerry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">allOnFerry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-        while (allOnFerry &lt; 10) {
-            if (!q1.isEmpty() &amp;&amp; q1.getHead() &lt;= currentTime) {
-                if (coachOnFerry &lt; 4) {
-                    coachTime += currentTime - q1.deQueue();
-                    coachOnFerry++;
-                    allOnFerry++;
-                } else if (!q2.isEmpty() &amp;&amp; q2.getHead() &lt;= currentTime) {
-                    truckTime += currentTime - q2.deQueue();
-                    allOnFerry++;
-                    coachOnFerry = 0;
-                } else {
-                    coachTime += currentTime - q1.deQueue();
-                    allOnFerry++;
-                    coachOnFerry++;
-                }
-            } else if (!q2.isEmpty() &amp;&amp; q2.getHead() &lt;= currentTime) {
-                truckTime += currentTime - q2.deQueue();
-                allOnFerry++;
-                coachOnFerry = 0;
-            } else {
-                break;
-            }
-        }
-        currentTime += 10;
-    }
+        <span class="k">while</span> <span class="p">(</span><span class="n">allOnFerry</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">q1</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">q1</span><span class="p">.</span><span class="n">getHead</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">currentTime</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">coachOnFerry</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">coachTime</span> <span class="o">+=</span> <span class="n">currentTime</span> <span class="o">-</span> <span class="n">q1</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                    <span class="n">coachOnFerry</span><span class="o">++</span><span class="p">;</span>
+                    <span class="n">allOnFerry</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">q2</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">q2</span><span class="p">.</span><span class="n">getHead</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">currentTime</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">truckTime</span> <span class="o">+=</span> <span class="n">currentTime</span> <span class="o">-</span> <span class="n">q2</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                    <span class="n">allOnFerry</span><span class="o">++</span><span class="p">;</span>
+                    <span class="n">coachOnFerry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="n">coachTime</span> <span class="o">+=</span> <span class="n">currentTime</span> <span class="o">-</span> <span class="n">q1</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                    <span class="n">allOnFerry</span><span class="o">++</span><span class="p">;</span>
+                    <span class="n">coachOnFerry</span><span class="o">++</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">q2</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">q2</span><span class="p">.</span><span class="n">getHead</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">currentTime</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">truckTime</span> <span class="o">+=</span> <span class="n">currentTime</span> <span class="o">-</span> <span class="n">q2</span><span class="p">.</span><span class="n">deQueue</span><span class="p">();</span>
+                <span class="n">allOnFerry</span><span class="o">++</span><span class="p">;</span>
+                <span class="n">coachOnFerry</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">currentTime</span> <span class="o">+=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    cout &lt;&lt; setiosflags(ios::fixed) &lt;&lt; setprecision(3) &lt;&lt; coachTime / nCoach
-         &lt;&lt; ' ' &lt;&lt; truckTime / nTruck;
-}
-</code></pre>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">setiosflags</span><span class="p">(</span><span class="n">ios</span><span class="o">::</span><span class="n">fixed</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">setprecision</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">coachTime</span> <span class="o">/</span> <span class="n">nCoach</span>
+         <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span> <span class="o">&lt;&lt;</span> <span class="n">truckTime</span> <span class="o">/</span> <span class="n">nTruck</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

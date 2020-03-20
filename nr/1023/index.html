@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -412,211 +414,212 @@
 </details>
 
 <h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-void output(int***,int,int,int);
+<span class="kt">void</span> <span class="nf">output</span><span class="p">(</span><span class="kt">int</span><span class="o">***</span><span class="p">,</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="p">);</span>
 
-int main(){
-    int totalMatricesCount;
-    cin &gt;&gt; totalMatricesCount;
-    int ***totalMatricesPointer=new int**[totalMatricesCount];
-    int *MatrixFloorPointer=new int[totalMatricesCount];
-    int *MatrixRotatePointer=new int[totalMatricesCount];
-    for(int Matrixnum=0;Matrixnum&lt;totalMatricesCount;Matrixnum++){
-        cin &gt;&gt; *(MatrixFloorPointer+Matrixnum);
-        cin &gt;&gt; *(MatrixRotatePointer+Matrixnum);
-        *(totalMatricesPointer+Matrixnum)=new int *[*(MatrixFloorPointer+Matrixnum)];
-        for(int row=0;row&lt;*(MatrixFloorPointer+Matrixnum);row++)
-            *(*(totalMatricesPointer+Matrixnum)+row)=new int [*(MatrixFloorPointer+Matrixnum)];
-        for(int row=0;row&lt;*(MatrixFloorPointer+Matrixnum);row++)
-        for(int column=0;column&lt;*(MatrixFloorPointer+Matrixnum);column++)
-            cin &gt;&gt;*(*(*(totalMatricesPointer+Matrixnum)+row)+column);
-    }
-    for(int Matrixnum=0;Matrixnum&lt;totalMatricesCount;Matrixnum++){
-        output(totalMatricesPointer+Matrixnum,*(MatrixFloorPointer+Matrixnum),*(MatrixRotatePointer+Matrixnum),Matrixnum);
-    }
-    return 0;
-}
-void output(int*** totalMatricesPointer,int floor,int rotate,int NOT_FIRST_MATIRX_FLAG){
-    if(NOT_FIRST_MATIRX_FLAG)cout &lt;&lt; endl;
-    bool NOT_FIRST_ROW_FLAG=false;
-    bool NOT_FIRST_COLUMN_FLAG=false;
-    for(int row=0;row&lt;floor;row++){
-        if(NOT_FIRST_ROW_FLAG)cout &lt;&lt; endl;
-        NOT_FIRST_ROW_FLAG = true;
-        for(int column=0;column&lt;floor;column++){
-            if(NOT_FIRST_COLUMN_FLAG)cout &lt;&lt; ' ';
-            NOT_FIRST_COLUMN_FLAG = true;
-            if(rotate==2)cout &lt;&lt; *(*(*(totalMatricesPointer)+column)+row);
-            if(rotate==1)cout &lt;&lt; *(*(*(totalMatricesPointer)+(floor-row-1))+column);
-            if(rotate==0)cout &lt;&lt; *(*(*(totalMatricesPointer)+row)+(floor-column-1));
-        }
-            NOT_FIRST_COLUMN_FLAG = false;
-    }
-    return;
-}
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="kt">int</span> <span class="n">totalMatricesCount</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">totalMatricesCount</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="o">***</span><span class="n">totalMatricesPointer</span><span class="o">=</span><span class="k">new</span> <span class="kt">int</span><span class="o">**</span><span class="p">[</span><span class="n">totalMatricesCount</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">MatrixFloorPointer</span><span class="o">=</span><span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">totalMatricesCount</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="o">*</span><span class="n">MatrixRotatePointer</span><span class="o">=</span><span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">totalMatricesCount</span><span class="p">];</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">Matrixnum</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">Matrixnum</span><span class="o">&lt;</span><span class="n">totalMatricesCount</span><span class="p">;</span><span class="n">Matrixnum</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="o">*</span><span class="p">(</span><span class="n">MatrixFloorPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">);</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="o">*</span><span class="p">(</span><span class="n">MatrixRotatePointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">);</span>
+        <span class="o">*</span><span class="p">(</span><span class="n">totalMatricesPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">)</span><span class="o">=</span><span class="k">new</span> <span class="kt">int</span> <span class="o">*</span><span class="p">[</span><span class="o">*</span><span class="p">(</span><span class="n">MatrixFloorPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">)];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">row</span><span class="o">&lt;*</span><span class="p">(</span><span class="n">MatrixFloorPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">);</span><span class="n">row</span><span class="o">++</span><span class="p">)</span>
+            <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">totalMatricesPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">)</span><span class="o">+</span><span class="n">row</span><span class="p">)</span><span class="o">=</span><span class="k">new</span> <span class="kt">int</span> <span class="p">[</span><span class="o">*</span><span class="p">(</span><span class="n">MatrixFloorPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">)];</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">row</span><span class="o">&lt;*</span><span class="p">(</span><span class="n">MatrixFloorPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">);</span><span class="n">row</span><span class="o">++</span><span class="p">)</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">column</span><span class="o">&lt;*</span><span class="p">(</span><span class="n">MatrixFloorPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">);</span><span class="n">column</span><span class="o">++</span><span class="p">)</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">totalMatricesPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">)</span><span class="o">+</span><span class="n">row</span><span class="p">)</span><span class="o">+</span><span class="n">column</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">Matrixnum</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">Matrixnum</span><span class="o">&lt;</span><span class="n">totalMatricesCount</span><span class="p">;</span><span class="n">Matrixnum</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">output</span><span class="p">(</span><span class="n">totalMatricesPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">,</span><span class="o">*</span><span class="p">(</span><span class="n">MatrixFloorPointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">),</span><span class="o">*</span><span class="p">(</span><span class="n">MatrixRotatePointer</span><span class="o">+</span><span class="n">Matrixnum</span><span class="p">),</span><span class="n">Matrixnum</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">output</span><span class="p">(</span><span class="kt">int</span><span class="o">***</span> <span class="n">totalMatricesPointer</span><span class="p">,</span><span class="kt">int</span> <span class="n">floor</span><span class="p">,</span><span class="kt">int</span> <span class="n">rotate</span><span class="p">,</span><span class="kt">int</span> <span class="n">NOT_FIRST_MATIRX_FLAG</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">NOT_FIRST_MATIRX_FLAG</span><span class="p">)</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">NOT_FIRST_ROW_FLAG</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">NOT_FIRST_COLUMN_FLAG</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">row</span><span class="o">&lt;</span><span class="n">floor</span><span class="p">;</span><span class="n">row</span><span class="o">++</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">NOT_FIRST_ROW_FLAG</span><span class="p">)</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="n">NOT_FIRST_ROW_FLAG</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">column</span><span class="o">&lt;</span><span class="n">floor</span><span class="p">;</span><span class="n">column</span><span class="o">++</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">NOT_FIRST_COLUMN_FLAG</span><span class="p">)</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+            <span class="n">NOT_FIRST_COLUMN_FLAG</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">rotate</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">totalMatricesPointer</span><span class="p">)</span><span class="o">+</span><span class="n">column</span><span class="p">)</span><span class="o">+</span><span class="n">row</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">rotate</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">totalMatricesPointer</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">floor</span><span class="o">-</span><span class="n">row</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">+</span><span class="n">column</span><span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">rotate</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">totalMatricesPointer</span><span class="p">)</span><span class="o">+</span><span class="n">row</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="n">floor</span><span class="o">-</span><span class="n">column</span><span class="o">-</span><span class="mi">1</span><span class="p">));</span>
+        <span class="p">}</span>
+            <span class="n">NOT_FIRST_COLUMN_FLAG</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* 矩阵反转 */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 矩阵反转 */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int mat[605][605] = {0};
+<span class="kt">int</span> <span class="n">mat</span><span class="p">[</span><span class="mi">605</span><span class="p">][</span><span class="mi">605</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 
-void trans(const int &amp;n, const int &amp;k){
-    switch(k){
-        case 0:
-            for (int i = 1; i &lt;= n; ++i){
-                for (int j = n; j &gt;= 1; --j)
-                    cout &lt;&lt; mat[i][j] &lt;&lt; ' ';
-                cout &lt;&lt; &quot;\n&quot;;
-            }
-            break;
-        case 1:
-            for (int i = n; i &gt;= 1; --i){
-                for (int j = 1; j &lt;= n; ++j)
-                    cout &lt;&lt; mat[i][j] &lt;&lt; ' ';
-                cout &lt;&lt; &quot;\n&quot;;
-            }
-            break;
-        case 2:
-            for (int j = 1; j &lt;= n; ++j){
-                for (int i = 1; i &lt;= n; ++i)
-                    cout &lt;&lt; mat[i][j] &lt;&lt; ' ';
-                cout &lt;&lt; &quot;\n&quot;;
-            }
-            break;
-        default:
-            break;
-    }
-}
+<span class="kt">void</span> <span class="nf">trans</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">k</span><span class="p">){</span>
+    <span class="k">switch</span><span class="p">(</span><span class="n">k</span><span class="p">){</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="o">--</span><span class="n">j</span><span class="p">)</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">;</span> <span class="o">--</span><span class="n">i</span><span class="p">){</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">){</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">default</span><span class="o">:</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    int n;
-    cin &gt;&gt; n;
-    while (n--){
-        int a, b;
-        cin &gt;&gt; a &gt;&gt; b;
-        for (int i = 1; i &lt;= a; ++i)
-            for (int j = 1; j &lt;= a; ++j)
-                cin &gt;&gt; mat[i][j];
-        trans(a, b);
-    }
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">n</span><span class="o">--</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+        <span class="n">trans</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;vector&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int n;
-    cin &gt;&gt; n;
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
 
-    for (; n &gt; 0; --n) {
-        int a, b;
-        cin &gt;&gt; a &gt;&gt; b;
+    <span class="k">for</span> <span class="p">(;</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
 
-        vector&lt;vector&lt;int&gt;&gt; mat(a,vector&lt;int&gt;(a,0));
+        <span class="n">vector</span><span class="o">&lt;</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&gt;</span> <span class="n">mat</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">0</span><span class="p">));</span>
 
-        if (b == 0) {
-            for (int i = 0; i &lt; a; ++i) {
-                for (int j = 0; j &lt; a; ++j) {
-                    cin &gt;&gt; mat[i][a - j - 1];
-                }
-            }
-        }
-        else if (b == 1) {
-            for (int i = 0; i &lt; a; ++i) {
-                for (int j = 0; j &lt; a; ++j) {
-                    cin &gt;&gt; mat[a - i - 1][j];
-                }
-            }
-        }
-        else {
-            for (int i = 0; i &lt; a; ++i) {
-                for (int j = 0; j &lt; a; ++j) {
-                    cin &gt;&gt; mat[j][i];
-                }
-            }
-        }
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">a</span> <span class="o">-</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">mat</span><span class="p">[</span><span class="n">a</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">mat</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        for (auto&amp; p : mat) {
-            for (auto q : p) {
-                cout &lt;&lt; q &lt;&lt; &quot; &quot;;
-            }
-            cout &lt;&lt; &quot;\n&quot;;
-        }
-    }
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">p</span> <span class="p">:</span> <span class="n">mat</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="nl">q</span> <span class="p">:</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">q</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-using namespace std;
-const int MAXSIZE = 700;
-struct matrix
-{
-    int size;
-    int** square;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXSIZE</span> <span class="o">=</span> <span class="mi">700</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">matrix</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">size</span><span class="p">;</span>
+    <span class="kt">int</span><span class="o">**</span> <span class="n">square</span><span class="p">;</span>
 
-};
-int main(void)
-{
-    int n;
-    cin &gt;&gt; n;
-    matrix* arr;
-    arr = new matrix[n];
-    for (int i = 0; i &lt; n; ++i)
-    {
-        int method;
-        cin &gt;&gt; arr[i].size &gt;&gt; method;
-        arr[i].square = new int*[arr[i].size];
-        for (int j = 0; j &lt; arr[i].size; ++j)
-            arr[i].square[j] = new int[arr[i].size];
-        if (method == 0)
-            for (int j = 0; j &lt; arr[i].size; ++j)
-                for (int k = arr[i].size - 1; k &gt;= 0; --k)
-                    cin &gt;&gt; arr[i].square[j][k];
-        else if (method == 1)
-            for (int j = arr[i].size - 1; j &gt;= 0; --j)
-                for (int k = 0; k &lt; arr[i].size; ++k)
-                    cin &gt;&gt; arr[i].square[j][k];
-        else if (method == 2)
-            for (int j = 0; j &lt; arr[i].size; ++j)
-                for (int k = 0; k &lt; arr[i].size; ++k)
-                    cin &gt;&gt; arr[i].square[k][j];
-    }
-    for (int i = 0; i &lt; n; ++i)
-        for (int j = 0; j &lt; arr[i].size; ++j)
-        {
-            for (int k = 0; k &lt; arr[i].size; ++k)
-            {
-                cout &lt;&lt; arr[i].square[j][k];
-                if (k &lt; arr[i].size - 1)
-                    cout &lt;&lt; &quot; &quot;;
-            }
-            if (i &lt; n - 1 || j &lt; arr[i].size - 1)
-                cout &lt;&lt; endl;
-        }
-    return 0;
-}
-
-</code></pre>
+<span class="p">};</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="n">matrix</span><span class="o">*</span> <span class="n">arr</span><span class="p">;</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">matrix</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">method</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">&gt;&gt;</span> <span class="n">method</span><span class="p">;</span>
+        <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">square</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">*</span><span class="p">[</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">square</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">k</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">k</span><span class="p">)</span>
+                    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">square</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="n">j</span><span class="p">)</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>
+                    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">square</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">method</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>
+                    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">square</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">k</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">square</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">k</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

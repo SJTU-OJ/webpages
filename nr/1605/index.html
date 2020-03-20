@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -432,338 +434,340 @@ NO
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* Brackets Stack */
-#include &lt;iostream&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* Brackets Stack */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-char full[1000005], inco[1000005];
-bool isco[1000005] = {0};
-int n, fsize = 0, isize = 0;
+<span class="kt">char</span> <span class="n">full</span><span class="p">[</span><span class="mi">1000005</span><span class="p">],</span> <span class="n">inco</span><span class="p">[</span><span class="mi">1000005</span><span class="p">];</span>
+<span class="kt">bool</span> <span class="n">isco</span><span class="p">[</span><span class="mi">1000005</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">fsize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">isize</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-bool isLeft(char ch){
-    return (ch == '(' || ch == '[' || ch == '{');
-}
+<span class="kt">bool</span> <span class="nf">isLeft</span><span class="p">(</span><span class="kt">char</span> <span class="n">ch</span><span class="p">){</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;[&#39;</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;{&#39;</span><span class="p">);</span>
+<span class="p">}</span>
 
-char getRight(char ch){
-    if (ch == '(') return ')';
-    else if (ch == '[') return ']';
-    else if (ch == '{') return '}';
-    else return ' ';
-}
+<span class="kt">char</span> <span class="nf">getRight</span><span class="p">(</span><span class="kt">char</span> <span class="n">ch</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;)&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;[&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;]&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;{&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;}&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">return</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+<span class="p">}</span>
 
-char getLeft(char ch){
-    if (ch == ')') return '(';
-    else if (ch == ']') return '[';
-    else if (ch == '}') return '{';
-    else return ' ';
-}
+<span class="kt">char</span> <span class="nf">getLeft</span><span class="p">(</span><span class="kt">char</span> <span class="n">ch</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;)&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;(&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;[&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="sc">&#39;{&#39;</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">return</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; n;
-    while (n--){
-        int op;
-        char ch;
-        cin &gt;&gt; op;
-        switch(op){
-        case 1:
-            cin &gt;&gt; ch;
-            full[fsize++] = ch;
-            if (isLeft(ch)){
-                inco[isize++] = ch;
-                isco[fsize - 1] = true;
-            }
-            else{
-                if (isize != 0 &amp;&amp; isLeft(inco[isize - 1]) &amp;&amp; ch == getRight(inco[isize - 1])){
-                    --isize;
-                    isco[fsize - 1] = true;
-                }
-                else{
-                    inco[isize++] = ch;
-                    isco[fsize - 1] = false;
-                }
-            }
-            break;
-        case 2:
-            if (fsize == 0)
-                break;
-            ch = full[fsize - 1];
-            if (isLeft(ch))
-                --isize;
-            else{
-                if (isco[fsize - 1])
-                    inco[isize++] = getLeft(ch);
-                else
-                    --isize;
-            }
-            --fsize;
-            break;
-        case 3:
-            if (fsize != 0)
-                cout &lt;&lt; full[fsize - 1] &lt;&lt; '\n';
-            break;
-        case 4:
-            if (isize)
-                cout &lt;&lt; &quot;NO\n&quot;;
-            else
-                cout &lt;&lt; &quot;YES\n&quot;;
-            break;
-        }
-    }
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">ios_base</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">n</span><span class="o">--</span><span class="p">){</span>
+        <span class="kt">int</span> <span class="n">op</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">op</span><span class="p">;</span>
+        <span class="k">switch</span><span class="p">(</span><span class="n">op</span><span class="p">){</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ch</span><span class="p">;</span>
+            <span class="n">full</span><span class="p">[</span><span class="n">fsize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">isLeft</span><span class="p">(</span><span class="n">ch</span><span class="p">)){</span>
+                <span class="n">inco</span><span class="p">[</span><span class="n">isize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+                <span class="n">isco</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span><span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">isize</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">isLeft</span><span class="p">(</span><span class="n">inco</span><span class="p">[</span><span class="n">isize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="n">ch</span> <span class="o">==</span> <span class="n">getRight</span><span class="p">(</span><span class="n">inco</span><span class="p">[</span><span class="n">isize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])){</span>
+                    <span class="o">--</span><span class="n">isize</span><span class="p">;</span>
+                    <span class="n">isco</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="k">else</span><span class="p">{</span>
+                    <span class="n">inco</span><span class="p">[</span><span class="n">isize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+                    <span class="n">isco</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">fsize</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="n">ch</span> <span class="o">=</span> <span class="n">full</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">isLeft</span><span class="p">(</span><span class="n">ch</span><span class="p">))</span>
+                <span class="o">--</span><span class="n">isize</span><span class="p">;</span>
+            <span class="k">else</span><span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">isco</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+                    <span class="n">inco</span><span class="p">[</span><span class="n">isize</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">getLeft</span><span class="p">(</span><span class="n">ch</span><span class="p">);</span>
+                <span class="k">else</span>
+                    <span class="o">--</span><span class="n">isize</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="o">--</span><span class="n">fsize</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">fsize</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">full</span><span class="p">[</span><span class="n">fsize</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">isize</span><span class="p">)</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;NO</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;YES</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &quot;iostream&quot;
-#include &quot;cstdio&quot;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-constexpr auto maxNum = 1000000;
+<span class="k">constexpr</span> <span class="k">auto</span> <span class="n">maxNum</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">;</span>
 
-class myStack {
-    int num = 0, acNum = 0;
-    char data[maxNum] = { 0 };
-    bool flag[maxNum] = { 0 };
-    char ac[maxNum] = { 0 };
-public:
-    void push(char b) {
-        if (b == '(' || b == '[' || b == '{')
-            ac[acNum++] = b;
-        else if (b == ')'&amp;&amp;acNum &gt; 0 &amp;&amp; ac[acNum - 1] == '(') {
-            acNum--;
-            flag[num] = true;
-        }
-        else if (b == ']'&amp;&amp;acNum &gt; 0 &amp;&amp; ac[acNum - 1] == '[') {
-            acNum--;
-            flag[num] = true;
-        }
-        else if (b == '}'&amp;&amp;acNum &gt; 0 &amp;&amp; ac[acNum - 1] == '{') {
-            acNum--;
-            flag[num] = true;
-        }
-        else
-            ac[acNum++] = b;
-        data[num++] = b;
-    }
-    bool empty() {
-        return num == 0;
-    }
-    char pop() {
-        if (num == 0)
-            return  0;
-        num--;
-        char temp = data[num];
-        data[num] = 0;
+<span class="k">class</span> <span class="nc">myStack</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">acNum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">data</span><span class="p">[</span><span class="n">maxNum</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+    <span class="kt">bool</span> <span class="n">flag</span><span class="p">[</span><span class="n">maxNum</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+    <span class="kt">char</span> <span class="n">ac</span><span class="p">[</span><span class="n">maxNum</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="kt">void</span> <span class="n">push</span><span class="p">(</span><span class="kt">char</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span> <span class="o">||</span> <span class="n">b</span> <span class="o">==</span> <span class="sc">&#39;[&#39;</span> <span class="o">||</span> <span class="n">b</span> <span class="o">==</span> <span class="sc">&#39;{&#39;</span><span class="p">)</span>
+            <span class="n">ac</span><span class="p">[</span><span class="n">acNum</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="err">&#39;</span><span class="p">)</span><span class="err">&#39;</span><span class="o">&amp;&amp;</span><span class="n">acNum</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ac</span><span class="p">[</span><span class="n">acNum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">acNum</span><span class="o">--</span><span class="p">;</span>
+            <span class="n">flag</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span><span class="o">&amp;&amp;</span><span class="n">acNum</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ac</span><span class="p">[</span><span class="n">acNum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;[&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">acNum</span><span class="o">--</span><span class="p">;</span>
+            <span class="n">flag</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">b</span> <span class="o">==</span> <span class="sc">&#39;}&#39;</span><span class="o">&amp;&amp;</span><span class="n">acNum</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">ac</span><span class="p">[</span><span class="n">acNum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;{&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">acNum</span><span class="o">--</span><span class="p">;</span>
+            <span class="n">flag</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">ac</span><span class="p">[</span><span class="n">acNum</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">num</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">char</span> <span class="n">pop</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span>  <span class="mi">0</span><span class="p">;</span>
+        <span class="n">num</span><span class="o">--</span><span class="p">;</span>
+        <span class="kt">char</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">num</span><span class="p">];</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-        //回退
-        if (flag[num]) {
-            if (temp == ')')
-                ac[acNum++] = '(';
-            else if (temp == ']')
-                ac[acNum++] = '[';
-            else if (temp == '}')
-                ac[acNum++] = '{';
-        }
-        else
-            acNum--;
-        flag[num] = false;
-        return temp;
-    }
-    char back() {
-        if (num == 0)
-            return 0;
-        return data[num - 1];
-    }
-    bool match() {
-        return acNum == 0;
-    }
-};
+        <span class="c1">//回退</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">flag</span><span class="p">[</span><span class="n">num</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="sc">&#39;)&#39;</span><span class="p">)</span>
+                <span class="n">ac</span><span class="p">[</span><span class="n">acNum</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;(&#39;</span><span class="p">;</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span><span class="p">)</span>
+                <span class="n">ac</span><span class="p">[</span><span class="n">acNum</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;[&#39;</span><span class="p">;</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
+                <span class="n">ac</span><span class="p">[</span><span class="n">acNum</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="err">&#39;</span><span class="p">{</span><span class="err">&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+            <span class="n">acNum</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">flag</span><span class="p">[</span><span class="n">num</span><span class="p">]</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">char</span> <span class="n">back</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">num</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="kt">bool</span> <span class="n">match</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">acNum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
 
-int main() {
-    int num;
-    myStack data;
-    cin &gt;&gt; num;
-    for (int i = 0; i &lt; num; i++) {
-        int temp;
-        scanf(&quot;%d&quot;, &amp;temp);
-        if (temp == 1) {
-            char c;
-            scanf(&quot; %c&quot;, &amp;c);
-            data.push(c);
-        }
-        else if (temp == 2) {
-            data.pop();
-        }
-        else if (temp == 3) {
-            if (!data.empty())
-                printf(&quot;%c\n&quot;, data.back());
-        }
-        else if (temp == 4) {
-            if (data.match())
-                printf(&quot;YES\n&quot;);
-            else
-                printf(&quot;NO\n&quot;);
-        }
-    }
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">num</span><span class="p">;</span>
+    <span class="n">myStack</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">num</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">temp</span><span class="p">;</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">temp</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">char</span> <span class="n">c</span><span class="p">;</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot; %c&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">c</span><span class="p">);</span>
+            <span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">data</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">data</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">.</span><span class="n">back</span><span class="p">());</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">temp</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">match</span><span class="p">())</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;YES</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="k">else</span>
+                <span class="n">printf</span><span class="p">(</span><span class="s">&quot;NO</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    return 0;
-}
-</code></pre>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
-using namespace std;
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-char input1[1001000], save[1001000];
+<span class="kt">char</span> <span class="n">input1</span><span class="p">[</span><span class="mi">1001000</span><span class="p">],</span> <span class="n">save</span><span class="p">[</span><span class="mi">1001000</span><span class="p">];</span>
 
-int main() {
-    ios::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 
-    int N, choice, inputCount = 0, saveCount = 0, wrong = 0;
-    char ch;
+    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">choice</span><span class="p">,</span> <span class="n">inputCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">saveCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wrong</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
 
-    cin &gt;&gt; N;
-    for (int i = 0; i &lt; N; i++) {
-        cin &gt;&gt; choice;
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">choice</span><span class="p">;</span>
 
-        if (choice == 1) {
-            cin &gt;&gt; ch;
-            input1[++inputCount] = ch;
-            if (wrong) {  //如果已经有问题就直接跳过下面的部分
-                continue;
-            } else if (ch == ')' || ch == ']' || ch == '}') {
-                if ((saveCount == 0) || (ch == ')' &amp;&amp; save[saveCount] != '(') ||
-                    (ch == ']' &amp;&amp; save[saveCount] != '[') ||
-                    (ch == '}' &amp;&amp; save[saveCount] != '{')) {
-                    wrong = inputCount;  //记录下有问题的位置
-                } else {  //如果新输入的和之前的左括号配对了，就直接把第二个栈的左括号删去
-                    saveCount--;
-                }
-            } else {  //如果输入进来的是左括号，就直接将其存入第二个栈
-                save[++saveCount] = ch;
-            }
-        } else if (choice == 2) {
-            if (inputCount) {
-                if (wrong) {
-                    inputCount--;
-                    if (wrong &gt;
-                        inputCount) {  //如果有问题的部分已经被pop，则直接重置错误位置
-                        wrong = 0;
-                    }
-                } else {
-                    if (input1[inputCount] == '(' ||
-                        input1[inputCount] == '[' ||
-                        input1[inputCount] == '{') {
-                        saveCount--;
-                    } else if (input1[inputCount] == ')') {
-                        save[++saveCount] = '(';
-                    } else if (input1[inputCount] == ']') {
-                        save[++saveCount] = '[';
-                    } else if (input1[inputCount] == '}') {
-                        save[++saveCount] = '{';
-                    }
-                    inputCount--;
-                }
-            }
-        } else if (choice == 3) {
-            if (inputCount) {
-                cout &lt;&lt; input1[inputCount] &lt;&lt; '\n';
-            }
-        } else if (choice == 4) {
-            if (wrong == 0 &amp;&amp;
-                saveCount == 0) {  //没有错误同时第二个栈没东西了才输出YES
-                cout &lt;&lt; &quot;YES\n&quot;;
-            } else {
-                cout &lt;&lt; &quot;NO\n&quot;;
-            }
-        }
-    }
-    return 0;
-}
-</code></pre>
+        <span class="k">if</span> <span class="p">(</span><span class="n">choice</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ch</span><span class="p">;</span>
+            <span class="n">input1</span><span class="p">[</span><span class="o">++</span><span class="n">inputCount</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">wrong</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">//如果已经有问题就直接跳过下面的部分</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;)&#39;</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span> <span class="o">||</span> <span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">((</span><span class="n">saveCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;)&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">save</span><span class="p">[</span><span class="n">saveCount</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;(&#39;</span><span class="p">)</span> <span class="o">||</span>
+                    <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">save</span><span class="p">[</span><span class="n">saveCount</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;[&#39;</span><span class="p">)</span> <span class="o">||</span>
+                    <span class="p">(</span><span class="n">ch</span> <span class="o">==</span> <span class="sc">&#39;}&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">save</span><span class="p">[</span><span class="n">saveCount</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;{&#39;</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="n">wrong</span> <span class="o">=</span> <span class="n">inputCount</span><span class="p">;</span>  <span class="c1">//记录下有问题的位置</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>  <span class="c1">//如果新输入的和之前的左括号配对了，就直接把第二个栈的左括号删去</span>
+                    <span class="n">saveCount</span><span class="o">--</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>  <span class="c1">//如果输入进来的是左括号，就直接将其存入第二个栈</span>
+                <span class="n">save</span><span class="p">[</span><span class="o">++</span><span class="n">saveCount</span><span class="p">]</span> <span class="o">=</span> <span class="n">ch</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">choice</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">inputCount</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">wrong</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">inputCount</span><span class="o">--</span><span class="p">;</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">wrong</span> <span class="o">&gt;</span>
+                        <span class="n">inputCount</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">//如果有问题的部分已经被pop，则直接重置错误位置</span>
+                        <span class="n">wrong</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">input1</span><span class="p">[</span><span class="n">inputCount</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;(&#39;</span> <span class="o">||</span>
+                        <span class="n">input1</span><span class="p">[</span><span class="n">inputCount</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;[&#39;</span> <span class="o">||</span>
+                        <span class="n">input1</span><span class="p">[</span><span class="n">inputCount</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;{&#39;</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">saveCount</span><span class="o">--</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">input1</span><span class="p">[</span><span class="n">inputCount</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;)&#39;</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">save</span><span class="p">[</span><span class="o">++</span><span class="n">saveCount</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;(&#39;</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">input1</span><span class="p">[</span><span class="n">inputCount</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;]&#39;</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">save</span><span class="p">[</span><span class="o">++</span><span class="n">saveCount</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;[&#39;</span><span class="p">;</span>
+                    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">input1</span><span class="p">[</span><span class="n">inputCount</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span> <span class="p">{</span>
+                        <span class="n">save</span><span class="p">[</span><span class="o">++</span><span class="n">saveCount</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;{&#39;</span><span class="p">;</span>
+                    <span class="p">}</span>
+                    <span class="n">inputCount</span><span class="o">--</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">choice</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">inputCount</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">input1</span><span class="p">[</span><span class="n">inputCount</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">choice</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">wrong</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span>
+                <span class="n">saveCount</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">//没有错误同时第二个栈没东西了才输出YES</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;YES</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;NO</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-using namespace std;
-char rstack[1000001],istack[1000001],c;
-int rtop,itop,n,x;
-bool match[1000001];
-void push(char c){
-    if (rstack[rtop-1]=='('&amp;&amp;c==')') {
-        rtop--;
-        match[itop]=true;
-    }
-    else if (rstack[rtop-1]=='['&amp;&amp;c==']') {
-        rtop--;
-        match[itop]=true;
-    }
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">rstack</span><span class="p">[</span><span class="mi">1000001</span><span class="p">],</span><span class="n">istack</span><span class="p">[</span><span class="mi">1000001</span><span class="p">],</span><span class="n">c</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">rtop</span><span class="p">,</span><span class="n">itop</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">;</span>
+<span class="kt">bool</span> <span class="n">match</span><span class="p">[</span><span class="mi">1000001</span><span class="p">];</span>
+<span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="kt">char</span> <span class="n">c</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rstack</span><span class="p">[</span><span class="n">rtop</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;(&#39;</span><span class="o">&amp;&amp;</span><span class="n">c</span><span class="o">==</span><span class="sc">&#39;)&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rtop</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">match</span><span class="p">[</span><span class="n">itop</span><span class="p">]</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">rstack</span><span class="p">[</span><span class="n">rtop</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;[&#39;</span><span class="o">&amp;&amp;</span><span class="n">c</span><span class="o">==</span><span class="sc">&#39;]&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rtop</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">match</span><span class="p">[</span><span class="n">itop</span><span class="p">]</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    else if (rstack[rtop-1]=='{'&amp;&amp;c=='}') {
-        rtop--;
-        match[itop]=true;
-    }
-    else rstack[rtop++]=c;
-}
-void raw_push(char c){
-    if (rstack[rtop-1]=='('&amp;&amp;c==')') rtop--;
-    else if (rstack[rtop-1]=='['&amp;&amp;c==']') rtop--;
-    else if (rstack[rtop-1]=='{'&amp;&amp;c=='}') rtop--;
-    else rstack[rtop++]=c;
-}
-void pop(){
-    switch (istack[itop-1]) {
-        case '(':
-            raw_push(')');
-            break;
-        case ')':
-            if (match[itop-1]) {raw_push('('); match[itop-1]=false;}
-            else rtop--;
-            break;
-        case '[':
-            raw_push(']');
-            break;
-        case ']':
-            if (match[itop-1]) {raw_push('['); match[itop-1]=false;}
-            else rtop--;
-            break;
-        case '{':
-            raw_push('}');
-            break;
-        case '}':
-            if (match[itop-1]) {raw_push('{'); match[itop-1]=false;}
-            else rtop--;
-            break;
-    }
-    itop--;
-}
-int main() {
-    scanf(&quot;%d&quot;,&amp;n);
-    for (int i=0;i&lt;n;++i)
-    {
-        scanf(&quot;%d&quot;,&amp;x);
-        if (x==1){
-            scanf(&quot; %c&quot;,&amp;c);
-            push(c);
-            istack[itop++]=c;
-        }
-        if (x==2&amp;&amp;itop&gt;=1) pop();
-        if (x==3&amp;&amp;itop&gt;=1) printf(&quot;%c\n&quot;,istack[itop-1]);
-        if (x==4){
-            if (!rtop) printf(&quot;YES\n&quot;);
-            else printf(&quot;NO\n&quot;);}
-    }
-    return 0;
-}
-</code></pre>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">rstack</span><span class="p">[</span><span class="n">rtop</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;{&#39;</span><span class="o">&amp;&amp;</span><span class="n">c</span><span class="o">==</span><span class="sc">&#39;}&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rtop</span><span class="o">--</span><span class="p">;</span>
+        <span class="n">match</span><span class="p">[</span><span class="n">itop</span><span class="p">]</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="n">rstack</span><span class="p">[</span><span class="n">rtop</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">raw_push</span><span class="p">(</span><span class="kt">char</span> <span class="n">c</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rstack</span><span class="p">[</span><span class="n">rtop</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;(&#39;</span><span class="o">&amp;&amp;</span><span class="n">c</span><span class="o">==</span><span class="sc">&#39;)&#39;</span><span class="p">)</span> <span class="n">rtop</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">rstack</span><span class="p">[</span><span class="n">rtop</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;[&#39;</span><span class="o">&amp;&amp;</span><span class="n">c</span><span class="o">==</span><span class="sc">&#39;]&#39;</span><span class="p">)</span> <span class="n">rtop</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">rstack</span><span class="p">[</span><span class="n">rtop</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="sc">&#39;{&#39;</span><span class="o">&amp;&amp;</span><span class="n">c</span><span class="o">==</span><span class="sc">&#39;}&#39;</span><span class="p">)</span> <span class="n">rtop</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">else</span> <span class="n">rstack</span><span class="p">[</span><span class="n">rtop</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">c</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">pop</span><span class="p">(){</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="n">istack</span><span class="p">[</span><span class="n">itop</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="sc">&#39;(&#39;</span><span class="o">:</span>
+            <span class="n">raw_push</span><span class="p">(</span><span class="sc">&#39;)&#39;</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;)&#39;</span><span class="o">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">itop</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span><span class="n">raw_push</span><span class="p">(</span><span class="sc">&#39;(&#39;</span><span class="p">);</span> <span class="n">match</span><span class="p">[</span><span class="n">itop</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="nb">false</span><span class="p">;}</span>
+            <span class="k">else</span> <span class="n">rtop</span><span class="o">--</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;[&#39;</span><span class="o">:</span>
+            <span class="n">raw_push</span><span class="p">(</span><span class="sc">&#39;]&#39;</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;]&#39;</span><span class="o">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">itop</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span><span class="n">raw_push</span><span class="p">(</span><span class="sc">&#39;[&#39;</span><span class="p">);</span> <span class="n">match</span><span class="p">[</span><span class="n">itop</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="nb">false</span><span class="p">;}</span>
+            <span class="k">else</span> <span class="n">rtop</span><span class="o">--</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;{&#39;</span><span class="o">:</span>
+            <span class="n">raw_push</span><span class="p">(</span><span class="sc">&#39;}&#39;</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="sc">&#39;}&#39;</span><span class="o">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">itop</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span><span class="n">raw_push</span><span class="p">(</span><span class="sc">&#39;{&#39;</span><span class="p">);</span> <span class="n">match</span><span class="p">[</span><span class="n">itop</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="nb">false</span><span class="p">;}</span>
+            <span class="k">else</span> <span class="n">rtop</span><span class="o">--</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">itop</span><span class="o">--</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">1</span><span class="p">){</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot; %c&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">c</span><span class="p">);</span>
+            <span class="n">push</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+            <span class="n">istack</span><span class="p">[</span><span class="n">itop</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">c</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">2</span><span class="o">&amp;&amp;</span><span class="n">itop</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)</span> <span class="n">pop</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">3</span><span class="o">&amp;&amp;</span><span class="n">itop</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">istack</span><span class="p">[</span><span class="n">itop</span><span class="o">-</span><span class="mi">1</span><span class="p">]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="o">==</span><span class="mi">4</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">rtop</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;YES</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+            <span class="k">else</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;NO</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

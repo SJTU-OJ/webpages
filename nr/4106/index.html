@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -385,134 +387,134 @@
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* Watashi kininarimasu! */
-#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-#include &lt;cmath&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* Watashi kininarimasu! */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-const int MAXN = 200000;
+<span class="k">const</span> <span class="kt">int</span> <span class="n">MAXN</span> <span class="o">=</span> <span class="mi">200000</span><span class="p">;</span>
 
-struct Node{
-    int l = 0, r = 0;
-    int maxx = 0;
-};
+<span class="k">struct</span> <span class="n">Node</span><span class="p">{</span>
+    <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">maxx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
 
-Node a[MAXN * 4 + 5];
+<span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="n">MAXN</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">5</span><span class="p">];</span>
 
-int t;
-int h, w, n;
+<span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
 
-void pushUp(int x){
-    if (a[x * 2].maxx &gt;= a[x * 2 + 1].maxx)
-        a[x].maxx = a[x * 2].maxx;
-    else
-        a[x].maxx = a[x * 2 + 1].maxx;
-}
+<span class="kt">void</span> <span class="nf">pushUp</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">maxx</span> <span class="o">&gt;=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">maxx</span><span class="p">)</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">maxx</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">maxx</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">maxx</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">maxx</span><span class="p">;</span>
+<span class="p">}</span>
 
-void buildTree(int x, int l, int r){
-    a[x].l = l;
-    a[x].r = r;
-    if (l == r){
-        a[x].maxx = w;
-        return;
-    }
-    int mid = (l + r) / 2;
-    buildTree(x * 2, l, mid);
-    buildTree(x * 2 + 1, mid + 1, r);
-    pushUp(x);
-}
+<span class="kt">void</span> <span class="nf">buildTree</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">){</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
+    <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">==</span> <span class="n">r</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">maxx</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="n">buildTree</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">mid</span><span class="p">);</span>
+    <span class="n">buildTree</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
+    <span class="n">pushUp</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
 
-void update(int x, int line, int len){
-    if (a[x].l == a[x].r){
-        a[x].maxx -= len;
-        return;
-    }
-    int mid = (a[x].l + a[x].r) / 2;
-    if (line &lt;= mid)
-        update(x * 2, line, len);
-    else
-        update(x * 2 + 1, line, len);
-    pushUp(x);
-}
+<span class="kt">void</span> <span class="nf">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">line</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span><span class="p">){</span>
+        <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">maxx</span> <span class="o">-=</span> <span class="n">len</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="p">)</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+    <span class="n">pushUp</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="p">}</span>
 
-int query(int x, int len){
-    if (a[x].l == a[x].r)
-        return a[x].l;
-    if (a[x * 2].maxx &gt;= len)
-        return query(x * 2, len);
-    else
-        return query(x * 2 + 1, len);
-}
+<span class="kt">int</span> <span class="nf">query</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">len</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span> <span class="o">==</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">r</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">l</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">].</span><span class="n">maxx</span> <span class="o">&gt;=</span> <span class="n">len</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">query</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="k">return</span> <span class="n">query</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">len</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; t;
-    while (t--){
-        cin &gt;&gt; h &gt;&gt; w &gt;&gt; n;
-        buildTree(1, 1, min(n, h));
-        for (int i = 1; i &lt;= n; ++i){
-            int m;
-            cin &gt;&gt; m;
-            if (m &gt; a[1].maxx){
-                cout &lt;&lt; &quot;-1\n&quot;;
-                continue;
-            }
-            int line = query(1, m);
-            cout &lt;&lt; line &lt;&lt; '\n';
-            update(1, line, m);
-        }
-    }
-    return 0;
-}
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">t</span><span class="o">--</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">h</span> <span class="o">&gt;&gt;</span> <span class="n">w</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
+        <span class="n">buildTree</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">h</span><span class="p">));</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+            <span class="kt">int</span> <span class="n">m</span><span class="p">;</span>
+            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">m</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">m</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">maxx</span><span class="p">){</span>
+                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;-1</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="kt">int</span> <span class="n">line</span> <span class="o">=</span> <span class="n">query</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">line</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+            <span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">m</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-</code></pre>
 
 <h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>#include &lt;iostream&gt;
-#include &lt;cstdio&gt;
-#include &lt;cstring&gt;
-using namespace std;
-int tr[1050000],m,h,w,n,t,x,f,ans[200001];//丐版线段树 请勿模仿
-int main() {
-    ios::sync_with_stdio(false);
-    cin&gt;&gt;t;
-    for (int i=0;i&lt;t;++i)
-    {
-        memset(tr,0,sizeof(tr));
-        cin&gt;&gt;h&gt;&gt;w&gt;&gt;n;
-        h=min(h,n);
-        for (m=1;m&lt;h;m&lt;&lt;=1);
-        for (int j=1+m;j&lt;=m+h;++j)
-            tr[j]=w;
-        for (int j=m+h+1;j&lt;=m&lt;&lt;1;++j)
-            tr[j]=0;
-        for (int j=m;j&gt;=1;--j)
-            tr[j]=max(tr[j&lt;&lt;1],tr[(j&lt;&lt;1)+1]);//以上为建树
-        for (int j=0;j&lt;n;++j)
-        {
-            cin&gt;&gt;x;
-            if (tr[1]&lt;x)
-            {
-                ans[j]=-1;
-                continue;
-            }
-            f=1;
-            while (f&lt;=m)
-                if (tr[f&lt;&lt;=1]&lt;x) f+=1;//单点查询
-            tr[f]-=x;
-            ans[j]=f-m;
-            for (f&gt;&gt;=1;f&gt;=1;f&gt;&gt;=1) tr[f]=max(tr[f&lt;&lt;1],tr[(f&lt;&lt;1)+1]);//单点修改
-        }
-        for (int j=0;j&lt;n;++j)
-            cout&lt;&lt;ans[j]&lt;&lt;&quot; &quot;;
-        cout&lt;&lt;endl;
-    }
-    return 0;
-}
-</code></pre>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">tr</span><span class="p">[</span><span class="mi">1050000</span><span class="p">],</span><span class="n">m</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">ans</span><span class="p">[</span><span class="mi">200001</span><span class="p">];</span><span class="c1">//丐版线段树 请勿模仿</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">t</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">t</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">tr</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="n">tr</span><span class="p">));</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">h</span><span class="o">&gt;&gt;</span><span class="n">w</span><span class="o">&gt;&gt;</span><span class="n">n</span><span class="p">;</span>
+        <span class="n">h</span><span class="o">=</span><span class="n">min</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">m</span><span class="o">&lt;</span><span class="n">h</span><span class="p">;</span><span class="n">m</span><span class="o">&lt;&lt;=</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="o">+</span><span class="n">m</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">m</span><span class="o">+</span><span class="n">h</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">w</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">m</span><span class="o">+</span><span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;=</span><span class="n">m</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="n">m</span><span class="p">;</span><span class="n">j</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">;</span><span class="o">--</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">max</span><span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">j</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">],</span><span class="n">tr</span><span class="p">[(</span><span class="n">j</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]);</span><span class="c1">//以上为建树</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">x</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">x</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">ans</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=-</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">continue</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">f</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">f</span><span class="o">&lt;=</span><span class="n">m</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">f</span><span class="o">&lt;&lt;=</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">x</span><span class="p">)</span> <span class="n">f</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span><span class="c1">//单点查询</span>
+            <span class="n">tr</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">-=</span><span class="n">x</span><span class="p">;</span>
+            <span class="n">ans</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">f</span><span class="o">-</span><span class="n">m</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">f</span><span class="o">&gt;&gt;=</span><span class="mi">1</span><span class="p">;</span><span class="n">f</span><span class="o">&gt;=</span><span class="mi">1</span><span class="p">;</span><span class="n">f</span><span class="o">&gt;&gt;=</span><span class="mi">1</span><span class="p">)</span> <span class="n">tr</span><span class="p">[</span><span class="n">f</span><span class="p">]</span><span class="o">=</span><span class="n">max</span><span class="p">(</span><span class="n">tr</span><span class="p">[</span><span class="n">f</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">],</span><span class="n">tr</span><span class="p">[(</span><span class="n">f</span><span class="o">&lt;&lt;</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]);</span><span class="c1">//单点修改</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="o">++</span><span class="n">j</span><span class="p">)</span>
+            <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">ans</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&lt;&lt;</span><span class="s">&quot; &quot;</span><span class="p">;</span>
+        <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 

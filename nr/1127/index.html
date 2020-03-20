@@ -10,6 +10,8 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="一个SJTUOJ的题解分享网站">
+      
       
       
       
@@ -426,75 +428,74 @@ Word #4: No Set
 </details>
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<pre><code>/* Water Problem */
-#include &lt;iostream&gt;
-#include &lt;cstring&gt;
-using namespace std;
+<div class="codehilite"><pre><span></span><code><span class="cm">/* Water Problem */</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-int t;
-char s[205];
-int isSublist[205][205];
+<span class="kt">int</span> <span class="n">t</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">s</span><span class="p">[</span><span class="mi">205</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">isSublist</span><span class="p">[</span><span class="mi">205</span><span class="p">][</span><span class="mi">205</span><span class="p">];</span>
 
-inline bool readSet(const char *, int, int);
-inline bool readElementSublist(const char *, int, int);
-inline bool readElement(const char *, int, int);
-inline bool readSubelement(const char *, int, int);
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">readSet</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">readElementSublist</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">readElement</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">readSubelement</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
 
-inline bool readSet(const char *s, int first, int last){
-    if (s[first] != '{' || s[last - 1] != '}')
-        return false;
-    if (last - first == 2)
-        return true;
-    return readElementSublist(s, first + 1, last - 1);
-}
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">readSet</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">first</span><span class="p">,</span> <span class="kt">int</span> <span class="n">last</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;{&#39;</span> <span class="o">||</span> <span class="n">s</span><span class="p">[</span><span class="n">last</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;}&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last</span> <span class="o">-</span> <span class="n">first</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">readElementSublist</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">last</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
 
-inline bool readElementSublist(const char *s, int first, int last){
-    if (isSublist[first][last] == 1)
-        return true;
-    if (isSublist[first][last] == -1)
-        return false;
-    for (int i = first; i &lt; last; ++i){
-        if (s[i] != ',')
-            continue;
-        if (readElement(s, first, i) &amp;&amp; readElementSublist(s, i + 1, last))
-            return true;
-    }
-    bool flag = readElement(s, first, last);
-    if (flag)
-        isSublist[first][last] = 1;
-    else
-        isSublist[first][last] = -1;
-    return flag;
-}
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">readElementSublist</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">first</span><span class="p">,</span> <span class="kt">int</span> <span class="n">last</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">isSublist</span><span class="p">[</span><span class="n">first</span><span class="p">][</span><span class="n">last</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">isSublist</span><span class="p">[</span><span class="n">first</span><span class="p">][</span><span class="n">last</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">first</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">last</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="sc">&#39;,&#39;</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">readElement</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">readElementSublist</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">last</span><span class="p">))</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">bool</span> <span class="n">flag</span> <span class="o">=</span> <span class="n">readElement</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+        <span class="n">isSublist</span><span class="p">[</span><span class="n">first</span><span class="p">][</span><span class="n">last</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">isSublist</span><span class="p">[</span><span class="n">first</span><span class="p">][</span><span class="n">last</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">flag</span><span class="p">;</span>
+<span class="p">}</span>
 
-inline bool readElement(const char *s, int first, int last){
-    if (last - first == 1){
-        if (s[first] == '{' || s[first] == '}' || s[first] == ',')
-            return true;
-        else
-            return false;
-    }
-    return readSet(s, first, last);
-}
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">readElement</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">first</span><span class="p">,</span> <span class="kt">int</span> <span class="n">last</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">last</span> <span class="o">-</span> <span class="n">first</span> <span class="o">==</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;{&#39;</span> <span class="o">||</span> <span class="n">s</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;}&#39;</span> <span class="o">||</span> <span class="n">s</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">==</span> <span class="sc">&#39;,&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">readSet</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">);</span>
+<span class="p">}</span>
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
-    cin &gt;&gt; t;
-    for (int i = 1; i &lt;= t; ++i){
-        cin &gt;&gt; s;
-        int len = strlen(s);
-        memset(isSublist, 0, sizeof(isSublist));
-        if (readSet(s, 0, len))
-            cout &lt;&lt; &quot;Word #&quot; &lt;&lt; i &lt;&lt; &quot;: Set\n&quot;;
-        else
-            cout &lt;&lt; &quot;Word #&quot; &lt;&lt; i &lt;&lt; &quot;: No Set\n&quot;;
-    }
-    return 0;
-}
-
-</code></pre>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">t</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">t</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="n">memset</span><span class="p">(</span><span class="n">isSublist</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">isSublist</span><span class="p">));</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">readSet</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">len</span><span class="p">))</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Word #&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;: Set</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+        <span class="k">else</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Word #&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;: No Set</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 
