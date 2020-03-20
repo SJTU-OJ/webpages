@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
   </a>
   
 </li>
@@ -342,7 +368,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 高精度除法 */
 #include &lt;iostream&gt;
 #include &lt;string&gt;
@@ -459,6 +485,1199 @@ int main(){
     cin &gt;&gt; s1 &gt;&gt; s2;
     BigInt bi1(s1), bi2(s2);
     cout &lt;&lt; bi1 / bi2 &lt;&lt; endl;
+    return 0;
+}
+
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstring&quot;
+#include &quot;cmath&quot;
+#include &quot;algorithm&quot;
+
+using namespace std;
+
+//常数
+constexpr auto maxNum = 10000;
+constexpr auto intMax = 20;
+
+//交换
+template &lt;class T&gt;
+void mySwap(T&amp;a, T &amp;b) {
+    T temp = a;
+    a = b;
+    b = temp;
+}
+
+//冒泡排序
+//默认a至b升序
+template &lt;class T&gt;
+void bubbleSort(T *destination, T *source, int num, bool(*f)(const T&amp; a, const T&amp; b)) {
+    //复制
+    if (destination != source)
+        for (int i = 0; i &lt; num; i++)
+            destination[i] = source[i];
+
+    for (int i = num - 2; i &gt;= 0; i--)
+        for (int j = 0; j &lt;= i; j++)
+            if (!f(destination[j], destination[j + 1]))
+                mySwap(destination[j], destination[j + 1]);
+}
+
+//无符号大整数类
+/*
+class unsignedBigInt {
+public:
+    char ch[maxNum * 2];
+    int startNum = maxNum;
+
+    //初始化
+    unsignedBigInt(const char *input) {
+        memset(ch, 0, maxNum*2);
+        for (int i = 0; i &lt; strlen(input); i++)
+            ch[i+maxNum] = input[i];
+    }
+    unsignedBigInt(void) {
+        memset(ch, 0, maxNum*2);
+    }
+
+    //复制构造函数
+    unsignedBigInt(const unsignedBigInt&amp; b) {
+        for (int i = 0; i &lt; maxNum * 2; i++)
+            ch[i] = b.ch[i];
+        startNum = b.startNum;
+    }
+
+    //输入输出
+    friend ostream &amp;operator&lt;&lt;(ostream &amp;output,const unsignedBigInt &amp;bi);
+    friend istream &amp;operator&gt;&gt;(istream &amp;input,unsignedBigInt &amp;bi);
+
+    //赋值
+    unsignedBigInt operator=(unsignedBigInt b) {
+        for (int i = 0; i &lt; maxNum * 2; i++)
+            ch[i] = b.ch[i];
+        startNum = b.startNum;
+        return *this;
+    }
+
+    //比较符
+    //小于
+    bool operator&lt;(unsignedBigInt b) {
+        return (strcmp(ch + startNum, b.ch + b.startNum) &lt; 0 &amp;&amp; strlen(ch + startNum) == strlen(b.ch + b.startNum)) || strlen(ch + startNum) &lt; strlen(b.ch + b.startNum) ? true : false;
+    }
+
+    //大于
+    bool operator&gt;(unsignedBigInt b) {
+        return (strcmp(ch + startNum, b.ch + b.startNum) &gt; 0 &amp;&amp; strlen(ch + startNum) == strlen(b.ch + b.startNum)) || strlen(ch + startNum)&gt;strlen(b.ch + b.startNum) ? true : false;
+    }
+
+    //小于等于
+    bool operator&lt;=(unsignedBigInt b) {
+        return (strcmp(ch + startNum, b.ch + b.startNum) &lt;= 0 &amp;&amp; strlen(ch + startNum) == strlen(b.ch + b.startNum)) || strlen(ch + startNum) &lt;strlen(b.ch + b.startNum) ? true : false;
+    }
+
+    //大于等于
+    bool operator&gt;=(unsignedBigInt b) {
+        return (strcmp(ch + startNum, b.ch + b.startNum) &gt;= 0 &amp;&amp; strlen(ch + startNum) == strlen(b.ch + b.startNum)) || strlen(ch + startNum) &gt; strlen(b.ch + b.startNum) ? true : false;
+    }
+
+    //等于等于
+    bool operator==(unsignedBigInt b) {
+        return strcmp(ch + startNum, b.ch + b.startNum) == 0 ? true : false;
+    }
+
+    //运算符
+    //加号
+    unsignedBigInt operator+(unsignedBigInt b) {
+        unsignedBigInt temp;
+        int jw = 0;
+
+        for (int i = 0;ch[startNum+strlen(ch+startNum)-i-1]!=0||b.ch[b.startNum + strlen(b.ch + b.startNum) - i - 1] != 0||jw!=0; i++) {
+            //判断加数
+            int j1 = ch[startNum + strlen(ch + startNum) - i - 1] == 0 ? 0 : ch[startNum + strlen(ch + startNum) - i - 1] - '0';
+            int j2= b.ch[b.startNum + strlen(b.ch + b.startNum) - i - 1] == 0 ? 0 : b.ch[b.startNum + strlen(b.ch + b.startNum) - i - 1] - '0';
+
+            //运算
+            temp.ch[--temp.startNum] = (j1 + j2 + jw) % 10+'0';
+            jw = (j1 + j2 + jw) / 10;
+        }
+
+        //返回
+        return temp;
+    }
+
+    //++c
+    unsignedBigInt operator++() {
+        *this = *this + unsignedBigInt(&quot;1&quot;);
+        return *this;
+    }
+
+    //c++
+    unsignedBigInt operator++(int i) {
+        unsignedBigInt temp = *this;
+        *this = temp +unsignedBigInt(&quot;1&quot;);
+        return temp;
+    }
+
+    //减号
+    unsignedBigInt operator-(unsignedBigInt b) {
+        unsignedBigInt temp;
+        int jw = 0;
+
+        for (int i = 0; ch[startNum + strlen(ch + startNum) - i - 1] != 0 || b.ch[b.startNum + strlen(b.ch + b.startNum) - i - 1] != 0; i++) {
+            //判断被减数与减数
+            int j1 = ch[startNum + strlen(ch + startNum) - i - 1] == 0 ? 0 : ch[startNum + strlen(ch + startNum) - i - 1] - '0';
+            int j2 = b.ch[b.startNum + strlen(b.ch + b.startNum) - i - 1] == 0 ? 0 : b.ch[b.startNum + strlen(b.ch + b.startNum) - i - 1] - '0';
+
+            //运算
+            if (j1 - jw - j2 &lt; 0) {
+                temp.ch[--temp.startNum] = 10 + j1 - jw - j2 + '0';
+                jw = 1;
+            }
+            else {
+                temp.ch[--temp.startNum] =  j1 - jw - j2 + '0';
+                jw = 0;
+            }
+        }
+
+        //修正
+        for (;temp.ch[temp.startNum] == '0';)
+            temp.ch[temp.startNum++] = 0;
+
+        //返回
+        return temp;
+    }
+
+    //--c
+    unsignedBigInt operator--() {
+        *this = *this - unsignedBigInt(&quot;1&quot;);
+        return *this;
+    }
+
+    //c--
+    unsignedBigInt operator--(int i) {
+        unsignedBigInt temp = *this;
+        *this = temp - unsignedBigInt(&quot;1&quot;);
+        return temp;
+        }
+
+    //乘号
+    unsignedBigInt operator*(unsignedBigInt b) {
+        unsignedBigInt temp(&quot;0&quot;);
+        for (int i = 0; i &lt; strlen(b.ch + b.startNum); i++) {
+            int curPos = b.startNum + strlen(b.ch + b.startNum) - 1 - i;
+            unsignedBigInt addNum;
+            if (b.ch[curPos] != '0') {
+                //Accelerate
+                int jw = 0;
+                for (int j = startNum + strlen(ch+startNum) - 1; j &gt;= startNum || jw != 0; j--) {
+                    int c1 = ch[j] == 0 ? 0 : ch[j] - '0';
+                    int c2 = b.ch[curPos] == 0 ? 0 : b.ch[curPos] - '0';
+
+                    if (c1*c2 + jw &lt; 10) {
+                        addNum.ch[--addNum.startNum] = c1 * c2 + jw + '0';
+                        jw = 0;
+                    }
+                    else {
+                        addNum.ch[--addNum.startNum] = (c1*c2 + jw) % 10 + '0';
+                        jw = (c1*c2 + jw) / 10;
+                    }
+                }
+                //Calculate
+                for (int j = 0; j &lt; i; j++)
+                    addNum.ch[addNum.startNum + strlen(addNum.ch + addNum.startNum)] = '0';
+
+                temp = temp + addNum;
+            }
+        }
+        return temp;
+    }
+
+    //除号
+    unsignedBigInt operator/(unsignedBigInt b) {
+        //排除异常
+        if (b == unsignedBigInt(&quot;0&quot;)) {
+            throw &quot;NaN&quot;;
+        }
+
+        //临时被除数
+        unsignedBigInt temp;
+        //最终结果
+        unsignedBigInt result;
+
+        for (int i = startNum; i &lt; startNum + strlen(ch + startNum); i++) {
+            //下移一位
+            temp.ch[temp.startNum + strlen(temp.ch + temp.startNum)] = ch[i];
+            //开始计算
+            unsignedBigInt tempResult=b;
+            int wr = 0;
+            for (; tempResult &lt;= temp;wr++) {
+                tempResult = tempResult + b;
+            }
+            result.ch[result.startNum + strlen(result.ch + result.startNum)] = wr + '0';
+            //计算差值
+            tempResult = tempResult - b;
+            if (tempResult == unsignedBigInt(&quot;0&quot;)) {
+                temp = unsignedBigInt();
+            }
+            else {
+                temp = temp - tempResult;
+            }
+        }
+
+        //去0
+        for (; strlen(result.ch + result.startNum) &gt; 1 &amp;&amp; result.ch[result.startNum] == '0';)
+            result.ch[result.startNum++] = 0;
+
+        return result;
+    }
+
+    //%
+    unsignedBigInt operator%(unsignedBigInt b) {
+        return *this-*this/b*b;
+    }
+
+    //+=
+    void operator+=(unsignedBigInt b) {
+        *this = *this + b;
+    }
+
+    //-=
+    void operator-=(unsignedBigInt b) {
+        *this = *this - b;
+    }
+
+    //*=
+    void operator*=(unsignedBigInt b) {
+        *this = *this * b;
+    }
+
+    // /=
+    void operator/=(unsignedBigInt b) {
+        *this = *this / b;
+    }
+
+    //%=
+    void operator%=(unsignedBigInt b) {
+        *this = *this% b;
+    }
+};
+*/
+
+//新无符号大整数类
+
+class unsignedBigInt {
+private:
+    bool del = false;
+public:
+    char *ch;
+    int startNum = 0;
+    int len = 0;
+
+    //初始化
+    unsignedBigInt(const char *input) {
+        if (del)
+            delete[] ch;
+
+        len = (strlen(input) + 1) * 2;
+        startNum = strlen(input);
+        ch = new char[len];
+        memset(ch, 0, len);
+        for (int i = 0; i &lt; strlen(input); i++)
+            ch[i + startNum] = input[i];
+
+        del = true;
+    }
+    unsignedBigInt(int num) {
+        if (del)
+            delete[] ch;
+
+        //临时数组
+        int n = 0, temp[intMax];
+        if (num == 0) {
+            n = 1;
+            temp[0] = 0;
+        }
+        else
+            for (; num &gt; 0; num /= 10)
+                temp[n++] = num % 10;
+
+
+        len = (n + 1) * 2;
+        startNum = n;
+        ch = new char[len];
+        memset(ch, 0, len);
+
+        for (int i = 0; i &lt; n; i++)
+            ch[startNum + i] = temp[n - i - 1] + '0';
+
+        del = true;
+    }
+    unsignedBigInt(void) {
+        if (del)
+            delete[] ch;
+
+        len = 1;
+        startNum = 0;
+        ch = new char[len];
+        memset(ch, 0, len);
+
+        del = true;
+    }
+    unsignedBigInt(int num, int sizen) {
+        if (del)
+            delete[] ch;
+
+        len = (sizen + 1) * 2;
+        startNum = sizen;
+        ch = new char[len];
+        memset(ch, 0, len);
+
+        if (num &gt;= 0) {
+            int n = 0, temp[intMax];
+            if (num == 0) {
+                n = 1;
+                temp[0] = 0;
+            }
+            else
+                for (; num &gt; 0; num /= 10)
+                    temp[n++] = num % 10;
+
+            for (int i = 0; i &lt; n; i++)
+                ch[startNum + i] = temp[n - i - 1] + '0';
+        }
+
+        del = true;
+    }
+
+    //析构
+    ~unsignedBigInt() {
+        if (del)
+            delete[] ch;
+    }
+
+    //计算真实长度
+    int realLength(const unsignedBigInt &amp;b) {
+        return strlen(b.ch + b.startNum);
+    }
+
+    //复制构造函数
+    unsignedBigInt(const unsignedBigInt&amp; b) {
+        if (del)
+            delete[] ch;
+
+        len = b.len;
+        startNum = b.startNum;
+        ch = new char[len];
+        for (int i = 0; i &lt; len; i++)
+            ch[i] = b.ch[i];
+
+        del = true;
+    }
+
+    //输入输出
+    friend ostream &amp;operator&lt;&lt;(ostream &amp;output, const unsignedBigInt &amp;bi);
+    friend istream &amp;operator&gt;&gt;(istream &amp;input, unsignedBigInt &amp;bi);
+
+    //赋值
+    unsignedBigInt &amp;operator=(const unsignedBigInt &amp;b) {
+        //检查自身赋值
+        if (this == &amp;b)
+            return *this;
+
+        if (del)
+            delete[] ch;
+
+        len = b.len;
+        startNum = b.startNum;
+        ch = new char[len];
+        for (int i = 0; i &lt; len; i++)
+            ch[i] = b.ch[i];
+
+        del = true;
+        return *this;
+    }
+    unsignedBigInt &amp;operator=(const char* b) {
+        if (del)
+            delete[] ch;
+
+        len = (strlen(b) + 1) * 2;
+        startNum = strlen(b);
+        memset(ch, 0, len);
+
+        for (int i = 0; i &lt; strlen(b); i++)
+            ch[i + startNum] = b[i];
+
+        del = true;
+        return *this;
+    }
+    unsignedBigInt &amp;operator=(int num) {
+        if (del)
+            delete[] ch;
+
+        //临时数组
+        int n = 0, temp[intMax];
+        if (num == 0) {
+            n = 1;
+            temp[0] = 0;
+        }
+        else
+            for (; num &gt; 0; num /= 10)
+                temp[n++] = num % 10;
+
+
+        len = (n + 1) * 2;
+        startNum = n;
+        ch = new char[len];
+        memset(ch, 0, len);
+
+        for (int i = 0; i &lt; n; i++)
+            ch[startNum + i] = temp[n - i - 1] + '0';
+
+        del = true;
+        return *this;
+    }
+
+    //比较符
+    //小于
+    bool operator&lt;(const unsignedBigInt &amp;b) {
+        return (strcmp(ch + startNum, b.ch + b.startNum) &lt; 0 &amp;&amp; strlen(ch + startNum) == strlen(b.ch + b.startNum)) || strlen(ch + startNum) &lt; strlen(b.ch + b.startNum) ? true : false;
+    }
+
+    //大于
+    bool operator&gt;(const unsignedBigInt &amp;b) {
+        return (strcmp(ch + startNum, b.ch + b.startNum) &gt; 0 &amp;&amp; strlen(ch + startNum) == strlen(b.ch + b.startNum)) || strlen(ch + startNum) &gt; strlen(b.ch + b.startNum) ? true : false;
+    }
+
+    //小于等于
+    bool operator&lt;=(const unsignedBigInt &amp;b) {
+        return (strcmp(ch + startNum, b.ch + b.startNum) &lt;= 0 &amp;&amp; strlen(ch + startNum) == strlen(b.ch + b.startNum)) || strlen(ch + startNum) &lt; strlen(b.ch + b.startNum) ? true : false;
+    }
+
+    //大于等于
+    bool operator&gt;=(const unsignedBigInt &amp;b) {
+        return (strcmp(ch + startNum, b.ch + b.startNum) &gt;= 0 &amp;&amp; strlen(ch + startNum) == strlen(b.ch + b.startNum)) || strlen(ch + startNum) &gt; strlen(b.ch + b.startNum) ? true : false;
+    }
+
+    //等于等于
+    bool operator==(const unsignedBigInt &amp;b) {
+        return strcmp(ch + startNum, b.ch + b.startNum) == 0 ? true : false;
+    }
+
+    //运算符
+    //加号
+    unsignedBigInt operator+(const unsignedBigInt &amp;b) {
+        unsignedBigInt temp(-1, max(realLength(*this), realLength(b)) + 2);
+        int jw = 0;
+        int test = realLength(*this);
+
+        for (int i = 0; realLength(*this) &gt; i || realLength(b) &gt; i || jw != 0; i++) {
+            //判断加数
+            int j1 = realLength(*this) &lt;= i ? 0 : ch[startNum + strlen(ch + startNum) - i - 1] - '0';
+            int j2 = realLength(b) &lt;= i ? 0 : b.ch[b.startNum + strlen(b.ch + b.startNum) - i - 1] - '0';
+
+            //运算
+            temp.ch[--temp.startNum] = (j1 + j2 + jw) % 10 + '0';
+            jw = (j1 + j2 + jw) / 10;
+        }
+
+        //返回
+        return temp;
+    }
+
+    //++c
+    unsignedBigInt operator++() {
+        *this = *this + unsignedBigInt(&quot;1&quot;);
+        return *this;
+    }
+
+    //c++
+    unsignedBigInt operator++(int i) {
+        unsignedBigInt temp = *this;
+        *this = temp + unsignedBigInt(&quot;1&quot;);
+        return temp;
+    }
+
+    //减号
+    unsignedBigInt operator-(const unsignedBigInt &amp;b) {
+        if (*this == b)
+            return unsignedBigInt(0);
+
+        unsignedBigInt temp(-1, max(realLength(*this), realLength(b)) + 2);
+        int jw = 0;
+
+        for (int i = 0; realLength(*this) &gt; i || realLength(b) &gt; i; i++) {
+            //判断被减数与减数
+            int j1 = realLength(*this) &lt;= i ? 0 : ch[startNum + strlen(ch + startNum) - i - 1] - '0';
+            int j2 = realLength(b) &lt;= i ? 0 : b.ch[b.startNum + strlen(b.ch + b.startNum) - i - 1] - '0';
+
+            //运算
+            if (j1 - jw - j2 &lt; 0) {
+                temp.ch[--temp.startNum] = 10 + j1 - jw - j2 + '0';
+                jw = 1;
+            }
+            else {
+                temp.ch[--temp.startNum] = j1 - jw - j2 + '0';
+                jw = 0;
+            }
+        }
+
+        //修正
+        for (; temp.ch[temp.startNum] == '0';)
+            temp.ch[temp.startNum++] = 0;
+
+        //返回
+        return temp;
+    }
+
+    //--c
+    unsignedBigInt operator--() {
+        *this = *this - unsignedBigInt(&quot;1&quot;);
+        return *this;
+    }
+
+    //c--
+    unsignedBigInt operator--(int i) {
+        unsignedBigInt temp = *this;
+        *this = temp - unsignedBigInt(&quot;1&quot;);
+        return temp;
+    }
+
+    //乘号
+    unsignedBigInt operator*(const unsignedBigInt &amp;b) {
+        unsignedBigInt temp(0, realLength(*this) + realLength(b) + 2);
+        for (int i = 0; i &lt; strlen(b.ch + b.startNum); i++) {
+            int curPos = b.startNum + strlen(b.ch + b.startNum) - 1 - i;
+            unsignedBigInt addNum(-1, realLength(*this) + realLength(b) + 2);
+            if (b.ch[curPos] != '0') {
+                //Accelerate
+                int jw = 0;
+                for (int j = startNum + strlen(ch + startNum) - 1; j &gt;= startNum || jw != 0; j--) {
+                    int c1 = ch[j] == 0 ? 0 : ch[j] - '0';
+                    int c2 = b.ch[curPos] == 0 ? 0 : b.ch[curPos] - '0';
+
+                    if (c1*c2 + jw &lt; 10) {
+                        addNum.ch[--addNum.startNum] = c1 * c2 + jw + '0';
+                        jw = 0;
+                    }
+                    else {
+                        addNum.ch[--addNum.startNum] = (c1*c2 + jw) % 10 + '0';
+                        jw = (c1*c2 + jw) / 10;
+                    }
+                }
+                //Calculate
+                for (int j = 0; j &lt; i; j++)
+                    addNum.ch[addNum.startNum + strlen(addNum.ch + addNum.startNum)] = '0';
+
+                temp = temp + addNum;
+            }
+        }
+        return temp;
+    }
+
+    //除号
+    unsignedBigInt operator/(const unsignedBigInt &amp;b) {
+        //排除异常
+        if (unsignedBigInt(&quot;0&quot;) == b) {
+            throw &quot;NaN&quot;;
+        }
+
+        //临时被除数
+        unsignedBigInt temp(-1, max(realLength(*this), realLength(b)) + 2);
+        //最终结果
+        unsignedBigInt result(-1, max(realLength(*this), realLength(b)) + 2);
+
+        for (int i = startNum; i &lt; startNum + strlen(ch + startNum); i++) {
+            //下移一位
+            temp.ch[temp.startNum + strlen(temp.ch + temp.startNum)] = ch[i];
+            //开始计算
+            unsignedBigInt tempResult = b;
+            int wr = 0;
+            for (; tempResult &lt;= temp; wr++) {
+                tempResult = tempResult + b;
+            }
+            result.ch[result.startNum + strlen(result.ch + result.startNum)] = wr + '0';
+            //计算差值
+            tempResult = tempResult - b;
+            if (tempResult == temp) {
+                temp = unsignedBigInt(-1, max(realLength(*this), realLength(b)) + 2);
+            }
+            else {
+                temp = temp - tempResult;
+            }
+        }
+
+        //去0
+        for (; strlen(result.ch + result.startNum) &gt; 1 &amp;&amp; result.ch[result.startNum] == '0';)
+            result.ch[result.startNum++] = 0;
+
+        return result;
+    }
+
+    //%
+    unsignedBigInt operator%(const unsignedBigInt &amp;b) {
+        return *this - *this / b * b;
+    }
+
+    //+=
+    void operator+=(const unsignedBigInt &amp;b) {
+        *this = *this + b;
+    }
+
+    //-=
+    void operator-=(const unsignedBigInt &amp;b) {
+        *this = *this - b;
+    }
+
+    //*=
+    void operator*=(const unsignedBigInt &amp;b) {
+        *this = *this * b;
+    }
+
+    // /=
+    void operator/=(const unsignedBigInt &amp;b) {
+        *this = *this / b;
+    }
+
+    //%=
+    void operator%=(const unsignedBigInt &amp;b) {
+        *this = *this% b;
+    }
+};
+
+
+//有符号大整数类
+class bigInt {
+public:
+    bool op = true;
+    unsignedBigInt ubi;
+
+    //构造函数
+    bigInt() {
+        ubi = unsignedBigInt();
+    }
+    bigInt(const char* b) {
+        if (b[0] == '-') {
+            ubi = unsignedBigInt(b + 1);
+            op = false;
+        }
+        else {
+            ubi = unsignedBigInt(b);
+            op = true;
+        }
+    }
+    bigInt(int b) {
+        if (b &lt; 0) {
+            ubi = unsignedBigInt(-b);
+            op = false;
+        }
+        else {
+            ubi = unsignedBigInt(b);
+            op = true;
+        }
+    }
+    bigInt(int num, int sizen) {
+        if (num &lt; 0) {
+            ubi = unsignedBigInt(-num, sizen);
+            op = false;
+        }
+        else {
+            ubi = unsignedBigInt(num, sizen);
+            op = true;
+        }
+    }
+
+    //复制函数
+    bigInt(const bigInt &amp;b) {
+        op = b.op;
+        ubi = b.ubi;
+    }
+
+    //赋值函数
+    bigInt &amp;operator=(const bigInt &amp;b) {
+        op = b.op;
+        ubi = b.ubi;
+
+        return *this;
+    }
+    bigInt &amp;operator=(const char* b) {
+        if (b[0] == '-') {
+            ubi = unsignedBigInt(b + 1);
+            op = false;
+        }
+        else {
+            ubi = unsignedBigInt(b);
+            op = true;
+        }
+
+        return *this;
+    }
+    bigInt &amp;operator=(int b) {
+        if (b &lt; 0) {
+            ubi = unsignedBigInt(-b);
+            op = false;
+        }
+        else {
+            ubi = unsignedBigInt(b);
+            op = true;
+        }
+
+        return *this;
+    }
+
+    //比较部分
+    //大于
+    bool operator&gt;(const bigInt &amp;b) {
+        if (op != b.op)
+            return op &gt; b.op ? true : false;
+        else
+            return op ? ubi &gt; b.ubi:ubi &lt; b.ubi;
+    }
+    //大于等于
+    bool operator&gt;=(const bigInt &amp;b) {
+        if (op != b.op)
+            return op &gt; b.op ? true : false;
+        else
+            return op ? ubi &gt;= b.ubi : ubi &lt;= b.ubi;
+    }
+    //小于
+    bool operator&lt;(const bigInt &amp;b) {
+        if (op != b.op)
+            return op &lt; b.op ? true : false;
+        else
+            return op ? ubi &lt; b.ubi : ubi &gt; b.ubi;
+    }
+    //小于等于
+    bool operator&lt;=(const bigInt &amp;b) {
+        if (op != b.op)
+            return op &lt; b.op ? true : false;
+        else
+            return op ? ubi &lt;= b.ubi : ubi &gt;= b.ubi;
+    }
+    //等于等于
+    bool operator==(const bigInt &amp;b) {
+        return op == b.op || ubi == unsignedBigInt(0) ? ubi == b.ubi : false;
+    }
+    //不等于
+    bool operator!=(const bigInt &amp;b) {
+        return !(*this == b);
+    }
+
+    //计算部分
+    //加法
+    bigInt operator+(const bigInt &amp;b) {
+        bigInt result;
+
+        if (op == b.op) {
+            result.ubi = ubi + b.ubi;
+            result.op = op;
+        }
+        else if (op &gt; b.op) {
+            if (ubi &gt;= b.ubi) {
+                result.ubi = ubi - b.ubi;
+                result.op = true;
+            }
+            else {
+                unsignedBigInt temp = b.ubi;
+                result.ubi = temp - ubi;
+                result.op = false;
+            }
+        }
+        else {
+            if (ubi &gt; b.ubi) {
+                result.ubi = ubi - b.ubi;
+                result.op = false;
+            }
+            else {
+                unsignedBigInt temp = b.ubi;
+                result.ubi = temp - ubi;
+                result.op = true;
+            }
+        }
+
+        return result;
+    }
+    //减法
+    bigInt operator-(const bigInt &amp;b) {
+        bigInt temp = b;
+        temp.op = !temp.op;
+        return *this + temp;
+    }
+    //负号
+    bigInt operator-() {
+        return bigInt(0) - *this;
+    }
+    //乘法
+    bigInt operator*(const bigInt &amp;b) {
+        bigInt result;
+
+        if (op == b.op) {
+            result.ubi = ubi * b.ubi;
+            result.op = true;
+        }
+        else {
+            result.ubi = ubi * b.ubi;
+            result.op = false;
+        }
+
+        return result;
+    }
+    //除法
+    bigInt operator/(const bigInt &amp;b) {
+        bigInt result;
+
+        if (op == b.op) {
+            result.ubi = ubi / b.ubi;
+            result.op = true;
+        }
+        else {
+            result.ubi = ubi / b.ubi;
+            result.op = false;
+        }
+
+        return result;
+    }
+    //%
+    bigInt operator%(const bigInt &amp;b) {
+        return *this - *this / b * b;
+    }
+
+    //++c
+    bigInt operator++() {
+        *this = *this + bigInt(1);
+    }
+    //c++
+    bigInt operator++(int b) {
+        *this = *this + bigInt(b);
+        return *this - bigInt(b);
+    }
+    //--c
+    bigInt operator--() {
+        *this = *this - bigInt(1);
+    }
+    //c--
+    bigInt operator--(int b) {
+        *this = *this - bigInt(b);
+        return *this + bigInt(b);
+    }
+
+    //+=
+    void operator+=(const bigInt &amp;b) {
+        *this = *this + b;
+    }
+    //-=
+    void operator-=(const bigInt &amp;b) {
+        *this = *this - b;
+    }
+    //*=
+    void operator*=(const bigInt &amp;b) {
+        *this = *this * b;
+    }
+    // /=
+    void operator/=(const bigInt &amp;b) {
+        *this = *this / b;
+    }
+    //%=
+    void operator%=(const bigInt &amp;b) {
+        *this = *this % b;
+    }
+};
+
+//输入输出流重载
+//无符号大整数
+ostream &amp;operator&lt;&lt;(ostream &amp;output, const unsignedBigInt &amp;bi) {
+    output &lt;&lt; bi.ch + bi.startNum;
+    return output;
+}
+istream &amp;operator&gt;&gt;(istream &amp;input, unsignedBigInt &amp;bi) {
+    char ch[maxNum];
+    input &gt;&gt; ch;
+    bi = unsignedBigInt(ch);
+    return input;
+}
+
+//有符号大整数
+ostream &amp;operator&lt;&lt;(ostream &amp;output, const bigInt &amp;bi) {
+    output &lt;&lt; (!bi.op ? &quot;-&quot; : &quot;&quot;) &lt;&lt; bi.ubi;
+    return output;
+}
+istream &amp;operator&gt;&gt;(istream &amp;input, bigInt &amp;bi) {
+    input &gt;&gt; bi.ubi;
+    if (bi.ubi.ch[bi.ubi.startNum] == '-') {
+        bi.op = false;
+        bi.ubi.ch[bi.ubi.startNum++] = 0;
+    }
+    return input;
+}
+
+int main() {
+    bigInt a, b;
+    cin &gt;&gt; a &gt;&gt; b;
+    a /= b;
+    cout &lt;&lt; a;
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;cmath&gt;
+#include &lt;cstring&gt;
+#include &lt;iomanip&gt;
+#include &lt;iostream&gt;
+using namespace std;
+
+class num {
+    struct node {
+        int data;
+        node *next;
+
+        node() : next(NULL) {}
+
+        node(int d, node *N = NULL) : data(d), next(N) {}
+    };
+
+    node *head;
+
+   public:
+    int len;
+
+    num();
+
+    num(const num &amp;other);
+
+    num(int x);
+
+    ~num();
+
+    void show();
+
+    void operate(num &amp;b);
+
+    int sub(num &amp;b);
+
+    void add(num &amp;b);
+
+    void force();
+};
+
+void num::add(num &amp;b) {
+    int carry = 0, tem;
+    node *cur1 = head;
+    node *cur2 = b.head;
+    while (cur1-&gt;next &amp;&amp; cur2-&gt;next) {
+        tem = carry + cur1-&gt;data + cur2-&gt;data;
+        if (tem &gt;= 10) {
+            carry = 1;
+            tem -= 10;
+        } else {
+            carry = 0;
+        }
+        cur1-&gt;data = tem;
+        cur1 = cur1-&gt;next;
+        cur2 = cur2-&gt;next;
+    }
+
+    while (cur1-&gt;next) {
+        tem = carry + cur1-&gt;data;
+        if (tem &gt;= 10) {
+            carry = 1;
+            tem -= 10;
+        } else {
+            carry = 0;
+        }
+        cur1-&gt;data = tem;
+        cur1 = cur1-&gt;next;
+    }
+
+    while (cur2-&gt;next) {
+        tem = carry + cur2-&gt;data;
+        if (tem &gt;= 10) {
+            carry = 1;
+            tem -= 10;
+        } else {
+            carry = 0;
+        }
+        cur1-&gt;data = tem;
+        cur1 = cur1-&gt;next = new node();
+        cur2 = cur2-&gt;next;
+    }
+
+    if (carry) {
+        cur1-&gt;data = carry;
+        cur1-&gt;next = new node();
+    }
+}
+
+void num::force() {
+    ++len;
+    head = new node(0, head);
+}
+
+num::num(int x) {
+    len = 1;
+    head = new node();
+    head = new node(x, head);
+}
+
+num::num(const num &amp;other) {
+    len = 0;
+    node *p = other.head;
+    head = new node(p-&gt;data);
+    node *cur = head;
+
+    while (1) {
+        p = p-&gt;next;
+        if (!p) {
+            break;
+        }
+        cur = cur-&gt;next = new node(p-&gt;data);
+    }
+
+    len = other.len;
+}
+
+void num::show() {
+    node *cur = head;
+    while (cur-&gt;next) {
+        cout &lt;&lt; cur-&gt;data;
+        cur = cur-&gt;next;
+    }
+}
+
+void num::operate(num &amp;b) {
+    num ans(0);
+    node *cur;
+    int d, flag;
+
+    while (1) {
+        num tem(b), addin(1);
+        d = max(0, len - b.len - 1);
+
+        for (int i = 0; i &lt; d; ++i) {
+            tem.force();
+        }
+
+        flag = sub(tem);
+
+        if (flag) {
+            for (int i = 0; i &lt; d; ++i) {
+                addin.force();
+            }
+
+            ans.add(addin);
+        } else {
+            break;
+        }
+    }
+    node *out = NULL;
+    cur = ans.head;
+    while (cur-&gt;next) {
+        out = new node(cur-&gt;data, out);
+        cur = cur-&gt;next;
+    }
+
+    while (out) {
+        cout &lt;&lt; out-&gt;data;
+        cur = out;
+        out = out-&gt;next;
+        delete cur;
+    }
+}
+
+int num::sub(num &amp;b) {
+    node *cur1 = head;
+    node *cur2 = b.head;
+    int lend = 0, tem, last0;
+
+    if (len &lt; b.len) {
+        return 0;
+    }
+
+    while (cur1-&gt;next &amp;&amp; cur2-&gt;next) {
+        tem = cur1-&gt;data - cur2-&gt;data - lend;
+        if (tem &lt; 0) {
+            lend = 1;
+            tem += 10;
+        } else {
+            lend = 0;
+        }
+        cur1-&gt;data = tem;
+        cur1 = cur1-&gt;next;
+        cur2 = cur2-&gt;next;
+    }
+
+    while (cur1-&gt;next) {
+        tem = cur1-&gt;data - lend;
+        if (tem &lt; 0) {
+            lend = 1;
+            tem += 10;
+        } else {
+            lend = 0;
+        }
+        cur1-&gt;data = tem;
+        cur1 = cur1-&gt;next;
+    }
+
+    if (!cur1-&gt;next &amp;&amp; !cur2-&gt;next &amp;&amp; lend) {
+        return 0;
+    } else {
+        cur1 = head;
+        while (cur1-&gt;next) {
+            if (cur1-&gt;data != 0) {
+                last0 = 0;
+            } else {
+                ++last0;
+            }
+            cur1 = cur1-&gt;next;
+        }
+
+        cur1 = head;
+
+        for (int i = 0; i &lt; len - last0 - 1; ++i) {
+            cur1 = cur1-&gt;next;
+        }
+
+        for (int i = 0; i &lt; last0; ++i) {
+            cur2 = cur1-&gt;next;
+            if (!cur2-&gt;next) {
+                break;
+            }
+            cur1-&gt;next = cur2-&gt;next;
+            delete cur2;
+        }
+
+        len -= last0;
+    }
+    return 1;
+}
+
+num::num() {
+    len = 0;
+    head = new node;
+    char ch;
+    while (1) {
+        cin.get(ch);
+        if (ch == '\n') break;
+        head = new node(ch - '0', head);
+        ++len;
+    }
+}
+
+num::~num() {
+    if (len &gt; 0) {
+        node *cur = head;
+        while (head) {
+            head = head-&gt;next;
+            delete cur;
+            cur = head;
+        }
+    }
+}
+
+int main() {
+    num n1, n2;
+    n1.operate(n2);
     return 0;
 }
 

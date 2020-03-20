@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
   </a>
   
 </li>
@@ -391,7 +417,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 二哥的内存 */
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
@@ -471,6 +497,210 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cmath&quot;
+#include &quot;cstdio&quot;
+using namespace std;
+
+constexpr int NUM_SIZE = 100009;
+constexpr int HASH_MAX = 500000;
+
+//数据存放类
+class data_type {
+public:
+    int x = -1, y = -1, val = 0;
+};
+
+//简易哈希表
+class hash_map {
+public:
+    data_type hash_data[HASH_MAX]{};
+
+    //哈希函数
+    int hash_func(int key1, int key2) {
+        return ((unsigned int)(key1 * key2)) % (unsigned int)HASH_MAX;
+    }
+
+    //寻找
+    int find(int key1, int key2) {
+        for (auto p = hash_func(key1, key2);; p = (p + 1) % HASH_MAX) {
+            if (hash_data[p].x == key1 &amp;&amp; hash_data[p].y == key2) {
+                return hash_data[p].val;
+            }
+            else if (hash_data[p].x &lt; 0) {
+                return 0;
+            }
+        }
+    }
+
+    //插入
+    void insert(int key1, int key2, int val) {
+        for (auto p = hash_func(key1, key2);; p = (p + 1) % HASH_MAX) {
+            if (hash_data[p].x &lt; 0) {
+                hash_data[p].x = key1;
+                hash_data[p].y = key2;
+                hash_data[p].val = val;
+                break;
+            }
+        }
+    }
+};
+
+//映射关系
+int row[NUM_SIZE], col[NUM_SIZE];
+hash_map map_data;
+
+int main() {
+    //初始化映射关系
+    for (int i = 0; i &lt; NUM_SIZE; ++i) {
+        row[i] = i;
+        col[i] = i;
+    }
+
+    int n, m;
+    scanf(&quot;%d&quot;, &amp;n);
+    for (int i = 0; i &lt; n; ++i) {
+        int x, y, z;
+        scanf(&quot;%d %d %d&quot;, &amp;x, &amp;y, &amp;z);
+        map_data.insert(x, y, z);
+    }
+    cin &gt;&gt; m;
+    for (int i = 0; i &lt; m; ++i) {
+        int op, x, y;
+        scanf(&quot;%d %d %d&quot;, &amp;op, &amp;x, &amp;y);
+        if (op == 0) {
+            auto temp = row[x];
+            row[x] = row[y];
+            row[y] = temp;
+        }
+        else if (op == 1) {
+            auto temp = col[x];
+            col[x] = col[y];
+            col[y] = temp;
+        }
+        else {
+            printf(&quot;%d\n&quot;, map_data.find(row[x], col[y]));
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 1e6 + 100;
+
+struct Node {
+    int row;
+    int colume;
+    int data;
+
+    bool operator&lt;(Node &amp;right) {
+        if (row != right.row) {
+            return row &lt; right.row;
+        } else {
+            return colume &lt; right.colume;
+        }
+    }
+
+    bool operator&gt;(Node &amp;right) {
+        if (row != right.row) {
+            return row &gt; right.row;
+        } else {
+            return colume &gt; right.colume;
+        }
+    }
+};
+
+Node arr[maxN];
+int row[maxN] = {0}, col[maxN] = {0};
+
+void qSort(Node *, int, int);
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n, m;
+    cin &gt;&gt; n;
+    for (int i = 0; i &lt; n; i++) {
+        int r, c, d;
+        cin &gt;&gt; r &gt;&gt; c &gt;&gt; d;
+
+        arr[i].row = r;
+        arr[i].colume = c;
+        arr[i].data = d;
+    }
+
+    qSort(arr, 0, n - 1);
+
+    for (int i = 0; i &lt; maxN; i++) {
+        row[i] = i;
+        col[i] = i;
+    }
+
+    cin &gt;&gt; m;
+    for (int i = 0; i &lt; m; i++) {
+        int order, x, y, temp;
+        cin &gt;&gt; order &gt;&gt; x &gt;&gt; y;
+        switch (order) {
+            case 0:
+                temp = row[x];
+                row[x] = row[y];
+                row[y] = temp;
+                break;
+            case 1:
+                temp = col[x];
+                col[x] = col[y];
+                col[y] = temp;
+                break;
+            case 2:
+                int r = row[x], c = col[y];
+                bool flag = 0;
+                for (int i = 0; i &lt; n; i++) {
+                    if (arr[i].row == r &amp;&amp; arr[i].colume == c) {
+                        cout &lt;&lt; arr[i].data &lt;&lt; '\n';
+                        flag = 1;
+                    }
+                }
+                if (!flag) {
+                    cout &lt;&lt; 0 &lt;&lt; '\n';
+                }
+        }
+    }
+
+    return 0;
+}
+
+void qSort(Node *nums, int l, int h) {
+    if (l &gt;= h) {
+        return;
+    }
+    int first = l, last = h;
+    Node key = nums[first];
+
+    while (first &lt; last) {
+        while (first &lt; last &amp;&amp; nums[last] &gt; key) {
+            --last;
+        }
+        nums[first] = nums[last];
+        while (first &lt; last &amp;&amp; nums[first] &lt; key) {
+            ++first;
+        }
+        nums[last] = nums[first];
+    }
+    nums[first] = key;
+    qSort(nums, l, first - 1);
+    qSort(nums, first + 1, h);
+}
 </code></pre>
                 
                   

@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,15 +289,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -375,7 +401,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 静态查找表 */
 #include &lt;iostream&gt;
 using namespace std;
@@ -432,7 +458,236 @@ int main(){
 
 </code></pre>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+using namespace std;
+
+class myList {
+public:
+    class node {
+    public:
+        int data;
+        node* next = nullptr;
+    };
+
+    node* head;
+    node* rear;
+    myList() {
+        head = new node;
+        rear = head;
+    }
+
+    ~myList() {
+        for (auto p = head; p!= nullptr;) {
+            auto temp = p;
+            p = p-&gt;next;
+            delete temp;
+        }
+    }
+
+    int find(int num) {
+        int ans = 0;
+        auto p = head;
+        for (; p-&gt;next != nullptr; p = p-&gt;next,ans++) {
+            if (p-&gt;next-&gt;data == num) {
+                ans++;
+                break;
+            }
+        }
+        //移动
+        if (head != p&amp;&amp;p-&gt;next!=nullptr) {
+            auto temp = head-&gt;next;
+            head-&gt;next = p-&gt;next;
+            p-&gt;next = head-&gt;next-&gt;next;
+            head-&gt;next-&gt;next = temp;
+        }
+        return ans;
+    }
+
+    void insert(int num) {
+        auto p = head;
+        bool flag = true;
+        /*for (; p-&gt;next != nullptr; p = p-&gt;next)
+            if (p-&gt;next-&gt;data == num) {
+                flag = false;
+                break;
+            }*/
+
+        if (flag) {
+            rear-&gt;next = new node;
+            rear = rear-&gt;next;
+            rear-&gt;data = num;
+        }
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(false);
+
+    int n, m;
+    cin &gt;&gt; n;
+
+    myList newList;
+
+    for (; n &gt; 0; n--) {
+        int temp;
+        cin &gt;&gt; temp;
+        newList.insert(temp);
+    }
+
+    cin &gt;&gt; m;
+
+    long long ans = 0;
+    for (; m &gt; 0; m--) {
+        int temp;
+        cin &gt;&gt; temp;
+        ans += newList.find(temp);
+    }
+
+    cout &lt;&lt; ans;
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+int compare = 0;
+
+class sLinkList {
+   private:
+    struct Node {
+        int data;
+        Node *next;
+
+        Node() : data(0), next(NULL) {}
+        Node(int d, Node *n = NULL) : data(d), next(n) {}
+        ~Node() {}
+    };
+    Node *head;
+    int Length;
+
+    Node *move(int) const;
+
+   public:
+    sLinkList();
+    ~sLinkList();
+    void push_back(const int &amp;);
+    void push_first(const int &amp;);
+    void clear();
+    void remove(const int &amp;);
+    int find(const int &amp;);
+    void moveToFirst(const int &amp;);
+    int visit(const int &amp;);
+};
+
+typename sLinkList::Node *sLinkList::move(int i) const {
+    Node *p = head;
+    while (i-- &gt;= 0) {
+        p = p-&gt;next;
+    }
+
+    return p;
+}
+
+sLinkList::sLinkList() {
+    head = new Node;
+    Length = 0;
+}
+
+sLinkList::~sLinkList() {
+    clear();
+    delete head;
+}
+
+void sLinkList::clear() {
+    Node *p = head-&gt;next, *q;
+    head-&gt;next = NULL;
+    while (p != NULL) {
+        q = p-&gt;next;
+        delete p;
+        p = q;
+    }
+    Length = 0;
+}
+
+void sLinkList::push_back(const int &amp;x) {
+    Node *p = move(Length - 1);
+    p-&gt;next = new Node(x, p-&gt;next);
+    ++Length;
+}
+
+void sLinkList::push_first(const int &amp;x) {
+    Node *p = head;
+    p-&gt;next = new Node(x, p-&gt;next);
+    ++Length;
+}
+
+void sLinkList::remove(const int &amp;i) {
+    if (i == -1) {
+        return;
+    } else {
+        Node *p, *q;
+        p = move(i - 1);
+        q = p-&gt;next;
+        p-&gt;next = q-&gt;next;
+        delete q;
+        --Length;
+    }
+}
+
+int sLinkList::find(const int &amp;x) {
+    int n = 0;
+    Node *p = head-&gt;next;
+    while (p != NULL) {
+        compare++;
+        if (p-&gt;data == x) {
+            return n;
+        } else {
+            p = p-&gt;next;
+            n++;
+        }
+    }
+
+    return -1;
+}
+
+int sLinkList::visit(const int &amp;x) { return move(x)-&gt;data; }
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n, m, tmp, pos;
+    sLinkList lists;
+
+    cin &gt;&gt; n;
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; tmp;
+        lists.push_back(tmp);
+    }
+
+    cin &gt;&gt; m;
+    for (int i = 0; i &lt; m; i++) {
+        cin &gt;&gt; tmp;
+        pos = lists.find(tmp);
+        if (pos != -1) {
+            lists.remove(pos);
+            lists.push_first(tmp);
+        }
+    }
+
+    cout &lt;&lt; compare;
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 using namespace std;
 int ans,n,x,m,nex[20000],v[20000],last;

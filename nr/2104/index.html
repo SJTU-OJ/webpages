@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
   </a>
   
 </li>
@@ -415,7 +434,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 大脸上课 */
 #include &lt;iostream&gt;
 #include &lt;queue&gt;
@@ -487,6 +506,89 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+using namespace std;
+
+class Position {
+public:
+    int x = 0, y = 0;
+    int distance = 0;
+
+    Position() = default;
+    Position(int x,int y,int dis):x(x),y(y),distance(dis){}
+};
+
+template &lt;class T&gt;
+class my_queue {
+    T queue_[100000];
+    int start = 0, end = 0;
+    int mod = 100000;
+public:
+    bool empty() const{
+        return end - start == 0;
+    }
+    T front() const {
+        return queue_[start % mod];
+    }
+    void pop() {
+        ++start;
+    }
+
+    void push(const T&amp; val) {
+        queue_[(end++) % mod] = val;
+    }
+};
+
+bool map[1209][1209] = { 0 };
+
+
+int dx[] = { 0,1,0,-1 },
+dy[] = { 1,0,-1,0 };
+my_queue&lt;Position&gt; queue_data;
+
+int bfs(int destx,int desty) {
+    Position init_pos(600, 600, 0);
+    queue_data.push(init_pos);
+    map[600][600] = true;
+    while (!queue_data.empty()) {
+        auto temp = queue_data.front();
+        queue_data.pop();
+
+        //判断是否到达
+        if (temp.x == destx &amp;&amp; temp.y == desty)
+            return temp.distance;
+        for (int i = 0; i &lt; 4; ++i) {
+            if (temp.x + dx[i] &gt;= 0 &amp;&amp; temp.y + dy[i] &gt;= 0 &amp;&amp; temp.x + dx[i] &lt;= 1200
+                &amp;&amp; temp.y + dy[i] &lt;= 1200 &amp;&amp; !map[temp.x + dx[i]][temp.y + dy[i]]) {
+                Position next_pos(temp.x + dx[i], temp.y + dy[i], temp.distance + 1);
+                queue_data.push(next_pos);
+                map[next_pos.x][next_pos.y] = true;
+            }
+        }
+    }
+    return 0;
+}
+
+int main() {
+    int X, Y, N;
+    cin &gt;&gt; X &gt;&gt; Y &gt;&gt; N;
+    X += 600;
+    Y += 600;
+
+    for (int i = 0; i &lt; N; ++i) {
+        int tempx, tempy;
+        scanf(&quot;%d %d&quot;, &amp;tempx, &amp;tempy);
+        map[tempx + 600][tempy + 600] = true;
+    }
+
+    cout &lt;&lt; bfs(X, Y);
+
+    return 0;
+}
 </code></pre>
                 
                   

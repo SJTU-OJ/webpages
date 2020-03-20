@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -359,7 +385,229 @@
 
 </details>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;algorithm&quot;
+using namespace std;
+
+//记录被选中的点
+int choose[100009] = { 0 };
+
+int main() {
+    int n, m, k;
+    ios::sync_with_stdio(false);
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; k;
+
+    int *dis = new int[n];
+    for (int i = 0; i &lt; n; i++)
+        cin &gt;&gt; dis[i];
+    sort(dis, dis + n);
+    if (k == 1) {
+        int cl = 0, cr = dis[n - 1],ans=0;
+        //二分法
+        while (cl &lt;= cr) {
+            int mid = (cl + cr) &gt;&gt; 1,cnt=0;
+            for (int i = 1, startNum = 0; i &lt; n; i++)
+                if (dis[i] - dis[startNum] &lt; mid) cnt++;
+                else startNum = i;
+            if (cnt &gt; n - m) cr = mid - 1;
+            else {
+                cl = mid + 1;
+                ans = mid;
+            }
+        }
+        cout &lt;&lt; ans;
+    }
+    else if(k==2){
+        int cl = dis[0], cr = 2*dis[n - 1]-3*dis[0], ans = 0;
+        //二分法
+        while (cl &lt;= cr) {
+            int mid = (cl + cr) &gt;&gt; 1, cnt = 0,topNum=0;
+            choose[topNum++] = 0;
+            bool flag = false;
+            for (int i = 1, startNum = 0; i &lt; n; i++)
+                if (dis[i] - dis[startNum] &lt; mid) { 
+                    cnt++; 
+                    //判断是否在末尾
+                    if (i == n - 1) {
+                        choose[topNum - 1] = i;
+                    }
+                }
+                else {
+                    choose[topNum++] = i;
+                    startNum = i;
+                }
+            //判断是否可以插入
+            for (int i = 1; i &lt; topNum; i++) {
+                if (choose[i] &gt; choose[i - 1] + 1) {
+                    if (dis[choose[i] - 1] - dis[choose[i - 1]] &gt;= mid ||
+                        dis[choose[i]] - dis[choose[i - 1] + 1] &gt;= mid) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            if (cnt &lt; n - m + 1)
+                flag = true;
+            if (cnt &gt; n - m + 1||!flag) 
+                cr = mid - 1;
+            else {
+                cl = mid + 1;
+                ans = mid;
+            }
+        }
+        cout &lt;&lt; ans;
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 100000 + 100;
+int n, m, k;
+long long l, r, mid, ans, pos[maxN];
+bool stone[maxN];
+
+void qSort(long long *, int, int);
+bool judge(long long);
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; k;
+
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; pos[i];
+    }
+    qSort(pos, 0, n - 1);
+
+    if (pos[0] &lt; 0) {
+        for (int i = n - 1; i &gt;= 0; i--) {
+            pos[i] -= pos[0];
+        }
+    }
+
+    l = pos[0];
+    r = pos[n - 1];
+
+    while (l &lt;= r) {
+        mid = (l + r) / 2;
+        if (judge(mid)) {
+            ans = mid;
+            l = mid + 1;
+        } else {
+            r = mid - 1;
+        }
+    }
+
+    cout &lt;&lt; ans;
+
+    return 0;
+}
+
+void qSort(long long *num, int l, int h) {
+    if (l &gt;= h) {
+        return;
+    }
+    int first = l, last = h;
+    long long key = num[first];
+
+    while (first &lt; last) {
+        while (first &lt; last &amp;&amp; num[last] &gt;= key) {
+            --last;
+        }
+        num[first] = num[last];
+        while (first &lt; last &amp;&amp; num[first] &lt;= key) {
+            ++first;
+        }
+        num[last] = num[first];
+    }
+    num[first] = key;
+    qSort(num, l, first - 1);
+    qSort(num, first + 1, h);
+}
+
+bool judge(long long x) {
+    if (k == 1) {
+        int sum = n - m, now = 0;
+
+        for (int i = 1; i &lt; n - 1; i++) {
+            if (pos[i] - pos[now] &lt; x) {
+                sum--;
+                if (sum &lt; 0) {
+                    return 0;
+                }
+            } else {
+                now = i;
+            }
+        }
+
+        if (pos[n - 1] - pos[now] &lt; x &amp;&amp; sum == 0) {
+            return 0;
+        } else {
+            return 1;
+        }
+    } else {
+        int sum = n - m + 1, now = 0;
+        for (int i = 0; i &lt; n; i++) {
+            stone[i] = 1;
+        }
+
+        for (int i = 1; i &lt; n - 1; i++) {
+            if (pos[i] - pos[now] &lt; x) {
+                sum--;
+                stone[i] = 0;
+                if (sum &lt; 0) {
+                    return 0;
+                }
+            } else {
+                now = i;
+            }
+        }
+
+        if (pos[n - 1] - pos[now] &lt; x) {
+            sum--;
+        }
+        if (sum &gt; 0) {
+            return 1;
+        } else if (sum &lt; 0) {
+            return 0;
+        } else {
+            stone[now] = 0;
+        }
+
+        int l, r;
+        for (int i = 1; i &lt; n - 1; i++) {
+            if (stone[i] == 1) {
+                continue;
+            } else {
+                l = i;
+                r = i;
+                while (stone[l] == 0 &amp;&amp; l &gt;= 0) {
+                    l--;
+                }
+                while (stone[r] == 0 &amp;&amp; r &lt; n) {
+                    r++;
+                }
+
+                if (((pos[r] - pos[i]) &gt;= x) || ((pos[i] - pos[l]) &gt;= x)) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;algorithm&gt;
 using namespace std;

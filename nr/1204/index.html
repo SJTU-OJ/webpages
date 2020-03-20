@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#vvvvv1vs-solution-star" class="md-nav__link">
-    vvvvv1v's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vvvvv1vs-solution" class="md-nav__link">
+    vvvvv1v's solution 
   </a>
   
 </li>
@@ -423,7 +449,326 @@ Enjoy typing by yourself.
 
 </details>
 
-<h2 id="vvvvv1vs-solution-star">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstring&quot;
+using namespace std;
+
+int main() {
+    //所有文件内容
+    char ch[200][3000] = { 0 };
+    int row = 0;
+
+    //输入
+    while (true) {
+        char temp[3000];
+        cin.getline(temp, 3000);
+        if (strcmp(temp, &quot;******&quot;) == 0)
+            break;
+        row++;
+        strcpy(ch[row], temp);
+    }
+
+    //操作
+    while (true) {
+        char op[100];
+        cin &gt;&gt; op;
+        if (strcmp(op, &quot;quit&quot;) == 0) {
+            cout &lt;&lt; ch[1];
+            for (int i = 2; i &lt;= row; i++) cout &lt;&lt; endl &lt;&lt; ch[i];
+            break;
+        }
+        if (strcmp(op, &quot;list&quot;) == 0) {
+            int n1, n2;
+            cin &gt;&gt; n1 &gt;&gt; n2;
+
+            //是否合法
+            if (n1 &gt; n2 || n1 &lt;= 0 || n2 &gt; row) {
+                cout &lt;&lt; &quot;Error!&quot;&lt;&lt;endl;
+                continue;
+            }
+            for (int i = n1; i &lt;= n2; i++)
+                cout &lt;&lt; ch[i] &lt;&lt; endl;
+        }
+        if (strcmp(op, &quot;ins&quot;) == 0) {
+            int n1, n2;
+            char str[3000];
+            cin &gt;&gt; n1 &gt;&gt; n2;
+            cin.get();
+            cin.getline(str, 3000);
+            if (n1 &lt;= 0 || n1 &gt; row  || n2 &gt; strlen(ch[n1])+1) {
+                cout &lt;&lt; &quot;Error!&quot; &lt;&lt; endl;
+                continue;
+            }
+                strcat(str, ch[n1] + n2-1);
+                strcpy(ch[n1] + n2-1, str);
+        }
+        if (strcmp(op, &quot;del&quot;) == 0) {
+            int n1, n2, num;
+            cin &gt;&gt; n1 &gt;&gt; n2 &gt;&gt; num;
+            if (n1 &lt;= 0 || n1 &gt; row || n2 &gt; strlen(ch[n1]) + 1 || num &lt;0 || num + n2 - 1 &gt; strlen(ch[n1])) {
+                cout &lt;&lt; &quot;Error!&quot; &lt;&lt; endl;
+                continue;
+            }
+            strcpy(ch[n1] + n2 - 1, ch[n1] + num + n2 - 1);
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+template &lt;class elemType&gt;
+class list {
+   public:
+    virtual void clear() = 0;
+    virtual int length() const = 0;
+    virtual void insert(int i, const elemType &amp;x) = 0;
+    virtual void remove(int i) = 0;
+
+    virtual elemType visit(int i) const = 0;
+    virtual ~list(){};
+};
+
+template &lt;class elemType&gt;
+class sLinkList : public list&lt;elemType&gt; {
+   private:
+    struct Node {
+        elemType data;
+        Node *next;
+
+        Node(const elemType &amp;x, Node *n = NULL) : data(x), next(n) {}
+        Node() : next(NULL) {}
+        ~Node() {}
+    };
+    Node *head;
+    int Length;
+
+    Node *move(int i) const;
+
+   public:
+    sLinkList();
+
+    ~sLinkList() {
+        clear();
+        delete head;
+    }
+
+    void push(const elemType &amp;x) { insert(Length, x); }
+
+    void clear();
+
+    int length() const { return Length; }
+
+    void insert(int i, const elemType &amp;x);
+
+    void remove(int i);
+
+    elemType visit(int i) const;
+
+    void erase(int i);
+
+    void erase(const elemType &amp;x, const elemType &amp;y);
+
+    void traverse() const {
+        Node *cur = head-&gt;next;
+        while (cur) {
+            cout &lt;&lt; cur-&gt;data;
+            cur = cur-&gt;next;
+        }
+    }
+};
+
+template &lt;class elemType&gt;
+void sLinkList&lt;elemType&gt;::erase(const elemType &amp;x, const elemType &amp;y) {
+    Node *p = head-&gt;next, *q = head;
+    while (p) {
+        if (p-&gt;data &gt; x &amp;&amp; p-&gt;data &lt; y) {
+            q-&gt;next = p-&gt;next;
+            delete p;
+            p = q-&gt;next;
+        } else {
+            p = p-&gt;next;
+            q = q-&gt;next;
+        }
+    }
+}
+
+template &lt;class elemType&gt;
+typename sLinkList&lt;elemType&gt;::Node *sLinkList&lt;elemType&gt;::move(int i) const {
+    Node *p = head;
+    while (i-- &gt;= 0) {
+        p = p-&gt;next;
+    }
+    return p;
+}
+
+template &lt;class elemType&gt;
+sLinkList&lt;elemType&gt;::sLinkList() {
+    head = new Node;
+    Length = 0;
+}
+
+template &lt;class elemType&gt;
+void sLinkList&lt;elemType&gt;::clear() {
+    Node *p = head-&gt;next, *q;
+    head-&gt;next = NULL;
+    while (p != NULL) {
+        q = p-&gt;next;
+        delete p;
+        p = q;
+    }
+
+    Length = 0;
+}
+
+template &lt;class elemType&gt;
+void sLinkList&lt;elemType&gt;::insert(int i, const elemType &amp;x) {
+    Node *pos;
+    pos = move(i - 1);
+    pos-&gt;next = new Node(x, pos-&gt;next);
+    ++Length;
+}
+
+template &lt;class elemType&gt;
+void sLinkList&lt;elemType&gt;::remove(int i) {
+    Node *pos, *delp;
+    pos = move(i - 1);
+    delp = pos-&gt;next;
+    pos-&gt;next = delp-&gt;next;
+    pos-&gt;next = delp-&gt;next;
+    delete delp;
+    --Length;
+}
+
+template &lt;class elemType&gt;
+elemType sLinkList&lt;elemType&gt;::visit(int i) const {
+    return move(i)-&gt;data;
+}
+
+template &lt;class elemType&gt;
+void sLinkList&lt;elemType&gt;::erase(int i) {
+    elemType tmp = move(i)-&gt;data;
+    Node *p = head-&gt;next;
+    int j = 0;
+    while (p) {
+        if (p-&gt;data == tmp) {
+            p = p-&gt;next;
+            remove(j);
+        } else {
+            p = p-&gt;next;
+            ++j;
+        }
+    }
+}
+
+sLinkList&lt;char&gt; *text[105] = {0};
+int lines = 0;
+
+void list1(int, int);
+
+void ins(int, int, char *);
+
+void del(int, int, int);
+
+int main() {
+    text[0] = new sLinkList&lt;char&gt;();
+    char in;
+    char order[10];
+    char str[150];
+    int x, y, i;
+    cin.get(in);
+    while (in != '*') {
+        if (in == '\n') {
+            text[++lines] = new sLinkList&lt;char&gt;();
+        } else {
+            text[lines]-&gt;push(in);
+        }
+        cin.get(in);
+    }
+
+    while (in != '\n') {
+        cin.get(in);
+    }
+
+    while (1) {
+        cin &gt;&gt; order;
+        if (strcmp(order, &quot;quit&quot;) == 0) {
+            break;
+        } else if (strcmp(order, &quot;list&quot;) == 0) {
+            cin &gt;&gt; x &gt;&gt; y;
+            list1(x, y);
+        } else if (strcmp(order, &quot;ins&quot;) == 0) {
+            cin &gt;&gt; x &gt;&gt; y;
+            i = 0;
+            cin.get(in);
+            while (1) {
+                cin.get(in);
+                if (in == '\n') break;
+                str[i++] = in;
+            }
+            str[i] = 0;
+            ins(x, y, str);
+        } else if (strcmp(order, &quot;del&quot;) == 0) {
+            cin &gt;&gt; x &gt;&gt; y &gt;&gt; i;
+            del(x, y, i);
+        } else {
+            cout &lt;&lt; &quot;Error!&quot; &lt;&lt; endl;
+        }
+    }
+
+    for (int i = 0; i &lt; lines; ++i) {
+        text[i]-&gt;traverse();
+        if (i != lines - 1) {
+            cout &lt;&lt; endl;
+        }
+    }
+    return 0;
+}
+
+void list1(int n1, int n2) {
+    if (n1 &lt; 1 || n2 &lt; 1 || n1 &gt; n2 || n1 &gt; lines || n2 &gt; lines) {
+        cout &lt;&lt; &quot;Error!&quot; &lt;&lt; endl;
+    } else {
+        while (n1 &lt;= n2) {
+            text[n1 - 1]-&gt;traverse();
+            cout &lt;&lt; endl;
+            ++n1;
+        }
+    }
+}
+
+void ins(int i, int j, char *str) {
+    if (i &lt; 1 || j &lt; 1 || i &gt; lines || j &gt; text[i - 1]-&gt;length() + 1) {
+        cout &lt;&lt; &quot;Error!&quot; &lt;&lt; endl;
+    } else {
+        int ind = 0;
+        while (str[ind]) {
+            text[i - 1]-&gt;insert(j - 1 + ind, str[ind]);
+            ++ind;
+        }
+    }
+}
+
+void del(int i, int j, int num) {
+    if (i &lt; 1 || j &lt; 1 || i &gt; lines || j + num &gt; text[i - 1]-&gt;length() + 1) {
+        cout &lt;&lt; &quot;Error!&quot; &lt;&lt; endl;
+        return;
+    } else {
+        while (num--) {
+            text[i - 1]-&gt;remove(j - 1);
+        }
+    }
+}
+</code></pre>
+
+<h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstring&gt;
 using namespace std;

@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
   </a>
   
 </li>
@@ -350,7 +369,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 四通八达 */
 #include &lt;iostream&gt;
 #include &lt;vector&gt;
@@ -414,6 +433,86 @@ int main(){
     }
     cout &lt;&lt; ans - cnt &lt;&lt; endl;
     return 0;
+}
+
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 1e6;
+
+struct edgeNode {
+    int data;
+    edgeNode *next;
+
+    edgeNode(int d = 0, edgeNode *n = 0) : data(d), next(n) {}
+};
+
+struct verNode {
+    int data;
+    edgeNode *head;
+    int degree;
+
+    verNode(int d = 0, edgeNode *h = 0) : data(d), head(h), degree(0) {}
+};
+
+int N, M, ans = 0, city = 0, degree = 0;
+verNode *nodes[maxN];
+bool isVisited[maxN] = {0};
+
+void DFS(int);
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    cin &gt;&gt; N &gt;&gt; M;
+
+    for (int i = 0; i &lt;= N; i++) {
+        nodes[i] = new verNode(i);
+    }
+
+    for (int i = 0; i &lt; M; i++) {
+        int temp1, temp2;
+
+        cin &gt;&gt; temp1 &gt;&gt; temp2;
+
+        nodes[temp1]-&gt;head = new edgeNode(temp2, nodes[temp1]-&gt;head);
+        nodes[temp1]-&gt;degree++;
+        nodes[temp2]-&gt;head = new edgeNode(temp1, nodes[temp2]-&gt;head);
+        nodes[temp2]-&gt;degree++;
+    }
+
+    for (int i = 0; i &lt;= N; i++) {
+        if (!isVisited[i]) {
+            city = degree = 0;
+            DFS(i);
+            ans += ((city * (city - 1)) - degree) / 2;
+        }
+    }
+
+    cout &lt;&lt; ans;
+
+    return 0;
+}
+
+void DFS(int i) {
+    isVisited[i] = 1;
+    city++;
+    degree += nodes[i]-&gt;degree;
+
+    edgeNode *p = nodes[i]-&gt;head;
+
+    while (p) {
+        if (!isVisited[p-&gt;data]) {
+            DFS(p-&gt;data);
+        }
+        p = p-&gt;next;
+    }
 }
 
 </code></pre>

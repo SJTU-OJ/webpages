@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,15 +289,36 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zsi-rs-solution" class="md-nav__link">
+    Zsi-r's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -351,7 +384,7 @@ BADC
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 二哥学二叉树 */
 #include &lt;iostream&gt;
 #include &lt;cstring&gt;
@@ -392,7 +425,229 @@ int main(){
 
 </code></pre>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cmath&quot;
+#include &quot;cstring&quot;
+using namespace std;
+
+//二叉树类
+template &lt;class T&gt;
+class myBinaryTree {
+public:
+    class node {
+    public:
+        T data;
+        T *lchild=nullptr, *rchild=nullptr;
+    };
+    node *root=nullptr;
+
+    //清空
+    void clear() {
+        clear(root);
+    }
+
+    void clear(node *p) {
+        if (p == nullptr)
+            return;
+        clear(p-&gt;lchild);
+        clear(p-&gt;rchild);
+        delete p;
+        p = nullptr;
+    }
+
+    //构造
+    myBinaryTree(){}
+
+    //析构
+    ~myBinaryTree() {
+        clear(root);
+    }
+
+    //判断是否非空
+    bool empty() {
+        return root == nullptr;
+    }
+};
+
+char tdata[1009] = { 0 };
+int dataSize = 0;
+
+void createTree(int rootNum, char *tempData1,char *tempData2) {
+    if (strlen(tempData1) == 0) return;
+    char root = tempData1[0];
+    tdata[rootNum] = root;
+    dataSize = rootNum &lt; dataSize ? dataSize : rootNum;
+    char ldata1[50] = { 0 }, rdata1[50] = { 0 }, ldata2[50] = { 0 }, rdata2[50] = { 0 };
+    int length = strlen(tempData1);
+    bool flag = false;
+    for (int i = 0,k=0; i &lt; length; i++,k++) {
+        if (tempData2[i] == root) {
+            flag = true;
+            k = -1;
+        }
+        else if (!flag) {
+            ldata1[k] = tempData1[i + 1];
+            ldata2[k] = tempData2[i];
+        }
+        else if (flag) {
+            rdata1[k] = tempData1[i];
+            rdata2[k] = tempData2[i];
+        }
+    }
+    //递归
+    createTree(rootNum * 2, ldata1, ldata2);
+    createTree(rootNum * 2 + 1, rdata1, rdata2);
+}
+
+int main() {
+    char preData[50], postData[50];
+    cin &gt;&gt; preData &gt;&gt; postData;
+
+    createTree(1, preData, postData);
+
+    //输出
+    cout &lt;&lt; tdata[1];
+    for (int i = 2; i &lt;= dataSize; i++) {
+        if (tdata[i] == 0)
+            cout &lt;&lt; &quot; NULL&quot;;
+        else
+            cout &lt;&lt; &quot; &quot; &lt;&lt; tdata[i];
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+char tree[100000] = {0}, Left[100000], Middle[100000];
+
+char* subString(char* str, int l, int r) {
+    if (r &lt; l) {
+        return NULL;
+    }
+    char* tmp = new char[100000];
+    for (int i = l; i &lt;= r; i++) {
+        tmp[i - l] = str[i];
+    }
+
+    tmp[r + 1] = 0;
+
+    return tmp;
+}
+
+void createTree(char* strLeft, char* strMiddle, int n) {
+    int i = 0, j = 0;
+    char *lltmp, *lmtmp, *rltmp, *rmtmp;
+    if (strLeft == NULL) {
+        return;
+    }
+
+    tree[n] = strLeft[0];
+
+    if (strlen(strLeft) == 1 || strlen(strMiddle) == 1) {
+        return;
+    }
+
+    for (i = 0; i &lt; strlen(strMiddle); i++) {
+        if (strMiddle[i] == strLeft[0]) {
+            break;
+        }
+    }
+    j = (i + 1 &gt; strlen(strLeft)) ? (strlen(strLeft) - 1) : (i + 1);
+
+    lltmp = subString(strLeft, 1, j - 1);
+    lmtmp = subString(strMiddle, 0, i - 1);
+    rltmp = subString(strLeft, j, strlen(strLeft) - 1);
+    rmtmp = subString(strMiddle, i + 1, strlen(strMiddle) - 1);
+
+    createTree(lltmp, lmtmp, 2 * n);
+    createTree(rltmp, rmtmp, 2 * n + 1);
+
+    delete[] lltmp;
+    delete[] lmtmp;
+    delete[] rltmp;
+    delete[] rmtmp;
+}
+
+int main() {
+    int i, j = 1, k = 0;
+    cin &gt;&gt; Left &gt;&gt; Middle;
+    i = strlen(Left);
+    createTree(Left, Middle, 1);
+    for (; k &lt; i;) {
+        if (tree[j] &lt; 'A' || tree[j] &gt; 'Z') {
+            cout &lt;&lt; &quot;NULL &quot;;
+            j++;
+        } else {
+            cout &lt;&lt; tree[j] &lt;&lt; &quot; &quot;;
+            j++;
+            k++;
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+#include &lt;cmath&gt;
+
+using namespace std;
+
+void f(int root , int start ,int end,int count,char tree[],const char pre[],const char mid[]){
+    int i;
+    if (end &lt; start)
+        return; 
+    else
+        tree[count] = pre[root];
+
+    for (i = start; i &lt;= end;i++)
+        if (mid[i]==pre[root])
+            break;
+    f(root + 1, start, i - 1, 2 * count, tree, pre, mid);
+    f(root + 1 + i - start, i + 1, end, 2 * count + 1, tree, pre, mid);
+}
+
+int main()
+{
+    char pre[27], mid[27];
+    char tree[1001];
+
+    cin &gt;&gt; pre;
+    cin &gt;&gt; mid;
+    int len = strlen(pre);
+    for (int k = 0; k&lt;1000 ;k++)
+    {
+        tree[k] = '@';
+    }
+
+    f(0, 0, len - 1, 1, tree, pre, mid);
+
+    int num = 0, i = 1;
+    while (num!=len)
+    {
+        if (tree[i]=='@')
+            cout &lt;&lt; &quot;NULL&quot; &lt;&lt; ' ';
+        else{
+            cout &lt;&lt; tree[i] &lt;&lt; ' ';
+            num++;
+        }
+        i++;
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstring&gt;
 using namespace std;

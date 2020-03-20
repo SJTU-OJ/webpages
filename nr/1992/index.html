@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
   </a>
   
 </li>
@@ -377,7 +396,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 绮礼的阴谋 */
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
@@ -422,6 +441,83 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+using namespace std;
+
+int times[10009][2] = { 0 };
+
+template &lt;class T&gt;
+void quick_sort(T start, T end) {
+    if (start == end)
+        return;
+    auto i = start, j = end;
+    --j;
+    if (i == j)
+        return;
+    //交换
+    auto key = (*start)[0];
+    auto tmp = (*start)[1];
+    for (bool status = true; i != j;) {
+        if (status) {
+            if ((*j)[0] &lt; key) {
+                (*i)[0] = (*j)[0];
+                (*i)[1] = (*j)[1];
+                ++i;
+                status = false;
+            }
+            else
+                --j;
+        }
+        else {
+            if ((*i)[0] &gt; key) {
+                (*j)[0] = (*i)[0];
+                (*j)[1] = (*i)[1];
+                --j;
+                status = true;
+            }
+            else
+                ++i;
+        }
+    }
+    (*i)[1] = tmp;
+    (*i)[0] = key;
+    //递归
+    quick_sort(start, i + 1);
+    quick_sort(i + 1, end);
+}
+
+int main() {
+    int n;
+    cin &gt;&gt; n;
+
+    for (int i = 0; i &lt; n; ++i) {
+        scanf(&quot;%d %d&quot;, &amp;times[i][0], &amp;times[i][1]);
+    }
+    quick_sort(times, times + n);
+
+    int ans = 0;
+    int cur_left = 0, cur_right = 0;
+    for (int i = 0; i &lt; n; ++i) {
+        if (times[i][0] &gt; cur_right) {
+            ans += cur_right - cur_left;
+            cur_left = times[i][0];
+            cur_right = times[i][1];
+        }
+        else {
+            if (cur_right &lt; times[i][1])
+                cur_right = times[i][1];
+        }
+    }
+    ans += cur_right - cur_left;
+
+    cout &lt;&lt; ans;
+
+    return 0;
+}
 </code></pre>
                 
                   

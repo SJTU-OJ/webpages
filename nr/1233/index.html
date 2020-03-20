@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zsi-rs-solution" class="md-nav__link">
+    Zsi-r's solution 
   </a>
   
 </li>
@@ -381,7 +414,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* Path */
 #include &lt;iostream&gt;
 using namespace std;
@@ -424,6 +457,235 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+using namespace std;
+
+bool dfs_visited[20] = { 0 };
+
+class graph_point {
+public:
+    int next[20] = { 0 };
+    int edge_num = 0;
+
+    void add_edge(int to) {
+        //判断是否重复
+        for (int i = 0; i &lt; edge_num; ++i)
+            if (next[i] == to)
+                return;
+        next[edge_num++] = to;
+    }
+};
+
+graph_point graph[12];
+
+int dfs(int start, int length) {
+    if (dfs_visited[start])
+        return 0;
+    if (length == 0) {
+        return 1;
+    }
+    dfs_visited[start] = true;
+    int ans = 0;
+    for (int i = 0; i &lt; graph[start].edge_num; ++i)
+        ans += dfs(graph[start].next[i], length - 1);
+    dfs_visited[start] = false;
+    return ans;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n, m, start, M;
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; start &gt;&gt; M;
+
+    for (int i = 0; i &lt; m; ++i) {
+        int a, b;
+        cin &gt;&gt; a &gt;&gt; b;
+        graph[a].add_edge(b);
+    }
+
+    cout &lt;&lt; dfs(start, M);
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 10 + 10;
+
+struct edgeNode {
+    int data;
+    edgeNode *next;
+
+    edgeNode(int d = 0, edgeNode *n = 0) : data(d), next(n) {}
+};
+
+struct verNode {
+    int data;
+    edgeNode *head;
+
+    verNode(int d = 0, edgeNode *h = 0) : data(d), head(h) {}
+};
+
+int n, m, start, M, temp1, temp2, ans = 0;
+verNode *nodes[maxN];
+bool isVisited[maxN] = {0};
+
+void DFS(int i, int len);
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; start &gt;&gt; M;
+
+    for (int i = 1; i &lt;= n; i++) {
+        nodes[i] = new verNode(i);
+    }
+
+    for (int i = 0; i &lt; m; i++) {
+        cin &gt;&gt; temp1 &gt;&gt; temp2;
+        bool flag = 1;
+        edgeNode *p = nodes[temp1]-&gt;head;
+        while (p) {
+            if (p-&gt;data == temp2) {
+                flag = 0;
+                break;
+            }
+            p = p-&gt;next;
+        }
+        if (flag) {
+            nodes[temp1]-&gt;head = new edgeNode(temp2, nodes[temp1]-&gt;head);
+        }
+    }
+
+    DFS(start, 0);
+
+    cout &lt;&lt; ans;
+
+    return 0;
+}
+
+void DFS(int i, int len) {
+    if (isVisited[i]) {
+        return;
+    }
+    isVisited[i] = 1;
+    if (len == M) {
+        ans++;
+        isVisited[i] = 0;
+        return;
+    }
+    edgeNode *p = nodes[i]-&gt;head;
+    while (p) {
+        DFS(p-&gt;data, len + 1);
+        p = p-&gt;next;
+    }
+    isVisited[i] = 0;
+}
+</code></pre>
+
+<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+class graph
+{
+private:
+    struct edgeNode
+    {
+        int end;
+        edgeNode *next;
+        edgeNode(int e, edgeNode *n = NULL) : end(e), next(n){};
+    };
+
+    int Vers, Edges,M;//the target to the length of path
+    edgeNode **verList;
+
+public:
+
+    int dfs(int start, bool visited[],int currentlength) const
+    {   
+        int count = 0;
+        edgeNode *p = verList[start];
+        visited[start] = true;
+        if (currentlength==M)
+            return 1;
+        while (p != NULL)
+        {
+            if (visited[p-&gt;end] == false)
+            {
+                count+= dfs(p-&gt;end, visited,currentlength+1);
+                visited[p-&gt;end] = false;
+            }
+            p = p-&gt;next;
+        }
+        return count;
+    }
+/*
+    int dfs(int start,bool visited[],int currentlength)
+    {
+
+    }
+*/
+public:
+    graph(int vSize, int eSize,int Mtmp)
+    {
+        Vers = vSize;
+        Edges = eSize;
+        M = Mtmp;
+        verList = new edgeNode*[vSize+1];
+        for (int i = 0; i &lt;= vSize; i++)
+            verList[i] = NULL;
+    }
+    ~graph()
+    {
+        edgeNode *p;
+        for (int i = 1; i &lt;= Vers; i++)
+        {
+            p = verList[i];
+            while (p != NULL)
+            {
+                verList[i] = p-&gt;next;
+                delete p;
+                p = verList[i];
+            }
+        }
+        delete[] verList;
+    }
+    void insert(int x, int y)
+    {
+        verList[x]= new edgeNode(y, verList[x]);
+    }
+
+};
+
+int main()
+{
+    int numofver, numofedge, startnode, goal,nodeofedge1,nodeofedge2;
+    cin &gt;&gt; numofver &gt;&gt; numofedge &gt;&gt; startnode &gt;&gt; goal;
+    graph gf(numofver, numofedge, goal);
+    for (int i = 0; i &lt; numofedge;i++)
+    {
+        cin &gt;&gt; nodeofedge1 &gt;&gt; nodeofedge2;
+        gf.insert(nodeofedge1, nodeofedge2);
+    }
+    bool *visited = new bool[numofver+1];
+    for (int i = 0; i &lt;= numofver;i++)
+        visited[i] = false;
+    cout &lt;&lt; gf.dfs(startnode, visited, 0)&lt;&lt;endl;
+}
 </code></pre>
                 
                   

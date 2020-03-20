@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,15 +289,36 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#victrids-solution-star" class="md-nav__link">
-    VictriD's solution Star
+  <a href="#victrids-solution" class="md-nav__link">
+    VictriD's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#vvvvv1vs-solution-star" class="md-nav__link">
-    vvvvv1v's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zsi-rs-solution" class="md-nav__link">
+    Zsi-r's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vvvvv1vs-solution" class="md-nav__link">
+    vvvvv1v's solution 
   </a>
   
 </li>
@@ -371,7 +404,7 @@
 
 </details>
 
-<h2 id="victrids-solution-star">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 
 using namespace std;
@@ -485,7 +518,447 @@ int main() {
 }
 </code></pre>
 
-<h2 id="vvvvv1vs-solution-star">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstring&quot;
+using namespace std;
+
+template &lt;class T&gt;
+class myLink {
+public:
+    T data;
+    myLink *next = nullptr;
+};
+
+template &lt;class T&gt;
+class mySheet {
+public:
+    myLink&lt;T&gt; *head;
+    myLink&lt;T&gt; *rear;
+    mySheet() {
+        head = new myLink&lt;T&gt;;
+        rear = head;
+    }
+    mySheet(T data) {
+        head = new myLink&lt;T&gt;;
+        head-&gt;next = new myLink&lt;T&gt;;
+        head-&gt;next-&gt;data = data;
+        rear = head-&gt;next;
+    }
+    ~mySheet() {
+        for (auto p = head; p;) {
+            auto temp = p-&gt;next;
+            if (p == rear) {
+                delete p;
+                break;
+            }
+            delete p;
+            p = temp;
+        }
+    }
+
+    //复制构造函数
+    mySheet(const mySheet&lt;T&gt; &amp;b) {
+        head = new myLink&lt;T&gt;;
+        for (auto p1 = head, p2 = b.head; p2-&gt;next != nullptr;) {
+            p1-&gt;next = new myLink&lt;T&gt;;
+            p1-&gt;next-&gt;data = p2-&gt;next-&gt;data;
+            p1 = p1-&gt;next;
+            p2 = p2-&gt;next;
+            rear = p1;
+        }
+    }
+
+    //重载等号
+    mySheet&lt;T&gt;&amp; operator=(const mySheet&lt;T&gt; &amp;b) {
+        head = new myLink&lt;T&gt;;
+        for (auto p1 = head, p2 = b.head; p2-&gt;next != nullptr;) {
+            p1-&gt;next = new myLink&lt;T&gt;;
+            p1-&gt;next-&gt;data = p2-&gt;next-&gt;data;
+            p1 = p1-&gt;next;
+            p2 = p2-&gt;next;
+            rear = p1;
+        }
+        return *this;
+    }
+
+    void append(T b) {
+        rear-&gt;next = new myLink&lt;T&gt;;
+        rear = rear-&gt;next;
+        rear-&gt;data = b;
+    }
+
+    //重载加号
+    mySheet&lt;T&gt; operator+(const mySheet&lt;T&gt; &amp;b) const {
+        mySheet&lt;T&gt; temp = *this;
+        mySheet&lt;T&gt; tempAdd = b;
+        temp.rear-&gt;next = tempAdd.head-&gt;next;
+        return temp;
+    }
+
+    //打印
+    void print() {
+        for (auto p = head;; ) {
+            if (p-&gt;next == nullptr) break;
+            if (p != head) cout &lt;&lt; &quot; &quot;;
+            cout &lt;&lt; p-&gt;next-&gt;data;
+            p = p-&gt;next;
+        }
+    }
+};
+
+int main() {
+    char type[10];
+    int num1, num2;
+    cin &gt;&gt; type;
+    cin &gt;&gt; num1 &gt;&gt; num2;
+    if (strcmp(type, &quot;int&quot;) == 0) {
+        mySheet&lt;int&gt; a, b;
+        for (int i = 0; i &lt; num1; i++) {
+            int temp;
+            cin &gt;&gt; temp;
+            a.append(temp);
+        }
+        for (int i = 0; i &lt; num2; i++) {
+            int temp;
+            cin &gt;&gt; temp;
+            b.append(temp);
+        }
+        mySheet&lt;int&gt; c;
+        c = a + b;
+        c.print();
+    }
+    if (strcmp(type, &quot;char&quot;) == 0) {
+        mySheet&lt;char&gt; a, b;
+        for (int i = 0; i &lt; num1; i++) {
+            char temp;
+            cin&gt;&gt;temp;
+            a.append(temp);
+        }
+        for (int i = 0; i &lt; num2; i++) {
+            char temp;
+            cin &gt;&gt; temp;
+            b.append(temp);
+        }
+        mySheet&lt;char&gt; c;
+        c = a + b;
+        c.print();
+    }
+    if (strcmp(type, &quot;double&quot;) == 0) {
+        mySheet&lt;double&gt; a, b;
+        for (int i = 0; i &lt; num1; i++) {
+            double temp;
+            cin &gt;&gt; temp;
+            a.append(temp);
+        }
+        for (int i = 0; i &lt; num2; i++) {
+            double temp;
+            cin &gt;&gt; temp;
+            b.append(temp);
+        }
+        mySheet&lt;double&gt; c;
+        c = a + b;
+        c.print();
+    }
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+template &lt;class T&gt;
+class seqList {
+   private:
+    T *data;
+    int Length;
+    int maxSize;
+    void doubleSpace();
+
+   public:
+    seqList(int initSize = 10);
+    seqList(const seqList&lt;T&gt; &amp;);
+    ~seqList();
+    int length() const;
+    void add(const T &amp;x);
+    void traverse() const;
+    seqList&lt;T&gt; operator+(seqList&lt;T&gt; &amp;);
+    seqList&lt;T&gt; &amp;operator=(const seqList&lt;T&gt; &amp;);
+    T &amp;operator[](int);
+};
+
+template &lt;class T&gt;
+void seqList&lt;T&gt;::doubleSpace() {
+    T *tmp = data;
+
+    maxSize *= 2;
+
+    data = new T[maxSize];
+    for (int i = 0; i &lt; Length; ++i) {
+        data[i] = tmp[i];
+    }
+
+    delete[] tmp;
+}
+
+template &lt;class T&gt;
+seqList&lt;T&gt;::seqList(int initSize) {
+    data = new T[initSize];
+    Length = 0;
+    maxSize = initSize;
+}
+
+template &lt;class T&gt;
+seqList&lt;T&gt;::~seqList() {
+    delete[] data;
+}
+
+template &lt;class T&gt;
+int seqList&lt;T&gt;::length() const {
+    return Length;
+}
+
+template &lt;class T&gt;
+void seqList&lt;T&gt;::add(const T &amp;x) {
+    if (Length == maxSize) {
+        doubleSpace();
+    }
+
+    data[Length] = x;
+    Length++;
+}
+
+template &lt;class T&gt;
+void seqList&lt;T&gt;::traverse() const {
+    for (int i = 0; i &lt; Length - 1; i++) {
+        cout &lt;&lt; data[i] &lt;&lt; ' ';
+    }
+    cout &lt;&lt; data[Length - 1];
+}
+
+template &lt;class T&gt;
+seqList&lt;T&gt; seqList&lt;T&gt;::operator+(seqList&lt;T&gt; &amp;right) {
+    seqList&lt;T&gt; tmp(this-&gt;length() + right.length());
+
+    for (int i = 0; i &lt; this-&gt;length(); i++) {
+        tmp.add(data[i]);
+    }
+
+    for (int i = 0; i &lt; right.length(); i++) {
+        tmp.add(right[i]);
+    }
+
+    return tmp;
+}
+
+template &lt;class T&gt;
+T &amp;seqList&lt;T&gt;::operator[](int x) {
+    return data[x];
+}
+
+template &lt;class T&gt;
+seqList&lt;T&gt;::seqList(const seqList&lt;T&gt; &amp;right) {
+    Length = right.Length;
+    maxSize = right.maxSize;
+    data = new T[maxSize];
+    for (int i = 0; i &lt; maxSize; i++) {
+        data[i] = right.data[i];
+    }
+}
+
+template &lt;class T&gt;
+seqList&lt;T&gt; &amp;seqList&lt;T&gt;::operator=(const seqList&lt;T&gt; &amp;right) {
+    if (&amp;right != this) {
+        delete[] data;
+
+        Length = right.Length;
+        maxSize = right.maxSize;
+        data = new T[maxSize];
+        for (int i = 0; i &lt; Length; i++) {
+            data[i] = right.data[i];
+        }
+    }
+
+    return *this;
+}
+
+int main() {
+    char type[50];
+    int l1, l2;
+    cin &gt;&gt; type &gt;&gt; l1 &gt;&gt; l2;
+
+    if (strcmp(type, &quot;int&quot;) == 0) {
+        seqList&lt;int&gt; vec1, vec2, vec3;
+        int tmp;
+
+        for (int i = 0; i &lt; l1; ++i) {
+            cin &gt;&gt; tmp;
+            vec1.add(tmp);
+        }
+
+        for (int i = 0; i &lt; l2; ++i) {
+            cin &gt;&gt; tmp;
+            vec2.add(tmp);
+        }
+
+        vec3 = vec1 + vec2;
+        vec3.traverse();
+    }
+
+    if (strcmp(type, &quot;double&quot;) == 0) {
+        seqList&lt;double&gt; vec1, vec2, vec3;
+        double tmp;
+
+        for (int i = 0; i &lt; l1; ++i) {
+            cin &gt;&gt; tmp;
+            vec1.add(tmp);
+        }
+
+        for (int i = 0; i &lt; l2; ++i) {
+            cin &gt;&gt; tmp;
+            vec2.add(tmp);
+        }
+
+        vec3 = vec1 + vec2;
+        vec3.traverse();
+    }
+
+    if (strcmp(type, &quot;char&quot;) == 0) {
+        seqList&lt;char&gt; vec1, vec2, vec3;
+        char tmp;
+
+        for (int i = 0; i &lt; l1; ++i) {
+            cin &gt;&gt; tmp;
+            vec1.add(tmp);
+        }
+
+        for (int i = 0; i &lt; l2; ++i) {
+            cin &gt;&gt; tmp;
+            vec2.add(tmp);
+        }
+
+        vec3 = vec1 + vec2;
+        vec3.traverse();
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>//NO.14的&lt;&gt;
+//operato+不返回引用&amp;
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+
+using namespace std;
+
+template &lt;class elemType&gt; class mylist;
+template &lt;class elemType&gt; mylist&lt;elemType&gt; operator+(const mylist&lt;elemType&gt; &amp;l1,const mylist&lt;elemType&gt; &amp;l2);
+
+template&lt;class elemType&gt;
+class mylist
+{
+    friend mylist&lt;elemType&gt; operator+&lt;&gt;(const mylist &amp;l1,const mylist &amp;l2);
+public:
+    elemType *data;
+    int size;
+    mylist(int initSize=1)
+    {
+        size=initSize;
+        data = new elemType[size];
+    }
+    mylist(const mylist&lt;elemType&gt; &amp;x);//拷贝构造函数
+    mylist &amp;operator=(const mylist &amp;x);//赋值重载
+    ~mylist(){delete []data;size=0;}
+};
+
+template&lt;class elemType&gt;//赋值重载
+mylist&lt;elemType&gt; &amp;mylist&lt;elemType&gt;::operator=(const mylist&lt;elemType&gt; &amp;x)
+{
+    if (this == &amp;x) return *this;
+    size=x.size;
+    delete []data;
+    data= new elemType[size];
+    for(int i=0;i&lt;size;i++)data[i]=x.data[i];
+    return *this;
+}
+
+template&lt;class elemType&gt;//拷贝构造函数
+mylist&lt;elemType&gt;::mylist(const mylist&lt;elemType&gt; &amp;x)
+{
+    size=x.size;
+    elemType *data = new elemType[size];
+    for(int i=0;i&lt;size;i++)data[i]=x.data[i];
+}
+
+template&lt;class elemType&gt;
+mylist&lt;elemType&gt; operator+(const mylist&lt;elemType&gt; &amp;l1,const mylist&lt;elemType&gt; &amp;l2)
+{
+    int i,j;
+    mylist&lt;elemType&gt; l3(l1.size+l2.size);
+    l3.size=l1.size+l2.size;
+    for (i=0;i&lt;l1.size;i++)l3.data[i]=l1.data[i];
+    for (j=0;j&lt;l2.size;j++)l3.data[i+j]=l2.data[j];
+    return l3;
+}
+
+
+int main()
+{
+    char type[10];
+    int len1,len2;
+    cin &gt;&gt; type;
+    cin &gt;&gt; len1 &gt;&gt; len2;
+
+    if (!strcmp(type,&quot;int&quot;))
+    {
+        mylist&lt;int&gt; list1(len1),list2(len2),list3(len1+len2);
+        for (int i=0;i&lt;len1;i++)cin&gt;&gt;list1.data[i];list1.size=len1;
+        for (int i=0;i&lt;len2;i++)cin&gt;&gt;list2.data[i];list2.size=len2;
+        list3 = list1+list2;
+        for (int i=0;i&lt;list3.size;i++)
+            cout &lt;&lt; list3.data[i]&lt;&lt;' ';
+    }
+    else if (!strcmp(type,&quot;double&quot;))
+    {
+        mylist&lt;double&gt; list1(len1),list2(len2),list3(len1+len2);
+        for (int i=0;i&lt;len1;i++)cin&gt;&gt;list1.data[i];list1.size=len1;
+        for (int i=0;i&lt;len2;i++)cin&gt;&gt;list2.data[i];list2.size=len2;
+        list3 = list1+list2;
+        for (int i=0;i&lt;list3.size;i++)
+            cout &lt;&lt; list3.data[i]&lt;&lt;' ';
+    }
+    else if (!strcmp(type,&quot;char&quot;))
+    {
+        mylist&lt;char&gt; list1(len1),list2(len2),list3(len1+len2);
+        for (int i=0;i&lt;len1;i++)cin&gt;&gt;list1.data[i];list1.size=len1;
+        for (int i=0;i&lt;len2;i++)cin&gt;&gt;list2.data[i];list2.size=len2;
+        list3 = list1+list2;
+        for (int i=0;i&lt;list3.size;i++)
+            cout &lt;&lt; list3.data[i]&lt;&lt;' ';
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre>
+
+<h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstring&gt;
 using namespace std;

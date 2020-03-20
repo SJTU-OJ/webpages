@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,15 +289,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -383,7 +409,7 @@ Q 2 4
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 操作数组 */
 #include &lt;iostream&gt;
 using namespace std;
@@ -480,7 +506,119 @@ int main(){
 
 </code></pre>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+using namespace std;
+
+int numData[100009] = { 0 };
+long long numAns[100009] = { 0 };
+
+int main() {
+    int N, M;
+    scanf(&quot;%d %d&quot;, &amp;N, &amp;M);
+
+    for (int i = 1; i &lt;= N; i++) {
+        scanf(&quot;%d&quot;, &amp;numData[i]);
+        numAns[i] = numAns[i - 1] + numData[i];
+    }
+
+    for (; M &gt; 0; M--) {
+        char op;
+        scanf(&quot;\n%c&quot;, &amp;op);
+
+        if (op == 'Q') {
+            int a, b;
+            scanf(&quot;%d %d&quot;, &amp;a, &amp;b);
+            printf(&quot;%lld\n&quot;, numAns[b] - numAns[a - 1]);
+        }
+        else {
+            int a, b, c;
+            scanf(&quot;%d %d %d&quot;, &amp;a, &amp;b, &amp;c);
+            if (a - 1 &gt; N - b) {
+                int ans = c;
+                for (; a &lt; b; a++,ans+=c)
+                    numAns[a] += ans;
+                for (; a &lt;= N; a++)
+                    numAns[a] += ans;
+            }
+            else {
+                int ans = c;
+                for (b=b-1;b&gt;=a;b--, ans += c)
+                    numAns[b] -= ans;
+                for (; b&gt;=0; b--)
+                    numAns[b] -= ans;
+            }
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 1e5 + 100;
+
+long long nums[maxN];
+
+long long question(int, int);
+
+void plusn(int, int, long long);
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n, m, tmp1, tmp2;
+    char order;
+    long long tmp3, sum;
+    cin &gt;&gt; n &gt;&gt; m;
+
+    for (int i = 1; i &lt;= n; i++) {
+        cin &gt;&gt; nums[i];
+    }
+
+    for (int i = 0; i &lt; m; i++) {
+        cin &gt;&gt; order;
+
+        if (order == 'Q') {
+            cin &gt;&gt; tmp1 &gt;&gt; tmp2;
+            sum = question(tmp1, tmp2);
+            cout &lt;&lt; sum &lt;&lt; '\n';
+        } else if (order == 'C') {
+            cin &gt;&gt; tmp1 &gt;&gt; tmp2 &gt;&gt; tmp3;
+            plusn(tmp1, tmp2, tmp3);
+        }
+    }
+
+    return 0;
+}
+
+long long question(int x, int y) {
+    long long sum = 0;
+
+    for (int i = x; i &lt;= y; i++) {
+        sum += nums[i];
+    }
+
+    return sum;
+}
+
+void plusn(int x, int y, long long n) {
+    for (int i = x; i &lt;= y; i++) {
+        nums[i] += n;
+    }
+
+    return;
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstdio&gt;
 using namespace std;

@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
   </a>
   
 </li>
@@ -362,7 +388,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 二哥买草 */
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
@@ -397,6 +423,276 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+using namespace std;
+
+template &lt;class T&gt;
+class mVector {
+    T** vector_data = nullptr;
+    unsigned int size = 0;
+    unsigned int capacity = 0;
+
+public:
+    //构造函数
+    mVector() = default;
+    mVector(unsigned int _size) :size(_size) {
+        capacity = _size * 2;
+        vector_data = new T * [capacity] {nullptr};
+    }
+    mVector(unsigned int _size, const T&amp; val) :size(_size) {
+        capacity = _size * 2;
+        vector_data = new T * [capacity] {nullptr};
+        for (unsigned int i = 0; i &lt; _size; ++i)
+            vector_data[i] = new T(val);
+    }
+    mVector(const mVector&lt;T&gt; &amp; _vector) :size(_vector.size), capacity(_vector.capacity) {
+        vector_data = new T * [capacity] {nullptr};
+        for (int i = 0; i &lt; size; ++i)
+            vector_data[i] = new T(*_vector.vector_data[i]);
+    }
+    //析构函数
+    ~mVector() {
+        for (unsigned int i = 0; i &lt; size; ++i)
+            delete vector_data[i];
+        delete[] vector_data;
+    }
+
+    //增加元素
+    void push_back(const T &amp; val) {
+        if (size &lt; capacity)
+            vector_data[size++] = new T(val);
+        else {
+            T** temp_data = new T * [(capacity + 1) * 2]{ nullptr };
+            for (unsigned int i = 0; i &lt; size; ++i)
+                temp_data[i] = vector_data[i];
+            temp_data[size++] = new T(val);
+            capacity = (capacity + 1) * 2;
+            delete[] vector_data;
+            vector_data = temp_data;
+        }
+    }
+
+    //删除末尾
+    void pop_back() {
+        delete vector_data[size];
+        vector_data[size--] = nullptr;
+    }
+
+    //清空
+    void clear() {
+        for (unsigned int i = 0; i &lt; size; ++i) {
+            delete vector_data[i];
+            vector_data[i] = nullptr;
+        }
+        size = 0;
+    }
+
+    //重载运算符
+    T &amp; operator[](const unsigned int&amp; pos) {
+        return *vector_data[pos];
+    }
+
+};
+
+template &lt;class T&gt;
+class myPriorityQueue {
+    mVector&lt;T&gt; queueData;
+    unsigned int sizeOfQueue = 0;
+    bool(*cmp)(T a, T b) = [](T a, T b) {return a &lt; b; };
+
+    //向下过滤
+    void percolateDown(unsigned int pos) {
+        while (pos * 2 &lt;= sizeOfQueue) {
+            if (pos * 2 + 1 &gt; sizeOfQueue) {
+                //交换
+                if (cmp(queueData[pos * 2], queueData[pos])) {
+                    auto temp = queueData[pos * 2];
+                    queueData[pos * 2] = queueData[pos];
+                    queueData[pos] = temp;
+                }
+                break;
+            }
+            else {
+                bool minNum = cmp(queueData[pos * 2 + 1], queueData[pos * 2]);
+                if (cmp(queueData[pos * 2 + minNum], queueData[pos])) {
+                    auto temp = queueData[pos * 2 + minNum];
+                    queueData[pos * 2 + minNum] = queueData[pos];
+                    queueData[pos] = temp;
+                    pos = pos * 2 + minNum;
+                }
+                else break;
+            }
+        }
+    }
+
+public:
+    //构建
+    myPriorityQueue() {
+        queueData.clear();
+        queueData.push_back(*new T);
+        sizeOfQueue = 0;
+    }
+
+    //compare函数返回父结点a与孩子结点b的关系正确与否
+    myPriorityQueue(bool(*compare)(T a, T b)) :cmp(compare) {
+        queueData.clear();
+        queueData.push_back(*new T);
+        sizeOfQueue = 0;
+    }
+
+    //根据数组建立堆
+    void buildHeap(T* eleData, unsigned int eleNum) {
+        queueData.clear();
+        sizeOfQueue = eleNum;
+        queueData.push_back(*new T);
+        for (unsigned int i = 1; i &lt;= eleNum; i++)
+            queueData.push_back(eleData[i - 1]);
+        //向下过滤
+        for (unsigned int pos = eleNum / 2; pos &gt; 0; pos--)
+            percolateDown(pos);
+    }
+
+    //判断是否空
+    bool empty() {
+        return sizeOfQueue == 0;
+    }
+
+    //返回队列大小
+    auto size() {
+        return sizeOfQueue;
+    }
+
+    //入队
+    void push(const T &amp; input) {
+        sizeOfQueue++;
+        queueData.push_back(input);
+
+        //向上过滤
+        for (auto i = sizeOfQueue; i &gt; 1; i = i / 2) {
+            //判断是否比父结点更小
+            if (cmp(queueData[i], queueData[i / 2])) {
+                //交换
+                auto temp = queueData[i];
+                queueData[i] = queueData[i / 2];
+                queueData[i / 2] = temp;
+            }
+            else break;
+        }
+    }
+
+    //队列最前
+    T top() {
+        return queueData[1];
+    }
+
+    //出队
+    T pop() {
+        auto temp = queueData[1];
+        queueData[1] = queueData[sizeOfQueue--];
+        queueData.pop_back();
+        percolateDown(1);
+        return temp;
+    }
+};
+/*
+int n_data[10009] = { 0 }, m_data[10009] = { 0 };
+myPriorityQueue&lt;int&gt; n_queue([](int a, int b) {return a &gt; b; }),
+m_queue([](int a, int b) {return a &gt; b; });
+
+int main() {
+    int N, M;
+    scanf(&quot;%d %d&quot;, &amp;N, &amp;M);
+
+    for (int i = 0; i &lt; N; ++i)
+        scanf(&quot;%d&quot;, &amp;n_data[i]);
+    for (int i = 0; i &lt; M; ++i)
+        scanf(&quot;%d&quot;, &amp;m_data[i]);
+
+    //建立堆
+    n_queue.buildHeap(n_data, N);
+    m_queue.buildHeap(m_data, M);
+
+    long long ans = 0;
+    for (; !n_queue.empty();) {
+        auto temp = n_queue.pop();
+        ++ans;
+        for (; !m_queue.empty() &amp;&amp; m_queue.top() &gt;= temp; m_queue.pop());
+        if (!m_queue.empty()) {
+            m_queue.pop();
+            ++ans;
+        }
+    }
+
+    printf(&quot;%lld&quot;, ans);
+
+    return 0;
+}*/
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 1e4 + 100;
+int good[maxN], bad[maxN];
+
+void qSort(int *, int, int);
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int N, M, ans = 0;
+    cin &gt;&gt; N &gt;&gt; M;
+    for (int i = 0; i &lt; N; i++) {
+        cin &gt;&gt; good[i];
+    }
+    for (int i = 0; i &lt; M; i++) {
+        cin &gt;&gt; bad[i];
+    }
+    qSort(good, 0, N - 1);
+    qSort(bad, 0, M - 1);
+
+    int g = 0, b = 0;
+    while (g &lt; N &amp;&amp; b &lt; M) {
+        if (good[g] &gt; bad[b]) {
+            b++;
+        }
+        g++;
+    }
+    ans = N + b;
+    cout &lt;&lt; ans;
+
+    return 0;
+}
+
+void qSort(int *nums, int l, int h) {
+    if (l &gt;= h) {
+        return;
+    }
+    int first = l, last = h;
+    int key = nums[first];
+
+    while (first &lt; last) {
+        while (first &lt; last &amp;&amp; nums[last] &gt;= key) {
+            --last;
+        }
+        nums[first] = nums[last];
+        while (first &lt; last &amp;&amp; nums[first] &lt;= key) {
+            ++first;
+        }
+        nums[last] = nums[first];
+    }
+    nums[first] = key;
+    qSort(nums, l, first - 1);
+    qSort(nums, first + 1, h);
+}
 </code></pre>
                 
                   

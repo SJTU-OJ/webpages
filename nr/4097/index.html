@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
   </a>
   
 </li>
@@ -364,7 +383,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 简单链表 */
 #include &lt;iostream&gt;
 #include &lt;cmath&gt;
@@ -494,6 +513,154 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;vector&quot;
+#include &quot;cmath&quot;
+using namespace std;
+
+template &lt;class T&gt;
+class block_node {
+public:
+    vector&lt;T&gt; val;
+    block_node&lt;T&gt;* next = nullptr;
+    block_node&lt;T&gt;* last = nullptr;
+    size_t len = 0;
+};
+
+template &lt;class T&gt;
+class block_list {
+public:
+    block_node&lt;T&gt;* head = nullptr;
+    block_node&lt;T&gt;* rear = nullptr;
+    size_t _size = 0;
+
+    block_list() {
+        head = new block_node&lt;T&gt;;
+        rear = new block_node&lt;T&gt;;
+        head-&gt;next = rear;
+        rear-&gt;last = head;
+        _size = 0;
+    }
+
+    //从数组导入
+    void from_array(T* array_data, size_t array_size) {
+        _size = array_size;
+        auto block_size = (size_t)sqrt(array_size);
+        auto p = head;
+        for (size_t i = 0; i &lt; array_size; i += block_size) {
+            p-&gt;next = new block_node&lt;T&gt;;
+            p-&gt;next-&gt;last = p;
+            p = p-&gt;next;
+            for (size_t j = 0; j &lt; block_size &amp;&amp; i + j &lt; array_size; ++j) {
+                p-&gt;val.push_back(array_data[i + j]);
+                ++p-&gt;len;
+            }
+        }
+        p-&gt;next = rear;
+        rear-&gt;last = p;
+    }
+
+    //查找
+    T&amp; find(unsigned int pos) {
+        auto p = head;
+        unsigned int i = 0;
+        for (; i + p-&gt;len &lt;= pos; i += p-&gt;len, p = p-&gt;next);
+        return p-&gt;val[pos - i];
+    }
+
+    //插入
+    void insert(unsigned int pos, const T&amp; val) {
+        auto p = head;
+        unsigned int i = 0;
+        for (; i + p-&gt;len &lt;= pos &amp;&amp; p-&gt;next-&gt;next; i += p-&gt;len, p = p-&gt;next);
+        ++p-&gt;len;
+        ++_size;
+        p-&gt;val.insert(p-&gt;val.begin() + (pos - i), val);
+        //判断是否超限
+        auto block_size = (size_t)sqrt(_size);
+        if (p-&gt;len &gt; 2 * block_size) {
+            auto temp = new block_node&lt;T&gt;;
+            temp-&gt;val.assign(p-&gt;val.begin() + p-&gt;len / 2, p-&gt;val.end());
+            p-&gt;val.erase(p-&gt;val.begin() + p-&gt;len / 2, p-&gt;val.end());
+            temp-&gt;len = p-&gt;len - p-&gt;len / 2;
+            p-&gt;len /= 2;
+            p-&gt;next-&gt;last = temp;
+            temp-&gt;next = p-&gt;next;
+            p-&gt;next = temp;
+            temp-&gt;last = p;
+        }
+    }
+
+    //删除
+    void erase(unsigned int pos) {
+        auto p = head;
+        unsigned int i = 0;
+        for (; i + p-&gt;len &lt;= pos; i += p-&gt;len, p = p-&gt;next);
+        --p-&gt;len;
+        --_size;
+        p-&gt;val.erase(p-&gt;val.begin() + (pos - i));
+        //判断是否完全删除
+        if (p-&gt;len &lt;= 0) {
+            p-&gt;last-&gt;next = p-&gt;next;
+            p-&gt;next-&gt;last = p-&gt;last;
+            delete p;
+            return;
+        }
+        //判断是否太小
+        auto block_size = (size_t)sqrt(_size);
+        if (p-&gt;len + p-&gt;next-&gt;len &lt; block_size &amp;&amp; p-&gt;next != rear) {
+            //合并
+            p-&gt;val.insert(p-&gt;val.end(), p-&gt;next-&gt;val.begin(), p-&gt;next-&gt;val.end());
+            p-&gt;len += p-&gt;next-&gt;len;
+            auto temp = p-&gt;next;
+            p-&gt;next = p-&gt;next-&gt;next;
+            p-&gt;next-&gt;last = p;
+            delete temp;
+        }
+    }
+
+    //打印
+    void println() {
+        for (auto p = head; p-&gt;next-&gt;next; p = p-&gt;next)
+            for (auto q : p-&gt;next-&gt;val)
+                cout &lt;&lt; q &lt;&lt; &quot; &quot;;
+    }
+};
+
+block_list&lt;int&gt; list_data;
+int init_array[100009] = { 0 };
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int N, M;
+    cin &gt;&gt; N &gt;&gt; M;
+
+    for (int i = 0; i &lt; N; ++i)
+        cin &gt;&gt; init_array[i];
+    list_data.from_array(init_array, N);
+
+    for (int i = 0; i &lt; M; ++i) {
+        int opt;
+        cin &gt;&gt; opt;
+        if (opt == 1) {
+            int X, Y;
+            cin &gt;&gt; X &gt;&gt; Y;
+            list_data.insert(X, Y);
+        }
+        else {
+            int X;
+            cin &gt;&gt; X;
+            list_data.erase(X - 1);
+        }
+    }
+    list_data.println();
+    return 0;
+}
 </code></pre>
                 
                   

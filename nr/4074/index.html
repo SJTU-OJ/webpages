@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
   </a>
   
 </li>
@@ -349,7 +368,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 洪水来袭 */
 #include &lt;iostream&gt;
 #include &lt;cstring&gt;
@@ -461,6 +480,81 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstring&quot;
+#include &quot;cstdio&quot;
+#include &quot;cmath&quot;
+using namespace std;
+
+int mmin(int a, int b) {
+    return a &lt; b ? a : b;
+}
+
+int mmin(int a, int b, int c, int d) {
+    return mmin(mmin(a, b), mmin(c, d));
+}
+
+int map_data[109][109] = { 0 };
+int water[109][109] = { 0 };
+
+int main() {
+    int m, n;
+    scanf(&quot;%d %d&quot;, &amp;m, &amp;n);
+
+    int max_height = 0;
+
+    for (int i = 1; i &lt;= m; ++i) {
+        for (int j = 1; j &lt;= n; ++j) {
+            scanf(&quot;%d&quot;, &amp;map_data[i][j]);
+            max_height = map_data[i][j] &gt; max_height ? map_data[i][j] : max_height;
+        }
+    }
+
+    //装水
+    for (int i = 1; i &lt;= m; ++i) {
+        for (int j = 1; j &lt;= n; ++j) {
+            water[i][j] = max_height - map_data[i][j];
+        }
+    }
+
+    //漏水
+    for (int leak = 0;;) {
+        leak = 0;
+        for (int i = 1; i &lt;= m; ++i) {
+            for (int j = 1; j &lt;= n; ++j) {
+                auto cur_min = mmin(map_data[i - 1][j] + water[i - 1][j], map_data[i][j - 1] + water[i][j - 1],
+                    map_data[i + 1][j] + water[i + 1][j], map_data[i][j + 1] + water[i][j + 1]);
+                if (water[i][j] &gt; 0 &amp;&amp; cur_min &lt; map_data[i][j] + water[i][j]) {
+                    if (map_data[i][j] &gt;= cur_min) {
+                        leak += water[i][j];
+                        water[i][j] = 0;
+                    }
+                    else {
+                        leak += map_data[i][j] + water[i][j] - cur_min;
+                        water[i][j] = cur_min - map_data[i][j];
+                    }
+                }
+            }
+        }
+        if (leak == 0)
+            break;
+    }
+
+    //统计
+    int ans = 0;
+    for (int i = 1; i &lt;= m; ++i) {
+        for (int j = 1; j &lt;= n; ++j) {
+            ans += water[i][j];
+        }
+    }
+
+    cout &lt;&lt; ans;
+
+    return 0;
+}
 </code></pre>
                 
                   

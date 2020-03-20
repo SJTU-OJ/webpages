@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,15 +289,36 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#victrids-solution-star" class="md-nav__link">
-    VictriD's solution Star
+  <a href="#victrids-solution" class="md-nav__link">
+    VictriD's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#vvvvv1vs-solution-star" class="md-nav__link">
-    vvvvv1v's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zsi-rs-solution" class="md-nav__link">
+    Zsi-r's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vvvvv1vs-solution" class="md-nav__link">
+    vvvvv1v's solution 
   </a>
   
 </li>
@@ -366,7 +399,7 @@
 
 </details>
 
-<h2 id="victrids-solution-star">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 
 using namespace std;
@@ -438,7 +471,464 @@ int main() {
 }
 </code></pre>
 
-<h2 id="vvvvv1vs-solution-star">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstring&quot;
+using namespace std;
+
+constexpr auto maxNum = 1000001;
+
+class myList {
+public:
+    short data=0;
+    myList *next = nullptr;
+};
+
+class bigNum {
+public:
+    myList *head;
+    bigNum(const char* ch) {
+        head = new myList;
+        auto p = head;
+        for (int i = strlen(ch) - 1; i &gt;= 0; i--) {
+            //添加元素
+            p-&gt;next = new myList;
+            p = p-&gt;next;
+            p-&gt;data = ch[i] - '0';
+        }
+    }
+    void add(bigNum num) {
+        //开始运算
+        int temp = 0;
+        auto p1 = head, p2 = num.head;
+        while (p1-&gt;next != nullptr || p2-&gt;next != nullptr || temp != 0) {
+            //判断是否需要添加
+            if (p1-&gt;next == nullptr)
+                p1-&gt;next = new myList;
+            short addNum = p2-&gt;next == nullptr ? 0 : p2-&gt;next-&gt;data;
+            if (p1-&gt;next-&gt;data + addNum + temp &lt; 10) {
+                p1-&gt;next-&gt;data = p1-&gt;next-&gt;data + addNum + temp;
+                temp = 0;
+            }
+            else {
+                p1-&gt;next-&gt;data = p1-&gt;next-&gt;data + addNum + temp - 10;
+                temp = 1;
+            }
+            p1 = p1-&gt;next;
+            p2 = p2-&gt;next == nullptr ? p2 : p2-&gt;next;
+        }
+    }
+    void print() {
+        char printString[maxNum] = { 0 }, reverseString[maxNum] = { 0 };
+        int n = 0;
+        for (auto p = head; p-&gt;next != nullptr; p = p-&gt;next) {
+            printString[n] = p-&gt;next-&gt;data + '0';
+            n++;
+        }
+        //倒序
+        int stringSize = strlen(printString);
+        for (int i = 0; i &lt; stringSize; i++)
+            reverseString[i] = printString[stringSize - i - 1];
+        cout &lt;&lt; reverseString;
+    }
+};
+
+int main() {
+    char num1[maxNum];
+    cin &gt;&gt; num1;
+    bigNum n1(num1);
+    cin &gt;&gt; num1;
+    bigNum n2(num1);
+    n2.add(n1);
+    n2.print();
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+class String {
+   private:
+    struct Node {
+        char data;
+        Node *prev, *next;
+
+        Node(const int &amp;x = 0, Node *p = NULL, Node *q = NULL)
+            : data(x), next(q), prev(p) {}
+
+        ~Node() {}
+    };
+
+    Node *head, *tail;
+    int Length;
+
+    Node *move(int) const;
+
+   public:
+    String();
+
+    String(const char *);
+
+    String(const String &amp;);
+
+    ~String() {
+        clear();
+        delete head;
+        delete tail;
+        head = NULL;
+        tail = NULL;
+    }
+
+    void clear();
+
+    int length() const { return Length; }
+
+    void insert(int, const char &amp;);
+
+    char visit(int) const;
+
+    char *travel() const;
+
+    void remove(int);
+
+    void plus(String, String);
+
+    String operator=(const String &amp;);
+};
+
+String::Node *String::move(int i) const {
+    Node *p = head;
+    --i;
+    while (i &gt;= 0) {
+        p = p-&gt;next;
+        --i;
+    }
+    return p;
+}
+
+String::String() {
+    head = new Node();
+    head-&gt;next = tail = new Node();
+    tail-&gt;prev = head;
+    head-&gt;prev = NULL;
+    tail-&gt;next = NULL;
+    Length = 0;
+}
+
+String::String(const char *str) : String() {
+    int len = strlen(str);
+
+    for (int i = len - 1; i &gt;= 0; i--) {
+        this-&gt;insert(1, str[i] - '0');
+    }
+}
+
+String::String(const String &amp;right) : String() {
+    if (this-&gt;head != NULL) {
+        // clear();
+    }
+    Node *q = right.tail-&gt;prev;
+    while (q-&gt;prev != NULL) {
+        this-&gt;insert(1, q-&gt;data);
+        q = q-&gt;prev;
+    }
+}
+
+String String::operator=(const String &amp;right) {
+    if (this != &amp;right) {
+        // clear();
+        Node *q = right.head-&gt;next;
+        while (q-&gt;prev != NULL) {
+            this-&gt;insert(1, q-&gt;data);
+            q = q-&gt;prev;
+        }
+    }
+    return *this;
+}
+
+void String::remove(int i) {
+    Node *p;
+    p = move(i);
+    p-&gt;prev-&gt;next = p-&gt;next;
+    p-&gt;next-&gt;prev = p-&gt;prev;
+    delete p;
+    --Length;
+}
+
+char *String::travel() const {
+    char *str;
+    int i = 0;
+    str = new char[Length];
+    Node *p = head-&gt;next;
+    while (p-&gt;next != NULL) {
+        str[i] = (p-&gt;data) + '0';
+        i++;
+        p = p-&gt;next;
+    }
+    str[i] = '\0';
+
+    return str;
+}
+
+char String::visit(int x) const { return move(x)-&gt;data; }
+
+void String::clear() {
+    Node *p = head-&gt;next, *q;
+    head-&gt;next = tail;
+    tail-&gt;prev = head;
+    while (p != tail) {
+        q = p-&gt;next;
+        delete p;
+        p = q;
+    }
+    p = NULL;
+    q = NULL;
+
+    Length = 0;
+}
+
+void String::insert(int i, const char &amp;x) {
+    Node *pos, *tmp;
+    pos = move(i);
+    tmp = new Node(x, pos-&gt;prev, pos);
+    pos-&gt;prev-&gt;next = tmp;
+    pos-&gt;prev = tmp;
+    Length++;
+    pos = NULL;
+    tmp = NULL;
+}
+
+void String::plus(String b1, String b2) {
+    this-&gt;clear();
+    int carry = 0, temp = 0;
+    Node *p = b1.tail-&gt;prev, *q = b2.tail-&gt;prev;
+
+    while (p-&gt;prev != NULL &amp;&amp; q-&gt;prev != NULL) {
+        temp = p-&gt;data + q-&gt;data + carry;
+        carry = temp / 10;
+        temp %= 10;
+        this-&gt;insert(1, temp);
+        temp = 0;
+        p = p-&gt;prev;
+        q = q-&gt;prev;
+    }
+
+    if (p-&gt;prev == NULL) {
+        while (q-&gt;prev != NULL) {
+            temp = q-&gt;data + carry;
+            carry = temp / 10;
+            temp %= 10;
+            this-&gt;insert(1, temp);
+            temp = 0;
+            q = q-&gt;prev;
+        }
+    }
+
+    if (q-&gt;prev == NULL) {
+        while (p-&gt;prev != NULL) {
+            temp = p-&gt;data + carry;
+            carry = temp / 10;
+            temp %= 10;
+            this-&gt;insert(1, temp);
+            temp = 0;
+            p = p-&gt;prev;
+        }
+    }
+
+    if (carry != 0) {
+        this-&gt;insert(1, carry);
+        carry = 0;
+    }
+}
+
+void input(char *);
+
+int main() {
+    char str1[100001] = {'\0'}, str2[100001] = {'\0'}, *str3;
+    input(str1);
+    input(str2);
+    String num1(str1), num2(str2), num3;
+    num3.plus(num1, num2);
+    str3 = num3.travel();
+    cout &lt;&lt; str3;
+}
+
+void input(char *num) {
+    char ch;
+    int i = 0;
+    cin.get(ch);
+    while (ch != '\n' &amp;&amp; i != 100000) {
+        num[i] = ch;
+        i++;
+        cin.get(ch);
+    }
+}
+</code></pre>
+
+<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+
+using namespace std;
+
+template &lt;class elemType&gt;
+class sLinkList
+{
+public:
+    struct node
+    {
+        elemType data;
+        node *next;
+
+        node(const elemType &amp;x, node *N=NULL){
+            data = x; next = N;
+        }
+        node ():next(NULL){};
+        ~node(){};
+    };
+
+    node *head;
+    int currentLength;
+
+    node *move(int i)const;
+
+    sLinkList();
+    ~sLinkList(){clear();delete head;}
+
+    void clear();
+    int length()const {return currentLength;}
+    void insert(int i,const elemType &amp;x);
+    elemType visit(int i) const;
+    void traverse()const;
+};
+
+template&lt;class elemType&gt;
+typename sLinkList&lt;elemType&gt;::node *sLinkList&lt;elemType&gt;::move(int i)const
+{
+    node *p = head;
+    while(i--&gt;=0)p = p-&gt;next;
+    return p;
+}
+
+template&lt;class elemType&gt;
+sLinkList&lt;elemType&gt;::sLinkList()
+{
+    head = new node;
+    currentLength = 0;
+}
+
+template&lt;class elemType&gt;
+void sLinkList&lt;elemType&gt;::clear()
+{
+    node *p = head -&gt; next,*q;
+    head -&gt;next = NULL;
+    while (p!=NULL)
+    {
+        q = p -&gt;next;
+        delete p;
+        p = q;
+    }
+    currentLength =0;
+}
+
+template&lt;class elemType&gt;
+void sLinkList&lt;elemType&gt;::insert(int i, const elemType &amp;x)
+{
+    node *pos;
+
+    pos = move(i -1);
+    pos-&gt;next=new node(x,pos-&gt;next);
+    ++currentLength;
+}
+
+template&lt;class elemType&gt;
+elemType sLinkList&lt;elemType&gt;::visit(int i)const
+{
+    return move(i)-&gt;data;
+}
+
+template&lt;class elemType&gt;
+void sLinkList&lt;elemType&gt;::traverse()const
+{
+    node *p = head -&gt;next;
+    while(p != NULL)
+    {
+        cout &lt;&lt;p-&gt;data;
+        p = p-&gt;next;
+    }
+}
+
+
+int main()
+{
+    char *l1=new char[1000001];
+    char *l2=new char[1000001];
+    char *resultstring=new char[1000002];
+    cin &gt;&gt; l1&gt;&gt;l2;
+
+    int i=0,j=0,len3=0,quotient,rem=0,temp,k=0,len1=strlen(l1),len2=strlen(l2);
+
+    sLinkList&lt;char&gt; list1,list2,list3;
+    while(i&lt;len1)
+    {
+        list1.insert(0,l1[i]);
+        i++;
+    }
+
+    while(j&lt;len2)
+    {
+        list2.insert(0,l2[j]);
+        j++;
+    }
+
+    sLinkList&lt;char&gt;::node *p=list1.head-&gt;next,*q=list2.head-&gt;next;
+
+    while(len3&lt;i&amp;&amp;len3&lt;j)
+    {
+        temp = (p-&gt;data)+(q-&gt;data)-'0'-'0'+rem;
+        quotient = temp%10;
+        list3.insert(0,quotient+'0');
+        rem = temp/10;
+        len3++;
+        p=p-&gt;next;q=q-&gt;next;
+    }
+
+    while(len3&lt;i)
+    {
+        temp = (p-&gt;data)-'0'+rem;
+        quotient = temp%10;
+        list3.insert(0,quotient+'0');
+        rem = temp/10;
+        len3++;
+        p=p-&gt;next;
+    }
+
+    while(len3&lt;j)
+    {
+        temp = (q-&gt;data)-'0'+rem;
+        quotient = temp%10;
+        list3.insert(0,quotient+'0');
+        rem = temp/10;
+        len3++;
+        q = q-&gt;next;
+    }
+
+    if (rem!=0){list3.insert(0,rem+'0');len3++;}
+    p=list3.head-&gt;next;
+    for (k=0;k&lt;len3;k++){resultstring[k]=p-&gt;data;p=p-&gt;next;}
+    cout&lt;&lt;resultstring;
+
+    return 0;
+}
+
+</code></pre>
+
+<h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstring&gt;
 using namespace std;

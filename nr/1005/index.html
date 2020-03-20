@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,22 +289,36 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#callmeinks-solution-star" class="md-nav__link">
-    Callmeink's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#vvvvv1vs-solution-star" class="md-nav__link">
-    vvvvv1v's solution Star
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#callmeinks-solution" class="md-nav__link">
+    Callmeink's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vvvvv1vs-solution" class="md-nav__link">
+    vvvvv1v's solution 
   </a>
   
 </li>
@@ -407,7 +433,7 @@ Wrong
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 数独 */
 #include &lt;iostream&gt;
 using namespace std;
@@ -454,7 +480,199 @@ int main(){
 
 </code></pre>
 
-<h2 id="callmeinks-solution-star">Callmeink's solution <a class="github-button" href="https://github.com/CallMeInk/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+using namespace std;
+
+int main() {
+    int num;
+    cin &gt;&gt; num;
+
+    for (; num &gt; 0; num--) {
+        int data[9][9];
+        for (int i = 0; i &lt; 9; i++)
+            for (int j = 0; j &lt; 9; j++)
+                cin &gt;&gt; data[i][j];
+
+        //Check
+        bool flag = false;
+        for (int i = 0; i &lt; 9; i++) {
+            bool check[9] = { 0 };
+            for (int j = 0; j &lt; 9; j++) {
+                if (check[data[i][j] - 1]) {
+                    cout &lt;&lt; &quot;Wrong&quot; &lt;&lt; endl;
+                    flag = true;
+                    break;
+                }
+                check[data[i][j] - 1] = true;
+            }
+            if (flag)
+                break;
+        }
+        if (flag)
+            continue;
+
+        //Check
+        flag = false;
+        for (int i = 0; i &lt; 9; i++) {
+            bool check[9] = { 0 };
+            for (int j = 0; j &lt; 9; j++) {
+                if (check[data[j][i] - 1]) {
+                    cout &lt;&lt; &quot;Wrong&quot; &lt;&lt; endl;
+                    flag = true;
+                    break;
+                }
+                check[data[j][i] - 1] = true;
+            }
+            if (flag)
+                break;
+        }
+        if (flag)
+            continue;
+
+        flag = false;
+        for (int i = 0; i &lt; 9; i += 3) {
+            for (int j = 0; j &lt; 9; j += 3) {
+                //Small Square
+                bool check[9] = { 0 };
+                for (int m = 0; m &lt; 3; m++) {
+                    for (int n = 0; n &lt; 3; n++) {
+                        if (check[data[i + m][j + n] - 1]) {
+                            flag = true;
+                            cout &lt;&lt; &quot;Wrong&quot; &lt;&lt; endl;
+                            goto outside;
+                        }
+                        check[data[i + m][j + n] - 1] = true;
+                    }
+                }
+            }
+        }
+
+    outside:
+        if (flag)
+            continue;
+        cout &lt;&lt; &quot;Right&quot; &lt;&lt; endl;
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+class sudoku {
+   private:
+    int **storage;
+
+   public:
+    sudoku();
+    ~sudoku();
+    bool checkline();
+    bool checkcolumn();
+    bool checknine();
+    friend istream &amp;operator&gt;&gt;(istream &amp;, sudoku &amp;);
+};
+
+sudoku::sudoku() {
+    storage = new int *[9];
+    for (int i = 0; i &lt; 9; i++) {
+        storage[i] = new int[9];
+        for (int j = 0; j &lt; 9; j++) {
+            storage[i][j] = 0;
+        }
+    }
+}
+
+sudoku::~sudoku() {
+    for (int i = 0; i &lt; 9; i++) {
+        delete[] storage[i];
+    }
+    delete[] storage;
+    storage = NULL;
+}
+
+bool sudoku::checkline() {
+    bool line[9][9] = {0};
+    for (int i = 0; i &lt; 9; i++) {
+        for (int j = 0; j &lt; 9; j++) {
+            int tmp = storage[i][j];
+            if (line[i][tmp - 1] == 0) {
+                line[i][tmp - 1] = 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+bool sudoku::checkcolumn() {
+    bool line[9][9] = {0};
+    for (int j = 0; j &lt; 9; j++) {
+        for (int i = 0; i &lt; 9; i++) {
+            int tmp = storage[i][j];
+            if (line[tmp - 1][j] == 0) {
+                line[tmp - 1][j] = 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+bool sudoku::checknine() {
+    bool line[9][9] = {0};
+    for (int i = 0; i &lt; 9; i++) {
+        for (int j = 0; j &lt; 9; j++) {
+            int tmp = storage[i][j];
+            if (line[(i / 3) * 3 + j / 3][tmp - 1] == 0) {
+                line[(i / 3) * 3 + j / 3][tmp - 1] = 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+istream &amp;operator&gt;&gt;(istream &amp;is, sudoku &amp;s) {
+    for (int i = 0; i &lt; 9; i++) {
+        for (int j = 0; j &lt; 9; j++) {
+            is &gt;&gt; s.storage[i][j];
+        }
+    }
+    return is;
+}
+
+int main() {
+    int n;
+    sudoku *su;
+
+    cin &gt;&gt; n;
+    su = new sudoku[n];
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; su[i];
+    }
+
+    for (int i = 0; i &lt; n; i++) {
+        bool check =
+            (su[i].checkline() &amp;&amp; su[i].checkcolumn() &amp;&amp; su[i].checknine());
+        if (check == 1) {
+            cout &lt;&lt; &quot;Right&quot; &lt;&lt; endl;
+        } else {
+            cout &lt;&lt; &quot;Wrong&quot; &lt;&lt; endl;
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="callmeinks-solution">Callmeink's solution <a class="github-button" href="https://github.com/CallMeInk/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 
 using namespace std;
@@ -523,7 +741,7 @@ int main()
 
 </code></pre>
 
-<h2 id="vvvvv1vs-solution-star">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="vvvvv1vs-solution">vvvvv1v's solution <a class="github-button" href="https://github.com/vvvvv1v/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 using namespace std;
 

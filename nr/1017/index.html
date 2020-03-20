@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
   </a>
   
 </li>
@@ -349,7 +368,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 二哥养兔子 */
 #include &lt;iostream&gt;
 #include &lt;string&gt;
@@ -440,6 +459,146 @@ int main(){
    // cout &lt;&lt; ans.getl() &lt;&lt; endl;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include&lt;cstdio&gt;
+#include&lt;iostream&gt;
+#include&lt;cmath&gt;
+#include&lt;algorithm&gt;
+#include&lt;cstring&gt;
+#include&lt;string&gt;
+#include&lt;vector&gt;
+
+using namespace std;
+struct bigint { // only positive number;
+    static const int BASE = 100000000;
+    static const int WIDTH = 8;
+    vector&lt;int&gt; s;
+    //value
+    bigint(long long num = 0) { *this = num; }
+    bigint operator = (long long num) {
+        s.clear();
+        do {
+            s.push_back(num%BASE);
+            num /= BASE;
+        } while (num &gt; 0);
+        return *this;
+    }
+    bigint operator = (const string&amp; str) {
+        s.clear();
+        int x, len = (str.length() - 1) / WIDTH + 1;
+        for (int i = 0; i &lt; len; i++) {
+            int end = str.length() - i * WIDTH;
+            int start = max(0, end - WIDTH);
+            sscanf_s(str.substr(start, end - start).c_str(), &quot;%d&quot;, &amp;x);
+            s.push_back(x);
+        }
+        return *this;
+    }
+    //input&amp;output
+    friend ostream&amp; operator &lt;&lt; (ostream &amp;out, const bigint&amp; x) {
+        out &lt;&lt; x.s.back();
+        for (int i = x.s.size() - 2; i &gt;= 0; i--) {
+            char buf[20];
+            sprintf_s(buf, &quot;%08d&quot;, x.s[i]);
+            for (int j = 0; j &lt; strlen(buf); j++) out &lt;&lt; buf[j];
+        }
+        return out;
+    }
+    friend istream&amp; operator &gt;&gt;(istream &amp;in, bigint&amp; x) {
+        string s;
+        if (!(in &gt;&gt; s)) return in;
+        x = s;
+        return in;
+    }
+    //compare
+    bool operator &lt; (const bigint&amp; b) const {
+        if (s.size() != b.s.size()) return s.size() &lt; b.s.size();
+        for (int i = s.size() - 1; i &gt;= 0; i++) if (s[i] != b.s[i]) return s[i] &lt; b.s[i];
+        return false;//equal
+    }
+    bool operator &gt; (const bigint&amp; b) const { return b &lt; *this; }
+    bool operator &lt;= (const bigint&amp; b) const { return !(b &lt; *this); }
+    bool operator &gt;= (const bigint&amp; b) const { return !(*this &lt; b); }
+    bool operator != (const bigint&amp; b) const { return b &lt; *this || *this &lt; b; }
+    bool operator == (const bigint&amp; b) const { return !(b &lt; *this) &amp;&amp; !(*this &lt; b); }
+    //calculate
+    bigint operator +(const bigint&amp; b) const {
+        bigint c;
+        c.s.clear();
+        for (int i = 0, g = 0;; i++) {
+            if (g == 0 &amp;&amp; i &gt;= s.size() &amp;&amp; i &gt;= b.s.size()) break;
+            int x = g;
+            if (i &lt; s.size()) x += s[i];
+            if (i &lt; b.s.size()) x += b.s[i];
+            c.s.push_back(x%BASE);
+            g = x / BASE;
+        }
+        return c;
+    }
+    bigint operator +=(const bigint&amp; b) {
+        *this = *this + b;
+        return *this;
+    }
+    bigint operator -(const bigint&amp; b) const {
+        bigint c;
+        c.s.clear();
+        for (int i = 0, g = 0;; i++) {
+            if (g == 0 &amp;&amp; i &gt;= s.size() &amp;&amp; i &gt;= b.s.size()) break;
+            int x = g;
+            if (i &lt; s.size()) x += s[i];
+            if (i &lt; b.s.size()) x -= b.s[i];
+            x += BASE;
+            c.s.push_back(x%BASE);
+            g = x / BASE - 1;
+        }
+        return c;
+    }
+    bigint operator * (const bigint&amp; b) const {
+        bigint c;
+        c.s.clear();
+        bigint g = 0;
+        for (int i = 0;; i++) {
+            if (g.s.size() == 0 &amp;&amp; i &gt;= s.size() + b.s.size() - 1) break;
+            bigint x;
+            x.s.clear();
+            for (int j = 0; j &lt; g.s.size(); j++) x.s.push_back(g.s[j]);
+            if (i &lt; s.size() + b.s.size() - 1) {
+                for (int j = max(0, i - (int)s.size() + 1); j &lt;= min(i, (int)b.s.size() - 1); j++) {
+                    bigint t = (long long)b.s[j] * s[i - j];
+                    x += t;
+                }
+            }
+            c.s.push_back(x.s[0]);
+            g.s.clear();
+            if (x.s.size() &gt; 1) for (int j = 1; j &lt; x.s.size(); j++) g.s.push_back(x.s[j]);
+        }
+        return c;
+    }
+};
+
+int main() {
+    bigint a, b, c;
+    int n;
+    bigint num;
+    bigint num1 = 1, num2 = 0, num3 = 0;
+
+    //输入
+    cin &gt;&gt; a &gt;&gt; b &gt;&gt; c &gt;&gt; n;
+
+    //计算
+    for (int i = 0; i &lt; n; i++) {
+        bigint temp = num1 * a + num2 * b + num3 * c;
+        num3 += num2;
+        num2 = num1;
+        num1 = temp;
+    }
+
+    cout &lt;&lt; num1 + num2 + num3 &lt;&lt; endl;
+
+    return 0;
+}
 </code></pre>
                 
                   

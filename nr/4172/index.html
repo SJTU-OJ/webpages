@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -387,7 +406,228 @@
 
 </details>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 1e6 + 100;
+
+bool roses[maxN] = {0};
+
+class segmentTree {
+   private:
+    struct Node {
+        int l;
+        int r;
+        int lMax;
+        int rMax;
+        int mMax;
+        int amount;
+        int add;
+
+        Node() : l(0), r(0), lMax(0), rMax(0), mMax(0), amount(0), add(0) {}
+    };
+    Node *data;
+    int length;
+
+    void buildTree(int X, int l, int r);
+    void update(int X, int l, int r, bool c);
+    void pushUp(int X);
+    void pushDown(int X);
+    int searchMany(int X, int l, int r);
+    int searchLongest(int X, int l, int r);
+
+   public:
+    segmentTree(int l = maxN) : length(l) { data = new Node[length * 4 + 100]; }
+    ~segmentTree() { delete[] data; }
+
+    void buildTree(int n);
+    void update(int l, int r, bool c);
+    int searchMany(int l, int r);
+    int searchLongest(int l, int r);
+};
+
+void segmentTree::pushUp(int X) {
+    int leftSon = 2 * X, rightSon = 2 * X + 1,
+        leftLength = data[leftSon].r - data[leftSon].l + 1,
+        rightLength = data[rightSon].r - data[rightSon].l + 1;
+
+    data[X].lMax = data[leftSon].lMax;
+    data[X].rMax = data[rightSon].rMax;
+    if (data[X].lMax == leftLength) {
+        data[X].lMax += data[rightSon].lMax;
+    }
+    if (data[X].rMax == rightLength) {
+        data[X].rMax += data[leftSon].rMax;
+    }
+    data[X].amount = data[leftSon].amount + data[rightSon].amount;
+    data[X].mMax =
+        max(max(data[leftSon].rMax + data[rightSon].lMax, data[leftSon].mMax),
+            data[rightSon].mMax);
+}
+
+void segmentTree::pushDown(int X) {
+    int leftSon = 2 * X, rightSon = 2 * X + 1;
+    if (data[X].add == 0) {
+        return;
+    } else if (data[X].l != data[X].r) {
+        int add = data[X].add;
+        data[leftSon].add = data[rightSon].add = add;
+        if (add == 1) {
+            data[leftSon].lMax = data[leftSon].rMax = data[leftSon].amount =
+                data[leftSon].mMax = 0;
+            data[rightSon].lMax = data[rightSon].rMax = data[rightSon].amount =
+                data[rightSon].mMax = 0;
+        } else if (add == 2) {
+            data[leftSon].lMax = data[leftSon].rMax = data[leftSon].amount =
+                data[leftSon].mMax = data[leftSon].r - data[leftSon].l + 1;
+            data[rightSon].lMax = data[rightSon].rMax = data[rightSon].amount =
+                data[rightSon].mMax = data[rightSon].r - data[rightSon].l + 1;
+        }
+        data[X].add = 0;
+    }
+}
+
+void segmentTree::buildTree(int n) { buildTree(1, 1, n); }
+
+void segmentTree::buildTree(int X, int l, int r) {
+    data[X].add = 0;
+    data[X].l = l;
+    data[X].r = r;
+    if (l == r) {
+        data[X].lMax = roses[l];
+        data[X].rMax = roses[l];
+        data[X].mMax = roses[l];
+        data[X].amount = roses[l];
+        return;
+    }
+    int mid = (l + r) &gt;&gt; 1;
+    buildTree(2 * X, l, mid);
+    buildTree(2 * X + 1, mid + 1, r);
+    pushUp(X);
+}
+
+void segmentTree::update(int l, int r, bool c) { update(1, l, r, c); }
+
+void segmentTree::update(int X, int l, int r, bool c) {
+    if (l &lt;= data[X].l &amp;&amp; r &gt;= data[X].r) {
+        if (c == 0) {
+            data[X].lMax = data[X].mMax = data[X].rMax = data[X].amount = 0;
+        } else {
+            data[X].lMax = data[X].mMax = data[X].rMax = data[X].amount =
+                data[X].r - data[X].l + 1;
+        }
+
+        data[X].add = c + 1;
+    } else {
+        int mid = (data[X].l + data[X].r) &gt;&gt; 1;
+        pushDown(X);
+
+        if (l &lt;= mid) {
+            update(2 * X, l, r, c);
+        }
+        if (r &gt; mid) {
+            update(2 * X + 1, l, r, c);
+        }
+
+        pushUp(X);
+    }
+}
+
+int segmentTree::searchMany(int l, int r) { return searchMany(1, l, r); }
+
+int segmentTree::searchMany(int X, int l, int r) {
+    if (data[X].l &gt; r || data[X].r &lt; l) {
+        return 0;
+    } else if (l &lt;= data[X].l &amp;&amp; data[X].r &lt;= r) {
+        return data[X].amount;
+    } else {
+        int mid = (data[X].l + data[X].r) &gt;&gt; 1;
+
+        pushDown(X);
+
+        int ans = 0;
+
+        return searchMany(2 * X, l, r) + searchMany(2 * X + 1, l, r);
+    }
+}
+
+int segmentTree::searchLongest(int l, int r) { return searchLongest(1, l, r); }
+
+int segmentTree::searchLongest(int X, int l, int r) {
+    if (data[X].l &gt; r || data[X].r &lt; l) {
+        return 0;
+    } else if (data[X].l &gt;= l &amp;&amp; data[X].r &lt;= r) {
+        return data[X].mMax;
+    } else {
+        if (data[X].add != 0) {
+            pushDown(X);
+        }
+        int mid = (data[X].l + data[X].r) &gt;&gt; 1;
+
+        if (r &lt;= mid) {
+            return searchLongest(2 * X, l, r);
+        } else if (l &gt; mid) {
+            return searchLongest(2 * X + 1, l, r);
+        } else {
+            int left1 = searchLongest(2 * X, l, r),
+                right1 = searchLongest(2 * X + 1, l, r);
+            int leftRight = data[2 * X].rMax, rightLeft = data[2 * X + 1].lMax;
+            if (leftRight &gt; mid - l + 1) {
+                leftRight = mid - l + 1;
+            }
+            if (rightLeft &gt; r - mid) {
+                rightLeft = r - mid;
+            }
+
+            return max(max(left1, right1), (leftRight + rightLeft));
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n, m;
+    cin &gt;&gt; n &gt;&gt; m;
+    segmentTree smt;
+
+    for (int i = 1; i &lt; n + 1; i++) {
+        cin &gt;&gt; roses[i];
+    }
+
+    smt.buildTree(n);
+
+    for (int i = 0; i &lt; m; i++) {
+        int order, l, r, x, ans;
+        cin &gt;&gt; order;
+        switch (order) {
+            case 1:
+                cin &gt;&gt; l &gt;&gt; r &gt;&gt; x;
+                smt.update(l, r, x);
+                break;
+            case 3:
+                cin &gt;&gt; l &gt;&gt; r;
+                ans = smt.searchLongest(l, r);
+                cout &lt;&lt; ans &lt;&lt; '\n';
+                break;
+            case 2:
+                cin &gt;&gt; l &gt;&gt; r;
+                ans = smt.searchMany(l, r);
+                cout &lt;&lt; ans &lt;&lt; '\n';
+                break;
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 using namespace std;
 const int MAXN=1000001;

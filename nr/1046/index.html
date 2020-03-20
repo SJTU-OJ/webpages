@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
   </a>
   
 </li>
@@ -386,7 +405,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 二哥的吊灯 */
 #include &lt;iostream&gt;
 using namespace std;
@@ -474,6 +493,93 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+class node {
+public:
+    int lchild = 0, rchild = 0;
+    int num = 1;
+    int red_num = 0;
+    bool is_red = false;
+    int parent = 0;
+};
+
+node node_list[100009];
+
+int dfs(int root) {
+    if (node_list[root].lchild)
+        node_list[root].num += dfs(node_list[root].lchild);
+    if (node_list[root].rchild)
+        node_list[root].num += dfs(node_list[root].rchild);
+    return node_list[root].num;
+}
+
+void paint_red(int root,int pos) {
+    pos = pos % node_list[root].num;
+    int this_pos = node_list[root].lchild ? node_list[node_list[root].lchild].num : 0;
+    if (pos == this_pos) {
+        if (!node_list[root].is_red) {
+            node_list[root].is_red = true;
+            for (auto p = root; p; p = node_list[p].parent)
+                ++node_list[p].red_num;
+        }
+        return;
+    }
+    else if (pos &lt; this_pos) {
+        paint_red(node_list[root].lchild, pos);
+    }
+    else {
+        paint_red(node_list[root].rchild, pos - this_pos - 1);
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n, p, q;
+    cin &gt;&gt; n &gt;&gt; p &gt;&gt; q;
+
+    for (int i = 0; i &lt; n; ++i) {
+        int x, l, r;
+        cin &gt;&gt; x &gt;&gt; l &gt;&gt; r;
+
+        node_list[x].lchild = l;
+        node_list[x].rchild = r;
+        if (l)
+            node_list[l].parent = x;
+        if (r)
+            node_list[r].parent = x;
+    }
+
+    int root = 0;
+    for(int i=1;i&lt;=n;++i)
+        if (node_list[i].parent == 0) {
+            root = i;
+            break;
+        }
+
+    dfs(root);
+
+    for (int i = 0; i &lt; p; ++i) {
+        int t, x;
+        cin &gt;&gt; t &gt;&gt; x;
+        paint_red(t, x);
+    }
+
+    for (int i = 0; i &lt; q; ++i) {
+        int w;
+        cin &gt;&gt; w;
+        cout &lt;&lt; node_list[w].red_num &lt;&lt; &quot;\n&quot;;
+    }
+
+    return 0;
+}
 </code></pre>
                 
                   

@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -402,7 +428,550 @@ JOHNYLOVESANNA
 
 </details>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+#include &quot;queue&quot;
+#include &quot;cmath&quot;
+#include &quot;stack&quot;
+#include &quot;cstring&quot;
+using namespace std;
+
+//二叉树类
+template &lt;class T&gt;
+class myBinaryTree {
+public:
+    class node {
+    public:
+        T data;
+        node *lchild = nullptr, *rchild = nullptr;
+    };
+    node *root = nullptr;
+    node **nodeList = nullptr;
+    long long sizeOfTree = 0;
+
+    //创建一个相应大小的树
+    void createTree(int num) {
+        nodeList = new node*[num + 1]{ nullptr };
+        sizeOfTree = num;
+    }
+    //创建结点（全部完成后需要CheckRoot进行根节点识别）
+    void createNode(int nodeNum, int lchild, int rchild, T data) {
+        if (nodeList[nodeNum] == nullptr)
+            nodeList[nodeNum] = new node;
+
+        nodeList[nodeNum]-&gt;data = data;
+
+        if (lchild != 0) {
+            if (nodeList[lchild] == nullptr)
+                nodeList[lchild] = new node;
+            nodeList[nodeNum]-&gt;lchild = nodeList[lchild];
+        }
+
+        if (rchild != 0) {
+            if (nodeList[rchild] == nullptr)
+                nodeList[rchild] = new node;
+            nodeList[nodeNum]-&gt;rchild = nodeList[rchild];
+        }
+    }
+    //创建一个num大小的树，数据为treeData
+    void createTree(T* treeData, int num) {
+        createTree(num);
+        for (int i = 1; i &lt;= num; i++) {
+            int lchild = i * 2 &lt;= num ? i * 2 : 0,
+                rchild = i * 2 + 1 &lt;= num ? i * 2 + 1 : 0;
+            createNode(i, lchild, rchild, treeData[i - 1]);
+        }
+        root = nodeList[1];
+    }
+    //创建一个空的完全二叉树
+    void createNullTree(int num) {
+        createTree(num);
+        nodeList[1] = new node;
+        for (int i = 1; i &lt;= num; i++) {
+            if (i * 2 &lt;= num) {
+                nodeList[i * 2] = new node;
+                nodeList[i]-&gt;lchild = nodeList[i * 2];
+            }
+            if (i * 2 + 1 &lt;= num) {
+                nodeList[i * 2 + 1] = new node;
+                nodeList[i]-&gt;rchild = nodeList[i * 2 + 1];
+            }
+        }
+        root = nodeList[1];
+    }
+    void checkRoot() {
+        for (int i = 1; i &lt;= sizeOfTree; i++) {
+            if (nodeList[i]-&gt;parent == nullptr) {
+                root = nodeList[i];
+                break;
+            }
+        }
+    }
+
+    //清空
+    void clear() {
+        clear(root);
+    }
+
+    void clear(node *p) {
+        if (p == nullptr)
+            return;
+        clear(p-&gt;lchild);
+        clear(p-&gt;rchild);
+        delete p;
+        p = nullptr;
+    }
+
+    //构造
+    myBinaryTree() {}
+
+    //析构
+    ~myBinaryTree() {
+        clear(root);
+    }
+
+    //判断是否非空
+    bool empty() {
+        return root == nullptr;
+    }
+
+
+    //返回大小
+    long long size() {
+        return sizeOfTree;
+    }
+
+    //迭代器
+    class preorderIterator {
+    public:
+        stack&lt;node*&gt; myStack;
+        node* currentData = nullptr;
+        friend preorderIterator myBinaryTree::preorderBegin();
+        T&amp; get() {
+            return currentData-&gt;data;
+        }
+        //遍历结束或内容为空
+        bool finish() {
+            return currentData == nullptr&amp;&amp;myStack.empty();
+        }
+
+        preorderIterator&amp; operator++() {
+            if (finish())
+                return *this;
+            if (myStack.empty()) {
+                currentData = nullptr;
+                return *this;
+            }
+            currentData = myStack.top();
+            myStack.pop();
+            if (currentData-&gt;rchild != nullptr)
+                myStack.push(currentData-&gt;rchild);
+            if (currentData-&gt;lchild != nullptr)
+                myStack.push(currentData-&gt;lchild);
+            return *this;
+        }
+    };
+
+    preorderIterator preorderBegin() {
+        preorderIterator result;
+        result.myStack.push(root);
+        ++result;
+        return result;
+    }
+
+    class inorderIterator {
+    public:
+        stack&lt;node*&gt; myStack;
+        node* currentData = nullptr;
+        friend inorderIterator myBinaryTree::inorderBegin();
+
+        T&amp; get() {
+            return currentData-&gt;data;
+        }
+        //遍历结束或内容为空
+        bool finish() {
+            return currentData == nullptr&amp;&amp;myStack.empty();
+        }
+
+        inorderIterator&amp; operator++() {
+            if (finish())
+                return *this;
+            if (myStack.empty()) {
+                currentData = nullptr;
+                return *this;
+            }
+            currentData = myStack.top();
+            myStack.pop();
+            for (node* p = currentData-&gt;rchild; p != nullptr; p = p-&gt;lchild)
+                myStack.push(p);
+            return *this;
+        }
+    };
+
+    inorderIterator inorderBegin() {
+        inorderIterator result;
+        for (node* p = root; p != nullptr; p = p-&gt;lchild)
+            result.myStack.push(p);
+        ++result;
+        return result;
+    }
+
+    class postorderIterator {
+    public:
+        stack&lt;node*&gt; myStack;
+        node* currentData = nullptr;
+        friend postorderIterator myBinaryTree::postorderBegin();
+        T&amp; get() {
+            return currentData-&gt;data;
+        }
+        //遍历结束或内容为空
+        bool finish() {
+            return currentData == nullptr&amp;&amp;myStack.empty();
+        }
+
+        postorderIterator&amp; operator++() {
+            if (finish())
+                return *this;
+            if (myStack.empty()) {
+                currentData = nullptr;
+                return *this;
+            }
+            currentData = myStack.top();
+            myStack.pop();
+            if (myStack.empty() || myStack.top()-&gt;rchild == currentData)
+                return *this;
+            for (node* p = myStack.top()-&gt;rchild; p != nullptr;) {
+                myStack.push(p);
+                if (p-&gt;lchild != nullptr)
+                    p = p-&gt;lchild;
+                else if (p-&gt;rchild != nullptr)
+                    p = p-&gt;rchild;
+                else
+                    break;
+            }
+            return *this;
+        }
+    };
+
+    postorderIterator postorderBegin() {
+        postorderIterator result;
+        for (node* p = root; p != nullptr;) {
+            result.myStack.push(p);
+            if (p-&gt;lchild != nullptr)
+                p = p-&gt;lchild;
+            else if (p-&gt;rchild != nullptr)
+                p = p-&gt;rchild;
+            else
+                break;
+        }
+        ++result;
+        return result;
+    }
+
+    //层序遍历迭代器
+    class levelIterator {
+    public:
+        queue&lt;node*&gt; myQueue;
+        node* currentData = nullptr;
+        friend levelIterator myBinaryTree::levelBegin();
+        T&amp; get() {
+            return currentData-&gt;data;
+        }
+        //遍历结束或内容为空
+        bool finish() {
+            return currentData == nullptr&amp;&amp;myQueue.empty();
+        }
+
+        levelIterator&amp; operator++() {
+            if (finish())
+                return *this;
+            if (myQueue.empty()) {
+                currentData = nullptr;
+                return *this;
+            }
+            currentData = myQueue.front();
+            myQueue.pop();
+            if (currentData-&gt;lchild != nullptr)
+                myQueue.push(currentData-&gt;lchild);
+            if (currentData-&gt;rchild != nullptr)
+                myQueue.push(currentData-&gt;rchild);
+            return *this;
+        }
+    };
+
+    levelIterator levelBegin() {
+        levelIterator result;
+        result.myQueue.push(root);
+        ++result;
+        return result;
+    }
+
+
+
+    //层次遍历
+    vector&lt;T*&gt; levelTraversal() {
+        if (sizeOfTree == 0)
+            return *new vector&lt;T*&gt;;
+
+        vector&lt;T*&gt; result;
+        queue&lt;node*&gt; treeQueue;
+
+        //根结点入队
+        treeQueue.push(root);
+
+        //层次遍历
+        while (!treeQueue.empty()) {
+            //出队
+            node* temp = treeQueue.front();
+            treeQueue.pop();
+
+            //入队
+            if (temp-&gt;lchild != nullptr)
+                treeQueue.push(temp-&gt;lchild);
+            if (temp-&gt;rchild != nullptr)
+                treeQueue.push(temp-&gt;rchild);
+
+            //写入
+            result.push_back(&amp;temp-&gt;data);
+        }
+
+        //返回
+        return result;
+    }
+
+    //前序遍历
+    vector&lt;T*&gt; preorderTraversal() {
+        vector&lt;T*&gt; result;
+        preorderTraversal(root, result);
+        return result;
+    }
+
+    void preorderTraversal(node* treeRoot, vector&lt;T*&gt; &amp;result) {
+        //显示当前
+        result.push_back(&amp;treeRoot-&gt;data);
+
+        if (treeRoot-&gt;lchild != nullptr)
+            preorderTraversal(treeRoot-&gt;lchild, result);
+        if (treeRoot-&gt;rchild != nullptr)
+            preorderTraversal(treeRoot-&gt;rchild, result);
+    }
+
+    //中序遍历
+    vector&lt;T*&gt; inorderTraversal() {
+        vector&lt;T*&gt; result;
+        inorderTraversal(root, result);
+        return result;
+    }
+
+    void inorderTraversal(node* treeRoot, vector&lt;T*&gt; &amp;result) {
+        if (treeRoot-&gt;lchild != nullptr)
+            inorderTraversal(treeRoot-&gt;lchild, result);
+        //显示当前
+        result.push_back(&amp;treeRoot-&gt;data);
+        if (treeRoot-&gt;rchild != nullptr)
+            inorderTraversal(treeRoot-&gt;rchild, result);
+    }
+
+    //后序遍历
+    vector&lt;T*&gt; postorderTraversal() {
+        vector&lt;T*&gt; result;
+        postorderTraversal(root, result);
+        return result;
+    }
+
+    void postorderTraversal(node* treeRoot, vector&lt;T*&gt; &amp;result) {
+        if (treeRoot-&gt;lchild != nullptr)
+            postorderTraversal(treeRoot-&gt;lchild, result);
+        if (treeRoot-&gt;rchild != nullptr)
+            postorderTraversal(treeRoot-&gt;rchild, result);
+        //显示当前
+        result.push_back(&amp;treeRoot-&gt;data);
+    }
+};
+
+int main() {
+    int num;
+    cin &gt;&gt; num;
+
+    for (; num &gt; 0; num--) {
+        int n;
+        scanf(&quot;%d&quot;, &amp;n);
+        char order[100], op[100], *str = new char[n + 1];
+        scanf(&quot;%s %s\n%s&quot;, order, op, str);
+        //建树
+        myBinaryTree&lt;char&gt; bTree;
+        if (strcmp(op, &quot;ENCODE&quot;) == 0) {
+            bTree.createTree(str, n);
+            delete str;
+            if (strcmp(order, &quot;PREORDER&quot;) == 0)
+                for (auto p = bTree.preorderBegin(); !p.finish(); ++p)
+                    printf(&quot;%c&quot;, p.currentData-&gt;data);
+            else if (strcmp(order, &quot;INORDER&quot;) == 0)
+                for (auto p = bTree.inorderBegin(); !p.finish(); ++p)
+                    printf(&quot;%c&quot;, p.currentData-&gt;data);
+            else if (strcmp(order, &quot;POSTORDER&quot;) == 0)
+                for (auto p = bTree.postorderBegin(); !p.finish(); ++p)
+                    printf(&quot;%c&quot;, p.currentData-&gt;data);
+        }
+        else if (strcmp(op, &quot;DECODE&quot;) == 0) {
+            int i = 0;
+            bTree.createTree(str, n);
+            if (strcmp(order, &quot;PREORDER&quot;) == 0)
+                for (auto p = bTree.preorderBegin(); !p.finish(); ++p, ++i)
+                    p.currentData-&gt;data = str[i];
+            else if (strcmp(order, &quot;INORDER&quot;) == 0)
+                for (auto p = bTree.inorderBegin(); !p.finish(); ++p, ++i)
+                    p.currentData-&gt;data = str[i];
+            else if (strcmp(order, &quot;POSTORDER&quot;) == 0)
+                for (auto p = bTree.postorderBegin(); !p.finish(); ++p, ++i)
+                    p.currentData-&gt;data = str[i];
+            delete str;
+            for (auto p = bTree.levelBegin(); !p.finish(); ++p)
+                printf(&quot;%c&quot;, p.currentData-&gt;data);
+        }
+        printf(&quot;\n&quot;);
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;cstring&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+void eInOrder(char *, int, int);
+void ePreOrder(char *, int, int);
+void ePostOrder(char *, int, int);
+void dInOrder(char *, int, int);
+void dPreOrder(char *, int, int);
+void dPostOrder(char *, int, int);
+
+char *ans;
+int index1;
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int N, length;
+    char order1[10], order2[10], *S;
+
+    cin &gt;&gt; N;
+    for (int i = 0; i &lt; N; i++) {
+        cin &gt;&gt; length &gt;&gt; order1 &gt;&gt; order2;
+
+        S = new char[length + 10];
+        cin &gt;&gt; S;
+        if (strcmp(order1, &quot;INORDER&quot;) == 0) {
+            if (strcmp(order2, &quot;ENCODE&quot;) == 0) {
+                eInOrder(S, length, 1);
+                cout &lt;&lt; '\n';
+            } else {
+                ans = new char[length + 10];
+                index1 = 0;
+                dInOrder(S, length, 1);
+                ans[length] = 0;
+                cout &lt;&lt; ans &lt;&lt; '\n';
+                delete[] ans;
+            }
+        } else if (strcmp(order1, &quot;PREORDER&quot;) == 0) {
+            if (strcmp(order2, &quot;ENCODE&quot;) == 0) {
+                ePreOrder(S, length, 1);
+                cout &lt;&lt; '\n';
+            } else {
+                ans = new char[length + 10];
+                index1 = 0;
+                dPreOrder(S, length, 1);
+                ans[length] = 0;
+                cout &lt;&lt; ans &lt;&lt; '\n';
+                delete[] ans;
+            }
+        } else if (strcmp(order1, &quot;POSTORDER&quot;) == 0) {
+            if (strcmp(order2, &quot;ENCODE&quot;) == 0) {
+                ePostOrder(S, length, 1);
+                cout &lt;&lt; '\n';
+            } else {
+                ans = new char[length + 10];
+                index1 = 0;
+                dPostOrder(S, length, 1);
+                ans[length] = 0;
+                cout &lt;&lt; ans &lt;&lt; '\n';
+                delete[] ans;
+            }
+        }
+    }
+}
+
+void eInOrder(char *str, int len, int pos) {
+    if (pos &gt; len) {
+        return;
+    }
+
+    eInOrder(str, len, 2 * pos);
+    cout &lt;&lt; str[pos - 1];
+    eInOrder(str, len, 2 * pos + 1);
+}
+
+void ePreOrder(char *str, int len, int pos) {
+    if (pos &gt; len) {
+        return;
+    }
+
+    cout &lt;&lt; str[pos - 1];
+    ePreOrder(str, len, 2 * pos);
+    ePreOrder(str, len, 2 * pos + 1);
+}
+
+void ePostOrder(char *str, int len, int pos) {
+    if (pos &gt; len) {
+        return;
+    }
+
+    ePostOrder(str, len, 2 * pos);
+    ePostOrder(str, len, 2 * pos + 1);
+    cout &lt;&lt; str[pos - 1];
+}
+
+void dInOrder(char *str, int len, int pos) {
+    if (pos &gt; len) {
+        return;
+    }
+
+    dInOrder(str, len, 2 * pos);
+    ans[pos - 1] = str[index1];
+    index1++;
+    dInOrder(str, len, 2 * pos + 1);
+}
+
+void dPreOrder(char *str, int len, int pos) {
+    if (pos &gt; len) {
+        return;
+    }
+
+    ans[pos - 1] = str[index1];
+    index1++;
+    dPreOrder(str, len, 2 * pos);
+    dPreOrder(str, len, 2 * pos + 1);
+}
+
+void dPostOrder(char *str, int len, int pos) {
+    if (pos &gt; len) {
+        return;
+    }
+
+    dPostOrder(str, len, 2 * pos);
+    dPostOrder(str, len, 2 * pos + 1);
+    ans[pos - 1] = str[index1];
+    index1++;
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstring&gt;
 #include &lt;cstdio&gt;

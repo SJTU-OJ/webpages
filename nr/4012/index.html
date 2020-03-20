@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -366,7 +392,432 @@
 
 </details>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+using namespace std;
+
+template &lt;class T&gt;
+class mVector {
+    T** vector_data = nullptr;
+    unsigned int size = 0;
+    unsigned int capacity = 0;
+
+public:
+    //构造函数
+    mVector() = default;
+    mVector(unsigned int _size) :size(_size) {
+        capacity = _size * 2;
+        vector_data = new T * [capacity] {nullptr};
+    }
+    mVector(unsigned int _size, const T&amp; val) :size(_size) {
+        capacity = _size * 2;
+        vector_data = new T * [capacity] {nullptr};
+        for (unsigned int i = 0; i &lt; _size; ++i)
+            vector_data[i] = new T(val);
+    }
+    mVector(const mVector&lt;T&gt; &amp; _vector) :size(_vector.size), capacity(_vector.capacity) {
+        vector_data = new T * [capacity] {nullptr};
+        for (int i = 0; i &lt; size; ++i)
+            vector_data[i] = new T(*_vector.vector_data[i]);
+    }
+    //析构函数
+    ~mVector() {
+        for (unsigned int i = 0; i &lt; size; ++i)
+            delete vector_data[i];
+        delete[] vector_data;
+    }
+
+    //迭代器
+    class iterator {
+        T** pos = nullptr;
+        friend iterator mVector&lt;T&gt;::begin();
+        friend iterator mVector&lt;T&gt;::end();
+        friend void mVector&lt;T&gt;::erase(const iterator&amp; val);
+    public:
+        iterator() = default;
+        iterator(const iterator&amp; other) {
+            pos = other.pos;
+        }
+        iterator&amp; operator++() {
+            ++pos;
+            return *this;
+        }
+        iterator operator++(int) {
+            iterator temp(*this);
+            ++pos;
+            return temp;
+        }
+        iterator&amp; operator--() {
+            --pos;
+            return *this;
+        }
+        iterator operator--(int) {
+            iterator temp(*this);
+            --pos;
+            return temp;
+        }
+        bool operator==(const iterator&amp; other) const {
+            return pos == other.pos;
+        }
+        bool operator!=(const iterator&amp; other) const {
+            return pos != other.pos;
+        }
+        iterator&amp; operator=(const iterator&amp; other) {
+            pos = other.pos;
+            return *this;
+        }
+        T&amp; operator*() const {
+            return **pos;
+        }
+    };
+
+    //增加元素
+    void push_back(const T &amp; val) {
+        if (size &lt; capacity)
+            vector_data[size++] = new T(val);
+        else {
+            T** temp_data = new T * [(capacity + 1) * 2]{ nullptr };
+            for (unsigned int i = 0; i &lt; size; ++i)
+                temp_data[i] = vector_data[i];
+            temp_data[size++] = new T(val);
+            capacity = (capacity + 1) * 2;
+            delete[] vector_data;
+            vector_data = temp_data;
+        }
+    }
+
+    //删除末尾
+    void pop_back() {
+        delete vector_data[size];
+        vector_data[size--] = nullptr;
+    }
+
+    //清空
+    void clear() {
+        for (unsigned int i = 0; i &lt; size; ++i) {
+            delete vector_data[i];
+            vector_data[i] = nullptr;
+        }
+        size = 0;
+    }
+
+    //删除
+    void erase(const iterator &amp; val) {
+        delete* val.pos;
+        for (auto p = val.pos; p != vector_data + size - 1; ++p)
+            * p = *(p + 1);
+        --size;
+        vector_data[size] = nullptr;
+    }
+
+    //重载运算符
+    T &amp; operator[](const unsigned int&amp; pos) {
+        return *vector_data[pos];
+    }
+
+    iterator begin() {
+        iterator temp;
+        temp.pos = vector_data;
+        return temp;
+    }
+
+    iterator end() {
+        iterator temp;
+        temp.pos = vector_data + size;
+        return temp;
+    }
+
+};
+
+template &lt;class T&gt;
+class myPriorityQueue {
+public:
+    mVector&lt;T&gt; queueData;
+    unsigned int sizeOfQueue = 0;
+    bool(*cmp)(T a, T b) = [](T a, T b) {return a &lt; b; };
+
+    //向下过滤
+    void percolateDown(unsigned int pos) {
+        while (pos * 2 &lt;= sizeOfQueue) {
+            if (pos * 2 + 1 &gt; sizeOfQueue) {
+                //交换
+                if (cmp(queueData[pos * 2], queueData[pos])) {
+                    auto temp = queueData[pos * 2];
+                    queueData[pos * 2] = queueData[pos];
+                    queueData[pos] = temp;
+                }
+                break;
+            }
+            else {
+                bool minNum = cmp(queueData[pos * 2 + 1], queueData[pos * 2]);
+                if (cmp(queueData[pos * 2 + minNum], queueData[pos])) {
+                    auto temp = queueData[pos * 2 + minNum];
+                    queueData[pos * 2 + minNum] = queueData[pos];
+                    queueData[pos] = temp;
+                    pos = pos * 2 + minNum;
+                }
+                else break;
+            }
+        }
+    }
+
+
+    //构建
+    myPriorityQueue() {
+        queueData.clear();
+        queueData.push_back((T)0);
+        sizeOfQueue = 0;
+    }
+
+    //compare函数返回父结点a与孩子结点b的关系正确与否
+    myPriorityQueue(bool(*compare)(T a, T b)) :cmp(compare) {
+        queueData.clear();
+        queueData.push_back(*new T);
+        sizeOfQueue = 0;
+    }
+
+    //根据数组建立堆
+    void buildHeap(T* eleData, unsigned int eleNum) {
+        queueData.clear();
+        sizeOfQueue = eleNum;
+        queueData.push_back(*new T);
+        for (unsigned int i = 1; i &lt;= eleNum; i++)
+            queueData.push_back(eleData[i - 1]);
+        //向下过滤
+        for (unsigned int pos = eleNum / 2; pos &gt; 0; pos--)
+            percolateDown(pos);
+    }
+
+    void refresh() {
+        //向下过滤
+        for (unsigned int pos = size() / 2; pos &gt; 0; pos--)
+            percolateDown(pos);
+    }
+
+    //判断是否空
+    bool empty() {
+        return sizeOfQueue == 0;
+    }
+
+    //返回队列大小
+    auto size() {
+        return sizeOfQueue;
+    }
+
+    //入队
+    void push(const T &amp; input) {
+        sizeOfQueue++;
+        queueData.push_back(input);
+
+        //向上过滤
+        for (auto i = sizeOfQueue; i &gt; 1; i = i / 2) {
+            //判断是否比父结点更小
+            if (cmp(queueData[i], queueData[i / 2])) {
+                //交换
+                auto temp = queueData[i];
+                queueData[i] = queueData[i / 2];
+                queueData[i / 2] = temp;
+            }
+            else break;
+        }
+    }
+
+    //队列最前
+    T top() {
+        return queueData[1];
+    }
+
+    //出队
+    T pop() {
+        auto temp = queueData[1];
+        queueData[1] = queueData[sizeOfQueue--];
+        queueData.pop_back();
+        percolateDown(1);
+        return temp;
+    }
+};
+
+int weight[20000] = { 0 };
+
+int main() {
+    //ios::sync_with_stdio(false);
+    //cin.tie(NULL);
+
+    int n;
+    cin &gt;&gt; n;
+
+    for (int i = 0; i &lt; n; i++)
+        cin &gt;&gt; weight[i];
+
+    //排除特殊情况
+    if (n == 1) {
+        cout &lt;&lt; weight[0];
+        return 0;
+    }
+
+    myPriorityQueue&lt;int&gt; fruit;
+    fruit.buildHeap(weight, n);
+
+    long long ans=0;
+    //不断循环
+    while (fruit.sizeOfQueue &gt; 2) {
+        if (fruit.queueData[2] &lt;= fruit.queueData[3]) {
+            fruit.queueData[2] += fruit.queueData[1];
+            ans += fruit.queueData[2];
+            fruit.percolateDown(2);
+        }
+        else {
+            fruit.queueData[3] += fruit.queueData[1];
+            ans += fruit.queueData[3];
+            fruit.percolateDown(3);
+        }
+        //剔除最小的元素
+        fruit.pop();
+    }
+    ans += fruit.queueData[1] + fruit.queueData[2];
+    cout &lt;&lt; ans;
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 1e5 + 100;
+
+template &lt;class Type&gt;
+class priorityQueue {
+   private:
+    int currentSize;
+    Type *array;
+    int maxSize;
+
+    void doubleSpace();
+    // void buildHeap();
+    void percolateDown(int);
+
+   public:
+    priorityQueue(int capacity = maxN);
+    // priorityQueue(const Type data[],int size);
+    ~priorityQueue();
+    bool isEmpty() const;
+    void enQueue(const Type &amp;x);
+    Type deQueue();
+    Type getHead() const;
+};
+
+template &lt;class Type&gt;
+priorityQueue&lt;Type&gt;::priorityQueue(int capacity)
+    : maxSize(capacity), currentSize(0) {
+    array = new Type[capacity];
+}
+
+template &lt;class Type&gt;
+priorityQueue&lt;Type&gt;::~priorityQueue() {
+    delete[] array;
+}
+
+template &lt;class Type&gt;
+bool priorityQueue&lt;Type&gt;::isEmpty() const {
+    return currentSize == 0;
+}
+
+template &lt;class Type&gt;
+Type priorityQueue&lt;Type&gt;::getHead() const {
+    return array[1];
+}
+
+template &lt;class Type&gt;
+void priorityQueue&lt;Type&gt;::enQueue(const Type &amp;x) {
+    if (currentSize == maxSize - 1) {
+        doubleSpace();
+    }
+
+    int hole = ++currentSize;
+    for (; hole &gt; 1 &amp;&amp; x &lt; array[hole / 2]; hole /= 2) {
+        array[hole] = array[hole / 2];
+    }
+
+    array[hole] = x;
+}
+
+template &lt;class Type&gt;
+Type priorityQueue&lt;Type&gt;::deQueue() {
+    Type minItem;
+
+    minItem = array[1];
+    array[1] = array[currentSize--];
+    percolateDown(1);
+
+    return minItem;
+}
+
+template &lt;class Type&gt;
+void priorityQueue&lt;Type&gt;::percolateDown(int hole) {
+    int child;
+    Type tmp = array[hole];
+
+    for (; hole * 2 &lt;= currentSize; hole = child) {
+        child = hole * 2;
+
+        if (child != currentSize &amp;&amp; array[child + 1] &lt; array[child]) {
+            child++;
+        }
+
+        if (array[child] &lt; tmp) {
+            array[hole] = array[child];
+        } else {
+            break;
+        }
+    }
+    array[hole] = tmp;
+}
+
+template &lt;class Type&gt;
+void priorityQueue&lt;Type&gt;::doubleSpace() {
+    Type *tmp = array;
+
+    maxSize *= 2;
+
+    array = new Type[maxSize];
+    for (int i = 0; i &lt; currentSize; i++) {
+        array[i] = tmp[i];
+    }
+
+    delete[] tmp;
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int N, tmp1, tmp2, tmp3;
+    long long strength = 0;
+    priorityQueue&lt;int&gt; fruits;
+
+    cin &gt;&gt; N;
+
+    for (int i = 0; i &lt; N; i++) {
+        cin &gt;&gt; tmp1;
+        fruits.enQueue(tmp1);
+    }
+
+    for (int i = 0; i &lt; N - 1; i++) {
+        tmp1 = fruits.deQueue();
+        tmp2 = fruits.deQueue();
+        tmp3 = tmp1 + tmp2;
+        fruits.enQueue(tmp3);
+        strength += tmp3;
+    }
+
+    cout &lt;&lt; strength;
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstdio&gt;
 using namespace std;

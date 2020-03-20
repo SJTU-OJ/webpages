@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
   </a>
   
 </li>
@@ -398,7 +424,7 @@ Q 1
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 二哥吃糖 */
 #include &lt;iostream&gt;
 using namespace std;
@@ -530,6 +556,476 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+#include &quot;cstring&quot;
+using namespace std;
+
+int mmax(int a, int b) {
+    return a &gt; b ? a : b;
+}
+
+int mmin(int a, int b) {
+    return a &lt; b ? a : b;
+}
+
+//记录元素在优先队列里面的位置
+int queue_pos[500009] = { 0 };
+
+class type {
+public:
+    int pos = 0;
+    int val = 0;
+};
+
+class mqueue {
+public:
+    type queue_data[500009];
+    int _size = 0;
+
+    void push_up(int pos) {
+        for (; pos &gt; 1 &amp;&amp; queue_data[pos].val &gt; queue_data[pos &gt;&gt; 1].val; pos &gt;&gt;= 1) {
+            swap(queue_pos[queue_data[pos].pos], queue_pos[queue_data[pos &gt;&gt; 1].pos]);
+            swap(queue_data[pos], queue_data[pos &gt;&gt; 1]);
+        }
+    }
+
+    void push_down(int pos) {
+        for (; pos * 2 &lt;= _size;) {
+            if (pos * 2 == _size) {
+                if (queue_data[pos].val &lt; queue_data[pos &lt;&lt; 1].val) {
+                    swap(queue_pos[queue_data[pos].pos], queue_pos[queue_data[pos * 2].pos]);
+                    swap(queue_data[pos], queue_data[pos &lt;&lt; 1]);
+                }
+                break;
+            }
+            else {
+                if (queue_data[pos].val &lt; mmax(queue_data[pos * 2].val, queue_data[pos * 2 + 1].val)) {
+                    if (queue_data[pos * 2].val &lt; queue_data[pos * 2 + 1].val) {
+                        swap(queue_pos[queue_data[pos].pos], queue_pos[queue_data[pos * 2 + 1].pos]);
+                        swap(queue_data[pos], queue_data[pos * 2 + 1]);
+                        pos = pos * 2 + 1;
+                    }
+                    else {
+                        swap(queue_pos[queue_data[pos].pos], queue_pos[queue_data[pos * 2].pos]);
+                        swap(queue_data[pos], queue_data[pos * 2]);
+                        pos &lt;&lt;= 1;
+                    }
+                }
+                else
+                    break;
+            }
+        }
+    }
+
+    void push(const type&amp; val) {
+        queue_data[++_size] = val;
+        queue_pos[val.pos] = _size;
+        push_up(_size);
+    }
+
+    type pop() {
+        auto temp = queue_data[1];
+        queue_data[1] = queue_data[_size];
+        queue_pos[queue_data[1].pos] = 1;
+        --_size;
+        push_down(1);
+        queue_pos[temp.pos] = 0;
+        return temp;
+    }
+
+    int size() {
+        return _size;
+    }
+
+    void erase(int pos) {
+        queue_pos[queue_data[pos].pos] = 0;
+        queue_pos[queue_data[_size].pos] = pos;
+        queue_data[pos] = queue_data[_size];
+        --_size;
+        push_up(pos);
+        push_down(pos);
+    }
+};
+
+//并查集
+class disjointSet {
+public:
+    //数组
+    int* parent;
+    int length = 0;
+
+    //构造函数
+    disjointSet() = default;
+    disjointSet(int size) :length(size) {
+        parent = new int[size];
+        memset(parent, -1, length * sizeof(int));
+    }
+
+    //析构函数
+    ~disjointSet() {
+        length = 0;
+        delete[] parent;
+    }
+
+    //寻找
+    int find(int x) {
+        if (parent[x] &lt; 0)
+            return x;
+        return parent[x] = find(parent[x]);
+    }
+    //合并
+    void set_union(int root1, int root2) {
+        if (root1 == root2)
+            return;
+        if (parent[root1] &gt; parent[root2]) {
+            parent[root2] += parent[root1];
+            parent[root1] = root2;
+        }
+        else {
+            parent[root1] += parent[root2];
+            parent[root2] = root1;
+        }
+    }
+
+    int size(int pos) {
+        return -parent[find(pos)];
+    }
+};
+
+bool cleared[500009] = { 0 };
+mqueue queue_data;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n, m;
+    cin &gt;&gt; n &gt;&gt; m;
+
+    disjointSet set_data(n + 1);
+    for (int i = 1; i &lt;= n; ++i) {
+        type temp;
+        temp.pos = i;
+        temp.val = 1;
+        queue_data.push(temp);
+    }
+
+    for (; m &gt; 0;) {
+        char op;
+        cin &gt;&gt; op;
+        if (op == 'C') {
+            --m;
+            int x, y;
+            cin &gt;&gt; x &gt;&gt; y;
+
+            if (set_data.find(x) == set_data.find(y) || cleared[set_data.find(x)] || cleared[set_data.find(y)]) {
+                continue;
+            }
+            queue_data.erase(queue_pos[set_data.find(x)]);
+            queue_data.erase(queue_pos[set_data.find(y)]);
+            set_data.set_union(set_data.find(x), set_data.find(y));
+            type temp;
+            temp.pos = set_data.find(x);
+            temp.val = set_data.size(x);
+            queue_data.push(temp);
+        }
+        else if (op == 'D') {
+            --m;
+            int x;
+            cin &gt;&gt; x;
+            if (cleared[set_data.find(x)]) {
+                continue;
+            }
+            queue_data.erase(queue_pos[set_data.find(x)]);
+            cleared[set_data.find(x)] = true;
+        }
+        else if (op == 'Q') {
+            --m;
+            int p;
+            cin &gt;&gt; p;
+            type temp[12];
+            for (int i = 0; i &lt; p - 1; ++i) {
+                temp[i] = queue_data.pop();
+            }
+            type ans = queue_data.pop();
+            cout &lt;&lt; ans.val &lt;&lt; &quot;\n&quot;;
+            queue_data.push(ans);
+            for (int i = 0; i &lt; p - 1; ++i) {
+                queue_data.push(temp[i]);
+            }
+        }
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 5e5 + 100;
+
+int box[maxN], sugar[maxN], moveTo[maxN] = {0}, boxNow, N, M;
+
+template &lt;class T&gt;
+class AvlTree {
+   private:
+    struct AvlNode {
+        T data;
+        AvlNode *left;
+        AvlNode *right;
+        int height;
+        AvlNode(const T &amp;otherdata, AvlNode *l, AvlNode *r)
+            : data(otherdata), left(l), right(r), height(1) {}
+    };
+
+   public:
+    AvlTree(AvlNode *t = 0) : root(t) {}
+    ~AvlTree() { makeEmpty(root); }
+    bool find(const T &amp;x) const { return find(x, root); }
+    void insert(const T &amp;x) { insert(x, root); }
+    void remove(const T &amp;x) { remove(x, root); }
+    T &amp;findkth(int i) { return findkth(i, root); }
+
+   private:
+    AvlNode *root;
+    void insert(const T &amp;x, AvlNode *&amp;t);
+    void remove(const T &amp;x, AvlNode *&amp;t);
+    bool find(const T &amp;x, AvlNode *t) const;
+    void makeEmpty(AvlNode *&amp;t);
+    T &amp;findkth(int i, AvlNode *&amp;t);
+    int height(AvlNode *t) { return t == 0 ? 0 : t-&gt;height; }
+    void LL(AvlNode *&amp;t);
+    void RR(AvlNode *&amp;t);
+    void LR(AvlNode *&amp;t);
+    void RL(AvlNode *&amp;t);
+};
+
+template &lt;class T&gt;
+void AvlTree&lt;T&gt;::insert(const T &amp;x, AvlNode *&amp;t) {
+    if (t == 0) {
+        t = new AvlNode(x, 0, 0);
+    } else if (x &gt; t-&gt;data) {
+        insert(x, t-&gt;left);
+        if (height(t-&gt;left) - height(t-&gt;right) == 2) {
+            if (x &gt; t-&gt;left-&gt;data) {
+                LL(t);
+            } else {
+                LR(t);
+            }
+        }
+        t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
+    } else {
+        insert(x, t-&gt;right);
+        if (height(t-&gt;right) - height(t-&gt;left) == 2) {
+            if (x &lt;= t-&gt;right-&gt;data) {
+                RR(t);
+            } else {
+                RL(t);
+            }
+        }
+        t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
+    }
+}
+
+template &lt;class T&gt;
+void AvlTree&lt;T&gt;::remove(const T &amp;x, AvlNode *&amp;t) {
+    if (t == 0) {
+        return;
+    }
+    if (x &gt; t-&gt;data) {
+        remove(x, t-&gt;left);
+        if (height(t-&gt;right) - height(t-&gt;left) == 2) {
+            AvlNode *r = t-&gt;right;
+            if (height(r-&gt;left) &gt; height(r-&gt;right)) {
+                RL(t);
+            } else {
+                RR(t);
+            }
+        }
+        t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
+    } else if (x &lt; t-&gt;data) {
+        remove(x, t-&gt;right);
+        if (height(t-&gt;left) - height(t-&gt;right) == 2) {
+            AvlNode *r = t-&gt;left;
+            if (height(r-&gt;right) &gt; height(r-&gt;left)) {
+                LR(t);
+            } else {
+                LL(t);
+            }
+        }
+        t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
+    } else if (t-&gt;left != 0 &amp;&amp; t-&gt;right != 0) {
+        if (height(t-&gt;left) &lt;= height(t-&gt;right)) {
+            AvlNode *tmp = t-&gt;right;
+            while (tmp-&gt;left != 0) {
+                tmp = tmp-&gt;left;
+            }
+            t-&gt;data = tmp-&gt;data;
+            remove(t-&gt;data, t-&gt;right);
+            t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
+        } else {
+            AvlNode *tmp = t-&gt;left;
+            while (tmp-&gt;right != 0) {
+                tmp = tmp-&gt;right;
+            }
+            t-&gt;data = tmp-&gt;data;
+            remove(t-&gt;data, t-&gt;left);
+            t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
+        }
+    } else {
+        AvlNode *old = t;
+        t = (t-&gt;left != 0) ? t-&gt;left : t-&gt;right;
+        delete old;
+    }
+}
+
+template &lt;class T&gt;
+bool AvlTree&lt;T&gt;::find(const T &amp;x, AvlNode *t) const {
+    if (t == 0) {
+        return false;
+    }
+
+    if (x &gt; t-&gt;data) {
+        return find(x, t-&gt;left);
+    }
+    if (x &lt; t-&gt;data) {
+        return find(x, t-&gt;right);
+    }
+
+    return true;
+}
+
+template &lt;class T&gt;
+void AvlTree&lt;T&gt;::makeEmpty(AvlNode *&amp;t) {
+    if (t == 0) return;
+    AvlNode *tmp = t;
+    makeEmpty(t-&gt;left);
+    makeEmpty(t-&gt;right);
+    delete tmp;
+    t = 0;
+}
+
+template &lt;class T&gt;
+T &amp;AvlTree&lt;T&gt;::findkth(int i, AvlNode *&amp;t) {
+    int rs = height(t-&gt;left);
+    if (rs == i - 1) {
+        return t-&gt;data;
+    }
+
+    if (rs &gt;= i) {
+        return findkth(i, t-&gt;left);
+    } else {
+        return findkth(i - rs - 1, t-&gt;right);
+    }
+}
+
+template &lt;class T&gt;
+void AvlTree&lt;T&gt;::LL(AvlNode *&amp;t) {
+    AvlNode *t1 = t-&gt;left;
+    t-&gt;left = t1-&gt;right;
+    t1-&gt;right = t;
+    t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
+    t1-&gt;height = height(t1-&gt;left) + height(t) + 1;
+    t = t1;
+}
+
+template &lt;class T&gt;
+void AvlTree&lt;T&gt;::RR(AvlNode *&amp;t) {
+    AvlNode *t1 = t-&gt;right;
+    t-&gt;right = t1-&gt;left;
+    t1-&gt;left = t;
+    t-&gt;height = height(t-&gt;left) + height(t-&gt;right) + 1;
+    t1-&gt;height = height(t1-&gt;right) + height(t) + 1;
+    t = t1;
+}
+
+template &lt;class T&gt;
+void AvlTree&lt;T&gt;::LR(AvlNode *&amp;t) {
+    RR(t-&gt;left);
+    LL(t);
+}
+
+template &lt;class T&gt;
+void AvlTree&lt;T&gt;::RL(AvlNode *&amp;t) {
+    LL(t-&gt;right);
+    RR(t);
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int x, y;
+    char order;
+    AvlTree&lt;int&gt; bst;
+
+    cin &gt;&gt; N &gt;&gt; M;
+    for (int i = 1; i &lt;= N; i++) {
+        box[i] = 1;
+        bst.insert(1);
+        sugar[i] = i;
+    }
+    boxNow = N;
+
+    for (int times = 0; times &lt; M; times++) {
+        cin &gt;&gt; order;
+        switch (order) {
+            case 'C':
+                cin &gt;&gt; x &gt;&gt; y;
+                while (moveTo[sugar[x]] != 0) {
+                    sugar[x] = moveTo[sugar[x]];
+                }
+                while (moveTo[sugar[y]] != 0) {
+                    sugar[y] = moveTo[sugar[y]];
+                }
+
+                if (sugar[x] != sugar[y] &amp;&amp; box[sugar[x]] != 0 &amp;&amp;
+                    box[sugar[y]] != 0) {
+                    bst.remove(box[sugar[x]]);
+                    bst.remove(box[sugar[y]]);
+
+                    box[sugar[x]] += box[sugar[y]];
+                    box[sugar[y]] = 0;
+
+                    bst.insert(box[sugar[x]]);
+
+                    moveTo[sugar[y]] = sugar[x];
+                    boxNow--;
+                }
+                break;
+            case 'D':
+                cin &gt;&gt; x;
+                while (moveTo[sugar[x]] != 0) {
+                    sugar[x] = moveTo[sugar[x]];
+                }
+                if (box[sugar[x]] != 0) {
+                    bst.remove(box[sugar[x]]);
+                    box[sugar[x]] = 0;
+                    boxNow--;
+                }
+                break;
+            case 'Q':
+                cin &gt;&gt; x;
+                if (boxNow &lt; x) {
+                    cout &lt;&lt; 0 &lt;&lt; '\n';
+                } else {
+                    cout &lt;&lt; bst.findkth(x) &lt;&lt; '\n';
+                }
+                break;
+        }
+    }
+
+    return 0;
+}
 </code></pre>
                 
                   

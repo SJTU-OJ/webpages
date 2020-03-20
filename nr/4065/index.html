@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,15 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -384,7 +403,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 泷的旅途 */
 #include &lt;iostream&gt;
 #include &lt;cstring&gt;
@@ -464,7 +483,120 @@ int main(){
 
 </code></pre>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+#include &quot;cmath&quot;
+#include &quot;cstring&quot;
+using namespace std;
+
+class position {
+public:
+    int distance = 0;
+    int posx = 0, posy = 0;
+    int remain = 0;
+};
+
+template &lt;class T&gt;
+class my_queue {
+    T queue_[100000];
+    int start = 0, end = 0;
+    int mod = 100000;
+public:
+    bool empty() const {
+        return end - start == 0;
+    }
+    T front() const {
+        return queue_[start % mod];
+    }
+    void pop() {
+        ++start;
+    }
+
+    void push(const T&amp; val) {
+        queue_[(end++) % mod] = val;
+    }
+    int size() {
+        return end - start;
+    }
+};
+
+int map_data[309][309] = { 0 };
+int dx[] = { 0,1,0,-1 },
+dy[] = { 1,0,-1,0 };
+int visited[309][309] = { 0 };
+
+my_queue&lt;position&gt; queue_data;
+int n, m;
+int bfs(int startx, int starty, int endx, int endy) {
+    //初始点位
+    position start_point;
+    start_point.posx = startx;
+    start_point.posy = starty;
+    start_point.distance = 0;
+    start_point.remain = 6;
+    queue_data.push(start_point);
+    visited[startx][starty] = 6;
+
+    while (!queue_data.empty()) {
+        auto temp = queue_data.front();
+        queue_data.pop();
+        //判断是否到达
+        if (temp.posx == endx &amp;&amp; temp.posy == endy) {
+            return temp.distance;
+        }
+        //补充能量
+        if (map_data[temp.posx][temp.posy] == 4) {
+            temp.remain = 6;
+            map_data[temp.posx][temp.posy] = 0;
+        }
+        if (temp.remain &gt; 1) {
+            for (int i = 0; i &lt; 4; ++i) {
+                auto nextx = temp.posx + dx[i],
+                    nexty = temp.posy + dy[i];
+                if (nextx &gt;= 0 &amp;&amp; nextx &lt; n &amp;&amp; nexty &gt;= 0 &amp;&amp; nexty &lt; m &amp;&amp;
+                    map_data[nextx][nexty]!=0) {
+                    position next;
+                    next.distance = temp.distance + 1;
+                    next.posx = nextx;
+                    next.posy = nexty;
+                    next.remain = temp.remain - 1;
+                    if (next.remain &gt; visited[next.posx][next.posy]) {
+                        queue_data.push(next);
+                        visited[next.posx][next.posy] = next.remain;
+                    }
+                }
+            }
+        }
+    }
+
+    return -1;
+}
+
+int main() {
+    scanf(&quot;%d %d&quot;, &amp;n, &amp;m);
+
+    int startx = 0, starty = 0,
+        endx = 0, endy = 0;
+
+    for (int i = 0; i &lt; n; ++i)
+        for (int j = 0; j &lt; m; ++j) {
+            scanf(&quot;%d&quot;, &amp;map_data[i][j]);
+            if (map_data[i][j] == 2) {
+                startx = i, starty = j;
+            }
+            else if (map_data[i][j] == 3) {
+                endx = i, endy = j;
+            }
+        }
+
+    cout &lt;&lt; bfs(startx, starty, endx, endy);
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 using namespace std;
 int map[302][302],dis[302][302][7],minx,m,n,sx,sy;

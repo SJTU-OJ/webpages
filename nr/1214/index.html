@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,15 +289,36 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zsi-rs-solution" class="md-nav__link">
+    Zsi-r's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -385,7 +418,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* traverse */
 #include &lt;iostream&gt;
 using namespace std;
@@ -465,7 +498,1018 @@ int main(){
 
 </code></pre>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+#include &quot;cmath&quot;
+#include &quot;cstring&quot;
+using namespace std;
+
+template &lt;class T&gt;
+class mQueue {
+    class node {
+    public:
+        T data;
+        node* next = nullptr;
+    };
+    node* head = nullptr,
+        * rear = nullptr;
+    size_t _size = 0;
+
+public:
+    //构造函数
+    mQueue() {
+        head = new node;
+        rear = head;
+    }
+    //判断是否为空
+    bool empty() {
+        return head-&gt;next == nullptr;
+    }
+    //增加
+    void push(const T&amp; val) {
+        rear-&gt;next = new node;
+        rear = rear-&gt;next;
+        rear-&gt;data = val;
+        ++_size;
+    }
+    //删除
+    void pop() {
+        //安全措施
+        if (head-&gt;next == nullptr)
+            return;
+        auto temp = head-&gt;next;
+        delete head;
+        head = temp;
+        --_size;
+    }
+    //大小
+    size_t size() {
+        return _size;
+    }
+    //最前
+    T&amp; front() {
+        //安全措施
+        return head-&gt;next-&gt;data;
+    }
+    //最后
+    T&amp; back() {
+        //安全措施
+        return rear-&gt;data;
+    }
+};
+
+template &lt;class T&gt;
+class mVector {
+    T** vector_data = nullptr;
+    unsigned int size = 0;
+    unsigned int capacity = 0;
+
+public:
+    //构造函数
+    mVector() = default;
+    mVector(unsigned int _size) :size(_size) {
+        capacity = _size * 2;
+        vector_data = new T * [capacity] {nullptr};
+    }
+    mVector(unsigned int _size, const T&amp; val) :size(_size) {
+        capacity = _size * 2;
+        vector_data = new T * [capacity] {nullptr};
+        for (unsigned int i = 0; i &lt; _size; ++i)
+            vector_data[i] = new T(val);
+    }
+    mVector(const mVector&lt;T&gt; &amp; _vector) :size(_vector.size), capacity(_vector.capacity) {
+        vector_data = new T * [capacity] {nullptr};
+        for (int i = 0; i &lt; size; ++i)
+            vector_data[i] = new T(*_vector.vector_data[i]);
+    }
+    //析构函数
+    ~mVector() {
+        for (unsigned int i = 0; i &lt; size; ++i)
+            delete vector_data[i];
+        delete[] vector_data;
+    }
+
+    //迭代器
+    class iterator {
+        T** pos = nullptr;
+        friend iterator mVector&lt;T&gt;::begin();
+        friend iterator mVector&lt;T&gt;::end();
+        friend void mVector&lt;T&gt;::erase(const iterator&amp; val);
+    public:
+        iterator() = default;
+        iterator(const iterator&amp; other) {
+            pos = other.pos;
+        }
+        iterator&amp; operator++() {
+            ++pos;
+            return *this;
+        }
+        iterator operator++(int) {
+            iterator temp(*this);
+            ++pos;
+            return temp;
+        }
+        iterator&amp; operator--() {
+            --pos;
+            return *this;
+        }
+        iterator operator--(int) {
+            iterator temp(*this);
+            --pos;
+            return temp;
+        }
+        bool operator==(const iterator&amp; other) const {
+            return pos == other.pos;
+        }
+        bool operator!=(const iterator&amp; other) const {
+            return pos != other.pos;
+        }
+        iterator&amp; operator=(const iterator&amp; other) {
+            pos = other.pos;
+            return *this;
+        }
+        T&amp; operator*() const {
+            return **pos;
+        }
+    };
+
+    //增加元素
+    void push_back(const T &amp; val) {
+        if (size &lt; capacity)
+            vector_data[size++] = new T(val);
+        else {
+            T** temp_data = new T * [(capacity + 1) * 2]{ nullptr };
+            for (unsigned int i = 0; i &lt; size; ++i)
+                temp_data[i] = vector_data[i];
+            temp_data[size++] = new T(val);
+            capacity = (capacity + 1) * 2;
+            delete[] vector_data;
+            vector_data = temp_data;
+        }
+    }
+
+    //删除末尾
+    void pop_back() {
+        delete vector_data[size];
+        vector_data[size--] = nullptr;
+    }
+
+    //清空
+    void clear() {
+        for (unsigned int i = 0; i &lt; size; ++i) {
+            delete vector_data[i];
+            vector_data[i] = nullptr;
+        }
+        size = 0;
+    }
+
+    //删除
+    void erase(const iterator &amp; val) {
+        delete* val.pos;
+        for (auto p = val.pos; p != vector_data + size - 1; ++p)
+            * p = *(p + 1);
+        --size;
+        vector_data[size] = nullptr;
+    }
+
+    //重载运算符
+    T &amp; operator[](const unsigned int&amp; pos) {
+        return *vector_data[pos];
+    }
+
+    iterator begin() {
+        iterator temp;
+        temp.pos = vector_data;
+        return temp;
+    }
+
+    iterator end() {
+        iterator temp;
+        temp.pos = vector_data + size;
+        return temp;
+    }
+
+};
+
+//二叉树类
+template &lt;class T&gt;
+class myBinaryTree {
+public:
+    class node {
+    public:
+        T data;
+        node *lchild = nullptr, *rchild = nullptr, *parent = nullptr;
+    };
+    node *root = nullptr;
+    node **nodeList = nullptr;
+    long long sizeOfTree = 0;
+
+    //创建树
+    void createTree(int num) {
+        nodeList = new node*[num + 1]{ nullptr };
+        sizeOfTree = num;
+    }
+
+    void creadNode(int nodeNum, int lchild, int rchild, int data) {
+        if (nodeList[nodeNum] == nullptr)
+            nodeList[nodeNum] = new node;
+
+        nodeList[nodeNum]-&gt;data = data;
+
+        if (lchild != 0) {
+            if (nodeList[lchild] == nullptr)
+                nodeList[lchild] = new node;
+            nodeList[lchild]-&gt;parent = nodeList[nodeNum];
+            nodeList[nodeNum]-&gt;lchild = nodeList[lchild];
+        }
+
+        if (rchild != 0) {
+            if (nodeList[rchild] == nullptr)
+                nodeList[rchild] = new node;
+            nodeList[rchild]-&gt;parent = nodeList[nodeNum];
+            nodeList[nodeNum]-&gt;rchild = nodeList[rchild];
+        }
+    }
+
+    void checkRoot() {
+        for (int i = 1; i &lt;= sizeOfTree; i++) {
+            if (nodeList[i]-&gt;parent == nullptr) {
+                root = nodeList[i];
+                break;
+            }
+        }
+    }
+
+    //清空
+    void clear() {
+        clear(root);
+    }
+
+    void clear(node *p) {
+        if (p == nullptr)
+            return;
+        clear(p-&gt;lchild);
+        clear(p-&gt;rchild);
+        delete p;
+        p = nullptr;
+    }
+
+    //构造
+    myBinaryTree() {}
+
+    //析构
+    ~myBinaryTree() {
+        clear(root);
+    }
+
+    //判断是否非空
+    bool empty() {
+        return root == nullptr;
+    }
+
+    //判断是否为完全二叉树
+    bool isCBT() {
+        if (empty())
+            return false;
+        //层次遍历
+        mQueue&lt;node*&gt; treeQueue;
+        bool flag = false;
+        //先入队
+        treeQueue.push(root);
+
+        //反复
+        while (!treeQueue.empty()) {
+            //先出队一个
+            node* temp = treeQueue.front();
+            treeQueue.pop();
+
+            //右孩子有左孩子没有
+            if (temp-&gt;lchild == nullptr&amp;&amp;temp-&gt;rchild != nullptr)
+                return false;
+
+            if (!flag) {
+                //左孩子有右孩子没有
+                if (temp-&gt;lchild != nullptr&amp;&amp;temp-&gt;rchild == nullptr) {
+                    flag = true;
+                    //左孩子入队
+                    treeQueue.push(temp-&gt;lchild);
+                }
+                //左右孩子都没有
+                else if (temp-&gt;lchild == nullptr&amp;&amp;temp-&gt;rchild == nullptr) {
+                    flag = true;
+                }
+                //左右都有孩子
+                else {
+                    treeQueue.push(temp-&gt;lchild);
+                    treeQueue.push(temp-&gt;rchild);
+                }
+            }
+            else {
+                //判断是否为叶子
+                if (temp-&gt;lchild != nullptr || temp-&gt;rchild != nullptr)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    //返回大小
+    long long size() {
+        return sizeOfTree;
+    }
+
+    //层次遍历
+    mVector&lt;T&gt; levelTraversal() {
+        if (sizeOfTree == 0)
+            return *new mVector&lt;T&gt;;
+
+        mVector&lt;T&gt; result; 
+        mQueue&lt;node*&gt; treeQueue;
+
+        //根结点入队
+        treeQueue.push(root);
+
+        //层次遍历
+        while (!treeQueue.empty()) {
+            //出队
+            node* temp = treeQueue.front();
+            treeQueue.pop();
+
+            //入队
+            if (temp-&gt;lchild != nullptr)
+                treeQueue.push(temp-&gt;lchild);
+            if (temp-&gt;rchild != nullptr)
+                treeQueue.push(temp-&gt;rchild);
+
+            //写入
+            result.push_back(temp-&gt;data);
+        }
+
+        //返回
+        return result;
+    }
+
+    //前序遍历
+    mVector&lt;T&gt; preorderTraversal() {
+        mVector&lt;T&gt; result;
+        preorderTraversal(root, result);
+        return result;
+    }
+
+    void preorderTraversal(node* treeRoot,mVector&lt;T&gt; &amp;result) {
+        //显示当前
+        result.push_back(treeRoot-&gt;data);
+
+        if (treeRoot-&gt;lchild != nullptr)
+            preorderTraversal(treeRoot-&gt;lchild,result);
+        if (treeRoot-&gt;rchild != nullptr)
+            preorderTraversal(treeRoot-&gt;rchild,result);
+    }
+
+    //中序遍历
+    mVector&lt;T&gt; midorderTraversal() {
+        mVector&lt;T&gt; result;
+        midorderTraversal(root, result);
+        return result;
+    }
+
+    void midorderTraversal(node* treeRoot, mVector&lt;T&gt; &amp;result) {
+        if (treeRoot-&gt;lchild != nullptr)
+            midorderTraversal(treeRoot-&gt;lchild, result);
+        //显示当前
+        result.push_back(treeRoot-&gt;data);
+        if (treeRoot-&gt;rchild != nullptr)
+            midorderTraversal(treeRoot-&gt;rchild, result);
+    }
+
+    //后序遍历
+    mVector&lt;T&gt; lostorderTraversal() {
+        mVector&lt;T&gt; result;
+        lostorderTraversal(root, result);
+        return result;
+    }
+
+    void lostorderTraversal(node* treeRoot, mVector&lt;T&gt; &amp;result) {
+        if (treeRoot-&gt;lchild != nullptr)
+            lostorderTraversal(treeRoot-&gt;lchild, result);
+        if (treeRoot-&gt;rchild != nullptr)
+            lostorderTraversal(treeRoot-&gt;rchild, result);
+        //显示当前
+        result.push_back(treeRoot-&gt;data);
+    }
+};
+
+//左孩子右兄弟二叉树类
+template &lt;class T&gt;
+class mySpecialBinaryTree {
+public:
+    class node {
+    public:
+        T data;
+        node *lchild = nullptr, *rbrother = nullptr;
+        bool isRoot = true;
+    };
+    node *root = nullptr;
+    node **nodeList = nullptr;
+    long long sizeOfTree = 0;
+
+    //创建树
+    void createTree(int num) {
+        nodeList = new node*[num + 1]{ nullptr };
+        sizeOfTree = num;
+    }
+
+    void creadNode(int nodeNum, int lchild, int rbrother, int data) {
+        if (nodeList[nodeNum] == nullptr)
+            nodeList[nodeNum] = new node;
+
+        nodeList[nodeNum]-&gt;data = data;
+
+        if (lchild != 0) {
+            if (nodeList[lchild] == nullptr)
+                nodeList[lchild] = new node;
+            nodeList[lchild]-&gt;isRoot = false;
+            nodeList[nodeNum]-&gt;lchild = nodeList[lchild];
+        }
+
+        if (rbrother != 0) {
+            if (nodeList[rbrother] == nullptr)
+                nodeList[rbrother] = new node;
+            nodeList[rbrother]-&gt;isRoot = false;
+            nodeList[nodeNum]-&gt;rbrother = nodeList[rbrother];
+        }
+    }
+
+    void checkRoot() {
+        for (int i = 1; i &lt;= sizeOfTree; i++) {
+            if (nodeList[i]-&gt;isRoot) {
+                root = nodeList[i];
+                break;
+            }
+        }
+    }
+
+    //清空
+    void clear() {
+        clear(root);
+    }
+
+    void clear(node *p) {
+        if (p == nullptr)
+            return;
+        clear(p-&gt;lchild);
+        clear(p-&gt;rbrother);
+        delete p;
+        p = nullptr;
+    }
+
+    //构造
+    mySpecialBinaryTree() {}
+
+    //析构
+    ~mySpecialBinaryTree() {
+        clear(root);
+    }
+
+    //判断是否非空
+    bool empty() {
+        return root == nullptr;
+    }
+
+    //返回大小
+    long long size() {
+        return sizeOfTree;
+    }
+
+    //层次遍历
+    mVector&lt;T&gt; levelTraversal() {
+        if (sizeOfTree == 0)
+            return *new mVector&lt;T&gt;;
+
+        mVector&lt;T&gt; result;
+        mQueue&lt;node*&gt; treeQueue;
+
+        //根结点入队
+        treeQueue.push(root);
+
+        //层次遍历
+        while (!treeQueue.empty()) {
+            //出队
+            node* temp = treeQueue.front();
+            treeQueue.pop();
+
+            //入队
+            for (auto p = temp-&gt;lchild; p!= nullptr; p = p-&gt;rbrother)
+                treeQueue.push(p);
+
+            //写入
+            result.push_back(temp-&gt;data);
+        }
+
+        //返回
+        return result;
+    }
+
+    //前序遍历
+    mVector&lt;T&gt; preorderTraversal() {
+        mVector&lt;T&gt; result;
+        preorderTraversal(root, result);
+        return result;
+    }
+
+    void preorderTraversal(node* treeRoot, mVector&lt;T&gt; &amp;result) {
+        //显示当前
+        result.push_back(treeRoot-&gt;data);
+
+        if (treeRoot-&gt;lchild != nullptr)
+            preorderTraversal(treeRoot-&gt;lchild, result);
+        if (treeRoot-&gt;rbrother != nullptr)
+            preorderTraversal(treeRoot-&gt;rbrother, result);
+    }
+
+    //后序遍历
+    mVector&lt;T&gt; lostorderTraversal() {
+        mVector&lt;T&gt; result;
+        lostorderTraversal(root, result);
+        return result;
+    }
+
+    void lostorderTraversal(node* treeRoot, mVector&lt;T&gt; &amp;result) {
+        if (treeRoot-&gt;lchild != nullptr)
+            lostorderTraversal(treeRoot-&gt;lchild, result);
+        //显示当前
+        result.push_back(treeRoot-&gt;data);
+        if (treeRoot-&gt;rbrother != nullptr)
+            lostorderTraversal(treeRoot-&gt;rbrother, result);
+    }
+};
+
+int main() {
+    int num;
+    mySpecialBinaryTree&lt;int&gt; bTree;
+    cin &gt;&gt; num;
+    bTree.createTree(num);
+
+    for (int i = 1; i &lt;= num; i++) {
+        int lchild, rchild, nodeData;
+        scanf(&quot;%d %d %d&quot;, &amp;lchild, &amp;rchild, &amp;nodeData);
+        bTree.creadNode(i, lchild, rchild, nodeData);
+    }
+
+    bTree.checkRoot();
+    auto ans = bTree.preorderTraversal();
+
+    cout &lt;&lt; ans[0];
+    for (int i = 1; i &lt; bTree.sizeOfTree; i++)
+        printf(&quot; %d&quot;, ans[i]);
+    auto ans1 = bTree.lostorderTraversal();
+
+    cout &lt;&lt; endl;
+
+    cout &lt;&lt; ans1[0];
+    for (int i = 1; i &lt; bTree.sizeOfTree; i++)
+        printf(&quot; %d&quot;, ans1[i]);
+
+    auto ans2 = bTree.levelTraversal();
+
+    cout &lt;&lt; endl;
+
+    cout &lt;&lt; ans2[0];
+    for (int i = 1; i &lt; bTree.sizeOfTree; i++)
+        printf(&quot; %d&quot;, ans2[i]);
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 100000;
+int leftNum[maxN + 100] = {0}, rightNum[maxN + 100] = {0};
+long long int numNum[maxN + 100] = {0};
+
+template &lt;class elemType&gt;
+class queue {
+   public:
+    virtual bool isEmpty() const = 0;
+    virtual void enQueue(const elemType &amp;) = 0;
+    virtual elemType deQueue() = 0;
+    virtual elemType getHead() const = 0;
+    virtual ~queue() {}
+};
+
+template &lt;class elemType&gt;
+class seqQueue : public queue&lt;elemType&gt; {
+   private:
+    elemType *data;
+    int maxSize;
+    int front, rear;
+    void doubleSpace();
+
+   public:
+    seqQueue(int size = maxN + 100);
+    ~seqQueue();
+    bool isEmpty() const;
+    void enQueue(const elemType &amp;);
+    elemType deQueue();
+    elemType getHead() const;
+    int length() const;
+};
+
+template &lt;class elemType&gt;
+void seqQueue&lt;elemType&gt;::doubleSpace() {
+    elemType *tmp = data;
+    data = new elemType[maxSize * 2];
+
+    for (int i = 1; i &lt;= maxSize; i++) {
+        data[i] = tmp[(front + i) % maxSize];
+    }
+
+    front = 0;
+    rear = maxSize;
+    maxSize *= 2;
+    delete[] tmp;
+}
+
+template &lt;class elemType&gt;
+seqQueue&lt;elemType&gt;::seqQueue(int size) : maxSize(size), front(0), rear(0) {
+    data = new elemType[size];
+}
+
+template &lt;class elemType&gt;
+seqQueue&lt;elemType&gt;::~seqQueue() {
+    delete[] data;
+}
+
+template &lt;class elemType&gt;
+bool seqQueue&lt;elemType&gt;::isEmpty() const {
+    return front == rear;
+}
+
+template &lt;class elemType&gt;
+void seqQueue&lt;elemType&gt;::enQueue(const elemType &amp;x) {
+    if ((rear + 1) % maxSize == front) {
+        doubleSpace();
+    }
+    rear = (rear + 1) % maxSize;
+    data[rear] = x;
+}
+
+template &lt;class elemType&gt;
+elemType seqQueue&lt;elemType&gt;::deQueue() {
+    front = (front + 1) % maxSize;
+    return data[front];
+}
+
+template &lt;class elemType&gt;
+elemType seqQueue&lt;elemType&gt;::getHead() const {
+    return data[(front + 1) % maxSize];
+}
+
+template &lt;class elemType&gt;
+int seqQueue&lt;elemType&gt;::length() const {
+    return ((rear + maxSize - front) % maxSize);
+}
+
+template &lt;class T&gt;
+class bTree {
+   private:
+    struct Node {
+        T data;
+        Node *leftSon;
+        Node *leftBrother;
+        Node *rightBrother;
+        Node *parent;
+
+        Node(T d = 0)
+            : data(d), parent(0), leftSon(0), leftBrother(0), rightBrother(0) {}
+    };
+    Node *root;
+    Node *nodes[maxN + 100];
+    void clear(Node *);
+    void preOrder(Node *) const;
+    void postOrder(Node *) const;
+
+   public:
+    bTree(int n = 10);
+    ~bTree();
+    void addNode(int, int, T, bool);
+    void findRoot();
+    void levelOrder() const;
+    void preOrder() const;
+    void postOrder() const;
+};
+
+template &lt;class T&gt;
+bTree&lt;T&gt;::bTree(int n) : root(NULL) {
+    for (int i = 1; i &lt;= n + 5; i++) {
+        nodes[i] = new Node;
+    }
+}
+
+template &lt;class T&gt;
+bTree&lt;T&gt;::~bTree() {
+    clear(root);
+}
+
+template &lt;class T&gt;
+void bTree&lt;T&gt;::clear(Node *p) {
+    if (p == NULL) {
+        return;
+    }
+
+    clear(p-&gt;leftSon);
+    clear(p-&gt;rightBrother);
+    delete p;
+}
+
+template &lt;class T&gt;
+void bTree&lt;T&gt;::addNode(int n, int i, T x, bool isRight) {
+    if (i != 0 &amp;&amp; !isRight) {
+        nodes[i]-&gt;parent = nodes[n];
+        nodes[n]-&gt;leftSon = nodes[i];
+    } else if (i != 0 &amp;&amp; isRight) {
+        nodes[i]-&gt;leftBrother = nodes[n];
+        nodes[n]-&gt;rightBrother = nodes[i];
+    }
+    nodes[n]-&gt;data = x;
+}
+
+template &lt;class T&gt;
+void bTree&lt;T&gt;::findRoot() {
+    root = nodes[1];
+    while (root-&gt;parent != NULL || root-&gt;rightBrother != NULL ||
+           root-&gt;leftBrother != NULL) {
+        if (root-&gt;parent != NULL) {
+            root = root-&gt;parent;
+        } else if (root-&gt;leftBrother != NULL) {
+            root = root-&gt;leftBrother;
+        }
+    }
+}
+
+template &lt;class T&gt;
+void bTree&lt;T&gt;::levelOrder() const {
+    seqQueue&lt;Node *&gt; que;
+    Node *tmp, *tmp1;
+
+    cout &lt;&lt; root-&gt;data &lt;&lt; ' ';
+    que.enQueue(root);
+    while (!que.isEmpty()) {
+        tmp = que.deQueue();
+        tmp1 = tmp-&gt;leftSon;
+        while (tmp1) {
+            cout &lt;&lt; tmp1-&gt;data &lt;&lt; ' ';
+            que.enQueue(tmp1);
+            tmp1 = tmp1-&gt;rightBrother;
+        }
+    }
+}
+
+template &lt;class T&gt;
+void bTree&lt;T&gt;::preOrder(Node *t) const {
+    cout &lt;&lt; t-&gt;data &lt;&lt; ' ';
+
+    Node *tmp = t;
+    while (tmp-&gt;rightBrother != 0 &amp;&amp; t == root) {
+        preOrder(tmp-&gt;rightBrother);
+        tmp = tmp-&gt;rightBrother;
+    }
+
+    if (t-&gt;leftSon != 0) {
+        preOrder(t-&gt;leftSon);
+        Node *tmp1 = t-&gt;leftSon;
+        while (tmp1-&gt;rightBrother != 0) {
+            preOrder(tmp1-&gt;rightBrother);
+            tmp1 = tmp1-&gt;rightBrother;
+        }
+    }
+}
+
+template &lt;class T&gt;
+void bTree&lt;T&gt;::postOrder(Node *t) const {
+    Node *tmp = t;
+    while (tmp-&gt;rightBrother != 0 &amp;&amp; t == root) {
+        postOrder(tmp-&gt;rightBrother);
+        tmp = tmp-&gt;rightBrother;
+    }
+
+    if (t-&gt;leftSon != 0) {
+        postOrder(t-&gt;leftSon);
+
+        Node *tmp1 = t-&gt;leftSon;
+        while (tmp1-&gt;rightBrother != 0) {
+            postOrder(tmp1-&gt;rightBrother);
+            tmp1 = tmp1-&gt;rightBrother;
+        }
+    }
+    cout &lt;&lt; t-&gt;data &lt;&lt; ' ';
+}
+
+template &lt;class T&gt;
+void bTree&lt;T&gt;::preOrder() const {
+    preOrder(root);
+}
+
+template &lt;class T&gt;
+void bTree&lt;T&gt;::postOrder() const {
+    postOrder(root);
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int N;
+
+    cin &gt;&gt; N;
+    bTree&lt;long long int&gt; Tree(N);
+    for (int i = 1; i &lt;= N; i++) {
+        cin &gt;&gt; leftNum[i] &gt;&gt; rightNum[i] &gt;&gt; numNum[i];
+    }
+
+    for (int i = 1; i &lt;= N; i++) {
+        Tree.addNode(i, leftNum[i], numNum[i], 0);
+    }
+    for (int i = 1; i &lt;= N; i++) {
+        Tree.addNode(i, rightNum[i], numNum[i], 1);
+    }
+
+    Tree.findRoot();
+
+    Tree.preOrder();
+    cout &lt;&lt; '\n';
+    Tree.postOrder();
+    cout &lt;&lt; '\n';
+    Tree.levelOrder();
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+//树的后根遍历 == 二叉树的中序遍历
+//树的先根遍历 == 二叉树的先序遍历
+
+class node
+{
+public:
+    int data = NULL;
+    int lchild = 0, brother = 0;
+    node() {};
+    node(int d, int l, int b) : data(d), lchild(l), brother(b){};
+    node(node &amp;x) { data = x.data, lchild = x.lchild, brother = x.brother; }
+    ~node(){};
+};
+
+class linkQueue
+{
+    private:
+    struct nodeInQueue{
+        node data;
+        nodeInQueue *next;
+        nodeInQueue (const node &amp;x, nodeInQueue *N = NULL)
+        {
+            data=x;next=N;
+        }
+        nodeInQueue() : next(NULL) {};
+        ~nodeInQueue() {};
+    };
+
+    nodeInQueue *front,*rear;//队不空时，front和rear都有数据，当队长为1时，front和rear所指相同
+
+    public:
+    linkQueue();
+    ~linkQueue();
+    bool isEmpty()const ;
+    void enQueue(const node &amp;x);
+    node deQueue();
+};
+
+linkQueue::linkQueue()
+{
+    front = rear = NULL;
+}
+
+linkQueue::~linkQueue()
+{
+    nodeInQueue *tmp;
+    while(front != NULL)
+    {
+        tmp = front;
+        front = front -&gt;next;
+        delete tmp;
+    }
+}
+
+bool linkQueue::isEmpty()const
+{
+    return front == NULL;
+}
+
+void linkQueue::enQueue(const node &amp;x)
+{
+    if (rear == NULL) front = rear = new nodeInQueue (x);
+    else 
+        rear=rear-&gt;next=new nodeInQueue (x);
+}
+
+node linkQueue::deQueue()
+{
+    nodeInQueue *tmp=front;
+    node value = front -&gt;data;
+    front = front -&gt;next;
+    if (front==NULL)rear=NULL;
+    delete tmp;
+    return value;
+}
+
+
+void pre(int accessnow,node*tree) 
+{
+    cout &lt;&lt; tree[accessnow].data &lt;&lt; &quot; &quot;;
+    if (tree[accessnow].lchild != 0)
+        pre(tree[accessnow].lchild-1, tree);
+    if (tree[accessnow].brother != 0)
+        pre(tree[accessnow].brother-1, tree);
+    return;
+}
+
+void post(int accessnow,node*tree) 
+{
+    if (tree[accessnow].lchild != 0)
+        post(tree[accessnow].lchild-1, tree);
+
+    cout &lt;&lt; tree[accessnow].data &lt;&lt; &quot; &quot;;
+
+    if (tree[accessnow].brother != 0)
+        post(tree[accessnow].brother-1, tree);
+    return;
+}
+
+void level(linkQueue &amp;s,node *tree){
+    node temp;
+    while (!s.isEmpty()){
+        temp = s.deQueue();
+        if (temp.lchild!=0)
+            s.enQueue(tree[temp.lchild-1]);
+        cout &lt;&lt; temp.data &lt;&lt; ' ';
+        while(temp.brother!=0){
+            temp = tree[temp.brother-1];
+            cout &lt;&lt; temp.data &lt;&lt; ' ';
+            if (temp.lchild!=0)
+                s.enQueue(tree[temp.lchild-1]);
+        }
+    }
+}
+
+int main()
+{
+    int NumNode;
+    cin &gt;&gt; NumNode;
+    node *tree = new node[NumNode];
+    linkQueue que;
+
+    int RootLine;
+    bool *FindRoot = new bool[NumNode+1];
+    for (int i = 0; i &lt; NumNode + 1;i++)
+        FindRoot[i] = false;
+
+    for (int i = 0; i &lt; NumNode;i++)
+    {
+        cin &gt;&gt; tree[i].lchild &gt;&gt; tree[i].brother &gt;&gt; tree[i].data;
+        FindRoot[tree[i].lchild] = true;
+        FindRoot[tree[i].brother] = true;
+    }
+
+    for (RootLine = 1; RootLine &lt; NumNode + 1;RootLine ++)
+    {
+        if (!FindRoot[RootLine])
+            break;
+    }
+
+    pre(RootLine-1, tree);
+    cout &lt;&lt; endl;
+    post(RootLine-1, tree);
+
+    que.enQueue(tree[RootLine-1]);
+
+    cout &lt;&lt; endl;
+    level(que, tree);
+    return 0;
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstdio&gt;
 using namespace std;

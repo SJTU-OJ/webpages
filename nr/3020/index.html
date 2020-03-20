@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
   </a>
   
 </li>
@@ -382,7 +401,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 骆源的哈夫曼树 */
 #include &lt;iostream&gt;
 using namespace std;
@@ -478,6 +497,219 @@ int main(){
         heap.push(k);
     }
     cout &lt;&lt; ans &lt;&lt; endl;
+    return 0;
+}
+
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 1e6 + 100;
+
+int N, M;
+long long WPL = 0;
+
+struct HfNode {
+    long long data, sum, depth;
+
+    HfNode(long long d = 0, long long s = 0, long long de = 0)
+        : data(d), sum(s), depth(de) {}
+
+    HfNode(const HfNode &amp;right)
+        : data(right.data), sum(right.sum), depth(right.depth) {}
+
+    bool operator&lt;(const HfNode &amp;other) const {
+        if (data == other.data) {
+            return depth &gt; other.depth;
+        }
+        return data &lt; other.data;
+    }
+
+    HfNode &amp;operator=(const HfNode &amp;other) {
+        if (&amp;other != this) {
+            data = other.data;
+            sum = other.sum;
+            depth = other.depth;
+        }
+
+        return *this;
+    }
+};
+
+template &lt;class Type&gt;
+class priorityQueue {
+   private:
+    int currentSize;
+    Type *array;
+    int maxSize;
+
+    void doubleSpace();
+    void buildHeap();
+    void percolateDown(int);
+
+   public:
+    priorityQueue(int capacity = 2 * maxN);
+    priorityQueue(const Type *data, int size);
+    ~priorityQueue();
+    bool isEmpty() const;
+    void enQueue(const Type &amp;x);
+    Type deQueue();
+    Type getHead() const;
+    int Size() const { return currentSize; }
+};
+
+template &lt;class Type&gt;
+priorityQueue&lt;Type&gt;::priorityQueue(int capacity)
+    : maxSize(capacity), currentSize(0) {
+    array = new Type[capacity];
+}
+
+template &lt;class Type&gt;
+priorityQueue&lt;Type&gt;::priorityQueue(const Type *data, int size)
+    : maxSize(size + 10), currentSize(size) {
+    array = new Type[maxSize];
+
+    for (int i = 0; i &lt; size; i++) {
+        array[i + 1] = data[i];
+    }
+
+    buildHeap();
+}
+
+template &lt;class Type&gt;
+priorityQueue&lt;Type&gt;::~priorityQueue() {
+    delete[] array;
+}
+
+template &lt;class Type&gt;
+bool priorityQueue&lt;Type&gt;::isEmpty() const {
+    return currentSize == 0;
+}
+
+template &lt;class Type&gt;
+Type priorityQueue&lt;Type&gt;::getHead() const {
+    return array[1];
+}
+
+template &lt;class Type&gt;
+void priorityQueue&lt;Type&gt;::enQueue(const Type &amp;x) {
+    if (currentSize == maxSize - 1) {
+        // doubleSpace();
+    }
+
+    int hole = ++currentSize;
+    for (; hole &gt; 1 &amp;&amp; x &lt; array[hole / 2]; hole /= 2) {
+        array[hole] = array[hole / 2];
+    }
+
+    array[hole] = x;
+}
+
+template &lt;class Type&gt;
+Type priorityQueue&lt;Type&gt;::deQueue() {
+    Type minItem;
+
+    minItem = array[1];
+    array[1] = array[currentSize--];
+    percolateDown(1);
+
+    return minItem;
+}
+
+template &lt;class Type&gt;
+void priorityQueue&lt;Type&gt;::percolateDown(int hole) {
+    int child;
+    Type tmp = array[hole];
+
+    for (; hole * 2 &lt;= currentSize; hole = child) {
+        child = hole * 2;
+
+        if (child != currentSize &amp;&amp; array[child + 1] &lt; array[child]) {
+            child++;
+        }
+
+        if (array[child] &lt; tmp) {
+            array[hole] = array[child];
+        } else {
+            break;
+        }
+    }
+    array[hole] = tmp;
+}
+
+template &lt;class Type&gt;
+void priorityQueue&lt;Type&gt;::doubleSpace() {
+    Type *tmp = array;
+
+    maxSize *= 2;
+
+    array = new Type[maxSize];
+    for (int i = 0; i &lt; currentSize; i++) {
+        array[i] = tmp[i];
+    }
+
+    delete[] tmp;
+}
+
+template &lt;class Type&gt;
+void priorityQueue&lt;Type&gt;::buildHeap() {
+    for (int i = currentSize / 2; i &gt; 0; i--) {
+        percolateDown(i);
+    }
+}
+
+priorityQueue&lt;HfNode&gt; que;
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    cin &gt;&gt; N &gt;&gt; M;
+
+    for (int i = 0; i &lt; N; i++) {
+        long long d;
+        cin &gt;&gt; d;
+        HfNode temp(d);
+        que.enQueue(temp);
+    }
+
+    if ((N - M) % (M - 1)) {
+        int tmp = (M - 1) - (N - M) % (M - 1);
+        for (int i = 0; i &lt; tmp; i++) {
+            HfNode temp;
+            que.enQueue(temp);
+        }
+    }
+
+    while (que.Size() &gt; 1) {
+        HfNode sum, temp;
+
+        for (int i = 0; i &lt; M; i++) {
+            temp = que.getHead();
+            que.deQueue();
+
+            sum.data += temp.data;
+            sum.sum += temp.data + temp.sum;
+
+            if (sum.depth &lt;= 0 || sum.depth &lt; temp.depth + 1) {
+                sum.depth = temp.depth + 1;
+            }
+        }
+        if (sum.data == 0) {
+            sum.depth--;
+        }
+
+        que.enQueue(sum);
+    }
+
+    WPL = que.getHead().sum;
+
+    cout &lt;&lt; WPL;
+
     return 0;
 }
 

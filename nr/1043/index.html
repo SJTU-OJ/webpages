@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zsi-rs-solution" class="md-nav__link">
+    Zsi-r's solution 
   </a>
   
 </li>
@@ -369,7 +395,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 完全二叉树 */
 #include &lt;iostream&gt;
 #include &lt;queue&gt;
@@ -414,6 +440,371 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+#include &quot;cmath&quot;
+#include &quot;cstring&quot;
+using namespace std;
+
+template &lt;class T&gt;
+class mQueue {
+    class node {
+    public:
+        T data;
+        node* next = nullptr;
+    };
+    node* head = nullptr,
+        * rear = nullptr;
+    size_t _size = 0;
+
+public:
+    //构造函数
+    mQueue() {
+        head = new node;
+        rear = head;
+    }
+    //判断是否为空
+    bool empty() {
+        return head-&gt;next == nullptr;
+    }
+    //增加
+    void push(const T&amp; val) {
+        rear-&gt;next = new node;
+        rear = rear-&gt;next;
+        rear-&gt;data = val;
+        ++_size;
+    }
+    //删除
+    void pop() {
+        //安全措施
+        if (head-&gt;next == nullptr)
+            return;
+        auto temp = head-&gt;next;
+        delete head;
+        head = temp;
+        --_size;
+    }
+    //大小
+    size_t size() {
+        return _size;
+    }
+    //最前
+    T&amp; front() {
+        //安全措施
+        return head-&gt;next-&gt;data;
+    }
+    //最后
+    T&amp; back() {
+        //安全措施
+        return rear-&gt;data;
+    }
+};
+
+//二叉树类
+template &lt;class T&gt;
+class myBinaryTree {
+public:
+    class node {
+    public:
+        T data;
+        node *lchild = nullptr, *rchild = nullptr,*parent=nullptr;
+    };
+    node *root = nullptr;
+    node **nodeList=nullptr;
+    int lengthOfNodeList=0;
+
+    //创建树
+    void createTree(int num) {
+        nodeList = new node*[num+1] {nullptr};
+        lengthOfNodeList = num;
+    }
+
+    void creadNode(int nodeNum, int child) {
+        if (nodeList[nodeNum] == nullptr) {
+            nodeList[nodeNum] = new node;
+            nodeList[nodeNum]-&gt;data = nodeNum;
+        }
+
+        nodeList[child] = new node;
+        nodeList[child]-&gt;data = child;
+        if (nodeList[nodeNum]-&gt;lchild == nullptr) {
+            nodeList[nodeNum]-&gt;lchild = nodeList[child];
+        }
+        else {
+            if (child &gt; nodeList[nodeNum]-&gt;lchild-&gt;data)
+                nodeList[nodeNum]-&gt;rchild = nodeList[child];
+            else {
+                nodeList[nodeNum]-&gt;rchild = nodeList[nodeNum]-&gt;lchild;
+                nodeList[nodeNum]-&gt;lchild = nodeList[child];
+            }
+        }
+    }
+
+    void checkRoot() {
+        root = nodeList[0];
+    }
+
+    //清空
+    void clear() {
+        clear(root);
+    }
+
+    void clear(node *p) {
+        if (p == nullptr)
+            return;
+        clear(p-&gt;lchild);
+        clear(p-&gt;rchild);
+        delete p;
+        p = nullptr;
+    }
+
+    //构造
+    myBinaryTree() {}
+
+    //析构
+    ~myBinaryTree() {
+        clear(root);
+    }
+
+    //判断是否非空
+    bool empty() {
+        return root == nullptr;
+    }
+
+    //判断是否为完全二叉树
+    bool isCBT() {
+        if (empty())
+            return false;
+        //层次遍历
+        mQueue&lt;node*&gt; treeQueue;
+        bool flag = false;
+        //先入队
+        treeQueue.push(root);
+
+        //反复
+        while (!treeQueue.empty()) {
+            //先出队一个
+            node* temp = treeQueue.front();
+            treeQueue.pop();
+
+            //右孩子有左孩子没有
+            if (temp-&gt;lchild == nullptr&amp;&amp;temp-&gt;rchild != nullptr)
+                return false;
+
+            if (!flag) {
+                //左孩子有右孩子没有
+                if (temp-&gt;lchild != nullptr&amp;&amp;temp-&gt;rchild == nullptr) {
+                    flag = true;
+                    //左孩子入队
+                    treeQueue.push(temp-&gt;lchild);
+                }
+                //左右孩子都没有
+                else if (temp-&gt;lchild == nullptr&amp;&amp;temp-&gt;rchild == nullptr) {
+                    flag = true;
+                }
+                //左右都有孩子
+                else {
+                    treeQueue.push(temp-&gt;lchild);
+                    treeQueue.push(temp-&gt;rchild);
+                }
+            }
+            else {
+                //判断是否为叶子
+                if (temp-&gt;lchild != nullptr || temp-&gt;rchild != nullptr)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+};
+
+int main() {
+    myBinaryTree&lt;int&gt; bTree;
+    int num;
+    cin &gt;&gt; num;
+    if (num == 1) {
+        cout &lt;&lt; &quot;true&quot;;
+        return 0;
+    }
+    bTree.createTree(num);
+
+    for (int i = 1; i &lt; num; i++) {
+        int temp;
+        scanf(&quot;%d&quot;, &amp;temp);
+        bTree.creadNode(temp, i);
+    }
+    bTree.checkRoot();
+    cout &lt;&lt; (bTree.isCBT()?&quot;true&quot;:&quot;false&quot;);
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+struct node
+{
+    int leftchild, rightchild;
+    node() : leftchild(-1), rightchild(-1){};
+    bool haveonlyleftchild()
+    {
+        return leftchild &gt;= 0 &amp;&amp; rightchild == -1;
+    }
+    bool haveonlyrightchild()
+    {
+        return leftchild == -1 &amp;&amp; rightchild &gt;= 0;
+    }
+    bool havenochild()
+    {
+        return leftchild == -1 &amp;&amp; rightchild == -1;
+    }
+    bool havebothchild()
+    {
+        return leftchild &gt;= 0 &amp;&amp; rightchild &gt;= 0;
+    }
+};
+
+class que
+{
+    struct n
+    {
+        node data;
+        n *next;
+        n(const node &amp;x,n*n = NULL)
+        {
+            data = x;
+            next = n;
+        }
+        n():next(NULL){}
+        ~n(){}
+    };
+
+    n *front, *rear;
+public:
+    que() { front = rear = NULL; }
+    bool isempty()
+    {
+        return front == NULL;
+    }
+    ~que() {
+        n *temp;
+        while(front!=NULL)
+        {
+            temp = front;
+            front = front-&gt;next;
+            delete temp;
+        }
+    }
+    void enqueue(const node &amp;x)
+    {
+        if (rear==NULL)
+            front = rear = new n(x);
+        else 
+        {
+            rear-&gt;next = new n(x);
+            rear = rear-&gt;next;
+        }
+    }
+    node dequeue()
+    {
+        n *temp = front;
+        node value = front-&gt;data;
+        front = front-&gt;next;
+        if (front ==NULL)
+            rear = NULL;
+        delete temp;
+        return value;
+    }
+
+};
+
+class tree
+{
+    friend istream &amp; operator&gt;&gt;(istream &amp;is,tree &amp;obj)
+    {
+        int temp;
+        for (int i = 1; i &lt; obj.len;i++)
+        {
+            cin &gt;&gt; temp;
+            if (obj.list[temp].havenochild())
+                obj.list[temp].leftchild = i;
+            else if (obj.list[temp].haveonlyleftchild())
+                obj.list[temp].rightchild = i;
+        }
+        return is;
+    }
+private:
+    node *list;
+    int len;
+    bool iscbt(int n)
+    {
+        que q;
+        if (list[n].havenochild())
+            return true;
+        bool flag = false;
+        q.enqueue(list[n]);
+        while(!q.isempty())
+        {
+            node temp = q.dequeue();
+            if (temp.haveonlyrightchild())
+                return false;
+            if (!flag){
+                if (temp.havebothchild())
+                {
+                    q.enqueue(list[temp.leftchild]);
+                    q.enqueue(list[temp.rightchild]);
+                    continue;
+                }
+                else if (temp.haveonlyleftchild())
+                {
+                    q.enqueue(list[temp.leftchild]);
+                    flag = true;
+                    continue;
+                }
+                else if (temp.havenochild())
+                {
+                    flag = true;
+                    continue;
+                }
+            }
+            else{
+                if (!temp.havenochild())
+                    return false;
+            }
+        }
+        return true;
+    }
+public:
+    tree(int n){
+        list = new node[n];
+        len = n;
+    }
+    bool iscbt()
+    {
+        return iscbt(0);
+    }
+};
+
+int main()
+{
+    int n;
+    cin &gt;&gt; n;
+    tree t(n);
+    cin &gt;&gt; t;
+    bool flag = t.iscbt();
+    if (flag)
+        cout &lt;&lt; &quot;true&quot; &lt;&lt; endl;
+    else
+        cout &lt;&lt; &quot;false&quot; &lt;&lt; endl;
+    return 0;
+}
 </code></pre>
                 
                   

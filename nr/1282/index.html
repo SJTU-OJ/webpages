@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution-star" class="md-nav__link">
-    WashSwang's solution Star
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#washswangs-solution" class="md-nav__link">
+    WashSwang's solution 
   </a>
   
 </li>
@@ -362,7 +388,161 @@
 
 </details>
 
-<h2 id="washswangs-solution-star">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cmath&quot;
+#include &quot;algorithm&quot;
+using namespace std;
+
+int n, ans = 1e9, a[2009], c[2009], 
+f[2009][2009], g[2009][2009];
+
+void sol()
+{
+    for (int i = 1; i &lt;= n; ++i)
+    {
+        for (int j = 1; j &lt;= n; ++j)
+        {
+            f[i][j] = g[i - 1][j] + abs(a[i] - c[j]);
+            if (j == 1) 
+                g[i][j] = f[i][j];
+            else 
+                g[i][j] = min(f[i][j], g[i][j - 1]);
+        }
+    }
+    for (int i = 1; i &lt;= n; ++i)
+        ans = min(ans, f[n][i]);
+}
+
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    //输入并排序
+    cin &gt;&gt; n;
+    for (int i = 1; i &lt;= n; ++i)
+    {
+        cin &gt;&gt; a[i];
+        c[i] = a[i];
+    }
+    sort(c + 1, c + n + 1);
+
+    sol();
+    //反序
+    for (int i = 1; i &lt;= n / 2; ++i)
+        swap(c[i], c[n - i + 1]);
+
+    sol();
+    cout &lt;&lt; ans;
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 2000 + 100;
+
+long long ans = 1e17, height[maxN] = {0}, height1[maxN] = {0},
+          dp[maxN][maxN] = {0};
+
+void qSort(long long *, int, int);
+void DP(int);
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    int n;
+
+    cin &gt;&gt; n;
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; height[i];
+        height1[i] = height[i];
+    }
+    qSort(height1, 0, n - 1);
+    DP(n);
+    cout &lt;&lt; ans;
+
+    return 0;
+}
+
+void qSort(long long *nums, int l, int h) {
+    if (l &gt;= h) {
+        return;
+    }
+    int first = l, last = h;
+    long long key = nums[first];
+
+    while (first &lt; last) {
+        while (first &lt; last &amp;&amp; nums[last] &gt;= key) {
+            --last;
+        }
+        nums[first] = nums[last];
+        while (first &lt; last &amp;&amp; nums[first] &lt;= key) {
+            ++first;
+        }
+        nums[last] = nums[first];
+    }
+    nums[first] = key;
+    qSort(nums, l, first - 1);
+    qSort(nums, first + 1, h);
+}
+
+void DP(int n) {
+    for (int i = 0; i &lt; n; i++) {
+        for (int j = 0; j &lt; n; j++) {
+            if (i == 0) {
+                if (j == 0) {
+                    dp[i][j] = abs(height1[j] - height[i]);
+                } else {
+                    dp[i][j] = min(abs(height1[j] - height[i]), dp[i][j - 1]);
+                }
+            } else if (j == 0) {
+                dp[i][j] = dp[i - 1][j] + abs(height1[j] - height[i]);
+            } else {
+                dp[i][j] = min(dp[i - 1][j] + abs(height1[j] - height[i]),
+                               dp[i][j - 1]);
+            }
+
+            if (i == n - 1) {
+                ans = min(ans, dp[i][j]);
+            }
+        }
+    }
+
+    for (int i = n - 1; i &gt;= 0; i--) {
+        for (int j = 0; j &lt; n; j++) {
+            if (i == n - 1) {
+                if (j == 0) {
+                    dp[i][j] = abs(height1[j] - height[i]);
+                } else {
+                    dp[i][j] = min(abs(height1[j] - height[i]), dp[i][j - 1]);
+                }
+            } else if (j == 0) {
+                dp[i][j] = dp[i + 1][j] + abs(height1[j] - height[i]);
+            } else {
+                dp[i][j] = min(dp[i + 1][j] + abs(height1[j] - height[i]),
+                               dp[i][j - 1]);
+            }
+
+            if (i == 0) {
+                ans = min(ans, dp[i][j]);
+            }
+        }
+    }
+
+    return;
+}
+</code></pre>
+
+<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstring&gt;
 using namespace std;

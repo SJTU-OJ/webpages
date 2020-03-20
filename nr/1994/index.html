@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,8 +289,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zsi-rs-solution" class="md-nav__link">
+    Zsi-r's solution 
   </a>
   
 </li>
@@ -362,7 +395,7 @@
 
 </details>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* 二哥的地图 */
 #include &lt;iostream&gt;
 #include &lt;cstring&gt;
@@ -409,6 +442,238 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+using namespace std;
+
+bool map[509][509] = { 0 };
+int dx[] = { 0,1,0,-1 },
+dy[] = { 1,0,-1,0 };
+int n, m;
+void dfs(int x, int y) {
+    map[x][y] = false;
+    for (int i = 0; i &lt; 4; ++i) {
+        if (x + dx[i] &gt;= 0 &amp;&amp; x + dx[i] &lt; n &amp;&amp; y + dy[i] &gt;= 0 &amp;&amp; y + dy[i] &lt; m &amp;&amp; map[x + dx[i]][y + dy[i]])
+            dfs(x + dx[i], y + dy[i]);
+    }
+}
+
+int main() {
+    scanf(&quot;%d %d&quot;, &amp;n, &amp;m);
+
+    for(int i=0;i&lt;n;++i)
+        for (int j = 0; j &lt; m; ++j) {
+            int temp;
+            scanf(&quot;%d&quot;, &amp;temp);
+            map[i][j] = (bool)(temp + 1);
+        }
+
+    int cnt = 0;
+    for(int i=0;i&lt;n;++i)
+        for(int j=0;j&lt;m;++j)
+            if (map[i][j]) {
+                ++cnt;
+                dfs(i, j);
+            }
+
+    cout &lt;&lt; cnt;
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 5e2 + 10;
+
+int N = 0, M = 0, worldMap[maxN][maxN] = {0}, ans = 0;
+
+void DFS(int x, int y);
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    cin &gt;&gt; N &gt;&gt; M;
+
+    for (int i = 0; i &lt; N + 2; i++) {
+        for (int j = 0; j &lt; M + 2; j++) {
+            if (i == 0 || i == N + 1 || j == 0 || j == N + 1) {
+                worldMap[i][j] = 0;
+            } else {
+                int temp;
+                cin &gt;&gt; temp;
+                worldMap[i][j] = temp + 1;
+            }
+        }
+    }
+
+    for (int i = 0; i &lt; N + 2; i++) {
+        for (int j = 0; j &lt; M + 2; j++) {
+            if (worldMap[i][j]) {
+                ans++;
+                DFS(i, j);
+            }
+        }
+    }
+
+    cout &lt;&lt; ans;
+
+    return 0;
+}
+
+void DFS(int x, int y) {
+    if (!worldMap[x][y]) {
+        return;
+    } else {
+        worldMap[x][y] = 0;
+        DFS(x - 1, y);
+        DFS(x + 1, y);
+        DFS(x, y - 1);
+        DFS(x, y + 1);
+    }
+}
+</code></pre>
+
+<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+class DisjointSet{
+private:
+    int size;
+    int *parent;
+public:
+    DisjointSet(int s);
+    ~DisjointSet() { delete[] parent; }
+    void Union(int root1, int root2);
+    int Find(int x);
+    void isOne(int x);
+    int countCountry();
+    void print();
+};
+
+void DisjointSet::print()
+{
+    for (int i = 0; i &lt; size;i++)
+        cout &lt;&lt; parent[i] &lt;&lt; ' ';
+    cout &lt;&lt; endl;
+}
+
+int DisjointSet::countCountry()
+{
+    int count = 0;
+    for (int i = 0; i &lt; size;i++)
+    {
+        if (parent[i] &lt; 0)
+            count++;
+    }
+    return count;
+}
+
+void DisjointSet::isOne(int x)
+{
+    parent[x] = 0;
+}
+
+DisjointSet::DisjointSet(int s)
+{
+    size = s;
+    parent = new int[size];
+    for (int i = 0; i &lt; size;i++)
+        parent[i] = -1;
+}
+
+int DisjointSet::Find(int x)
+{
+    if (parent[x]&lt;0)
+        return x;
+    return parent[x] = Find(parent[x]);
+}
+
+void DisjointSet::Union(int root1,int root2)
+{
+    if (root1==root2)
+        return;
+    if (parent[root1]&gt;parent[root2])
+    {
+        parent[root2] += parent[root1];
+        parent[root1] = root2;
+    }
+    else
+    {
+        parent[root1] += parent[root2];
+        parent[root2] = root1;
+    }
+}
+
+int main()
+{
+    int m, n;
+    cin &gt;&gt; n &gt;&gt; m;
+    int **array = new int *[n];
+    for (int i = 0; i &lt; n;i++)
+    {
+        array[i] = new int[m];
+        for (int j = 0; j &lt; m;j++)
+        {
+            cin &gt;&gt; array[i][j];
+        }
+    }
+
+    //输入的第一行
+    DisjointSet djs(n * m);
+    if(array[0][0]==-1)
+        djs.isOne(0);
+
+    for (int i = 1; i &lt; m; i++)
+    {
+        if (array[0][i] == -1)
+            djs.isOne(i);
+        else
+            if (array[0][i-1]==0)
+                djs.Union(djs.Find(i), djs.Find(i - 1));        
+    }
+
+
+    //接下来的n-1行
+    for (int i = 1; i &lt; n; i++)
+    {
+        if (array[i][0]==-1)
+            djs.isOne(i* m);
+        else 
+            if (array[i-1][0]==0)
+            djs.Union(djs.Find((i - 1) * m), djs.Find(i * m));
+    }
+
+
+    for (int i = 1; i &lt; n; i++)
+    {
+        for (int j = 1; j &lt; m; j++)
+        {
+            if (array[i][j]==-1)
+                djs.isOne(i * m + j);
+            else 
+            {
+                if (array[i][j-1]==0)
+                    djs.Union(djs.Find(i * m + j - 1), djs.Find(i * m + j));
+                if (array[i-1][j]==0)
+                    djs.Union(djs.Find(i * m - m + j), djs.Find(i * m + j));
+            }
+        }
+    }
+
+    cout &lt;&lt; djs.countCountry() &lt;&lt; endl;
+    return 0;
+}
 </code></pre>
                 
                   

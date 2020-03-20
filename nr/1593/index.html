@@ -250,6 +250,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../thanks/" title="鸣谢" class="md-nav__link">
+      鸣谢
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
     <a href="../../about/" title="关于" class="md-nav__link">
       关于
     </a>
@@ -277,15 +289,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#victrids-solution-star" class="md-nav__link">
-    VictriD's solution Star
+  <a href="#victrids-solution" class="md-nav__link">
+    VictriD's solution 
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#fineartzs-solution-star" class="md-nav__link">
-    FineArtz's solution Star
+  <a href="#fineartzs-solution" class="md-nav__link">
+    FineArtz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ligongzzzs-solution" class="md-nav__link">
+    ligongzzz's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#neight99s-solution" class="md-nav__link">
+    Neight99's solution 
   </a>
   
 </li>
@@ -461,7 +487,7 @@
 
 </details>
 
-<h2 id="victrids-solution-star">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>#include &lt;iostream&gt;
 #include &lt;cstdio&gt;
 #include &lt;cstring&gt;
@@ -535,7 +561,7 @@ int main() {
 }
 </code></pre>
 
-<h2 id="fineartzs-solution-star">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！">Star</a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
 <pre><code>/* Mouse */
 #include &lt;iostream&gt;
 #include &lt;iomanip&gt;
@@ -615,6 +641,281 @@ int main(){
     return 0;
 }
 
+</code></pre>
+
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &quot;cstdio&quot;
+#include &quot;iostream&quot;
+#include &quot;cmath&quot;
+using namespace std;
+
+constexpr int mod = (int)(1e8);
+
+struct mouse_type {
+    long long val = 0, strength = 0;
+} mouse[200009];
+
+bool cmp(const int&amp; a, const int&amp; b) {
+    return mouse[a].val &gt; mouse[b].val || (mouse[a].val == mouse[b].val &amp;&amp; a &lt; b);
+}
+
+int paiwei[200009] = { 0 };
+
+template &lt;class T, class T_val = decltype(*declval&lt;T&gt;()),
+    class Compare = bool (*)(T_val, T_val)&gt;
+    void quick_sort(T start, T end,
+        Compare cmp = [](T_val a, T_val b) {return a &lt; b; }) {
+    if (start == end)
+        return;
+    auto i = start, j = end;
+    --j;
+    if (i == j)
+        return;
+    //交换
+    auto key = *start;
+    for (bool status = true; i != j;) {
+        if (status) {
+            if (cmp(*j, key)) {
+                *i = *j;
+                ++i;
+                status = false;
+            }
+            else
+                --j;
+        }
+        else {
+            if (cmp(key, *i)) {
+                *j = *i;
+                --j;
+                status = true;
+            }
+            else
+                ++i;
+        }
+    }
+    *i = key;
+    //递归
+    quick_sort(start, ++i, cmp);
+    quick_sort(i, end, cmp);
+}
+
+void arrange(int pos) {
+    auto temp = paiwei[pos];
+    auto p = pos - 1;
+    for (; p &gt;= 0; --p) {
+        if (cmp(temp, paiwei[p])) {
+            paiwei[p + 1] = paiwei[p];
+        }
+        else
+            break;
+    }
+    paiwei[p + 1] = temp;
+}
+
+void myMergeSort(int* data, int num) {
+    if (num == 0) return;
+    else if (num == 1) return;
+
+    myMergeSort(data, num / 2);
+    myMergeSort(data + num / 2, num - num / 2);
+
+    //合并
+    int* temp = new int[num];
+
+    for (int i = 0, j = num / 2, n = 0; i &lt; num / 2 || j &lt; num; n++) {
+        if (i &lt; num / 2 &amp;&amp; j &lt; num) {
+            if (cmp(data[i], data[j])) {
+                temp[n] = data[i];
+                i++;
+            }
+            else {
+                temp[n] = data[j];
+                j++;
+            }
+        }
+        else if (i == num / 2) {
+            temp[n] = data[j];
+            j++;
+        }
+        else if (j == num) {
+            temp[n] = data[i];
+            i++;
+        }
+    }
+
+    //复制
+    for (int i = 0; i &lt; num; i++)
+        data[i] = temp[i];
+
+    delete temp;
+}
+
+int main() {
+    int N, R;
+    scanf(&quot;%d %d&quot;, &amp;N, &amp;R);
+    N *= 2;
+    //srand(0);
+    for (int i = 1; i &lt;= N; ++i) {
+        paiwei[i - 1] = i;
+        scanf(&quot;%lld&quot;, &amp;mouse[i].val);
+        //mouse[i].val =  rand()%mod;
+    }
+    for (int i = 1; i &lt;= N; ++i) {
+        scanf(&quot;%lld&quot;, &amp;mouse[i].strength);
+        //mouse[i].strength = rand()%mod;
+    }
+
+    //排序
+    quick_sort(paiwei, paiwei + N, cmp);
+    //myMergeSort(paiwei, N);
+
+    //开始比赛
+    for (int i = 0; i &lt; R; ++i) {
+        for (int step = 0; step &lt; N; step += 2) {
+            if (mouse[paiwei[step]].strength &lt; mouse[paiwei[step + 1]].strength) {
+                mouse[paiwei[step + 1]].val += 2;
+                arrange(step + 1);
+            }
+            else if (mouse[paiwei[step]].strength == mouse[paiwei[step + 1]].strength) {
+                ++mouse[paiwei[step]].val;
+                ++mouse[paiwei[step + 1]].val;
+                arrange(step);
+                arrange(step + 1);
+            }
+            else {
+                mouse[paiwei[step]].val += 2;
+                arrange(step);
+            }
+        }
+    }
+
+    for (int i = 0; i &lt; N; ++i)
+        printf(&quot;%d &quot;, paiwei[i]);
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<pre><code>#include &lt;iostream&gt;
+
+using namespace std;
+
+const int maxN = 2e5 + 100;
+
+struct Mouse {
+    int id;
+    int score;
+    int strength;
+
+    bool operator&lt;(const Mouse &amp;right) {
+        if ((score &lt; right.score) || (score == right.score &amp;&amp; id &gt; right.id)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    bool operator&gt;(const Mouse &amp;right) {
+        if ((score &gt; right.score) || (score == right.score &amp;&amp; id &lt; right.id)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+};
+
+void qSort(Mouse *, int, int);
+void contest();
+void bubble();
+
+int n, R, N;
+Mouse mice[maxN] = {0};
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    cin &gt;&gt; n &gt;&gt; R;
+
+    N = 2 * n;
+
+    for (int i = 1; i &lt;= N; i++) {
+        mice[i].id = i;
+        cin &gt;&gt; mice[i].score;
+    }
+    for (int i = 1; i &lt;= N; i++) {
+        cin &gt;&gt; mice[i].strength;
+    }
+
+    qSort(mice, 1, N);
+
+    for (int i = 0; i &lt; R; i++) {
+        contest();
+        bubble();
+    }
+
+    for (int i = 1; i &lt;= N; i++) {
+        cout &lt;&lt; mice[i].id &lt;&lt; ' ';
+    }
+
+    return 0;
+}
+
+void qSort(Mouse *nums, int l, int h) {
+    if (l &gt;= h) {
+        return;
+    }
+    Mouse temp = nums[l];
+    int i = l, j = l + 1, mid;
+    for (; j &lt;= h; j++) {
+        if (mice[j] &gt; temp) {
+            Mouse temp = mice[j];
+            mice[j] = mice[++i];
+            mice[i] = temp;
+        }
+    }
+    mice[l] = mice[i];
+    mice[i] = temp;
+    qSort(nums, l, i - 1);
+    qSort(nums, i + 1, h);
+}
+
+void contest() {
+    int temp1, temp2;
+
+    for (int i = 1; i &lt;= n; i++) {
+        temp1 = 2 * i - 1;
+        temp2 = 2 * i;
+
+        if (mice[temp1].strength &gt; mice[temp2].strength) {
+            mice[temp1].score += 2;
+        } else if (mice[temp1].strength &lt; mice[temp2].strength) {
+            mice[temp2].score += 2;
+        } else {
+            mice[temp1].score += 1;
+            mice[temp2].score += 1;
+        }
+    }
+}
+
+void bubble() {
+    for (int i = 2; i &lt;= N; i++) {
+        bool flag = 1;
+        for (int j = 1; j &lt;= N - i + 1; j++) {
+            if (mice[j + 1] &gt; mice[j]) {
+                Mouse temp = mice[j + 1];
+                mice[j + 1] = mice[j];
+                mice[j] = temp;
+                flag = 0;
+            }
+        }
+        if (flag) {
+            break;
+        }
+    }
+}
 </code></pre>
                 
                   
