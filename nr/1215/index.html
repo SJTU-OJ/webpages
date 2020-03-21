@@ -291,36 +291,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#skyzh-s-solution" class="md-nav__link">
-    skyzh 's solution
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ligongzzzs-solution" class="md-nav__link">
-    ligongzzz's solution 
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#neight99s-solution" class="md-nav__link">
-    Neight99's solution 
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#zsi-rs-solution" class="md-nav__link">
-    Zsi-r's solution 
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#washswangs-solution" class="md-nav__link">
-    WashSwang's solution 
+  <a href="#skyzhs-solutioninclude" class="md-nav__link">
+    skyzh's solution#include 
   </a>
   
 </li>
@@ -413,435 +385,432 @@ min
 
 </details>
 
-<h2 id="skyzh-s-solution">skyzh 's solution</h2>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stack&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<h2 id="skyzhs-solutioninclude">skyzh's solution#include <iostream></h2>
+<h1 id="include">include <string></h1>
+<h1 id="include_1">include <stack></h1>
+<h1 id="include_2">include <cstring></h1>
+<p>using namespace std;</p>
+<p>template<typename T>
+struct Heap {
+    T *data;
+    int cap, len;</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Heap</span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">cap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="p">)</span><span class="w"> </span><span class="err">:</span><span class="w"> </span><span class="n">cap</span><span class="p">(</span><span class="n">cap</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="o">[</span><span class="n">cap</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="n">Heap</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">Heap</span><span class="o">&amp;</span><span class="w"> </span><span class="n">that</span><span class="p">)</span><span class="w"> </span><span class="err">:</span><span class="w"> </span><span class="n">cap</span><span class="p">(</span><span class="n">that</span><span class="p">.</span><span class="n">cap</span><span class="p">),</span><span class="w"> </span><span class="nf">len</span><span class="p">(</span><span class="n">that</span><span class="p">.</span><span class="nf">len</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="o">[</span><span class="n">cap</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">memcpy</span><span class="p">(</span><span class="k">data</span><span class="p">,</span><span class="w"> </span><span class="n">that</span><span class="p">.</span><span class="k">data</span><span class="p">,</span><span class="w"> </span><span class="n">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cap</span><span class="p">);</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">struct</span> <span class="n">Heap</span> <span class="p">{</span>
-    <span class="n">T</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">cap</span><span class="p">,</span> <span class="n">len</span><span class="p">;</span>
+<span class="o">~</span><span class="n">Heap</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="k">delete</span><span class="err">[]</span><span class="w"> </span><span class="k">data</span><span class="p">;</span><span class="w"> </span><span class="err">}</span><span class="w"></span>
 
-    <span class="n">Heap</span><span class="p">(</span><span class="kt">int</span> <span class="n">cap</span> <span class="o">=</span> <span class="mi">1024</span><span class="p">)</span> <span class="o">:</span> <span class="n">cap</span><span class="p">(</span><span class="n">cap</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">len</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">cap</span><span class="p">];</span>
-    <span class="p">}</span>
+<span class="n">void</span><span class="w"> </span><span class="n">push</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">data</span><span class="o">[</span><span class="n">++len</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">swim</span><span class="p">(</span><span class="nf">len</span><span class="p">);</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-    <span class="n">Heap</span><span class="p">(</span><span class="k">const</span> <span class="n">Heap</span><span class="o">&amp;</span> <span class="n">that</span><span class="p">)</span> <span class="o">:</span> <span class="n">cap</span><span class="p">(</span><span class="n">that</span><span class="p">.</span><span class="n">cap</span><span class="p">),</span> <span class="n">len</span><span class="p">(</span><span class="n">that</span><span class="p">.</span><span class="n">len</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">cap</span><span class="p">];</span>
-        <span class="n">memcpy</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">that</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">cap</span><span class="p">);</span>
-    <span class="p">}</span>
+<span class="n">T</span><span class="w"> </span><span class="n">pop</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">swap</span><span class="p">(</span><span class="k">data</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="o">[</span><span class="n">len--</span><span class="o">]</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">sink</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">data</span><span class="o">[</span><span class="n">len + 1</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-    <span class="o">~</span><span class="n">Heap</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">data</span><span class="p">;</span> <span class="p">}</span>
+<span class="n">T</span><span class="w"> </span><span class="k">top</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">data</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-    <span class="kt">void</span> <span class="n">push</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">data</span><span class="p">[</span><span class="o">++</span><span class="n">len</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
-        <span class="n">swim</span><span class="p">(</span><span class="n">len</span><span class="p">);</span>
-    <span class="p">}</span>
+<span class="n">bool</span><span class="w"> </span><span class="k">less</span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nf">len</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nf">len</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">data</span><span class="o">[</span><span class="n">a</span><span class="o">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">data</span><span class="o">[</span><span class="n">b</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-    <span class="n">T</span> <span class="n">pop</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">swap</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">len</span><span class="o">--</span><span class="p">]);</span>
-        <span class="n">sink</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
-    <span class="p">}</span>
+<span class="n">void</span><span class="w"> </span><span class="n">swim</span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="nc">int</span><span class="w"> </span><span class="n">_idx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">less</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="n">_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">swap</span><span class="p">(</span><span class="k">data</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="o">[</span><span class="n">_idx</span><span class="o">]</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_idx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-    <span class="n">T</span> <span class="n">top</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="p">}</span>
+<span class="n">void</span><span class="w"> </span><span class="n">sink</span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="nc">int</span><span class="w"> </span><span class="n">_idx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">_idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">idx</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nf">len</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">_idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nf">len</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">less</span><span class="p">(</span><span class="n">_idx</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">_idx</span><span class="p">))</span><span class="w"> </span><span class="n">_idx</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">less</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="w"> </span><span class="n">_idx</span><span class="p">))</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">swap</span><span class="p">(</span><span class="k">data</span><span class="o">[</span><span class="n">idx</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="k">data</span><span class="o">[</span><span class="n">_idx</span><span class="o">]</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_idx</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-    <span class="kt">bool</span> <span class="n">less</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="n">len</span> <span class="o">||</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">len</span><span class="p">)</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">b</span><span class="p">];</span>
-    <span class="p">}</span>
+<span class="n">bool</span><span class="w"> </span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nf">len</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-    <span class="kt">void</span> <span class="n">swim</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">_idx</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">idx</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">less</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">_idx</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span> <span class="p">{</span>
-            <span class="n">swap</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">_idx</span><span class="p">]);</span>
-            <span class="n">idx</span> <span class="o">=</span> <span class="n">_idx</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="kt">void</span> <span class="n">sink</span><span class="p">(</span><span class="kt">int</span> <span class="n">idx</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">_idx</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">((</span><span class="n">_idx</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">idx</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">len</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">_idx</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="o">&amp;&amp;</span> <span class="n">less</span><span class="p">(</span><span class="n">_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">_idx</span><span class="p">))</span> <span class="n">_idx</span><span class="o">++</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">less</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">_idx</span><span class="p">))</span> <span class="k">break</span><span class="p">;</span>
-            <span class="n">swap</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">_idx</span><span class="p">]);</span>
-            <span class="n">idx</span> <span class="o">=</span> <span class="n">_idx</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">len</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kt">void</span> <span class="n">debug</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; &quot;</span><span class="p">;</span>
-        <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">Heap</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">heap</span><span class="p">(</span><span class="mi">65536</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">op1</span><span class="p">,</span> <span class="n">op2</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="n">cmd</span><span class="p">[</span><span class="mi">200</span><span class="p">];</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">cmd</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s">&quot;insert&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">op1</span><span class="p">;</span>
-            <span class="n">heap</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">op1</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s">&quot;delete&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">heap</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s">&quot;min&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">heap</span><span class="p">.</span><span class="n">top</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="n">void</span><span class="w"> </span><span class="n">debug</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nf">len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="ss">&quot; &quot;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 </code></pre></div>
 
 
-<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<p>};</p>
+<p>int main() {
+    Heap<int> heap(65536);
+    int N, op1, op2;
+    cin &gt;&gt; N;
+    char cmd[200];
+    for (int i = 0; i &lt; N; i++) {
+        cin &gt;&gt; cmd;
+        if (strcmp(cmd, "insert") == 0) {
+            cin &gt;&gt; op1;
+            heap.push(op1);
+        }
+        else if (strcmp(cmd, "delete") == 0) {
+            heap.pop();
+        }
+        else if (strcmp(cmd, "min") == 0) {
+            cout &lt;&lt; heap.top() &lt;&lt; endl;
+        }
+    }
+    return 0;
+}</p>
+<div class="codehilite"><pre><span></span><code><span class="err">##</span><span class="w"> </span><span class="n">ligongzzz</span><span class="err">&#39;</span><span class="n">s</span><span class="w"> </span><span class="n">solution</span><span class="w"> </span><span class="o">&lt;</span><span class="n">a</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;github-button&quot;</span><span class="w"> </span><span class="n">href</span><span class="o">=</span><span class="ss">&quot;https://github.com/ligongzzz/SJTU-OJ&quot;</span><span class="w"> </span><span class="k">data</span><span class="o">-</span><span class="n">icon</span><span class="o">=</span><span class="ss">&quot;octicon-star&quot;</span><span class="w"> </span><span class="k">data</span><span class="o">-</span><span class="n">show</span><span class="o">-</span><span class="nf">count</span><span class="o">=</span><span class="ss">&quot;true&quot;</span><span class="w"> </span><span class="n">aria</span><span class="o">-</span><span class="n">label</span><span class="o">=</span><span class="ss">&quot;Star!&quot;</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="w"></span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">mVector</span> <span class="p">{</span>
-    <span class="n">T</span><span class="o">**</span> <span class="n">vector_data</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">capacity</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="err">```</span><span class="n">cpp</span><span class="w"></span>
+<span class="n">#include</span><span class="w"> </span><span class="ss">&quot;iostream&quot;</span><span class="w"></span>
+<span class="n">#include</span><span class="w"> </span><span class="ss">&quot;cstdio&quot;</span><span class="w"></span>
+<span class="n">#include</span><span class="w"> </span><span class="ss">&quot;cstring&quot;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">namespace</span><span class="w"> </span><span class="n">std</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">public</span><span class="o">:</span>
-    <span class="c1">//构造函数</span>
-    <span class="n">mVector</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-    <span class="n">mVector</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">_size</span><span class="p">)</span> <span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">_size</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">capacity</span> <span class="o">=</span> <span class="n">_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
-        <span class="n">vector_data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span> <span class="o">*</span> <span class="p">[</span><span class="n">capacity</span><span class="p">]</span> <span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
-    <span class="p">}</span>
-    <span class="n">mVector</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">_size</span><span class="p">,</span> <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span> <span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">_size</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">capacity</span> <span class="o">=</span> <span class="n">_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
-        <span class="n">vector_data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span> <span class="o">*</span> <span class="p">[</span><span class="n">capacity</span><span class="p">]</span> <span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">_size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">mVector</span><span class="p">(</span><span class="k">const</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">_vector</span><span class="p">)</span> <span class="o">:</span><span class="n">size</span><span class="p">(</span><span class="n">_vector</span><span class="p">.</span><span class="n">size</span><span class="p">),</span> <span class="n">capacity</span><span class="p">(</span><span class="n">_vector</span><span class="p">.</span><span class="n">capacity</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">vector_data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span> <span class="o">*</span> <span class="p">[</span><span class="n">capacity</span><span class="p">]</span> <span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="o">*</span><span class="n">_vector</span><span class="p">.</span><span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-    <span class="p">}</span>
-    <span class="c1">//析构函数</span>
-    <span class="o">~</span><span class="n">mVector</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-            <span class="k">delete</span> <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-        <span class="k">delete</span><span class="p">[]</span> <span class="n">vector_data</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="n">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="n">mVector</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">T</span><span class="o">**</span><span class="w"> </span><span class="n">vector_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="k">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">capacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
 
-    <span class="c1">//迭代器</span>
-    <span class="k">class</span> <span class="nc">iterator</span> <span class="p">{</span>
-        <span class="n">T</span><span class="o">**</span> <span class="n">pos</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-        <span class="k">friend</span> <span class="n">iterator</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">begin</span><span class="p">();</span>
-        <span class="k">friend</span> <span class="n">iterator</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">end</span><span class="p">();</span>
-        <span class="k">friend</span> <span class="kt">void</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">erase</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">val</span><span class="p">);</span>
-    <span class="k">public</span><span class="o">:</span>
-        <span class="n">iterator</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="n">iterator</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">pos</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">++</span><span class="p">()</span> <span class="p">{</span>
-            <span class="o">++</span><span class="n">pos</span><span class="p">;</span>
-            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">iterator</span> <span class="k">operator</span><span class="o">++</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">iterator</span> <span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
-            <span class="o">++</span><span class="n">pos</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">--</span><span class="p">()</span> <span class="p">{</span>
-            <span class="o">--</span><span class="n">pos</span><span class="p">;</span>
-            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">iterator</span> <span class="k">operator</span><span class="o">--</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">iterator</span> <span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
-            <span class="o">--</span><span class="n">pos</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">pos</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">pos</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">pos</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
-            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="o">**</span><span class="n">pos</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
+<span class="k">public</span><span class="err">:</span><span class="w"></span>
+<span class="w">    </span><span class="o">//</span><span class="n">构造函数</span><span class="w"></span>
+<span class="w">    </span><span class="n">mVector</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">mVector</span><span class="p">(</span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">_size</span><span class="p">)</span><span class="w"> </span><span class="err">:</span><span class="k">size</span><span class="p">(</span><span class="n">_size</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">capacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">vector_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">[</span><span class="n">capacity</span><span class="o">]</span><span class="w"> </span><span class="err">{</span><span class="n">nullptr</span><span class="err">}</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">mVector</span><span class="p">(</span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">_size</span><span class="p">,</span><span class="w"> </span><span class="n">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="err">:</span><span class="k">size</span><span class="p">(</span><span class="n">_size</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">capacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">vector_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">[</span><span class="n">capacity</span><span class="o">]</span><span class="w"> </span><span class="err">{</span><span class="n">nullptr</span><span class="err">}</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">_size</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">vector_data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">mVector</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">_vector</span><span class="p">)</span><span class="w"> </span><span class="err">:</span><span class="k">size</span><span class="p">(</span><span class="n">_vector</span><span class="p">.</span><span class="k">size</span><span class="p">),</span><span class="w"> </span><span class="n">capacity</span><span class="p">(</span><span class="n">_vector</span><span class="p">.</span><span class="n">capacity</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">vector_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">[</span><span class="n">capacity</span><span class="o">]</span><span class="w"> </span><span class="err">{</span><span class="n">nullptr</span><span class="err">}</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">size</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">vector_data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="p">(</span><span class="o">*</span><span class="n">_vector</span><span class="p">.</span><span class="n">vector_data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="o">//</span><span class="n">析构函数</span><span class="w"></span>
+<span class="w">    </span><span class="o">~</span><span class="n">mVector</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">size</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">delete</span><span class="w"> </span><span class="n">vector_data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">delete</span><span class="err">[]</span><span class="w"> </span><span class="n">vector_data</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//反向迭代器</span>
-    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">U</span><span class="o">&gt;</span>
-    <span class="k">class</span> <span class="nc">reverse_iterator</span> <span class="p">{</span>
-        <span class="n">U</span> <span class="n">val</span><span class="p">;</span>
-        <span class="k">friend</span> <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">rbegin</span><span class="p">();</span>
-        <span class="k">friend</span> <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span> <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">rend</span><span class="p">();</span>
-    <span class="k">public</span><span class="o">:</span>
-        <span class="n">U</span><span class="o">&amp;</span> <span class="n">base</span><span class="p">()</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">val</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">reverse_iterator</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-        <span class="n">reverse_iterator</span><span class="p">(</span><span class="k">const</span> <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">reverse_iterator</span><span class="p">(</span><span class="k">const</span> <span class="n">U</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">other</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">++</span><span class="p">()</span> <span class="p">{</span>
-            <span class="o">--</span><span class="n">val</span><span class="p">;</span>
-            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">++</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span> <span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
-            <span class="o">--</span><span class="n">val</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">--</span><span class="p">()</span> <span class="p">{</span>
-            <span class="o">++</span><span class="n">val</span><span class="p">;</span>
-            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span> <span class="k">operator</span><span class="o">--</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span> <span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
-            <span class="o">++</span><span class="n">val</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">val</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="n">val</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">val</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
-            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="o">*</span><span class="n">val</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">};</span>
+<span class="w">    </span><span class="o">//</span><span class="n">迭代器</span><span class="w"></span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="n">iterator</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">T</span><span class="o">**</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">friend</span><span class="w"> </span><span class="n">iterator</span><span class="w"> </span><span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="k">begin</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">friend</span><span class="w"> </span><span class="n">iterator</span><span class="w"> </span><span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="k">end</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">friend</span><span class="w"> </span><span class="n">void</span><span class="w"> </span><span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">erase</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">val</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">public</span><span class="err">:</span><span class="w"></span>
+<span class="w">        </span><span class="n">iterator</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">iterator</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">operator</span><span class="o">++</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="o">++</span><span class="n">pos</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">this</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">iterator</span><span class="w"> </span><span class="n">operator</span><span class="o">++</span><span class="p">(</span><span class="nc">int</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">iterator</span><span class="w"> </span><span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="n">this</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="o">++</span><span class="n">pos</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">operator</span><span class="c1">--() {</span>
+<span class="w">            </span><span class="c1">--pos;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">this</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">iterator</span><span class="w"> </span><span class="n">operator</span><span class="c1">--(int) {</span>
+<span class="w">            </span><span class="n">iterator</span><span class="w"> </span><span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="n">this</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="c1">--pos;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">bool</span><span class="w"> </span><span class="n">operator</span><span class="o">==</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="n">const</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">bool</span><span class="w"> </span><span class="n">operator</span><span class="o">!=</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="n">const</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">operator</span><span class="o">=</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">iterator</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">this</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">operator</span><span class="o">*</span><span class="p">()</span><span class="w"> </span><span class="n">const</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">**</span><span class="n">pos</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="p">;</span><span class="w"></span>
 
-    <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">iterator</span><span class="o">&gt;</span> <span class="n">rbegin</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">end</span><span class="p">();</span>
-        <span class="o">--</span><span class="n">temp</span><span class="p">;</span>
-        <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">iterator</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
-        <span class="n">result</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">反向迭代器</span><span class="w"></span>
+<span class="w">    </span><span class="n">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="n">U</span><span class="o">&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="n">reverse_iterator</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">U</span><span class="w"> </span><span class="n">val</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">friend</span><span class="w"> </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">rbegin</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">friend</span><span class="w"> </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">rend</span><span class="p">();</span><span class="w"></span>
+<span class="w">    </span><span class="k">public</span><span class="err">:</span><span class="w"></span>
+<span class="w">        </span><span class="n">U</span><span class="o">&amp;</span><span class="w"> </span><span class="n">base</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">val</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">val</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">U</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">other</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">operator</span><span class="o">++</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="c1">--val;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">this</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="n">operator</span><span class="o">++</span><span class="p">(</span><span class="nc">int</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="n">this</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="c1">--val;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">operator</span><span class="c1">--() {</span>
+<span class="w">            </span><span class="o">++</span><span class="n">val</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">this</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="n">operator</span><span class="c1">--(int) {</span>
+<span class="w">            </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;</span><span class="w"> </span><span class="n">temp</span><span class="p">(</span><span class="o">*</span><span class="n">this</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="o">++</span><span class="n">val</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">bool</span><span class="w"> </span><span class="n">operator</span><span class="o">==</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="n">const</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">val</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">bool</span><span class="w"> </span><span class="n">operator</span><span class="o">!=</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="n">const</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">val</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">val</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">operator</span><span class="o">=</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">U</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">val</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">this</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">operator</span><span class="o">*</span><span class="p">()</span><span class="w"> </span><span class="n">const</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">val</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="p">;</span><span class="w"></span>
 
-    <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">iterator</span><span class="o">&gt;</span> <span class="n">rend</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">begin</span><span class="p">();</span>
-        <span class="o">--</span><span class="n">temp</span><span class="p">;</span>
-        <span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">iterator</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
-        <span class="n">result</span><span class="p">.</span><span class="n">val</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">iterator</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rbegin</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">auto</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">end</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="c1">--temp;</span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">iterator</span><span class="o">&gt;</span><span class="w"> </span><span class="k">result</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">result</span><span class="p">.</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">result</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//增加元素</span>
-    <span class="kt">void</span> <span class="n">push_back</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">capacity</span><span class="p">)</span>
-            <span class="n">vector_data</span><span class="p">[</span><span class="n">size</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="n">T</span><span class="o">**</span> <span class="n">temp_data</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span> <span class="o">*</span> <span class="p">[(</span><span class="n">capacity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]{</span> <span class="k">nullptr</span> <span class="p">};</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-                <span class="n">temp_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">temp_data</span><span class="p">[</span><span class="n">size</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
-            <span class="n">capacity</span> <span class="o">=</span> <span class="p">(</span><span class="n">capacity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
-            <span class="k">delete</span><span class="p">[]</span> <span class="n">vector_data</span><span class="p">;</span>
-            <span class="n">vector_data</span> <span class="o">=</span> <span class="n">temp_data</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">iterator</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rend</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">auto</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">begin</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="c1">--temp;</span>
+<span class="w">        </span><span class="n">reverse_iterator</span><span class="o">&lt;</span><span class="n">iterator</span><span class="o">&gt;</span><span class="w"> </span><span class="k">result</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">result</span><span class="p">.</span><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">result</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//删除末尾</span>
-    <span class="kt">void</span> <span class="n">pop_back</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">delete</span> <span class="n">vector_data</span><span class="p">[</span><span class="o">--</span><span class="n">size</span><span class="p">];</span>
-        <span class="n">vector_data</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">增加元素</span><span class="w"></span>
+<span class="w">    </span><span class="n">void</span><span class="w"> </span><span class="n">push_back</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">size</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">capacity</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">vector_data</span><span class="o">[</span><span class="n">size++</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">T</span><span class="o">**</span><span class="w"> </span><span class="n">temp_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="o">[</span><span class="n">(capacity + 1) * 2</span><span class="o">]</span><span class="err">{</span><span class="w"> </span><span class="n">nullptr</span><span class="w"> </span><span class="err">}</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">size</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">                </span><span class="n">temp_data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vector_data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">temp_data</span><span class="o">[</span><span class="n">size++</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="p">(</span><span class="n">val</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">capacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">capacity</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">delete</span><span class="err">[]</span><span class="w"> </span><span class="n">vector_data</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">vector_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp_data</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//清空</span>
-    <span class="kt">void</span> <span class="n">clear</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">delete</span> <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">vector_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">删除末尾</span><span class="w"></span>
+<span class="w">    </span><span class="n">void</span><span class="w"> </span><span class="n">pop_back</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">delete</span><span class="w"> </span><span class="n">vector_data</span><span class="o">[</span><span class="n">--size</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">vector_data</span><span class="o">[</span><span class="n">size</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//删除</span>
-    <span class="kt">void</span> <span class="n">erase</span><span class="p">(</span><span class="k">const</span> <span class="n">iterator</span> <span class="o">&amp;</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">delete</span><span class="o">*</span> <span class="n">val</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">p</span> <span class="o">=</span> <span class="n">val</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span> <span class="n">p</span> <span class="o">!=</span> <span class="n">vector_data</span> <span class="o">+</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">p</span><span class="p">)</span>
-            <span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="o">--</span><span class="n">size</span><span class="p">;</span>
-        <span class="n">vector_data</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">清空</span><span class="w"></span>
+<span class="w">    </span><span class="n">void</span><span class="w"> </span><span class="n">clear</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">size</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">delete</span><span class="w"> </span><span class="n">vector_data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">vector_data</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//重载运算符</span>
-    <span class="n">T</span> <span class="o">&amp;</span> <span class="k">operator</span><span class="p">[](</span><span class="k">const</span> <span class="kt">unsigned</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="o">*</span><span class="n">vector_data</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">删除</span><span class="w"></span>
+<span class="w">    </span><span class="n">void</span><span class="w"> </span><span class="n">erase</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">iterator</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">delete</span><span class="o">*</span><span class="w"> </span><span class="n">val</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">auto</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">val</span><span class="p">.</span><span class="n">pos</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">vector_data</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">size</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">p</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="c1">--size;</span>
+<span class="w">        </span><span class="n">vector_data</span><span class="o">[</span><span class="n">size</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nullptr</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="n">iterator</span> <span class="n">begin</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">iterator</span> <span class="n">temp</span><span class="p">;</span>
-        <span class="n">temp</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">vector_data</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">重载运算符</span><span class="w"></span>
+<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">operator</span><span class="err">[]</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">pos</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">vector_data</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="n">iterator</span> <span class="n">end</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">iterator</span> <span class="n">temp</span><span class="p">;</span>
-        <span class="n">temp</span><span class="p">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">vector_data</span> <span class="o">+</span> <span class="n">size</span><span class="p">;</span>
-        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="n">iterator</span><span class="w"> </span><span class="k">begin</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">iterator</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">temp</span><span class="p">.</span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vector_data</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-<span class="p">};</span>
+<span class="w">    </span><span class="n">iterator</span><span class="w"> </span><span class="k">end</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">iterator</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">temp</span><span class="p">.</span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vector_data</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">size</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">class</span> <span class="nc">myPriorityQueue</span> <span class="p">{</span>
-    <span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">queueData</span><span class="p">;</span>
-    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">sizeOfQueue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">bool</span><span class="p">(</span><span class="o">*</span><span class="n">cmp</span><span class="p">)(</span><span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span><span class="p">)</span> <span class="o">=</span> <span class="p">[](</span><span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">;</span> <span class="p">};</span>
+<span class="err">}</span><span class="p">;</span><span class="w"></span>
 
-    <span class="c1">//向下过滤</span>
-    <span class="kt">void</span> <span class="nf">percolateDown</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">pos</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">sizeOfQueue</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;</span> <span class="n">sizeOfQueue</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">//交换</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">],</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">]))</span> <span class="p">{</span>
-                    <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">];</span>
-                    <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
-                    <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">break</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="kt">bool</span> <span class="n">minNum</span> <span class="o">=</span> <span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">minNum</span><span class="p">],</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">]))</span> <span class="p">{</span>
-                    <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">minNum</span><span class="p">];</span>
-                    <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">minNum</span><span class="p">]</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">];</span>
-                    <span class="n">queueData</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-                    <span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">minNum</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="k">else</span> <span class="k">break</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+<span class="n">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">class</span><span class="w"> </span><span class="n">myPriorityQueue</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">mVector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">queueData</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">sizeOfQueue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">bool</span><span class="p">(</span><span class="o">*</span><span class="n">cmp</span><span class="p">)(</span><span class="n">T</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">[]</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="err">}</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">public</span><span class="o">:</span>
-    <span class="c1">//构建</span>
-    <span class="n">myPriorityQueue</span><span class="p">()</span> <span class="p">{</span>
-        <span class="n">queueData</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-        <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">((</span><span class="n">T</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span>
-        <span class="n">sizeOfQueue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">向下过滤</span><span class="w"></span>
+<span class="w">    </span><span class="n">void</span><span class="w"> </span><span class="n">percolateDown</span><span class="p">(</span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">pos</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">pos</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">sizeOfQueue</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pos</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">sizeOfQueue</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                </span><span class="o">//</span><span class="n">交换</span><span class="w"></span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="o">[</span><span class="n">pos * 2</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span><span class="p">))</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                    </span><span class="n">auto</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos * 2</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">                    </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos * 2</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">                    </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">}</span><span class="w"></span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="err">}</span><span class="w"></span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">bool</span><span class="w"> </span><span class="n">minNum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="o">[</span><span class="n">pos * 2 + 1</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos * 2</span><span class="o">]</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="o">[</span><span class="n">pos * 2 + minNum</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span><span class="p">))</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                    </span><span class="n">auto</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos * 2 + minNum</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">                    </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos * 2 + minNum</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">                    </span><span class="n">queueData</span><span class="o">[</span><span class="n">pos</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">                    </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minNum</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="err">}</span><span class="w"></span>
+<span class="w">                </span><span class="k">else</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//compare函数返回父结点a与孩子结点b的关系正确与否</span>
-    <span class="n">myPriorityQueue</span><span class="p">(</span><span class="kt">bool</span><span class="p">(</span><span class="o">*</span><span class="n">compare</span><span class="p">)(</span><span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span><span class="p">))</span> <span class="o">:</span><span class="n">cmp</span><span class="p">(</span><span class="n">compare</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">queueData</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-        <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="k">new</span> <span class="n">T</span><span class="p">);</span>
-        <span class="n">sizeOfQueue</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="k">public</span><span class="err">:</span><span class="w"></span>
+<span class="w">    </span><span class="o">//</span><span class="n">构建</span><span class="w"></span>
+<span class="w">    </span><span class="n">myPriorityQueue</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">queueData</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">((</span><span class="n">T</span><span class="p">)</span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">sizeOfQueue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//根据数组建立堆</span>
-    <span class="kt">void</span> <span class="n">buildHeap</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">eleData</span><span class="p">,</span> <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">eleNum</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">queueData</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
-        <span class="n">sizeOfQueue</span> <span class="o">=</span> <span class="n">eleNum</span><span class="p">;</span>
-        <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="k">new</span> <span class="n">T</span><span class="p">);</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">eleNum</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">eleData</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
-        <span class="c1">//向下过滤</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">eleNum</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span> <span class="n">pos</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">pos</span><span class="o">--</span><span class="p">)</span>
-            <span class="n">percolateDown</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">compare函数返回父结点a与孩子结点b的关系正确与否</span><span class="w"></span>
+<span class="w">    </span><span class="n">myPriorityQueue</span><span class="p">(</span><span class="n">bool</span><span class="p">(</span><span class="o">*</span><span class="n">compare</span><span class="p">)(</span><span class="n">T</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">b</span><span class="p">))</span><span class="w"> </span><span class="err">:</span><span class="n">cmp</span><span class="p">(</span><span class="n">compare</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">queueData</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">sizeOfQueue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//判断是否空</span>
-    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">sizeOfQueue</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">根据数组建立堆</span><span class="w"></span>
+<span class="w">    </span><span class="n">void</span><span class="w"> </span><span class="n">buildHeap</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="w"> </span><span class="n">eleData</span><span class="p">,</span><span class="w"> </span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">eleNum</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">queueData</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">sizeOfQueue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eleNum</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">*</span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">eleNum</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">eleData</span><span class="o">[</span><span class="n">i - 1</span><span class="o">]</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="o">//</span><span class="n">向下过滤</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">unsigned</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">eleNum</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">pos</span><span class="c1">--)</span>
+<span class="w">            </span><span class="n">percolateDown</span><span class="p">(</span><span class="n">pos</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//返回队列大小</span>
-    <span class="k">auto</span> <span class="n">size</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">sizeOfQueue</span><span class="p">;</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">判断是否空</span><span class="w"></span>
+<span class="w">    </span><span class="n">bool</span><span class="w"> </span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">sizeOfQueue</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//入队</span>
-    <span class="kt">void</span> <span class="n">push</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span> <span class="o">&amp;</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">sizeOfQueue</span><span class="o">++</span><span class="p">;</span>
-        <span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>
+<span class="w">    </span><span class="o">//</span><span class="n">返回队列大小</span><span class="w"></span>
+<span class="w">    </span><span class="n">auto</span><span class="w"> </span><span class="k">size</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">sizeOfQueue</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-        <span class="c1">//向上过滤</span>
-        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">sizeOfQueue</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//判断是否比父结点更小</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">queueData</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]))</span> <span class="p">{</span>
-                <span class="c1">//交换</span>
-                <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-                <span class="n">queueData</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">];</span>
-                <span class="n">queueData</span><span class="p">[</span><span class="n">i</span> <span class="o">/</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+<span class="w">    </span><span class="o">//</span><span class="n">入队</span><span class="w"></span>
+<span class="w">    </span><span class="n">void</span><span class="w"> </span><span class="n">push</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">input</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">sizeOfQueue</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">queueData</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="k">input</span><span class="p">);</span><span class="w"></span>
 
-    <span class="c1">//队列最前</span>
-    <span class="n">T</span> <span class="n">top</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">queueData</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="p">}</span>
+<span class="w">        </span><span class="o">//</span><span class="n">向上过滤</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">auto</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sizeOfQueue</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="o">//</span><span class="n">判断是否比父结点更小</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cmp</span><span class="p">(</span><span class="n">queueData</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">i / 2</span><span class="o">]</span><span class="p">))</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">                </span><span class="o">//</span><span class="n">交换</span><span class="w"></span>
+<span class="w">                </span><span class="n">auto</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="n">queueData</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">i / 2</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">                </span><span class="n">queueData</span><span class="o">[</span><span class="n">i / 2</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="err">}</span><span class="w"></span>
+<span class="w">            </span><span class="k">else</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-    <span class="c1">//出队</span>
-    <span class="n">T</span> <span class="n">pop</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">auto</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-        <span class="n">queueData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">queueData</span><span class="p">[</span><span class="n">sizeOfQueue</span><span class="o">--</span><span class="p">];</span>
-        <span class="n">queueData</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
-        <span class="n">percolateDown</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-        <span class="k">return</span> <span class="n">temp</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">};</span>
+<span class="w">    </span><span class="o">//</span><span class="n">队列最前</span><span class="w"></span>
+<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="k">top</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">M</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">M</span><span class="p">;</span>
-    <span class="n">myPriorityQueue</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">myQueue</span><span class="p">;</span>
+<span class="w">    </span><span class="o">//</span><span class="n">出队</span><span class="w"></span>
+<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">pop</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">auto</span><span class="w"> </span><span class="n">temp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">queueData</span><span class="o">[</span><span class="n">1</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queueData</span><span class="o">[</span><span class="n">sizeOfQueue--</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">queueData</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">percolateDown</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">temp</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="err">}</span><span class="p">;</span><span class="w"></span>
 
-    <span class="k">for</span> <span class="p">(;</span> <span class="n">M</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">M</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">char</span> <span class="n">temp</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
-        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%s&quot;</span><span class="p">,</span> <span class="n">temp</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="s">&quot;insert&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">tempNum</span><span class="p">;</span>
-            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tempNum</span><span class="p">);</span>
-            <span class="n">myQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tempNum</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="s">&quot;delete&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">myQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
-                <span class="n">myQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">myQueue</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
+<span class="nc">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="nc">int</span><span class="w"> </span><span class="n">M</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cin</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">M</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">myPriorityQueue</span><span class="o">&lt;</span><span class="nc">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">myQueue</span><span class="p">;</span><span class="w"></span>
 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;</span><span class="w"> </span><span class="n">M</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">M</span><span class="c1">--) {</span>
+<span class="w">        </span><span class="nc">char</span><span class="w"> </span><span class="n">temp</span><span class="o">[</span><span class="n">100</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">scanf</span><span class="p">(</span><span class="ss">&quot;%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">temp</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;insert&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="nc">int</span><span class="w"> </span><span class="n">tempNum</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="n">scanf</span><span class="p">(</span><span class="ss">&quot;%d&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tempNum</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">myQueue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">tempNum</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;delete&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="err">!</span><span class="n">myQueue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"></span>
+<span class="w">                </span><span class="n">myQueue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="ss">&quot;%d\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">myQueue</span><span class="p">.</span><span class="k">top</span><span class="p">());</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 </code></pre></div>
 
 
-<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
@@ -981,7 +950,7 @@ min
 </code></pre></div>
 
 
-<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
 
@@ -1124,7 +1093,7 @@ min
 </code></pre></div>
 
 
-<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>

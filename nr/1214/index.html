@@ -291,15 +291,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#skyzh-s-solution" class="md-nav__link">
-    skyzh 's solution
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fineartzs-solution" class="md-nav__link">
-    FineArtz's solution 
+  <a href="#skyzhs-solutioninclude" class="md-nav__link">
+    skyzh's solution#include 
   </a>
   
 </li>
@@ -326,8 +319,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#washswangs-solution" class="md-nav__link">
-    WashSwang's solution 
+  <a href="#victrids-solution" class="md-nav__link">
+    VictriD's solution 
   </a>
   
 </li>
@@ -427,177 +420,166 @@
 
 </details>
 
-<h2 id="skyzh-s-solution">skyzh 's solution</h2>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<h2 id="skyzhs-solutioninclude">skyzh's solution#include <iostream></h2>
+<p>using namespace std;</p>
+<p>template <typename T>
+struct Node {
+    T x;
+    int l, sibling;
+    Node() : l(0), sibling(0) {}
+    Node(const T&amp; x, int l = 0, int r = 0) : x(x), l(l), sibling(r) {}
+};</p>
+<p>template <typename T>
+struct Tree {
+    Node <T> *nodes;
+    Tree(int cap) : nodes(new Node<T> [cap]) {}
+    ~Tree() { delete [] nodes; }
+};</p>
+<p>Tree <int> tree(100001);
+bool is_child[100001] = { 0 };</p>
+<p>void pre_traverse(const Tree<int> &amp; tree, int node) {
+    if (node == 0) return;
+    const Node<int> &amp;ptr = tree.nodes[node];
+    printf("%d ", ptr.x);
+    pre_traverse(tree, ptr.l);
+    pre_traverse(tree, ptr.sibling);
+}</p>
+<p>void post_traverse(const Tree<int> &amp; tree, int node) {
+    if (node == 0) return;
+    const Node<int> &amp;ptr = tree.nodes[node];
+    post_traverse(tree, ptr.l);
+    printf("%d ", ptr.x);
+    post_traverse(tree, ptr.sibling);
+}</p>
+<p>template <typename T>
+struct Queue {
+    T* d;
+    int f, r;
+    Queue(int cap) : d(new T[cap]), f(0), r(0) {}
+    bool empty() { return f == r; }
+    void enqueue(const T&amp; x) { d[r++] = x; }
+    const T dequeue() { return d[f++]; }
+    ~Queue() { delete[] d; }
+};</p>
+<p>void level_traverse(const Tree<int> &amp; tree, int root) {
+    if (root == 0) return;
+    Queue <int> q(300000);
+    q.enqueue(root);
+    while (!q.empty()) {
+        const Node<int>&amp; node = tree.nodes[q.dequeue()];
+        printf("%d ", node.x);
+        if (node.l != 0) {
+            q.enqueue(node.l);
+            int ptr = tree.nodes[node.l].sibling;
+            while (ptr) {
+                q.enqueue(ptr);
+                ptr = tree.nodes[ptr].sibling;
+            }
+        }
+    }
+}</p>
+<p>int main() {
+    int N;
+    scanf("%d", &amp;N);
+    for (int i = 1; i &lt;= N; i++) {
+        scanf("%d%d%d", &amp;tree.nodes[i].l, &amp;tree.nodes[i].sibling, &amp;tree.nodes[i].x);
+        is_child[tree.nodes[i].l] = is_child[tree.nodes[i].sibling] = true;
+    }
+    int root = 0;
+    for (int i = 1; i &lt;= N; i++) {
+        if (!is_child[i]) root = i;
+    }
+    pre_traverse(tree, root);
+    printf("\n");
+    post_traverse(tree, root);
+    printf("\n");
+    level_traverse(tree, root);
+    printf("\n");
+    return 0;
+}</p>
+<div class="codehilite"><pre><span></span><code><span class="err">##</span><span class="w"> </span><span class="n">FineArtz</span><span class="s1">&#39;s solution &lt;a class=&quot;github-button&quot; href=&quot;https://github.com/FineArtz/SJTUOJ&quot; data-icon=&quot;octicon-star&quot; data-show-count=&quot;true&quot; aria-label=&quot;Star!&quot;&gt;&lt;/a&gt;</span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="s1">```cpp</span>
+<span class="s1">/* traverse */</span>
+<span class="s1">#include &lt;iostream&gt;</span>
+<span class="s1">using namespace std;</span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
-    <span class="n">T</span> <span class="n">x</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="n">sibling</span><span class="p">;</span>
-    <span class="n">Node</span><span class="p">()</span> <span class="o">:</span> <span class="n">l</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">sibling</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
-    <span class="n">Node</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">l</span><span class="p">(</span><span class="n">l</span><span class="p">),</span> <span class="n">sibling</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="p">{}</span>
-<span class="p">};</span>
+<span class="s1">struct Node{</span>
+<span class="s1">    int child = 0, sibling = 0;</span>
+<span class="s1">    int val = 0;</span>
+<span class="s1">};</span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">struct</span> <span class="n">Tree</span> <span class="p">{</span>
-    <span class="n">Node</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">*</span><span class="n">nodes</span><span class="p">;</span>
-    <span class="n">Tree</span><span class="p">(</span><span class="kt">int</span> <span class="n">cap</span><span class="p">)</span> <span class="o">:</span> <span class="n">nodes</span><span class="p">(</span><span class="k">new</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">[</span><span class="n">cap</span><span class="p">])</span> <span class="p">{}</span>
-    <span class="o">~</span><span class="n">Tree</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span> <span class="p">[]</span> <span class="n">nodes</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">};</span>
+<span class="s1">Node a[100005];</span>
+<span class="s1">bool b[100005] = {0};</span>
+<span class="s1">int n;</span>
 
-<span class="n">Tree</span> <span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">tree</span><span class="p">(</span><span class="mi">100001</span><span class="p">);</span>
-<span class="kt">bool</span> <span class="n">is_child</span><span class="p">[</span><span class="mi">100001</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="s1">void foretra(int x){</span>
+<span class="s1">    if (x == 0)</span>
+<span class="s1">        return;</span>
+<span class="s1">    cout &lt;&lt; a[x].val &lt;&lt; &#39;</span><span class="w"> </span><span class="s1">&#39;;</span>
+<span class="s1">    int t = a[x].child;</span>
+<span class="s1">    while (t){</span>
+<span class="s1">        foretra(t);</span>
+<span class="s1">        t = a[t].sibling;</span>
+<span class="s1">    }</span>
+<span class="s1">}</span>
 
-<span class="kt">void</span> <span class="nf">pre_traverse</span><span class="p">(</span><span class="k">const</span> <span class="n">Tree</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-    <span class="k">const</span> <span class="n">Node</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">];</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">ptr</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
-    <span class="n">pre_traverse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ptr</span><span class="p">.</span><span class="n">l</span><span class="p">);</span>
-    <span class="n">pre_traverse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ptr</span><span class="p">.</span><span class="n">sibling</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="s1">void backtra(int x){</span>
+<span class="s1">    if (x == 0)</span>
+<span class="s1">        return;</span>
+<span class="s1">    int t = a[x].child;</span>
+<span class="s1">    while (t){</span>
+<span class="s1">        backtra(t);</span>
+<span class="s1">        t = a[t].sibling;</span>
+<span class="s1">    }</span>
+<span class="s1">    cout &lt;&lt; a[x].val &lt;&lt; &#39;</span><span class="w"> </span><span class="s1">&#39;;</span>
+<span class="s1">}</span>
 
-<span class="kt">void</span> <span class="nf">post_traverse</span><span class="p">(</span><span class="k">const</span> <span class="n">Tree</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">node</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">node</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-    <span class="k">const</span> <span class="n">Node</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">ptr</span> <span class="o">=</span> <span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">];</span>
-    <span class="n">post_traverse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ptr</span><span class="p">.</span><span class="n">l</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">ptr</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
-    <span class="n">post_traverse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">ptr</span><span class="p">.</span><span class="n">sibling</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="s1">void hieatra(int root){</span>
+<span class="s1">    int q[100005];</span>
+<span class="s1">    int front = 0, rear = 0;</span>
+<span class="s1">    q[rear++] = root;</span>
+<span class="s1">    while (front != rear){</span>
+<span class="s1">        int now = q[front];</span>
+<span class="s1">        front++;</span>
+<span class="s1">        cout &lt;&lt; a[now].val &lt;&lt; &#39;</span><span class="w"> </span><span class="s1">&#39;;</span>
+<span class="s1">        int t = a[now].child;</span>
+<span class="s1">        while (t){</span>
+<span class="s1">            q[rear++] = t;</span>
+<span class="s1">            t = a[t].sibling;</span>
+<span class="s1">        }</span>
+<span class="s1">    }</span>
+<span class="s1">}</span>
 
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
-<span class="k">struct</span> <span class="n">Queue</span> <span class="p">{</span>
-    <span class="n">T</span><span class="o">*</span> <span class="n">d</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">f</span><span class="p">,</span> <span class="n">r</span><span class="p">;</span>
-    <span class="n">Queue</span><span class="p">(</span><span class="kt">int</span> <span class="n">cap</span><span class="p">)</span> <span class="o">:</span> <span class="n">d</span><span class="p">(</span><span class="k">new</span> <span class="n">T</span><span class="p">[</span><span class="n">cap</span><span class="p">]),</span> <span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">r</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
-    <span class="kt">bool</span> <span class="n">empty</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">f</span> <span class="o">==</span> <span class="n">r</span><span class="p">;</span> <span class="p">}</span>
-    <span class="kt">void</span> <span class="n">enqueue</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">d</span><span class="p">[</span><span class="n">r</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">const</span> <span class="n">T</span> <span class="n">dequeue</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">d</span><span class="p">[</span><span class="n">f</span><span class="o">++</span><span class="p">];</span> <span class="p">}</span>
-    <span class="o">~</span><span class="n">Queue</span><span class="p">()</span> <span class="p">{</span> <span class="k">delete</span><span class="p">[]</span> <span class="n">d</span><span class="p">;</span> <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="kt">void</span> <span class="nf">level_traverse</span><span class="p">(</span><span class="k">const</span> <span class="n">Tree</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="o">&amp;</span> <span class="n">tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">root</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-    <span class="n">Queue</span> <span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">(</span><span class="mi">300000</span><span class="p">);</span>
-    <span class="n">q</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>
-        <span class="k">const</span> <span class="n">Node</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">node</span> <span class="o">=</span> <span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">q</span><span class="p">.</span><span class="n">dequeue</span><span class="p">()];</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">x</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">l</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">q</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">l</span><span class="p">);</span>
-            <span class="kt">int</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">.</span><span class="n">l</span><span class="p">].</span><span class="n">sibling</span><span class="p">;</span>
-            <span class="k">while</span> <span class="p">(</span><span class="n">ptr</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">q</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">ptr</span><span class="p">);</span>
-                <span class="n">ptr</span> <span class="o">=</span> <span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">ptr</span><span class="p">].</span><span class="n">sibling</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">N</span><span class="p">;</span>
-    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">N</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">l</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sibling</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">);</span>
-        <span class="n">is_child</span><span class="p">[</span><span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">is_child</span><span class="p">[</span><span class="n">tree</span><span class="p">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sibling</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="kt">int</span> <span class="n">root</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_child</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">root</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">pre_traverse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-    <span class="n">post_traverse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-    <span class="n">level_traverse</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">root</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="s1">int main(){</span>
+<span class="s1">    ios::sync_with_stdio(false);</span>
+<span class="s1">    cin.tie(0);</span>
+<span class="s1">    cout.tie(0);</span>
+<span class="s1">    cin &gt;&gt; n;</span>
+<span class="s1">    for (int i = 1; i &lt;= n; ++i){</span>
+<span class="s1">        cin &gt;&gt; a[i].child &gt;&gt; a[i].sibling &gt;&gt; a[i].val;</span>
+<span class="s1">        b[a[i].child] = true;</span>
+<span class="s1">        b[a[i].sibling] = true;</span>
+<span class="s1">    }</span>
+<span class="s1">    int root = 0;</span>
+<span class="s1">    for (int i = 1; i &lt;= n; ++i){</span>
+<span class="s1">        if (!b[i]){</span>
+<span class="s1">            root = i;</span>
+<span class="s1">            break;</span>
+<span class="s1">        }</span>
+<span class="s1">    }</span>
+<span class="s1">    foretra(root);</span>
+<span class="s1">    cout &lt;&lt; &#39;</span><span class="err">\</span><span class="n">n</span><span class="s1">&#39;;</span>
+<span class="s1">    backtra(root);</span>
+<span class="s1">    cout &lt;&lt; &#39;</span><span class="err">\</span><span class="n">n</span><span class="s1">&#39;;</span>
+<span class="s1">    hieatra(root);</span>
+<span class="s1">    cout &lt;&lt; &#39;</span><span class="err">\</span><span class="n">n</span><span class="err">&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 </code></pre></div>
 
 
-<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<div class="codehilite"><pre><span></span><code><span class="cm">/* traverse */</span>
-<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="k">struct</span> <span class="n">Node</span><span class="p">{</span>
-    <span class="kt">int</span> <span class="n">child</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sibling</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="n">Node</span> <span class="n">a</span><span class="p">[</span><span class="mi">100005</span><span class="p">];</span>
-<span class="kt">bool</span> <span class="n">b</span><span class="p">[</span><span class="mi">100005</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
-<span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
-
-<span class="kt">void</span> <span class="nf">foretra</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">child</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">t</span><span class="p">){</span>
-        <span class="n">foretra</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">sibling</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">backtra</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">){</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">child</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">t</span><span class="p">){</span>
-        <span class="n">backtra</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">sibling</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">hieatra</span><span class="p">(</span><span class="kt">int</span> <span class="n">root</span><span class="p">){</span>
-    <span class="kt">int</span> <span class="n">q</span><span class="p">[</span><span class="mi">100005</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">front</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rear</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">front</span> <span class="o">!=</span> <span class="n">rear</span><span class="p">){</span>
-        <span class="kt">int</span> <span class="n">now</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="n">front</span><span class="p">];</span>
-        <span class="n">front</span><span class="o">++</span><span class="p">;</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">val</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39; &#39;</span><span class="p">;</span>
-        <span class="kt">int</span> <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">now</span><span class="p">].</span><span class="n">child</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">t</span><span class="p">){</span>
-            <span class="n">q</span><span class="p">[</span><span class="n">rear</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">;</span>
-            <span class="n">t</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">t</span><span class="p">].</span><span class="n">sibling</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-    <span class="n">ios</span><span class="o">::</span><span class="n">sync_with_stdio</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
-    <span class="n">cin</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="n">cout</span><span class="p">.</span><span class="n">tie</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">child</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sibling</span> <span class="o">&gt;&gt;</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">val</span><span class="p">;</span>
-        <span class="n">b</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="n">b</span><span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">sibling</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="kt">int</span> <span class="n">root</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]){</span>
-            <span class="n">root</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-            <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">foretra</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-    <span class="n">backtra</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-    <span class="n">hieatra</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-
-<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;cmath&quot;</span><span class="cp"></span>
@@ -1184,7 +1166,7 @@
 </code></pre></div>
 
 
-<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
@@ -1454,7 +1436,7 @@
 </code></pre></div>
 
 
-<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="zsi-rs-solution">Zsi-r's solution <a class="github-button" href="https://github.com/Zsi-r/CS221" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
@@ -1611,7 +1593,7 @@
 </code></pre></div>
 
 
-<h2 id="washswangs-solution">WashSwang's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/WashSwang/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>

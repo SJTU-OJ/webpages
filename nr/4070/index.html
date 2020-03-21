@@ -291,15 +291,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#skyzh-s-solution" class="md-nav__link">
-    skyzh 's solution
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ligongzzzs-solution" class="md-nav__link">
-    ligongzzz's solution 
+  <a href="#skyzhs-solutioninclude" class="md-nav__link">
+    skyzh's solution#include 
   </a>
   
 </li>
@@ -420,92 +413,81 @@ fudan
 
 </details>
 
-<h2 id="skyzh-s-solution">skyzh 's solution</h2>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<h2 id="skyzhs-solutioninclude">skyzh's solution#include <iostream></h2>
+<h1 id="include">include <cstring></h1>
+<p>using namespace std;</p>
+<p>struct String {
+    char x[50];
+};</p>
+<p>bool operator&lt;(const String&amp; a, const String&amp; b) {
+    return strcmp(a.x, b.x) &lt; 0;
+}</p>
+<p>int partition(String *x, int l, int r) {
+    String pivot = x[r];
+    int i = l;
+    for (int j = l; j &lt; r; j++) {
+        if (x[j] &lt; pivot) {
+            swap(x[j], x[i++]);
+        }
+    }
+    swap(x[r], x[i]);
+    return i;
+}</p>
+<p>void _quicksort(String *x, int l, int r) {
+    if (l &gt;= r) return;
+    int mid = partition(x, l, r);
+    _quicksort(x, l, mid - 1);
+    _quicksort(x, mid + 1, r);
+}</p>
+<p>void shuffle(String *x, int N) {
+    for (int i = N - 1; i &gt; 0; i--) {
+        int j = rand() % (i + 1);
+        swap(x[i], x[j]);
+    }
+}</p>
+<p>void quicksort(String *x, int N) {
+    shuffle(x, N);
+    _quicksort(x, 0, N - 1);
+}</p>
+<p>const int MAX_BUF = 100000;
+String buffer[MAX_BUF];
+int N = 0;</p>
+<p>int main() {
+    char ch;
+    char tmp[50];
+    cin &gt;&gt; ch; cin.get();
+    while(true) {
+        cin.getline(tmp, 50);
+        if (strcmp(tmp, "@") == 0) break;
+        else {
+            const int size = strlen(tmp);
+            int j = 0;
+            for(int i = 0; i &lt; size; i++) {
+                if (tmp[i] != ch) buffer[N].x[j++] = tmp[i];
+            }
+            buffer[N].x[j] = 0;
+            ++N;
+        }
+    }
+    quicksort(buffer, N);
+    for (int i = N - 1; i &gt;= 0; i--) {
+        cout &lt;&lt; buffer[i].x;
+        if (i != 0) cout &lt;&lt; endl;
+    }
+    return 0;
+}</p>
+<div class="codehilite"><pre><span></span><code>## ligongzzz&#39;s solution <span class="nt">&lt;a</span> <span class="na">class=</span><span class="s">&quot;github-button&quot;</span> <span class="na">href=</span><span class="s">&quot;https://github.com/ligongzzz/SJTU-OJ&quot;</span> <span class="na">data-icon=</span><span class="s">&quot;octicon-star&quot;</span> <span class="na">data-show-count=</span><span class="s">&quot;true&quot;</span> <span class="na">aria-label=</span><span class="s">&quot;Star!&quot;</span><span class="nt">&gt;&lt;/a&gt;</span>
 
-<span class="k">struct</span> <span class="n">String</span> <span class="p">{</span>
-    <span class="kt">char</span> <span class="n">x</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
-<span class="p">};</span>
+```cpp
+#include &quot;iostream&quot;
+#include &quot;cstdio&quot;
+#include &quot;cstring&quot;
+using namespace std;
 
-<span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">String</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">String</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">strcmp</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="n">partition</span><span class="p">(</span><span class="n">String</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">String</span> <span class="n">pivot</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">r</span><span class="p">];</span>
-    <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">l</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">swap</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">++</span><span class="p">]);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">swap</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">r</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-    <span class="k">return</span> <span class="n">i</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="n">_quicksort</span><span class="p">(</span><span class="n">String</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">l</span><span class="p">,</span> <span class="kt">int</span> <span class="n">r</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">l</span> <span class="o">&gt;=</span> <span class="n">r</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
-    <span class="n">_quicksort</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">mid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-    <span class="n">_quicksort</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mid</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">r</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="n">shuffle</span><span class="p">(</span><span class="n">String</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-        <span class="n">swap</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-
-<span class="kt">void</span> <span class="n">quicksort</span><span class="p">(</span><span class="n">String</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">shuffle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-    <span class="n">_quicksort</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="k">const</span> <span class="kt">int</span> <span class="n">MAX_BUF</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
-<span class="n">String</span> <span class="n">buffer</span><span class="p">[</span><span class="n">MAX_BUF</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">char</span> <span class="n">ch</span><span class="p">;</span>
-    <span class="kt">char</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">50</span><span class="p">];</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">ch</span><span class="p">;</span> <span class="n">cin</span><span class="p">.</span><span class="n">get</span><span class="p">();</span>
-    <span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">cin</span><span class="p">.</span><span class="n">getline</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s">&quot;@&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">const</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-            <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">ch</span><span class="p">)</span> <span class="n">buffer</span><span class="p">[</span><span class="n">N</span><span class="p">].</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">++</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="p">}</span>
-            <span class="n">buffer</span><span class="p">[</span><span class="n">N</span><span class="p">].</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="o">++</span><span class="n">N</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">quicksort</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">--</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
+int main() {
 
 
-<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&quot;cstring&quot;</span><span class="cp"></span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-
-
-<span class="p">}</span>
+}
 </code></pre></div>
                 
                   

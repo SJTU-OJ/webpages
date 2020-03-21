@@ -291,36 +291,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#skyzh-s-solution" class="md-nav__link">
-    skyzh 's solution
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#victrids-solution" class="md-nav__link">
-    VictriD's solution 
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fineartzs-solution" class="md-nav__link">
-    FineArtz's solution 
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#ligongzzzs-solution" class="md-nav__link">
-    ligongzzz's solution 
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#neight99s-solution" class="md-nav__link">
-    Neight99's solution 
+  <a href="#skyzhs-solutioninclude" class="md-nav__link">
+    skyzh's solution#include 
   </a>
   
 </li>
@@ -496,144 +468,137 @@
 
 </details>
 
-<h2 id="skyzh-s-solution">skyzh 's solution</h2>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<h2 id="skyzhs-solutioninclude">skyzh's solution#include <iostream></h2>
+<h1 id="include">include <algorithm></h1>
+<h1 id="include_1">include <cstdio></h1>
+<p>using namespace std;</p>
+<p>struct Mouse {
+    int p, s, id;
+};</p>
+<p>inline bool cmp(const Mouse&amp; a, const Mouse&amp; b) {
+    if (a.p == b.p) {
+        return a.id &lt; b.id;
+    } else return a.p &gt; b.p;
+}</p>
+<p>Mouse A[200000];</p>
+<p>int main() {
+    int N, R;
+    scanf("%d%d", &amp;N, &amp;R);
+    N *= 2;
+    for (int i = 0; i &lt; N; i++) {
+        scanf("%d", &amp;A[i].p);
+        A[i].id = i + 1;
+    }
+    for (int i = 0; i &lt; N; i++) {
+        scanf("%d", &amp;A[i].s);
+    }
+    sort(A, A + N, cmp);
+    for (int i = 0; i &lt; R; i++) {
+        for (int j = 0; j &lt; N; j += 2) {
+            Mouse&amp; a = A[j];
+            Mouse&amp; b = A[j + 1];
+            int res = a.s - b.s;
+            if (res &gt; 0) a.p += 2;
+            else if (res == 0) {
+                a.p++; b.p++;
+            }
+            else b.p += 2;
+        }
+        while (true) {
+            bool sorted = true;
+            for (int i = 0; i &lt; N - 1; i++) {
+                if (!cmp(A[i], A[i + 1])) {
+                    swap(A[i], A[i + 1]);
+                    sorted = false;
+                }
+            }
+            if (sorted) break;
+        }
+    }
+    for (int i = 0; i &lt; N; i++) {
+        printf("%d ", A[i].id);
+    }
+    printf("\n");
+    return 0;
+}</p>
+<div class="codehilite"><pre><span></span><code><span class="err">##</span><span class="w"> </span><span class="n">VictriD</span><span class="s1">&#39;s solution &lt;a class=&quot;github-button&quot; href=&quot;https://github.com/Victrid/Atlas&quot; data-icon=&quot;octicon-star&quot; data-show-count=&quot;true&quot; aria-label=&quot;Star!&quot;&gt;&lt;/a&gt;</span>
 
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="s1">```cpp</span>
+<span class="s1">#include &lt;iostream&gt;</span>
+<span class="s1">#include &lt;cstdio&gt;</span>
+<span class="s1">#include &lt;cstring&gt;</span>
+<span class="s1">using namespace std;</span>
+<span class="s1">struct mouse {</span>
+<span class="s1">    int number;</span>
+<span class="s1">    int score;</span>
+<span class="s1">    int strength;</span>
+<span class="s1">};</span>
 
-<span class="k">struct</span> <span class="n">Mouse</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">id</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="s1">mouse tmplist[200005];</span>
+<span class="s1">mouse ml[200005];</span>
 
-<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">cmp</span><span class="p">(</span><span class="k">const</span> <span class="n">Mouse</span><span class="o">&amp;</span> <span class="n">a</span><span class="p">,</span> <span class="k">const</span> <span class="n">Mouse</span><span class="o">&amp;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">p</span> <span class="o">==</span> <span class="n">b</span><span class="p">.</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">id</span> <span class="o">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">id</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="k">return</span> <span class="n">a</span><span class="p">.</span><span class="n">p</span> <span class="o">&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">p</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="s1">mouse* MergeSort(mouse* list, int listSize) {</span>
+<span class="s1">    if (listSize == 1)</span>
+<span class="s1">        return list;</span>
+<span class="s1">    if (listSize == 2) {</span>
+<span class="s1">        if (list[0].score &lt; list[1].score || (list[0].score == list[1].score &amp;&amp; list[0].number &gt; list[1].number)) {</span>
+<span class="s1">            mouse temp = list[0];</span>
+<span class="s1">            list[0]    = list[1];</span>
+<span class="s1">            list[1]    = temp;</span>
+<span class="s1">            return list;</span>
+<span class="s1">        }</span>
+<span class="s1">        return list;</span>
+<span class="s1">    }</span>
 
-<span class="n">Mouse</span> <span class="n">A</span><span class="p">[</span><span class="mi">200000</span><span class="p">];</span>
+<span class="s1">    mouse* llst = MergeSort(list, listSize / 2);</span>
+<span class="s1">    mouse* rlst = MergeSort(list + listSize / 2, listSize - listSize / 2);</span>
+<span class="s1">    int lct = 0, rct = 0;</span>
+<span class="s1">    while (lct + rct != listSize) {</span>
+<span class="s1">        if (((llst[lct].score &gt; rlst[rct].score || (llst[lct].score == rlst[rct].score &amp;&amp; llst[lct].number &lt; rlst[rct].number)) &amp;&amp; lct &lt; listSize / 2) || rct &gt;= listSize - listSize / 2) {</span>
+<span class="s1">            tmplist[lct + rct] = llst[lct];</span>
+<span class="s1">            lct++;</span>
+<span class="s1">        } else {</span>
+<span class="s1">            tmplist[lct + rct] = rlst[rct];</span>
+<span class="s1">            rct++;</span>
+<span class="s1">        }</span>
+<span class="s1">    }</span>
+<span class="s1">    memcpy(list, tmplist, listSize * sizeof(mouse));</span>
+<span class="s1">    return list;</span>
+<span class="s1">}</span>
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">R</span><span class="p">;</span>
-    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">N</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">R</span><span class="p">);</span>
-    <span class="n">N</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">p</span><span class="p">);</span>
-        <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">s</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">sort</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A</span> <span class="o">+</span> <span class="n">N</span><span class="p">,</span> <span class="n">cmp</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">R</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">Mouse</span><span class="o">&amp;</span> <span class="n">a</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-            <span class="n">Mouse</span><span class="o">&amp;</span> <span class="n">b</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">];</span>
-            <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">s</span> <span class="o">-</span> <span class="n">b</span><span class="p">.</span><span class="n">s</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">a</span><span class="p">.</span><span class="n">p</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">res</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">a</span><span class="p">.</span><span class="n">p</span><span class="o">++</span><span class="p">;</span> <span class="n">b</span><span class="p">.</span><span class="n">p</span><span class="o">++</span><span class="p">;</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="n">b</span><span class="p">.</span><span class="n">p</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">while</span> <span class="p">(</span><span class="nb">true</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kt">bool</span> <span class="n">sorted</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">cmp</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span> <span class="p">{</span>
-                    <span class="n">swap</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]);</span>
-                    <span class="n">sorted</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">sorted</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d &quot;</span><span class="p">,</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="s1">int main() {</span>
+<span class="s1">    int N, R;</span>
+<span class="s1">    cin &gt;&gt; N &gt;&gt; R;</span>
+<span class="s1">    for (int i = 0; i &lt; 2 * N; i++) {</span>
+<span class="s1">        ml[i].number = i + 1;</span>
+<span class="s1">        scanf(&quot;%d&quot;, &amp;(ml[i].score));</span>
+<span class="s1">    }</span>
+<span class="s1">    for (int i = 0; i &lt; 2 * N; i++) {</span>
+<span class="s1">        scanf(&quot;%d&quot;, &amp;(ml[i].strength));</span>
+<span class="s1">    }</span>
+<span class="s1">    MergeSort(ml, 2 * N);</span>
+<span class="s1">    for (int i = 0; i &lt; R; i++) {</span>
+<span class="s1">        for (int i = 0; i &lt; 2 * N; i += 2) {</span>
+<span class="s1">            if (ml[i].strength &gt; ml[i + 1].strength)</span>
+<span class="s1">                ml[i].score += 2;</span>
+<span class="s1">            if (ml[i].strength == ml[i + 1].strength)</span>
+<span class="s1">                ml[i].score++, ml[i + 1].score++;</span>
+<span class="s1">            if (ml[i].strength &lt; ml[i + 1].strength)</span>
+<span class="s1">                ml[i + 1].score += 2;</span>
+<span class="s1">        }</span>
+<span class="s1">        MergeSort(ml, 2 * N);</span>
+<span class="s1">    }</span>
+<span class="s1">    for (int i = 0; i &lt; 2 * N; i++) {</span>
+<span class="s1">        if (i)</span>
+<span class="s1">            printf(&quot;%c&quot;,&#39;</span><span class="w"> </span><span class="err">&#39;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="ss">&quot;%d&quot;</span><span class="p">,</span><span class="n">ml</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">.</span><span class="n">number</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 </code></pre></div>
 
 
-<h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-<span class="k">struct</span> <span class="n">mouse</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">number</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">score</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">strength</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="n">mouse</span> <span class="n">tmplist</span><span class="p">[</span><span class="mi">200005</span><span class="p">];</span>
-<span class="n">mouse</span> <span class="n">ml</span><span class="p">[</span><span class="mi">200005</span><span class="p">];</span>
-
-<span class="n">mouse</span><span class="o">*</span> <span class="nf">MergeSort</span><span class="p">(</span><span class="n">mouse</span><span class="o">*</span> <span class="n">list</span><span class="p">,</span> <span class="kt">int</span> <span class="n">listSize</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">listSize</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">list</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">listSize</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">score</span> <span class="o">&lt;</span> <span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">score</span> <span class="o">||</span> <span class="p">(</span><span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">score</span> <span class="o">==</span> <span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">score</span> <span class="o">&amp;&amp;</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">number</span> <span class="o">&gt;</span> <span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">number</span><span class="p">))</span> <span class="p">{</span>
-            <span class="n">mouse</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-            <span class="n">list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>    <span class="o">=</span> <span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-            <span class="n">list</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>    <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
-            <span class="k">return</span> <span class="n">list</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">return</span> <span class="n">list</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">mouse</span><span class="o">*</span> <span class="n">llst</span> <span class="o">=</span> <span class="n">MergeSort</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
-    <span class="n">mouse</span><span class="o">*</span> <span class="n">rlst</span> <span class="o">=</span> <span class="n">MergeSort</span><span class="p">(</span><span class="n">list</span> <span class="o">+</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">listSize</span> <span class="o">-</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
-    <span class="kt">int</span> <span class="n">lct</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rct</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">lct</span> <span class="o">+</span> <span class="n">rct</span> <span class="o">!=</span> <span class="n">listSize</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(((</span><span class="n">llst</span><span class="p">[</span><span class="n">lct</span><span class="p">].</span><span class="n">score</span> <span class="o">&gt;</span> <span class="n">rlst</span><span class="p">[</span><span class="n">rct</span><span class="p">].</span><span class="n">score</span> <span class="o">||</span> <span class="p">(</span><span class="n">llst</span><span class="p">[</span><span class="n">lct</span><span class="p">].</span><span class="n">score</span> <span class="o">==</span> <span class="n">rlst</span><span class="p">[</span><span class="n">rct</span><span class="p">].</span><span class="n">score</span> <span class="o">&amp;&amp;</span> <span class="n">llst</span><span class="p">[</span><span class="n">lct</span><span class="p">].</span><span class="n">number</span> <span class="o">&lt;</span> <span class="n">rlst</span><span class="p">[</span><span class="n">rct</span><span class="p">].</span><span class="n">number</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="n">lct</span> <span class="o">&lt;</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">||</span> <span class="n">rct</span> <span class="o">&gt;=</span> <span class="n">listSize</span> <span class="o">-</span> <span class="n">listSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">tmplist</span><span class="p">[</span><span class="n">lct</span> <span class="o">+</span> <span class="n">rct</span><span class="p">]</span> <span class="o">=</span> <span class="n">llst</span><span class="p">[</span><span class="n">lct</span><span class="p">];</span>
-            <span class="n">lct</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="n">tmplist</span><span class="p">[</span><span class="n">lct</span> <span class="o">+</span> <span class="n">rct</span><span class="p">]</span> <span class="o">=</span> <span class="n">rlst</span><span class="p">[</span><span class="n">rct</span><span class="p">];</span>
-            <span class="n">rct</span><span class="o">++</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">memcpy</span><span class="p">(</span><span class="n">list</span><span class="p">,</span> <span class="n">tmplist</span><span class="p">,</span> <span class="n">listSize</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">mouse</span><span class="p">));</span>
-    <span class="k">return</span> <span class="n">list</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="n">R</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">N</span> <span class="o">&gt;&gt;</span> <span class="n">R</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">ml</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">number</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">ml</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span><span class="p">));</span>
-    <span class="p">}</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="p">(</span><span class="n">ml</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">strength</span><span class="p">));</span>
-    <span class="p">}</span>
-    <span class="n">MergeSort</span><span class="p">(</span><span class="n">ml</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">R</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">ml</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">strength</span> <span class="o">&gt;</span> <span class="n">ml</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">strength</span><span class="p">)</span>
-                <span class="n">ml</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">ml</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">strength</span> <span class="o">==</span> <span class="n">ml</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">strength</span><span class="p">)</span>
-                <span class="n">ml</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span><span class="o">++</span><span class="p">,</span> <span class="n">ml</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">score</span><span class="o">++</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">ml</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">strength</span> <span class="o">&lt;</span> <span class="n">ml</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">strength</span><span class="p">)</span>
-                <span class="n">ml</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">].</span><span class="n">score</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="n">MergeSort</span><span class="p">(</span><span class="n">ml</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="sc">&#39; &#39;</span><span class="p">);</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="n">ml</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">number</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-
-<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cm">/* Mouse */</span>
 <span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&lt;iomanip&gt;</span><span class="cp"></span>
@@ -715,7 +680,7 @@
 </code></pre></div>
 
 
-<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;cmath&quot;</span><span class="cp"></span>
@@ -869,7 +834,7 @@
 </code></pre></div>
 
 
-<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="neight99s-solution">Neight99's solution <a class="github-button" href="https://github.com/Neight99/SJTU_DataStructure_A" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
 
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>

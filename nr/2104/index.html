@@ -291,15 +291,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#skyzh-s-solution" class="md-nav__link">
-    skyzh 's solution
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fineartzs-solution" class="md-nav__link">
-    FineArtz's solution 
+  <a href="#skyzhs-solutioninclude" class="md-nav__link">
+    skyzh's solution#include 
   </a>
   
 </li>
@@ -443,139 +436,131 @@
 
 </details>
 
-<h2 id="skyzh-s-solution">skyzh 's solution</h2>
-<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<h2 id="skyzhs-solutioninclude">skyzh's solution#include <iostream></h2>
+<p>using namespace std;</p>
+<p>bool MAP[2000][2000] = { 0 };
+bool visited[2000][2000] = { 0 };</p>
+<p>inline bool&amp; map_at(int x, int y) { return MAP[x + 500][y + 500]; }
+inline bool&amp; visited_at(int x, int y) { return visited[x + 500][y + 500]; }</p>
+<p>struct a_step {
+    int x, y, step;
+};</p>
+<p>a_step d[1000000];
+int front = 0, rear = 0;</p>
+<p>int bfs(int X, int Y) {
+    d[rear].x = 0;
+    d[rear].y = 0;
+    d[rear].step = 0;
+    ++rear;
+    while (front &lt; rear) {
+        a_step &amp;current = d[front];
+        ++front;
+        static int dir[4][2] = {1, 0, -1, 0, 0, 1, 0, -1};
+        for (int _d = 0; _d &lt; 4; _d++) {
+            int _x = current.x + dir[_d][0];
+            int _y = current.y + dir[_d][1];
+            if (_x &gt;= -505 &amp;&amp; _y &gt;= -505 &amp;&amp; _x &lt;= 505 &amp;&amp; _y &lt;= 505) {
+                if (map_at(_x, _y) == false &amp;&amp; visited_at(_x, _y) == false) {
+                    visited_at(_x, _y) = true;
+                    if (_x == X &amp;&amp; _y == Y) return current.step + 1;
+                    a_step &amp;tmp = d[rear];
+                    tmp.x = _x;
+                    tmp.y = _y;
+                    tmp.step = current.step + 1;
+                    ++rear;
+                }
+            }
+        }
+    }
+    return 0;
+}</p>
+<p>int main() {
+    int X, Y, N, x, y;
+    scanf("%d%d%d", &amp;X, &amp;Y, &amp;N);
+    for (int i = 0; i &lt; N; i++) {
+        scanf("%d%d", &amp;x, &amp;y);
+        map_at(x, y) = true;
+    }
+    printf("%d\n", bfs(X, Y));
+    return 0;
+}</p>
+<div class="codehilite"><pre><span></span><code><span class="err">##</span><span class="w"> </span><span class="n">FineArtz</span><span class="err">&#39;</span><span class="n">s</span><span class="w"> </span><span class="n">solution</span><span class="w"> </span><span class="o">&lt;</span><span class="n">a</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;github-button&quot;</span><span class="w"> </span><span class="n">href</span><span class="o">=</span><span class="ss">&quot;https://github.com/FineArtz/SJTUOJ&quot;</span><span class="w"> </span><span class="k">data</span><span class="o">-</span><span class="n">icon</span><span class="o">=</span><span class="ss">&quot;octicon-star&quot;</span><span class="w"> </span><span class="k">data</span><span class="o">-</span><span class="n">show</span><span class="o">-</span><span class="nf">count</span><span class="o">=</span><span class="ss">&quot;true&quot;</span><span class="w"> </span><span class="n">aria</span><span class="o">-</span><span class="n">label</span><span class="o">=</span><span class="ss">&quot;Star!&quot;</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="w"></span>
 
-<span class="kt">bool</span> <span class="n">MAP</span><span class="p">[</span><span class="mi">2000</span><span class="p">][</span><span class="mi">2000</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
-<span class="kt">bool</span> <span class="n">visited</span><span class="p">[</span><span class="mi">2000</span><span class="p">][</span><span class="mi">2000</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span> <span class="p">};</span>
+<span class="err">```</span><span class="n">cpp</span><span class="w"></span>
+<span class="cm">/* 大脸上课 */</span><span class="w"></span>
+<span class="n">#include</span><span class="w"> </span><span class="o">&lt;</span><span class="n">iostream</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">#include</span><span class="w"> </span><span class="o">&lt;</span><span class="n">queue</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">#include</span><span class="w"> </span><span class="o">&lt;</span><span class="n">cstring</span><span class="o">&gt;</span><span class="w"></span>
+<span class="k">using</span><span class="w"> </span><span class="n">namespace</span><span class="w"> </span><span class="n">std</span><span class="p">;</span><span class="w"></span>
 
-<span class="kr">inline</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">map_at</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">MAP</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">500</span><span class="p">][</span><span class="n">y</span> <span class="o">+</span> <span class="mi">500</span><span class="p">];</span> <span class="p">}</span>
-<span class="kr">inline</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">visited_at</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">visited</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="mi">500</span><span class="p">][</span><span class="n">y</span> <span class="o">+</span> <span class="mi">500</span><span class="p">];</span> <span class="p">}</span>
+<span class="n">const</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">dx</span><span class="o">[</span><span class="n">4</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="err">}</span><span class="p">;</span><span class="w"></span>
+<span class="n">const</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">dy</span><span class="o">[</span><span class="n">4</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="err">}</span><span class="p">;</span><span class="w"></span>
+<span class="n">const</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">502</span><span class="p">;</span><span class="w"></span>
 
-<span class="k">struct</span> <span class="n">a_step</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">step</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="n">bool</span><span class="w"> </span><span class="n">v</span><span class="o">[</span><span class="n">1005</span><span class="o">][</span><span class="n">1005</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
 
-<span class="n">a_step</span> <span class="n">d</span><span class="p">[</span><span class="mi">1000000</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">front</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rear</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nc">int</span><span class="w"> </span><span class="n">lBound</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">rBound</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1005</span><span class="p">,</span><span class="w"> </span><span class="n">uBound</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1005</span><span class="p">,</span><span class="w"> </span><span class="n">dBound</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
 
-<span class="kt">int</span> <span class="nf">bfs</span><span class="p">(</span><span class="kt">int</span> <span class="n">X</span><span class="p">,</span> <span class="kt">int</span> <span class="n">Y</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">d</span><span class="p">[</span><span class="n">rear</span><span class="p">].</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">d</span><span class="p">[</span><span class="n">rear</span><span class="p">].</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="n">d</span><span class="p">[</span><span class="n">rear</span><span class="p">].</span><span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="o">++</span><span class="n">rear</span><span class="p">;</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">front</span> <span class="o">&lt;</span> <span class="n">rear</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">a_step</span> <span class="o">&amp;</span><span class="n">current</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">front</span><span class="p">];</span>
-        <span class="o">++</span><span class="n">front</span><span class="p">;</span>
-        <span class="k">static</span> <span class="kt">int</span> <span class="n">dir</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">};</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">_d</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">_d</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">_d</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kt">int</span> <span class="n">_x</span> <span class="o">=</span> <span class="n">current</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir</span><span class="p">[</span><span class="n">_d</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
-            <span class="kt">int</span> <span class="n">_y</span> <span class="o">=</span> <span class="n">current</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dir</span><span class="p">[</span><span class="n">_d</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">_x</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">505</span> <span class="o">&amp;&amp;</span> <span class="n">_y</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">505</span> <span class="o">&amp;&amp;</span> <span class="n">_x</span> <span class="o">&lt;=</span> <span class="mi">505</span> <span class="o">&amp;&amp;</span> <span class="n">_y</span> <span class="o">&lt;=</span> <span class="mi">505</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">map_at</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">)</span> <span class="o">==</span> <span class="nb">false</span> <span class="o">&amp;&amp;</span> <span class="n">visited_at</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">)</span> <span class="o">==</span> <span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="n">visited_at</span><span class="p">(</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">)</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="n">_x</span> <span class="o">==</span> <span class="n">X</span> <span class="o">&amp;&amp;</span> <span class="n">_y</span> <span class="o">==</span> <span class="n">Y</span><span class="p">)</span> <span class="k">return</span> <span class="n">current</span><span class="p">.</span><span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-                    <span class="n">a_step</span> <span class="o">&amp;</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">rear</span><span class="p">];</span>
-                    <span class="n">tmp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">_x</span><span class="p">;</span>
-                    <span class="n">tmp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">_y</span><span class="p">;</span>
-                    <span class="n">tmp</span><span class="p">.</span><span class="n">step</span> <span class="o">=</span> <span class="n">current</span><span class="p">.</span><span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-                    <span class="o">++</span><span class="n">rear</span><span class="p">;</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="k">class</span><span class="w"> </span><span class="n">Point</span><span class="err">{</span><span class="w"></span>
+<span class="k">public</span><span class="err">:</span><span class="w"></span>
+<span class="w">    </span><span class="n">Point</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">Point</span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">xx</span><span class="p">,</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">yy</span><span class="p">)</span><span class="w"> </span><span class="err">:</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="n">yy</span><span class="p">),</span><span class="w"> </span><span class="n">step</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="err">{}</span><span class="w"></span>
+<span class="w">    </span><span class="nc">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="p">;</span><span class="w"></span>
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
-    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">X</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Y</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">N</span><span class="p">);</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
-        <span class="n">map_at</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">bfs</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">));</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
+<span class="n">bool</span><span class="w"> </span><span class="k">check</span><span class="p">(</span><span class="n">const</span><span class="w"> </span><span class="n">Point</span><span class="w"> </span><span class="o">&amp;</span><span class="n">p</span><span class="p">)</span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">lBound</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">rBound</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">lBound</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">uBound</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">v</span><span class="o">[</span><span class="n">p.x</span><span class="o">][</span><span class="n">p.y</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 
-
-<h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
-<div class="codehilite"><pre><span></span><code><span class="cm">/* 大脸上课 */</span>
-<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
-
-<span class="k">const</span> <span class="kt">int</span> <span class="n">dx</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">};</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">dy</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">};</span>
-<span class="k">const</span> <span class="kt">int</span> <span class="n">D</span> <span class="o">=</span> <span class="mi">502</span><span class="p">;</span>
-
-<span class="kt">bool</span> <span class="n">v</span><span class="p">[</span><span class="mi">1005</span><span class="p">][</span><span class="mi">1005</span><span class="p">];</span>
-
-<span class="kt">int</span> <span class="n">lBound</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rBound</span> <span class="o">=</span> <span class="mi">1005</span><span class="p">,</span> <span class="n">uBound</span> <span class="o">=</span> <span class="mi">1005</span><span class="p">,</span> <span class="n">dBound</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-<span class="k">class</span> <span class="nc">Point</span><span class="p">{</span>
-<span class="k">public</span><span class="o">:</span>
-    <span class="n">Point</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
-    <span class="n">Point</span><span class="p">(</span><span class="kt">int</span> <span class="n">xx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">yy</span><span class="p">)</span> <span class="o">:</span> <span class="n">x</span><span class="p">(</span><span class="n">xx</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">yy</span><span class="p">),</span> <span class="n">step</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
-    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="kt">bool</span> <span class="nf">check</span><span class="p">(</span><span class="k">const</span> <span class="n">Point</span> <span class="o">&amp;</span><span class="n">p</span><span class="p">){</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">lBound</span> <span class="o">||</span> <span class="n">p</span><span class="p">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">rBound</span> <span class="o">||</span> <span class="n">p</span><span class="p">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">lBound</span> <span class="o">||</span> <span class="n">p</span><span class="p">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">uBound</span> <span class="o">||</span> <span class="n">v</span><span class="p">[</span><span class="n">p</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">p</span><span class="p">.</span><span class="n">y</span><span class="p">])</span> <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
-    <span class="k">else</span> <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-    <span class="n">memset</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">v</span><span class="p">));</span>
-    <span class="n">v</span><span class="p">[</span><span class="n">D</span><span class="p">][</span><span class="n">D</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">;</span>
-    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="n">y</span> <span class="o">&gt;&gt;</span> <span class="n">n</span><span class="p">;</span>
-    <span class="n">x</span> <span class="o">+=</span> <span class="n">D</span><span class="p">;</span>
-    <span class="n">y</span> <span class="o">+=</span> <span class="n">D</span><span class="p">;</span>
-    <span class="cm">/*lBound = min(lBound, x - 1);</span>
+<span class="nc">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">memset</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">sizeof</span><span class="p">(</span><span class="n">v</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="n">v</span><span class="o">[</span><span class="n">D</span><span class="o">][</span><span class="n">D</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="nc">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cin</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">D</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">y</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">D</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="cm">/*lBound = min(lBound, x - 1);</span>
 <span class="cm">    rBound = max(rBound, x + 1);</span>
 <span class="cm">    uBound = max(uBound, y + 1);</span>
-<span class="cm">    dBound = min(dBound, y - 1);*/</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-        <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
-        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">a</span> <span class="o">&gt;&gt;</span> <span class="n">b</span><span class="p">;</span>
-        <span class="n">a</span> <span class="o">+=</span> <span class="n">D</span><span class="p">;</span>
-        <span class="n">b</span> <span class="o">+=</span> <span class="n">D</span><span class="p">;</span>
-        <span class="n">v</span><span class="p">[</span><span class="n">a</span><span class="p">][</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-        <span class="cm">/*lBound = min(lBound, a - 1);</span>
+<span class="cm">    dBound = min(dBound, y - 1);*/</span><span class="w"></span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="nc">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">cin</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">a</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">D</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">b</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">D</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">v</span><span class="o">[</span><span class="n">a</span><span class="o">][</span><span class="n">b</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="cm">/*lBound = min(lBound, a - 1);</span>
 <span class="cm">        rBound = max(rBound, a + 1);</span>
 <span class="cm">        uBound = max(uBound, b + 1);</span>
-<span class="cm">        dBound = min(dBound, b - 1);*/</span>
-    <span class="p">}</span>
-    <span class="n">queue</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span> <span class="n">q</span><span class="p">;</span>
-    <span class="n">Point</span> <span class="n">s</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">);</span>
-    <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">()){</span>
-        <span class="n">Point</span> <span class="n">now</span> <span class="o">=</span> <span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">(),</span> <span class="n">next</span><span class="p">;</span>
-        <span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">now</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">now</span><span class="p">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">y</span><span class="p">){</span>
-            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">now</span><span class="p">.</span><span class="n">step</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">){</span>
-            <span class="n">next</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">now</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">next</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">now</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-            <span class="n">next</span><span class="p">.</span><span class="n">step</span> <span class="o">=</span> <span class="n">now</span><span class="p">.</span><span class="n">step</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">check</span><span class="p">(</span><span class="n">next</span><span class="p">)){</span>
-                <span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-                <span class="n">v</span><span class="p">[</span><span class="n">next</span><span class="p">.</span><span class="n">x</span><span class="p">][</span><span class="n">next</span><span class="p">.</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<span class="cm">        dBound = min(dBound, b - 1);*/</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="n">queue</span><span class="o">&lt;</span><span class="n">Point</span><span class="o">&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">Point</span><span class="w"> </span><span class="n">s</span><span class="p">(</span><span class="n">D</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">s</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="err">!</span><span class="n">q</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">Point</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">q</span><span class="p">.</span><span class="n">front</span><span class="p">(),</span><span class="w"> </span><span class="k">next</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">now</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">step</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">next</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dx</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">next</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dy</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">next</span><span class="p">.</span><span class="n">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">check</span><span class="p">(</span><span class="k">next</span><span class="p">))</span><span class="err">{</span><span class="w"></span>
+<span class="w">                </span><span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="k">next</span><span class="p">);</span><span class="w"></span>
+<span class="w">                </span><span class="n">v</span><span class="o">[</span><span class="n">next.x</span><span class="o">][</span><span class="n">next.y</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"></span>
+<span class="w">            </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
 </code></pre></div>
 
 
-<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="有启发？给大佬星！"></a></h2>
+<h2 id="ligongzzzs-solution">ligongzzz's solution <a class="github-button" href="https://github.com/ligongzzz/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&quot;iostream&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;cstdio&quot;</span><span class="cp"></span>
 <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
