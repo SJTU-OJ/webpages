@@ -291,8 +291,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#skyzhs-solutioninclude" class="md-nav__link">
-    skyzh's solution#include 
+  <a href="#skyzhs-solution" class="md-nav__link">
+    skyzh's solution
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#victrids-solution" class="md-nav__link">
+    VictriD's solution 
   </a>
   
 </li>
@@ -425,112 +432,116 @@ AabccbaA
 
 </details>
 
-<h2 id="skyzhs-solutioninclude">skyzh's solution#include <iostream></h2>
-<h1 id="include">include <cstring></h1>
-<h1 id="include_1">include <vector></h1>
-<p>using namespace std;</p>
-<p>vector <bool> rev[10000];</p>
-<p>int main() {
-    char str[20000];
-    int max_len = 0, str_s = 0, str_e = 0;
-    cin &gt;&gt; str;
-    int len = strlen(str);
-    for (int i = 0; i &lt; len; i++) {
-        rev[i].resize(10000);
-        rev[i][i] = true;
-    }
-    for (int i = 0; i &lt; len - 1; i++) {
-        if (str[i] == str[i + 1]) {
-            rev[i][i + 1] = rev[i + 1][i] = true;
-            max_len = 1;
-        }
-    }
-    for (int i = 1; i &lt; len; i++) {
-        for (int j = 0; j &lt; i - 1; j++) {
-            if (str[i] == str[j]) {
-                if (rev[j + 1][i - 1]) {
-                    rev[j][i] = rev[i][j] = true;
-                    max_len = max(max_len, i - j);
-                }
-            }
-        }
-    }
-    if (max_len == 0) {
-        cout &lt;&lt; 0;
-        return 0;
-    }
-    cout &lt;&lt; max_len + 1 &lt;&lt; endl;
-    for (int i = 0; i &lt; len; i++) {
-        if (rev[i][i + max_len]) {
-            str[i + max_len + 1] = 0;
-            cout &lt;&lt; str + i;
-            return 0;
-        }
-    }
-    return 0;
-}</p>
-<div class="codehilite"><pre><span></span><code><span class="err">##</span><span class="w"> </span><span class="n">VictriD</span><span class="err">&#39;</span><span class="n">s</span><span class="w"> </span><span class="n">solution</span><span class="w"> </span><span class="o">&lt;</span><span class="n">a</span><span class="w"> </span><span class="k">class</span><span class="o">=</span><span class="ss">&quot;github-button&quot;</span><span class="w"> </span><span class="n">href</span><span class="o">=</span><span class="ss">&quot;https://github.com/Victrid/Atlas&quot;</span><span class="w"> </span><span class="k">data</span><span class="o">-</span><span class="n">icon</span><span class="o">=</span><span class="ss">&quot;octicon-star&quot;</span><span class="w"> </span><span class="k">data</span><span class="o">-</span><span class="n">show</span><span class="o">-</span><span class="nf">count</span><span class="o">=</span><span class="ss">&quot;true&quot;</span><span class="w"> </span><span class="n">aria</span><span class="o">-</span><span class="n">label</span><span class="o">=</span><span class="ss">&quot;Star!&quot;</span><span class="o">&gt;&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="w"></span>
+<h2 id="skyzhs-solution">skyzh's solution</h2>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-<span class="err">```</span><span class="n">cpp</span><span class="w"></span>
-<span class="n">#include</span><span class="w"> </span><span class="o">&lt;</span><span class="n">iostream</span><span class="o">&gt;</span><span class="w"></span>
-<span class="n">#include</span><span class="w"> </span><span class="o">&lt;</span><span class="n">cstring</span><span class="o">&gt;</span><span class="w"></span>
+<span class="n">vector</span> <span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span> <span class="n">rev</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
 
-<span class="n">#define</span><span class="w"> </span><span class="n">ODD</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
-<span class="n">#define</span><span class="w"> </span><span class="n">EVEN</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">str</span><span class="p">[</span><span class="mi">20000</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">max_len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">str_s</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">str_e</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">str</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="n">strlen</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">rev</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">resize</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
+        <span class="n">rev</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">str</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">rev</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rev</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+            <span class="n">max_len</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">str</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">rev</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+                    <span class="n">rev</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rev</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+                    <span class="n">max_len</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">max_len</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">j</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">max_len</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">max_len</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">rev</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span> <span class="o">+</span> <span class="n">max_len</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">str</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">max_len</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">str</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-<span class="k">using</span><span class="w"> </span><span class="n">namespace</span><span class="w"> </span><span class="n">std</span><span class="p">;</span><span class="w"></span>
 
-<span class="n">string</span><span class="w"> </span><span class="k">input</span><span class="p">;</span><span class="w"></span>
-<span class="nc">int</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
-<span class="nc">int</span><span class="w"> </span><span class="n">Leftrecorder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">Rightrecorder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstring&gt;</span><span class="cp"></span>
 
-<span class="nc">int</span><span class="w"> </span><span class="k">update</span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">pattern</span><span class="p">)</span><span class="w"></span>
-<span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="nc">int</span><span class="w"> </span><span class="n">leftlimit</span><span class="p">,</span><span class="w"> </span><span class="n">rightlimit</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ODD</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">leftlimit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">rightlimit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="k">else</span><span class="w"></span>
-<span class="w">    </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="k">input</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="k">input</span><span class="o">[</span><span class="n">i + 1</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">leftlimit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">rightlimit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="cp">#define ODD 1</span>
+<span class="cp">#define EVEN 0</span>
 
-<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">leftlimit</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">rightlimit</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">input</span><span class="o">[</span><span class="n">leftlimit - 1</span><span class="o">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">input</span><span class="o">[</span><span class="n">rightlimit + 1</span><span class="o">]</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="c1">--leftlimit;</span>
-<span class="w">        </span><span class="o">++</span><span class="n">rightlimit</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rightlimit</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">leftlimit</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">rightlimit</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">leftlimit</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">Rightrecorder</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Leftrecorder</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">Leftrecorder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">leftlimit</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">Rightrecorder</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rightlimit</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
 
-<span class="nc">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"></span>
-<span class="err">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">cin</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">input</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">input</span><span class="p">.</span><span class="n">length</span><span class="p">();</span><span class="w"></span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">ODD</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="k">update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">EVEN</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Rightrecorder</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Leftrecorder</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">Rightrecorder</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Leftrecorder</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Leftrecorder</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">Rightrecorder</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
-<span class="w">            </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">input</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-<span class="w">    </span><span class="k">else</span><span class="w"></span>
-<span class="w">        </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
-<span class="err">}</span><span class="w"></span>
+<span class="n">string</span> <span class="n">input</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">Leftrecorder</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">Rightrecorder</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">update</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pattern</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">leftlimit</span><span class="p">,</span> <span class="n">rightlimit</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">pattern</span> <span class="o">==</span> <span class="n">ODD</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">leftlimit</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">rightlimit</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="n">length</span> <span class="o">||</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">leftlimit</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">rightlimit</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="n">leftlimit</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">rightlimit</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">length</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">[</span><span class="n">leftlimit</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">input</span><span class="p">[</span><span class="n">rightlimit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="p">{</span>
+        <span class="o">--</span><span class="n">leftlimit</span><span class="p">;</span>
+        <span class="o">++</span><span class="n">rightlimit</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">rightlimit</span> <span class="o">-</span> <span class="n">leftlimit</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">rightlimit</span> <span class="o">-</span> <span class="n">leftlimit</span> <span class="o">&gt;</span> <span class="n">Rightrecorder</span> <span class="o">-</span> <span class="n">Leftrecorder</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Leftrecorder</span> <span class="o">=</span> <span class="n">leftlimit</span><span class="p">;</span>
+        <span class="n">Rightrecorder</span> <span class="o">=</span> <span class="n">rightlimit</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">input</span><span class="p">;</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">length</span><span class="p">();</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">ODD</span><span class="p">);</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">EVEN</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">Rightrecorder</span> <span class="o">-</span> <span class="n">Leftrecorder</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">Rightrecorder</span> <span class="o">-</span> <span class="n">Leftrecorder</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">Leftrecorder</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">Rightrecorder</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">input</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div>
                 
                   
