@@ -337,6 +337,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#pangbo13s-solution" class="md-nav__link">
+    Pangbo13's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#zqy1018s-solution" class="md-nav__link">
     zqy1018's solution 
   </a>
@@ -703,6 +710,174 @@ NO
         <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<h2 id="pangbo13s-solution">Pangbo13's solution <a class="github-button" href="https://github.com/pangbo13/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
+<div class="codehilite"><pre><span></span><code><span class="cm">/*</span>
+<span class="cm">这道题用cin&amp;cout会超时</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">stack</span><span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">isEmpty</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//判栈空</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">elemType</span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 进栈</span>
+        <span class="k">virtual</span> <span class="n">elemType</span> <span class="nf">pop</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 出栈</span>
+        <span class="k">virtual</span> <span class="n">elemType</span> <span class="nf">top</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 取栈顶元素</span>
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">stack</span><span class="p">()</span> <span class="p">{}</span> <span class="c1">//虚析构函数</span>
+<span class="p">};</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">seqStack</span><span class="o">:</span> <span class="k">public</span> <span class="n">stack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span><span class="p">{</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="n">elemType</span> <span class="o">*</span><span class="n">elem</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">top_p</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">maxSize</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">doubleSpace</span><span class="p">();</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">seqStack</span><span class="p">(</span><span class="kt">int</span> <span class="n">initSize</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">);</span>
+        <span class="o">~</span><span class="n">seqStack</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">elemType</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+        <span class="n">elemType</span> <span class="nf">pop</span><span class="p">();</span>
+        <span class="n">elemType</span> <span class="nf">top</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">seqStack</span><span class="p">(</span><span class="kt">int</span> <span class="n">initSize</span><span class="p">){</span>
+    <span class="n">elem</span> <span class="o">=</span> <span class="k">new</span> <span class="n">elemType</span><span class="p">[</span><span class="n">initSize</span><span class="p">];</span>
+    <span class="n">maxSize</span> <span class="o">=</span> <span class="n">initSize</span> <span class="p">;</span>
+    <span class="n">top_p</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::~</span><span class="n">seqStack</span><span class="p">(){</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">elem</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">top_p</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">push</span><span class="p">(</span><span class="k">const</span> <span class="n">elemType</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">top_p</span> <span class="o">==</span> <span class="n">maxSize</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="n">doubleSpace</span><span class="p">();</span>
+    <span class="n">elem</span><span class="p">[</span><span class="o">++</span><span class="n">top_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">elemType</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">pop</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="n">elem</span><span class="p">[</span><span class="n">top_p</span><span class="o">--</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">elemType</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">top</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">elem</span><span class="p">[</span><span class="n">top_p</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">doubleSpace</span><span class="p">(){</span>
+    <span class="n">elemType</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">elem</span><span class="p">;</span>
+    <span class="n">elem</span> <span class="o">=</span> <span class="k">new</span> <span class="n">elemType</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">maxSize</span> <span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">maxSize</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">elem</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">maxSize</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="p">[]</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//顺序栈定义结束</span>
+<span class="k">class</span> <span class="nc">BracketsStack</span><span class="p">{</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="n">seqStack</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span> <span class="n">input</span><span class="p">,</span><span class="n">brackets</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">char_since_unblance</span><span class="p">;</span>    <span class="c1">//保存距离第一个未配对闭括号的字符数</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">BracketsStack</span><span class="p">();</span>
+        <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+        <span class="kt">void</span> <span class="nf">pop</span><span class="p">();</span>
+        <span class="kt">char</span> <span class="nf">top</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">bool</span> <span class="nf">CheckBalance</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">BracketsStack</span><span class="o">::</span><span class="n">BracketsStack</span><span class="p">()</span><span class="o">:</span><span class="n">char_since_unblance</span><span class="p">(</span><span class="mi">0</span><span class="p">){}</span>
+
+<span class="kt">void</span> <span class="n">BracketsStack</span><span class="o">::</span><span class="n">push</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">){</span>
+    <span class="n">input</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">char_since_unblance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">char_since_unblance</span><span class="o">++</span><span class="p">;</span>  <span class="c1">//如果前面存在未配对闭括号，后面无论如何都不可能配对，因此不用操作括号栈</span>
+    <span class="k">else</span><span class="p">{</span>
+        <span class="k">switch</span><span class="p">(</span><span class="n">x</span><span class="p">){</span>
+            <span class="k">case</span> <span class="sc">&#39;(&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;[&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;{&#39;</span><span class="o">:</span>
+                <span class="n">brackets</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="c1">//判断新入栈的闭括号是否配对</span>
+            <span class="k">case</span> <span class="sc">&#39;)&#39;</span><span class="o">:</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">brackets</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span><span class="o">||</span><span class="n">brackets</span><span class="p">.</span><span class="n">top</span><span class="p">()</span><span class="o">!=</span><span class="sc">&#39;(&#39;</span><span class="p">)</span> <span class="n">char_since_unblance</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">else</span> <span class="n">brackets</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;]&#39;</span><span class="o">:</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">brackets</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span><span class="o">||</span><span class="n">brackets</span><span class="p">.</span><span class="n">top</span><span class="p">()</span><span class="o">!=</span><span class="sc">&#39;[&#39;</span><span class="p">)</span> <span class="n">char_since_unblance</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">else</span> <span class="n">brackets</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;}&#39;</span><span class="o">:</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">brackets</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">()</span><span class="o">||</span><span class="n">brackets</span><span class="p">.</span><span class="n">top</span><span class="p">()</span><span class="o">!=</span><span class="sc">&#39;{&#39;</span><span class="p">)</span> <span class="n">char_since_unblance</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="k">else</span> <span class="n">brackets</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">char</span> <span class="n">BracketsStack</span><span class="o">::</span><span class="n">top</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">else</span> <span class="k">return</span> <span class="n">input</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="n">BracketsStack</span><span class="o">::</span><span class="n">CheckBalance</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">char_since_unblance</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">brackets</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">());</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="n">BracketsStack</span><span class="o">::</span><span class="n">pop</span><span class="p">(){</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="k">return</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">char_since_unblance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">char_since_unblance</span><span class="o">--</span><span class="p">;</span>
+    <span class="k">else</span><span class="p">{</span>
+        <span class="k">switch</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">top</span><span class="p">()){</span>
+            <span class="k">case</span> <span class="sc">&#39;(&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;{&#39;</span><span class="o">:</span> <span class="k">case</span> <span class="sc">&#39;[&#39;</span><span class="o">:</span>
+                <span class="n">brackets</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="c1">//删除已经配对的闭括号时，需要重新入栈一个未配对的开括号</span>
+            <span class="k">case</span> <span class="sc">&#39;)&#39;</span><span class="o">:</span>
+                <span class="n">brackets</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="sc">&#39;(&#39;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;]&#39;</span><span class="o">:</span>
+                <span class="n">brackets</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="sc">&#39;[&#39;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="sc">&#39;}&#39;</span><span class="o">:</span>
+                <span class="n">brackets</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="sc">&#39;{&#39;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">input</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kt">bool</span> <span class="n">BracketsStack</span><span class="o">::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">input</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span><span class="n">choice</span><span class="p">;</span>
+    <span class="n">BracketsStack</span> <span class="n">bracketsstack</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">choice</span><span class="p">);</span>
+        <span class="k">switch</span><span class="p">(</span><span class="n">choice</span><span class="p">){</span>
+            <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+                <span class="kt">char</span> <span class="n">x</span><span class="p">;</span>
+                <span class="n">scanf</span><span class="p">(</span><span class="s">&quot; %c&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+                <span class="n">bracketsstack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+                <span class="n">bracketsstack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
+                <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">bracketsstack</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%c</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">bracketsstack</span><span class="p">.</span><span class="n">top</span><span class="p">());</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="mi">4</span><span class="o">:</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">bracketsstack</span><span class="p">.</span><span class="n">CheckBalance</span><span class="p">())</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;YES</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">else</span> <span class="nf">printf</span><span class="p">(</span><span class="s">&quot;NO</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 

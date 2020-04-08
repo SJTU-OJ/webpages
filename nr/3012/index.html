@@ -316,8 +316,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#oops" class="md-nav__link">
-    Oops! 本题目还没有解答！
+  <a href="#pangbo13s-solution" class="md-nav__link">
+    Pangbo13's solution 
   </a>
   
 </li>
@@ -406,10 +406,91 @@ ERROR
 
 </details>
 
-<h2 id="oops">Oops! 本题目还没有解答！</h2>
-<p>太难了，助教老师们编题的速度，已经超过了解题的速度！</p>
-<p>但是，如果你已经AC了，如果可以的话，请将存储库的链接提交到<a href="mailto:OJ@victrid.dev&amp;subject=提交&amp;body=存储库的地址：">OJ@victrid.dev</a>，与大家一起分享你的题解！</p>
-<p>更多关于添加题解的信息，请访问<a href="/add">添加</a>页面。</p>
+<h2 id="pangbo13s-solution">Pangbo13's solution <a class="github-button" href="https://github.com/pangbo13/SJTU-OJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">stack</span><span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">isEmpty</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//判栈空</span>
+        <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">elemType</span><span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 进栈</span>
+        <span class="k">virtual</span> <span class="n">elemType</span> <span class="nf">pop</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 出栈</span>
+        <span class="k">virtual</span> <span class="n">elemType</span> <span class="nf">top</span><span class="p">()</span> <span class="k">const</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// 取栈顶元素</span>
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">stack</span><span class="p">()</span> <span class="p">{}</span> <span class="c1">//虚析构函数</span>
+<span class="p">};</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">seqStack</span><span class="o">:</span> <span class="k">public</span> <span class="n">stack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;</span><span class="p">{</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="n">elemType</span> <span class="o">*</span><span class="n">elem</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">top_p</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">maxSize</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">doubleSpace</span><span class="p">();</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">seqStack</span><span class="p">(</span><span class="kt">int</span> <span class="n">initSize</span> <span class="o">=</span> <span class="mi">10</span><span class="p">);</span>
+        <span class="o">~</span><span class="n">seqStack</span><span class="p">();</span>
+        <span class="kt">bool</span> <span class="nf">isEmpty</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+        <span class="kt">void</span> <span class="nf">push</span><span class="p">(</span><span class="k">const</span> <span class="n">elemType</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+        <span class="n">elemType</span> <span class="nf">pop</span><span class="p">();</span>
+        <span class="n">elemType</span> <span class="nf">top</span><span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">seqStack</span><span class="p">(</span><span class="kt">int</span> <span class="n">initSize</span><span class="p">){</span>
+    <span class="n">elem</span> <span class="o">=</span> <span class="k">new</span> <span class="n">elemType</span><span class="p">[</span><span class="n">initSize</span><span class="p">];</span>
+    <span class="n">maxSize</span> <span class="o">=</span> <span class="n">initSize</span> <span class="p">;</span>
+    <span class="n">top_p</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::~</span><span class="n">seqStack</span><span class="p">(){</span>
+    <span class="k">delete</span><span class="p">[]</span> <span class="n">elem</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">bool</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">isEmpty</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">top_p</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">push</span><span class="p">(</span><span class="k">const</span> <span class="n">elemType</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">top_p</span> <span class="o">==</span> <span class="n">maxSize</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="n">doubleSpace</span><span class="p">();</span>
+    <span class="n">elem</span><span class="p">[</span><span class="o">++</span><span class="n">top_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">elemType</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">pop</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="n">elem</span><span class="p">[</span><span class="n">top_p</span><span class="o">--</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="n">elemType</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">top</span><span class="p">()</span> <span class="k">const</span><span class="p">{</span>
+    <span class="k">return</span> <span class="n">elem</span><span class="p">[</span><span class="n">top_p</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">elemType</span><span class="o">&gt;</span>
+<span class="kt">void</span> <span class="n">seqStack</span><span class="o">&lt;</span><span class="n">elemType</span><span class="o">&gt;::</span><span class="n">doubleSpace</span><span class="p">(){</span>
+    <span class="n">elemType</span> <span class="o">*</span><span class="n">tmp</span> <span class="o">=</span> <span class="n">elem</span><span class="p">;</span>
+    <span class="n">elem</span> <span class="o">=</span> <span class="k">new</span> <span class="n">elemType</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">maxSize</span> <span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">maxSize</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">elem</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="n">maxSize</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">delete</span> <span class="p">[]</span> <span class="n">tmp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="kt">int</span> <span class="n">N</span><span class="p">,</span><span class="n">op</span><span class="p">,</span><span class="n">num</span><span class="p">;</span>
+    <span class="n">seqStack</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">s</span><span class="p">;</span>
+    <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">N</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="n">cin</span><span class="o">&gt;&gt;</span><span class="n">op</span><span class="o">&gt;&gt;</span><span class="n">num</span><span class="p">;</span>
+        <span class="k">switch</span><span class="p">(</span><span class="n">op</span><span class="p">){</span>
+            <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+                <span class="n">s</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">);</span>
+                <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;OK&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">isEmpty</span><span class="p">())</span> <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;ERROR&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+                <span class="k">else</span><span class="p">{</span>
+                    <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">pop</span><span class="p">()</span> <span class="o">==</span> <span class="n">num</span><span class="p">)</span> <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;YES&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+                    <span class="k">else</span> <span class="n">cout</span><span class="o">&lt;&lt;</span><span class="s">&quot;NO&quot;</span><span class="o">&lt;&lt;</span><span class="n">endl</span><span class="p">;</span>
+                <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
                 
                   
                 
