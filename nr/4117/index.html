@@ -316,6 +316,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#victrids-solution" class="md-nav__link">
+    VictriD's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fineartzs-solution" class="md-nav__link">
     FineArtz's solution 
   </a>
@@ -435,6 +442,137 @@ Q 2 4
 </article>
 
 </details>
+
+<h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="c1">//The lazy tag is really confusing.</span>
+<span class="c1">//I may just follow the tutorial.</span>
+<span class="c1">//400005</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">seq</span><span class="p">[</span><span class="mi">400005</span><span class="p">]</span>  <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="n">tags</span><span class="p">[</span><span class="mi">400005</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="k">struct</span> <span class="n">set</span> <span class="p">{</span>
+    <span class="c1">//segmenttree</span>
+    <span class="c1">//Tree access helper</span>
+    <span class="kt">int</span> <span class="n">leftbound</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">rightbound</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">current</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="kt">long</span><span class="o">&amp;</span> <span class="n">tag</span><span class="p">;</span>
+    <span class="n">set</span> <span class="nf">left</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">set</span><span class="p">{</span>
+            <span class="n">leftbound</span><span class="p">,</span> <span class="p">(</span><span class="n">leftbound</span> <span class="o">+</span> <span class="n">rightbound</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">current</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seq</span><span class="p">[</span><span class="n">current</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">],</span> <span class="n">tags</span><span class="p">[</span><span class="n">current</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">]};</span>
+    <span class="p">}</span>
+    <span class="n">set</span> <span class="nf">right</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">set</span><span class="p">{</span>
+            <span class="p">(</span><span class="n">leftbound</span> <span class="o">+</span> <span class="n">rightbound</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rightbound</span><span class="p">,</span> <span class="n">current</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seq</span><span class="p">[</span><span class="n">current</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">],</span> <span class="n">tags</span><span class="p">[</span><span class="n">current</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">]};</span>
+    <span class="p">}</span>
+    <span class="kt">int</span> <span class="nf">addtag</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">rightbound</span> <span class="o">-</span> <span class="n">leftbound</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">tag</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">bool</span> <span class="nf">isleaf</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="o">!</span><span class="p">(</span><span class="n">rightbound</span> <span class="o">-</span> <span class="n">leftbound</span><span class="p">);</span> <span class="p">}</span>
+    <span class="kt">int</span> <span class="nf">update_fathers</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">z</span> <span class="o">=</span> <span class="n">current</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">z</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">seq</span><span class="p">[</span><span class="n">z</span><span class="p">]</span> <span class="o">=</span> <span class="n">seq</span><span class="p">[</span><span class="n">z</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">seq</span><span class="p">[</span><span class="n">z</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span> <span class="o">|</span> <span class="mi">1</span><span class="p">];</span>
+            <span class="n">z</span> <span class="o">&gt;&gt;=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="kt">void</span> <span class="nf">buildtree</span><span class="p">(</span><span class="n">set</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">leftbound</span> <span class="o">==</span> <span class="n">s</span><span class="p">.</span><span class="n">rightbound</span><span class="p">)</span>
+        <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">s</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>
+    <span class="k">else</span> <span class="p">{</span>
+        <span class="n">buildtree</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">left</span><span class="p">());</span>
+        <span class="n">buildtree</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">right</span><span class="p">());</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">s</span><span class="p">.</span><span class="n">left</span><span class="p">().</span><span class="n">value</span> <span class="o">+</span> <span class="n">s</span><span class="p">.</span><span class="n">right</span><span class="p">().</span><span class="n">value</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">buildtree</span><span class="p">(</span><span class="kt">int</span> <span class="n">total</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">buildtree</span><span class="p">(</span><span class="n">set</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seq</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tags</span><span class="p">[</span><span class="mi">1</span><span class="p">]});</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">tagproc</span><span class="p">(</span><span class="n">set</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">s</span><span class="p">.</span><span class="n">isleaf</span><span class="p">())</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">s</span><span class="p">.</span><span class="n">left</span><span class="p">().</span><span class="n">isleaf</span><span class="p">())</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">left</span><span class="p">().</span><span class="n">tag</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">tag</span><span class="p">;</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">left</span><span class="p">().</span><span class="n">value</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">tag</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">left</span><span class="p">().</span><span class="n">rightbound</span> <span class="o">-</span> <span class="n">s</span><span class="p">.</span><span class="n">left</span><span class="p">().</span><span class="n">leftbound</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">s</span><span class="p">.</span><span class="n">right</span><span class="p">().</span><span class="n">isleaf</span><span class="p">())</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">right</span><span class="p">().</span><span class="n">tag</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">tag</span><span class="p">;</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">right</span><span class="p">().</span><span class="n">value</span> <span class="o">+=</span> <span class="n">s</span><span class="p">.</span><span class="n">tag</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">right</span><span class="p">().</span><span class="n">rightbound</span> <span class="o">-</span> <span class="n">s</span><span class="p">.</span><span class="n">right</span><span class="p">().</span><span class="n">leftbound</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">s</span><span class="p">.</span><span class="n">tag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="nf">getsum</span><span class="p">(</span><span class="kt">int</span> <span class="n">oper_left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">set</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">oper_left</span> <span class="o">&lt;=</span> <span class="n">s</span><span class="p">.</span><span class="n">leftbound</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">.</span><span class="n">rightbound</span> <span class="o">&lt;=</span> <span class="n">oper_right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">tagproc</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="kt">long</span> <span class="kt">long</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="kt">int</span> <span class="n">mid</span>       <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">leftbound</span> <span class="o">+</span> <span class="n">s</span><span class="p">.</span><span class="n">rightbound</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">tag</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">tagproc</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">oper_left</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="p">)</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">getsum</span><span class="p">(</span><span class="n">oper_left</span><span class="p">,</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">left</span><span class="p">());</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">oper_right</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">)</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">getsum</span><span class="p">(</span><span class="n">oper_left</span><span class="p">,</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">right</span><span class="p">());</span>
+        <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">long</span> <span class="kt">long</span> <span class="nf">getsum</span><span class="p">(</span><span class="kt">int</span> <span class="n">oper_left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">oper_right</span><span class="p">,</span> <span class="kt">int</span> <span class="n">total</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">getsum</span><span class="p">(</span><span class="n">oper_left</span><span class="p">,</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">set</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seq</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tags</span><span class="p">[</span><span class="mi">1</span><span class="p">]});</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">addsequence</span><span class="p">(</span><span class="kt">int</span> <span class="n">oper_left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">set</span> <span class="n">s</span><span class="p">,</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">add</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">oper_left</span> <span class="o">&lt;=</span> <span class="n">s</span><span class="p">.</span><span class="n">leftbound</span> <span class="o">&amp;&amp;</span> <span class="n">s</span><span class="p">.</span><span class="n">rightbound</span> <span class="o">&lt;=</span> <span class="n">oper_right</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">value</span> <span class="o">+=</span> <span class="n">add</span> <span class="o">*</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">rightbound</span> <span class="o">-</span> <span class="n">s</span><span class="p">.</span><span class="n">leftbound</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">tag</span> <span class="o">+=</span> <span class="n">add</span><span class="p">;</span>
+        <span class="n">s</span><span class="p">.</span><span class="n">update_fathers</span><span class="p">();</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="c1">//if tags not passed, ancestors cannot get updated correctly.</span>
+        <span class="n">tagproc</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">mid</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">leftbound</span> <span class="o">+</span> <span class="n">s</span><span class="p">.</span><span class="n">rightbound</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">oper_left</span> <span class="o">&lt;=</span> <span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//Although no tags,</span>
+            <span class="c1">//father&#39;s value add first.</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">value</span> <span class="o">+=</span> <span class="n">add</span> <span class="o">*</span> <span class="p">(</span><span class="n">mid</span> <span class="o">-</span> <span class="n">oper_left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="n">addsequence</span><span class="p">(</span><span class="n">oper_left</span><span class="p">,</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">left</span><span class="p">(),</span> <span class="n">add</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">oper_right</span> <span class="o">&gt;</span> <span class="n">mid</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">s</span><span class="p">.</span><span class="n">value</span> <span class="o">+=</span> <span class="n">add</span> <span class="o">*</span> <span class="p">(</span><span class="n">oper_right</span> <span class="o">-</span> <span class="n">mid</span><span class="p">);</span>
+            <span class="n">addsequence</span><span class="p">(</span><span class="n">oper_left</span><span class="p">,</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">s</span><span class="p">.</span><span class="n">right</span><span class="p">(),</span> <span class="n">add</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">addsequence</span><span class="p">(</span><span class="kt">int</span> <span class="n">oper_left</span><span class="p">,</span> <span class="kt">int</span> <span class="n">oper_right</span><span class="p">,</span> <span class="kt">int</span> <span class="n">total</span><span class="p">,</span> <span class="kt">long</span> <span class="kt">long</span> <span class="n">add</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">addsequence</span><span class="p">(</span><span class="n">oper_left</span><span class="p">,</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">set</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">seq</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tags</span><span class="p">[</span><span class="mi">1</span><span class="p">]},</span> <span class="n">add</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">m</span><span class="p">);</span>
+    <span class="n">buildtree</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+    <span class="kt">char</span> <span class="n">op</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">oper_left</span><span class="p">,</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">oper_add</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">do</span> <span class="p">{</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">&#39; &#39;</span> <span class="o">||</span> <span class="n">op</span> <span class="o">==</span> <span class="sc">&#39;\n&#39;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">op</span> <span class="o">==</span> <span class="sc">&#39;Q&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oper_left</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oper_right</span><span class="p">);</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%lld</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">getsum</span><span class="p">(</span><span class="n">oper_left</span><span class="p">,</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">n</span><span class="p">));</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d %d %d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oper_left</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oper_right</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">oper_add</span><span class="p">);</span>
+            <span class="n">addsequence</span><span class="p">(</span><span class="n">oper_left</span><span class="p">,</span> <span class="n">oper_right</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">oper_add</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cm">/* 操作数组 */</span>
