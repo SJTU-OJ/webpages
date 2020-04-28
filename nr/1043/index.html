@@ -316,6 +316,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#victrids-solution" class="md-nav__link">
+    VictriD's solution 
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fineartzs-solution" class="md-nav__link">
     FineArtz's solution 
   </a>
@@ -421,6 +428,86 @@
 </article>
 
 </details>
+
+<h2 id="victrids-solution">VictriD's solution <a class="github-button" href="https://github.com/Victrid/Atlas" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+<span class="k">struct</span> <span class="n">tree</span> <span class="p">{</span>
+    <span class="n">tree</span><span class="o">*</span> <span class="n">left</span><span class="p">;</span>
+    <span class="n">tree</span><span class="o">*</span> <span class="n">right</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">valid</span><span class="p">;</span>
+    <span class="k">enum</span> <span class="p">{</span> <span class="n">none</span><span class="p">,</span>
+           <span class="n">one</span><span class="p">,</span>
+           <span class="n">both</span> <span class="p">}</span> <span class="n">occupied</span><span class="p">;</span>
+    <span class="n">tree</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="o">:</span> <span class="n">left</span><span class="p">(</span><span class="k">nullptr</span><span class="p">),</span> <span class="n">right</span><span class="p">(</span><span class="k">nullptr</span><span class="p">),</span> <span class="n">valid</span><span class="p">(</span><span class="nb">true</span><span class="p">),</span> <span class="n">occupied</span><span class="p">(</span><span class="n">none</span><span class="p">){};</span>
+    <span class="n">tree</span><span class="p">()</span> <span class="o">:</span> <span class="n">left</span><span class="p">(</span><span class="k">nullptr</span><span class="p">),</span> <span class="n">right</span><span class="p">(</span><span class="k">nullptr</span><span class="p">),</span> <span class="n">valid</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span> <span class="n">occupied</span><span class="p">(</span><span class="n">none</span><span class="p">){};</span>
+<span class="p">};</span>
+<span class="n">tree</span> <span class="n">nodes</span><span class="p">[</span><span class="mi">1000001</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="c1">//! queue must be large enough to handle a full tree</span>
+<span class="n">tree</span><span class="o">*</span> <span class="n">queuet</span><span class="p">[</span><span class="mi">4000003</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="k">nullptr</span><span class="p">};</span>
+<span class="n">tree</span><span class="o">**</span> <span class="n">queueex</span><span class="p">;</span>
+<span class="n">tree</span><span class="o">**</span> <span class="n">queueend</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">clearqueue</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">queueex</span>  <span class="o">=</span> <span class="n">queuet</span><span class="p">;</span>
+    <span class="n">queueend</span> <span class="o">=</span> <span class="n">queuet</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">void</span> <span class="nf">enqueue</span><span class="p">(</span><span class="n">tree</span><span class="o">*</span> <span class="n">tptr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">*</span><span class="n">queueend</span> <span class="o">=</span> <span class="n">tptr</span><span class="p">;</span>
+    <span class="n">queueend</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">tree</span><span class="o">*</span> <span class="nf">dequeue</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">queueex</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">queueend</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">nullptr</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">queueex</span><span class="o">++</span><span class="p">;</span>
+    <span class="k">return</span> <span class="o">*</span><span class="n">queueex</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">N</span><span class="p">;</span>
+    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">N</span><span class="p">);</span>
+    <span class="kt">int</span> <span class="n">proc</span><span class="p">;</span>
+    <span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">valid</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">nodes</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">valid</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">proc</span><span class="p">);</span>
+        <span class="k">switch</span> <span class="p">(</span><span class="n">nodes</span><span class="p">[</span><span class="n">proc</span><span class="p">].</span><span class="n">occupied</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="n">tree</span><span class="o">::</span><span class="nl">none</span><span class="p">:</span>
+            <span class="n">nodes</span><span class="p">[</span><span class="n">proc</span><span class="p">].</span><span class="n">occupied</span> <span class="o">=</span> <span class="n">tree</span><span class="o">::</span><span class="n">one</span><span class="p">;</span>
+            <span class="n">nodes</span><span class="p">[</span><span class="n">proc</span><span class="p">].</span><span class="n">left</span>     <span class="o">=</span> <span class="n">nodes</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="n">tree</span><span class="o">::</span><span class="nl">one</span><span class="p">:</span>
+            <span class="n">nodes</span><span class="p">[</span><span class="n">proc</span><span class="p">].</span><span class="n">occupied</span> <span class="o">=</span> <span class="n">tree</span><span class="o">::</span><span class="n">both</span><span class="p">;</span>
+            <span class="n">nodes</span><span class="p">[</span><span class="n">proc</span><span class="p">].</span><span class="n">right</span>    <span class="o">=</span> <span class="n">nodes</span> <span class="o">+</span> <span class="n">i</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="n">tree</span><span class="o">::</span><span class="nl">both</span><span class="p">:</span>
+            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;false&quot;</span><span class="p">;</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">clearqueue</span><span class="p">();</span>
+    <span class="n">enqueue</span><span class="p">(</span><span class="n">nodes</span><span class="p">);</span>
+    <span class="n">tree</span><span class="o">*</span> <span class="n">proce</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">tcount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">proce</span>      <span class="o">=</span> <span class="n">dequeue</span><span class="p">();</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">proce</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">proce</span><span class="o">-&gt;</span><span class="n">valid</span><span class="p">)</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="n">tcount</span><span class="o">++</span><span class="p">;</span>
+        <span class="n">proce</span><span class="o">-&gt;</span><span class="n">valid</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+        <span class="n">enqueue</span><span class="p">(</span><span class="n">proce</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
+        <span class="n">enqueue</span><span class="p">(</span><span class="n">proce</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
+        <span class="n">proce</span> <span class="o">=</span> <span class="n">dequeue</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">tcount</span> <span class="o">==</span> <span class="n">N</span><span class="p">)</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;true&quot;</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;false&quot;</span><span class="p">;</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
 
 <h2 id="fineartzs-solution">FineArtz's solution <a class="github-button" href="https://github.com/FineArtz/SJTUOJ" data-icon="octicon-star" data-show-count="true" aria-label="Star!"></a></h2>
 <div class="codehilite"><pre><span></span><code><span class="cm">/* 完全二叉树 */</span>
